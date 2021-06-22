@@ -1,10 +1,52 @@
-class Page {
+let article;
+let dictionary;
 
+class Article {
+  constructor(container, contents) {
+    this.pageWidth = 210;
+    this.pageHeight = 297;
+    this.marginLeft = 20;
+    this.marginRight = 20;
+    this.marginTop = 20;
+    this.marginBottom = 20;
+    this.contentWidth = this.pageWidth - this.marginLeft - this.marginRight;
+    this.contentHeight = this.pageHeight - this.marginTop - this.marginBottom;
+    this.node = add('DIV', container, {}, {
+      paddingLeft: this.marginLeft,
+      paddingRight: this.marginRight,
+      paddingTop: this.marginTop,
+      paddingBottom: this.marginBottom,
+      width: this.contentWidth,
+      visibility: 'hidden',
+      boxSizing: 'content-box',
+    });
+    this.footerRoot = add('DIV', this.node);
+    this.textRoot = add('DIV', this.node);
+    this.contents = contents;
+    this.pages = [];
+  }
+
+  async render() {
+    for (let element of this.contents) {
+      this.textRoot.appendChild(element);
+    }
+    await this.update();
+    let pageCount = 1;
+    while (this.pages.length < pageCount) {
+      const page = new Page()
+    }
+  }
+}
+
+class Page {
+  constructor() {
+    this.footer = new Footer;
+  }
 }
 
 class Footer {
   constructor() {
-    this.node = add('FOOTER', 'fn-root');
+    this.node = add('FOOTER', article.footerRoot);
     this.pusher = add('DIV', this.node, { innerText: '\u00a0' }, {
       float: 'right',
       visibility: 'hidden',
@@ -23,23 +65,24 @@ class Footer {
   }
 
   async resize() {
-    await updateCompletion;
-    const height = this.content.contentHeight;
+    await article.updateCompletion;
+    const height = toMillimeters(this.content.contentHeight);
     if (height !== this.height) {
-      const heightMM = toMillimeters(height);
-      this.frame.style.height = `${heightMM}mm`;
-      this.pusher.style.height = `${pageHeightMM - heightMM}mm`;
+      this.frame.style.height = `${height}mm`;
+      this.pusher.style.height = `${article.contentHeight - height}mm`;
       this.height = height;
     }
   }
 }
 
-function add(tag, parent, style) {
+function add(tag, parent, props, style) {
   const node = document.createElement(tag);
-  if (typeof(parent) === 'string') {
-    parent = document.getElementById(parent);
-  }
+  Object.assign(node, props);
   Object.assign(node.style, style);
   parent.appendChild(node);
   return node;
+}
+
+function toMillimeters(pixels) {
+  return pixels * (25.4 / 96);
 }
