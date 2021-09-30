@@ -1,6 +1,7 @@
 import sampleText from './lib/sample.js';
 import { generateFootnoteContents } from './lib/translation.js';
-import { addText,  addFootnotes } from './lib/layout.js';
+import { addText, addFootnotes } from './lib/layout.js';
+import { handleInput, handleKeyPress } from './lib/editing.js';
 
 async function start() {
   const setStatus = (status) => document.body.className = status;
@@ -17,6 +18,8 @@ async function start() {
     addText(content);
     // add footnotes
     addFootnotes(footnotes);
+    // attach handlers to elements for editing contents
+    attachHandlers();
     setStatus('ready');
   } catch (e) {
     const errorElement = document.getElementById('error-text');
@@ -24,6 +27,12 @@ async function start() {
     setStatus('error');
   }
   done = true;
+}
+
+function attachHandlers() {
+  const { body } = document;
+  body.addEventListener('input', handleInput);
+  body.addEventListener('keypress', handleKeyPress);
 }
 
 addEventListener('load', start);
