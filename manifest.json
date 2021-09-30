@@ -1,0 +1,27 @@
+{
+  "name": "Conradish",
+  "description": "Create print-outs of foreign-language articles with definitions as footnotes",
+  "version": "1.0",
+  "manifest_version": 3,
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": ["storage", "activeTab", "scripting"],
+  "host_permissions": ["https://clients5.google.com/*"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "/img/conradish16.png",
+      "32": "/img/conradish32.png",
+      "48": "/img/conradish48.png",
+      "128": "/img/conradish128.png"
+    }
+  },
+  "icons": {
+    "16": "/img/conradish16.png",
+    "32": "/img/conradish32.png",
+    "48": "/img/conradish48.png",
+    "128": "/img/conradish128.png"
+  },
+  "options_page": "options.html"
+}

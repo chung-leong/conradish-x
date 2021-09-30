@@ -1,0 +1,153 @@
+HTML {
+  margin: 0;
+}
+
+BODY {
+  display: flex;
+  margin: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  position: absolute;
+}
+
+#article-container {
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: auto;
+  flex-direction: row;
+  text-align: center;
+  background-color: darkgray;
+  height: 100%;
+  overflow: auto;
+}
+
+#article {
+  display: inline-block;
+  position: relative;
+  margin: 5mm 5mm 5mm 5mm;
+  text-align: left;
+}
+
+#article-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  padding: 20mm 20mm 20mm 20mm;
+}
+
+#article-text {
+  font-size: 12pt;
+  text-align: justify;
+}
+
+#article-text:focus {
+  outline: none;
+}
+
+#article-text *:first-child {
+  margin-top: 0;
+}
+
+#article-footers {
+  font-size: 10pt;
+}
+
+.footer-pusher {
+  float: right;
+  line-height: 0;
+  visibility: hidden;
+}
+
+.footer-content {
+  float: right;
+  width: 100%;
+  margin-top: 10mm;
+  margin-bottom: 40mm;
+  padding-left: 1.6em;
+}
+
+.footer-content:focus {
+  outline-offset: 2px;
+}
+
+.footer-spacer {
+  float: right;
+  width: 100%;
+  /* should match margin-top of .paper */
+  height: 5mm;
+  line-height: 0;
+  visibility: hidden;
+}
+
+.footer-content:empty {
+  /* no margin needed when it's empty */
+  margin-top: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+#article-footers *:last-child .footer-spacer {
+  display: none;
+}
+
+.paper {
+  width: 210mm;
+  height: 297mm;
+  /* should match height of .footer-spacer */
+  margin-top: 5mm;
+  background-color: white;
+  box-shadow: 1px 1px 5px black;
+}
+
+.paper:first-child {
+  margin-top: 0;
+}
+
+#side-nav {
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: 1em;
+  height: 100%;
+}
+
+@page {
+  size: 210mm 297mm;
+  margin: 0;
+}
+
+@media print {
+  #side-nav {
+    /* hide navigation */
+    display: none;
+  }
+
+  #article-container {
+    /* remove background and prevent appear of scroll bar */
+    background-color: transparent;
+    overflow: visible;
+  }
+
+  #article {
+    /* remove margin around article */
+    margin: 0;
+  }
+
+  #article-background {
+    /* hidden paper background */
+    visibility: hidden;
+  }
+
+  .paper {
+    /* remove spacing between sheets */
+    margin-top: 0;
+  }
+
+  .footer-spacer {
+    /* remove spacing between sheets */
+    display: none;
+  }
+}
