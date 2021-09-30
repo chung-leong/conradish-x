@@ -28,6 +28,12 @@ BODY {
   position: relative;
   margin: 5mm 5mm 5mm 5mm;
   text-align: left;
+  /* article is hidden from view initially */
+  visibility: hidden;
+}
+
+BODY.ready #article {
+  visibility: visible;
 }
 
 #article-content {
@@ -110,7 +116,7 @@ BODY {
 #side-nav {
   flex-grow: 0;
   flex-shrink: 0;
-  flex-basis: 1em;
+  flex-basis: 4em;
   height: 100%;
 }
 
@@ -150,4 +156,36 @@ BODY {
     /* remove spacing between sheets */
     display: none;
   }
+}
+
+#status-container {
+  display: flex;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  justify-content: center;
+  align-items: center;
+}
+
+.loader {
+  opacity: 0;
+  transition: opacity 0.5s ease-in;
+}
+
+BODY.pending .loader {
+  opacity: 0.5;
+}
+
+BODY.error .loader {
+  display: none;
+}
+
+BODY.ready #status-container {
+  display: none;
+}
+
+#error-text {
 }
