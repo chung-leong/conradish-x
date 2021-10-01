@@ -62,6 +62,10 @@ BODY.ready #article {
   font-size: 10pt;
 }
 
+.reference.removed .footnote-number {
+  display: none;
+}
+
 .footer-pusher {
   float: right;
   line-height: 0;
