@@ -62,10 +62,6 @@ BODY.ready #article {
   font-size: 10pt;
 }
 
-.reference.removed .footnote-number {
-  display: none;
-}
-
 .footer-pusher {
   float: right;
   line-height: 0;
@@ -101,6 +97,10 @@ BODY.ready #article {
 }
 
 #article-footers *:last-child .footer-spacer {
+  display: none;
+}
+
+.footnote-item.removed {
   display: none;
 }
 
