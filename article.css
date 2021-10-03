@@ -154,6 +154,8 @@ BODY.ready #article {
   .paper {
     /* remove spacing between sheets */
     margin-top: 0;
+    /* prevent generation of an blank extra page at the end */
+    height: 0;
   }
 
   .footer-spacer {
