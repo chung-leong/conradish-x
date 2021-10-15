@@ -29,19 +29,15 @@ async function handleCreateClick(tab) {
   const codeURL = chrome.runtime.getURL('lib/capture.js');
   const lang = await chrome.tabs.detectLanguage(tab.id);
   chrome.scripting.executeScript({
-    func: captureSelection,
+    target: { allFrames: true, tabId: tab.id },
     args: [ codeURL, lang ],
-    target: { allFrames: true, tabId: tab.id }
+    func: async (codeURL, lang) => {
+      const selection = getSelection();
+      if (selection.rangeCount > 0) {
+        // load the code for capturing only if the frame has selection
+        const { captureSelection } = await import(codeURL);
+        captureSelection(selection, lang);
+      }
+    }
   });
-}
-
-async function captureSelection(codeURL, lang) {
-  const selection = getSelection();
-  const range = selection.getRangeAt(0);
-  if (range.collapsed) {
-    return;
-  }
-  // load the code for capturing only if the frame has selection
-  const { captureRange } = await import(codeURL);
-  captureRange(range, lang);
 }
