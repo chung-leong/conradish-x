@@ -6,8 +6,8 @@
   "background": {
     "service_worker": "background.js"
   },
-  "permissions": ["storage", "activeTab", "scripting"],
-  "host_permissions": ["https://clients5.google.com/*"],
+  "permissions": [ "storage", "activeTab", "scripting", "contextMenus" ],
+  "host_permissions": [ "https://clients5.google.com/*" ],
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
@@ -23,5 +23,11 @@
     "48": "/img/conradish48.png",
     "128": "/img/conradish128.png"
   },
-  "options_page": "options.html"
+  "options_page": "options.html",
+  "web_accessible_resources": [
+    {
+      "resources": [ "/lib/capture.js" ],
+      "matches": [ "<all_urls>" ]
+    }
+  ]
 }
