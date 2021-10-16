@@ -1,4 +1,7 @@
-chrome.runtime.onInstalled.addListener(() => {
+import { initializeStorage, storeObject, findObjectKeys } from './lib/storage.js';
+
+chrome.runtime.onInstalled.addListener(async () => {
+  await initializeStorage();
   chrome.runtime.onMessage.addListener(handleMessage);
   chrome.contextMenus.onClicked.addListener(handleMenuClick);
   chrome.contextMenus.create({
@@ -7,6 +10,8 @@ chrome.runtime.onInstalled.addListener(() => {
     title: 'Create annotated document',
     id: 'create',
   });
+  const keys = findObjectKeys('DOC');
+  console.log(keys);
 });
 
 function handleMessage(request, sender, sendResponse) {
@@ -15,8 +20,9 @@ function handleMessage(request, sender, sendResponse) {
   }
 }
 
-function handleCreateDocument({ document }) {
-  console.log('Create', document);
+async function handleCreateDocument({ document }) {
+  const key = await storeObject('DOC', document);
+  console.log('Create', key);
 }
 
 function handleMenuClick(info, tab) {

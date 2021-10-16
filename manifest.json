@@ -4,7 +4,8 @@
   "version": "1.0",
   "manifest_version": 3,
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background.js",
+    "type": "module"
   },
   "permissions": [ "storage", "activeTab", "scripting", "contextMenus" ],
   "host_permissions": [ "https://clients5.google.com/*" ],
