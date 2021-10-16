@@ -1,7 +1,7 @@
 import sampleText from './lib/sample.js';
 import { generateFootnoteContents } from './lib/translation.js';
 import { addText, addFootnotes } from './lib/layout.js';
-import { handleInput, handleKeyPress } from './lib/editing.js';
+import { handleInput, handleKeyPress, handlePaste } from './lib/editing.js';
 
 async function start() {
   const setStatus = (status) => document.body.className = status;
@@ -33,6 +33,7 @@ function attachHandlers() {
   const { body } = document;
   body.addEventListener('input', handleInput);
   body.addEventListener('keypress', handleKeyPress);
+  body.addEventListener('paste', handlePaste);
 }
 
 addEventListener('load', start);
