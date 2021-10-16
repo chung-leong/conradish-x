@@ -7,7 +7,7 @@
     "service_worker": "background.js",
     "type": "module"
   },
-  "permissions": [ "storage", "activeTab", "scripting", "contextMenus" ],
+  "permissions": [ "storage", "activeTab", "scripting", "contextMenus", "tabs" ],
   "host_permissions": [ "https://clients5.google.com/*" ],
   "action": {
     "default_popup": "popup.html",

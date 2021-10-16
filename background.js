@@ -1,4 +1,4 @@
-import { initializeStorage, storeObject, findObjectKeys } from './lib/storage.js';
+import { initializeStorage, storeObject } from './lib/storage.js';
 
 chrome.runtime.onInstalled.addListener(async () => {
   await initializeStorage();
@@ -10,8 +10,6 @@ chrome.runtime.onInstalled.addListener(async () => {
     title: 'Create annotated document',
     id: 'create',
   });
-  const keys = findObjectKeys('DOC');
-  console.log(keys);
 });
 
 function handleMessage(request, sender, sendResponse) {
@@ -22,7 +20,9 @@ function handleMessage(request, sender, sendResponse) {
 
 async function handleCreateDocument({ document }) {
   const key = await storeObject('DOC', document);
-  console.log('Create', key);
+  const url = new URL(chrome.runtime.getURL('article.html'));
+  url.searchParams.set('t', key);
+  await chrome.tabs.create({ url: url.toString() });
 }
 
 function handleMenuClick(info, tab) {

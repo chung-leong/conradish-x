@@ -2,6 +2,9 @@ import sampleText from './lib/sample.js';
 import { generateFootnoteContents } from './lib/translation.js';
 import { addText, addFootnotes } from './lib/layout.js';
 import { handleInput, handleKeyPress, handlePaste } from './lib/editing.js';
+import { loadObject } from './lib/storage.js';
+
+const sampleDoc = { title: 'Test', content: sampleText };
 
 async function start() {
   const setStatus = (status) => document.body.className = status;
@@ -9,8 +12,10 @@ async function start() {
   let done = false;
   setTimeout(() => done || setStatus('pending'), 250);
   try {
-    const title = 'This is a test';
-    const content = sampleText;
+    const { searchParams } = new URL(location);
+    const key = searchParams.get('t');
+    const doc = (key) ? await loadObject(key) : sampleDoc;
+    const { title, content } = doc;
     document.title = title;
     // look up definitions
     const footnotes = await generateFootnoteContents(content);
