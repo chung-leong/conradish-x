@@ -15,7 +15,7 @@ async function start() {
     const { searchParams } = new URL(location);
     const key = searchParams.get('t');
     const doc = (key) ? await loadObject(key) : sampleDoc;
-    const { title, content } = doc;
+    const { title, content, lang } = doc;
     document.title = title;
     // look up definitions
     const footnotes = await generateFootnoteContents(content);

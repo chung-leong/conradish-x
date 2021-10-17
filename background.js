@@ -1,6 +1,6 @@
 import { initializeStorage, storeObject } from './lib/storage.js';
 
-chrome.runtime.onInstalled.addListener(async () => {
+async function start() {
   await initializeStorage();
   chrome.runtime.onMessage.addListener(handleMessage);
   chrome.contextMenus.onClicked.addListener(handleMenuClick);
@@ -10,7 +10,7 @@ chrome.runtime.onInstalled.addListener(async () => {
     title: 'Create annotated document',
     id: 'create',
   });
-});
+}
 
 function handleMessage(request, sender, sendResponse) {
   switch (request.type) {
@@ -47,3 +47,5 @@ async function handleCreateClick(tab) {
     }
   });
 }
+
+start();
