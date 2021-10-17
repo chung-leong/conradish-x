@@ -1,7 +1,7 @@
 import sampleText from './lib/sample.js';
 import { generateFootnoteContents } from './lib/translation.js';
 import { addText, addFootnotes } from './lib/layout.js';
-import { handleInput, handleKeyPress, handlePaste } from './lib/editing.js';
+import { createMenuItems, handleInput, handleKeyPress, handlePaste, handleSelectionChange } from './lib/editing.js';
 import { loadObject } from './lib/storage.js';
 
 const sampleDoc = { title: 'Test', content: sampleText };
@@ -25,6 +25,8 @@ async function start() {
     addFootnotes(footnotes);
     // attach handlers to elements for editing contents
     attachHandlers();
+    // create menu items
+    createMenuItems();
     setStatus('ready');
   } catch (e) {
     const errorElement = document.getElementById('error-text');
@@ -35,10 +37,10 @@ async function start() {
 }
 
 function attachHandlers() {
-  const { body } = document;
-  body.addEventListener('input', handleInput);
-  body.addEventListener('keypress', handleKeyPress);
-  body.addEventListener('paste', handlePaste);
+  document.addEventListener('input', handleInput);
+  document.addEventListener('keypress', handleKeyPress);
+  document.addEventListener('paste', handlePaste);
+  document.addEventListener('selectionchange', handleSelectionChange);
 }
 
 addEventListener('load', start);
