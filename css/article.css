@@ -64,6 +64,7 @@ BODY.ready #article {
 
 #article-menu {
   position: absolute;
+  display: none;
   left: 5px;
   top: 5px;
   background-color: #eeeeee;
@@ -146,50 +147,26 @@ BODY.ready #article {
 }
 
 #side-nav {
+  display: flex;
   flex-grow: 0;
   flex-shrink: 0;
-  flex-basis: 4em;
+  flex-basis: 30em;
+  flex-direction: column;
   height: 100%;
 }
 
-@page {
-  size: 210mm 297mm;
-  margin: 0;
+#side-nav-top {
+  flex-grow: 1;
+  flex-shrink: 1;
+  overflow: auto;
 }
 
-@media print {
-  #side-nav {
-    /* hide navigation */
-    display: none;
-  }
-
-  #article-container {
-    /* remove background and prevent appear of scroll bar */
-    background-color: transparent;
-    overflow: visible;
-  }
-
-  #article {
-    /* remove margin around article */
-    margin: 0;
-  }
-
-  #article-background {
-    /* hidden paper background */
-    visibility: hidden;
-  }
-
-  .paper {
-    /* remove spacing between sheets */
-    margin-top: 0;
-    /* prevent generation of an blank extra page at the end */
-    height: 0;
-  }
-
-  .footer-spacer {
-    /* remove spacing between sheets */
-    display: none;
-  }
+#side-nav-bottom {
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: auto;
+  text-align: right;
+  padding: 16px 16px 16px 16px;
 }
 
 #status-container {
@@ -232,4 +209,45 @@ BODY.ready #status-container {
   height: 1px;
   visibility: 0;
   border: 0;
+}
+
+@page {
+  size: 210mm 297mm;
+  margin: 0;
+}
+
+@media print {
+  #side-nav {
+    /* hide navigation */
+    display: none;
+  }
+
+  #article-container {
+    /* remove background and prevent appear of scroll bar */
+    background-color: transparent;
+    overflow: visible;
+  }
+
+  #article {
+    /* remove margin around article */
+    margin: 0;
+  }
+
+  #article-background {
+    /* hidden paper background */
+    visibility: hidden;
+  }
+
+  .paper {
+    /* remove spacing between sheets */
+    margin-top: 0;
+    /* prevent generation of an blank extra page at the end */
+    height: 0;
+    box-shadow: none;
+  }
+
+  .footer-spacer {
+    /* remove spacing between sheets */
+    display: none;
+  }
 }

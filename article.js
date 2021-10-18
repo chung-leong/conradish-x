@@ -1,8 +1,9 @@
 import sampleText from './lib/sample.js';
 import { generateFootnoteContents } from './lib/translation.js';
 import { addText, addFootnotes } from './lib/layout.js';
-import { createMenuItems, handleInput, handleKeyPress, handlePaste, handleSelectionChange } from './lib/editing.js';
+import { createMenuItems, attachEditingHandlers } from './lib/editing.js';
 import { loadObject } from './lib/storage.js';
+import { attachRippleEffectHandlers } from './lib/ui.js';
 
 const sampleDoc = { title: 'Test', content: sampleText };
 
@@ -24,7 +25,8 @@ async function start() {
     // add footnotes
     addFootnotes(footnotes);
     // attach handlers to elements for editing contents
-    attachHandlers();
+    attachEditingHandlers();
+    attachRippleEffectHandlers();
     // create menu items
     createMenuItems();
     setStatus('ready');
@@ -34,13 +36,6 @@ async function start() {
     setStatus('error');
   }
   done = true;
-}
-
-function attachHandlers() {
-  document.addEventListener('input', handleInput);
-  document.addEventListener('keypress', handleKeyPress);
-  document.addEventListener('paste', handlePaste);
-  document.addEventListener('selectionchange', handleSelectionChange);
 }
 
 addEventListener('load', start);
