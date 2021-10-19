@@ -41,3 +41,40 @@
   text-align: right;
   padding: 16px 16px 16px 16px;
 }
+
+.custom-margins {
+  display: flex;
+  margin: 16px 26px 16px auto;
+  border: 1px solid rgb(232, 234, 237);
+  height: 200px;
+  width: 178px;
+}
+
+.custom-margins .column INPUT[type="text"] {
+  width: 54px !important;
+  margin: 1px 1px 1px 1px;
+}
+
+.custom-margins .column {
+  display: flex;
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.custom-margins .column.right {
+  align-items: flex-end;
+}
+
+.custom-margins .column .row {
+  display: flex;
+  flex-grow: 1;
+  flex-shrink: 1;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.custom-margins .column .row.bottom {
+  align-items: flex-end;
+}
