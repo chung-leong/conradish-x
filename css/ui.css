@@ -1,4 +1,4 @@
-button, select, input {
+button, select, input[type="text"] {
   font-size: 13px;
   font-weight: 500;
   border-radius: 4px;
@@ -31,6 +31,39 @@ button.default {
 
 button.default:hover {
   box-shadow: 0 1px 2px 0 rgba(66, 133, 244, .3), 0 3px 6px 2px rgba(66, 133, 244, .15);
+}
+
+select, input[type="text"] {
+  color: rgb(32, 33, 36);
+  min-height: 32px;
+  border: 0;
+  background-color: rgb(241, 243, 244);
+  box-sizing: border-box;
+}
+
+select:focus, input[type="text"]:focus {
+  box-shadow: rgba(26, 115, 232, 0.4) 0 0 0 2px;
+  outline-style: none;
+}
+
+select {
+  -webkit-appearance: none;
+  padding: 1px 32px 2px 8px;
+  background-image: url('../img/arrow_down.svg');
+  background-origin: padding-box;
+  background-position-x: calc(100% - 8px);
+  background-position-y: 50%;
+  background-repeat: no-repeat;
+  background-size: 10px;
+}
+
+select option {
+  min-height: 15.6px;
+  padding: 0 2px 1px 2px;
+}
+
+input[type="text"] {
+  padding: 1px 8px 2px 8px;
 }
 
 span.ripple {

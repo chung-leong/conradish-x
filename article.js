@@ -3,7 +3,7 @@ import { generateFootnoteContents } from './lib/translation.js';
 import { addText, addFootnotes } from './lib/layout.js';
 import { createMenuItems, attachEditingHandlers } from './lib/editing.js';
 import { loadObject } from './lib/storage.js';
-import { attachRippleEffectHandlers } from './lib/ui.js';
+import { createArticleNavigation } from './lib/side-nav.js';
 
 const sampleDoc = { title: 'Test', content: sampleText };
 
@@ -17,6 +17,10 @@ async function start() {
     const key = searchParams.get('t');
     const doc = (key) ? await loadObject(key) : sampleDoc;
     const { title, content, lang } = doc;
+    // create menu items
+    createMenuItems();
+    // create side navigation
+    createArticleNavigation();
     document.title = title;
     // look up definitions
     const footnotes = await generateFootnoteContents(content);
@@ -26,9 +30,6 @@ async function start() {
     addFootnotes(footnotes);
     // attach handlers to elements for editing contents
     attachEditingHandlers();
-    attachRippleEffectHandlers();
-    // create menu items
-    createMenuItems();
     setStatus('ready');
   } catch (e) {
     const errorElement = document.getElementById('error-text');

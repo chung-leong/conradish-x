@@ -1,0 +1,43 @@
+#side-nav {
+  display: flex;
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-direction: column;
+  height: 100%;
+  font-family: Roboto, Segoe UI, Tahoma, sans-serif;
+  font-size: 13px;
+}
+
+#side-nav-top {
+  flex-grow: 1;
+  flex-shrink: 1;
+  overflow: auto;
+}
+
+#side-nav-top SECTION {
+  padding: 16px 16px 0 16px;
+}
+
+#side-nav-top SECTION.last {
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgb(232, 234, 237);
+}
+
+#side-nav-top SECTION SELECT,
+#side-nav-top SECTION INPUT[type="text"] {
+  width: 200px;
+}
+
+#side-nav-top SECTION LABEL {
+  display: inline-block;
+  width: 140px;
+  padding-top: 4px;
+}
+
+#side-nav-bottom {
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: auto;
+  text-align: right;
+  padding: 16px 16px 16px 16px;
+}

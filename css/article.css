@@ -146,29 +146,6 @@ BODY.ready #article {
   margin-top: 0;
 }
 
-#side-nav {
-  display: flex;
-  flex-grow: 0;
-  flex-shrink: 0;
-  flex-basis: 30em;
-  flex-direction: column;
-  height: 100%;
-}
-
-#side-nav-top {
-  flex-grow: 1;
-  flex-shrink: 1;
-  overflow: auto;
-}
-
-#side-nav-bottom {
-  flex-grow: 0;
-  flex-shrink: 0;
-  flex-basis: auto;
-  text-align: right;
-  padding: 16px 16px 16px 16px;
-}
-
 #status-container {
   display: flex;
   position: absolute;
