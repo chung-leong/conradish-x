@@ -53,6 +53,7 @@
 .custom-margins .column INPUT[type="text"] {
   width: 54px !important;
   margin: 1px 1px 1px 1px;
+  text-align: center;
 }
 
 .custom-margins .column {

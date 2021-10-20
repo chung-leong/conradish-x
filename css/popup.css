@@ -1,0 +1,47 @@
+BODY {
+  margin: 0;
+  width: 250px;
+  font-size: 13px;
+}
+
+UL {
+  list-style-type: none;
+  padding: 0;
+  margin: 4px 0 4px 0;
+}
+
+LI {
+  padding: 6px 12px 6px 48px;
+  white-space: nowrap;
+  user-select: none;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  background-origin: padding-box;
+  background-position-x: 16px;
+  background-position-y: 5px;
+  background-repeat: no-repeat;
+  background-size: 20px;
+}
+
+LI:hover {
+  background-color: rgb(241, 243, 244);
+}
+
+LI.create {
+  background-image: url('../img/conradish48.png');
+}
+
+LI.document {
+  background-image: url('../img/document48.png');
+  background-position-x: 15px;
+}
+
+LI.folder {
+  background-image: url('../img/folder48.png');
+}
+
+LI.separator {
+  border-bottom: 1px solid rgb(241, 243, 244) ;
+  padding: 0;
+  margin: 4px 0 4px 0;
+}

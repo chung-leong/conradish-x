@@ -33,7 +33,7 @@ async function start() {
     setStatus('ready');
   } catch (e) {
     const errorElement = document.getElementById('error-text');
-    errorElement.textContent = e.toString();
+    errorElement.textContent = e;
     setStatus('error');
   }
   done = true;
