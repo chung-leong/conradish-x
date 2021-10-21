@@ -32,6 +32,7 @@ async function start() {
     attachEditingHandlers();
     setStatus('ready');
   } catch (e) {
+    console.error(e);
     const errorElement = document.getElementById('error-text');
     errorElement.textContent = e;
     setStatus('error');

@@ -3,13 +3,25 @@ import { initializeStorage, findObjects, loadObject } from './lib/storage.js';
 async function start() {
   const list = document.createElement('UL');
   list.addEventListener('click', handleClick);
+  document.body.appendChild(list);
   // add menu item for creating new document
   const create = document.createElement('LI');
   create.textContent = 'Create annotated document';
-  create.className = 'create';
+  create.className = 'create disabled';
+  create.title = 'Select portion of document you wish to annotate first';
   create.dataset.command = 'create';
   list.appendChild(create);
-  document.body.appendChild(list);
+  // ask service worker whether current tab has selection
+  chrome.runtime.sendMessage(undefined, { type: 'query' }, (response) => {
+    // response is true if there is selection, false if there isn't, and null
+    // if we're in a page with unsupported protocol (e.g. chrome://)
+    if (response !== false) {
+      if (response) {
+        create.classList.remove('disabled');
+      }
+      create.title = '';
+    }
+  });
   await initializeStorage();
   const docs = findObjects();
   if (docs.length > 0) {

@@ -27,6 +27,15 @@ LI:hover {
   background-color: rgb(241, 243, 244);
 }
 
+LI.disabled {
+  filter: grayscale(100%);
+  opacity: 0.5;
+}
+
+LI.disabled:hover {
+  background-color: inherit;
+}
+
 LI.create {
   background-image: url('../img/conradish48.png');
 }

@@ -17,8 +17,13 @@ function handleMessage(request, sender, sendResponse) {
     case 'create':
       return handleCreateDocument(request);
     case 'command':
-      console.log(request)
       return handleCommand(request);
+    case 'query':
+      handleSelectionQuery(sendResponse);
+      // keep sendResponse alive by returning true
+      return true;
+    case 'response':
+      return handleSelectionResponse(true);
   }
 }
 
@@ -36,6 +41,37 @@ async function handleCommand({ command, arg }) {
       return openDocument(arg);
     case 'list':
       return openDocumentList();
+  }
+}
+
+let responseFunc = null;
+
+async function handleSelectionQuery(sendResponse) {
+  let [ tab ] = await chrome.tabs.query({ active: true, currentWindow: true });
+  const url = new URL(tab.url);
+  if ([ 'http:', 'https:', 'file:' ].includes(url.protocol)) {
+    responseFunc = sendResponse;
+    // ask all frames if they have selection
+    chrome.scripting.executeScript({
+      target: { allFrames: true, tabId: tab.id },
+      func: () => {
+        const selection = getSelection();
+        if (!selection.isCollapsed) {
+          chrome.runtime.sendMessage(undefined, { type: 'response' });
+        }
+      }
+    });
+    // call the response function after a while if not frame responded
+    setTimeout(handleSelectionResponse, 500, false);
+  } else {
+    sendResponse(null);
+  }
+}
+
+function handleSelectionResponse(state) {
+  if (responseFunc) {
+    responseFunc(state);
+    responseFunc = null;
   }
 }
 
@@ -66,7 +102,6 @@ async function createDocument(tab) {
 async function openDocument(key) {
   const url = new URL(chrome.runtime.getURL('article.html'));
   url.searchParams.set('t', key);
-  console.log(url);
   return openTab(url);
 }
 
