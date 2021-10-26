@@ -2,7 +2,7 @@ import sampleText from './lib/sample.js';
 import { generateFootnoteContents } from './lib/translation.js';
 import { addText, addFootnotes } from './lib/layout.js';
 import { createMenuItems, attachEditingHandlers } from './lib/editing.js';
-import { loadObject } from './lib/storage.js';
+import { initializeStorage, loadObject } from './lib/storage.js';
 import { createArticleNavigation } from './lib/side-nav.js';
 
 const sampleDoc = { title: 'Test', content: sampleText };
@@ -13,6 +13,7 @@ async function start() {
   let done = false;
   setTimeout(() => done || setStatus('pending'), 250);
   try {
+    await initializeStorage();
     const { searchParams } = new URL(location);
     const key = searchParams.get('t');
     const doc = (key) ? await loadObject(key) : sampleDoc;
