@@ -42,7 +42,7 @@ BODY.ready #article {
   left: 0;
   bottom: 0;
   right: 0;
-  padding: 20mm 20mm 20mm 20mm;
+  padding: 25mm 25mm 25mm 25mm;
 }
 
 #article-text {
@@ -189,7 +189,7 @@ BODY.ready #status-container {
 }
 
 @page {
-  size: 210mm 297mm;
+  size: A4 portrait;
   margin: 0;
 }
 
