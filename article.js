@@ -4,8 +4,9 @@ import { addText, addFootnotes } from './lib/layout.js';
 import { createMenuItems, attachEditingHandlers } from './lib/editing.js';
 import { initializeStorage, loadObject } from './lib/storage.js';
 import { createArticleNavigation } from './lib/side-nav.js';
+import { setSourceLanguage } from './lib/settings.js';
 
-const sampleDoc = { title: 'Test', content: sampleText };
+const sampleDoc = { title: 'Test', lang: 'en', content: sampleText };
 
 async function start() {
   const setStatus = (status) => document.body.className = status;
@@ -18,6 +19,8 @@ async function start() {
     const key = searchParams.get('t');
     const doc = (key) ? await loadObject(key) : sampleDoc;
     const { title, content, lang } = doc;
+    // set the source language
+    setSourceLanguage(lang);
     // create menu items
     createMenuItems();
     // create side navigation
