@@ -50,10 +50,18 @@
   width: 178px;
 }
 
+.custom-margins.hidden {
+  display: none;
+}
+
 .custom-margins .column INPUT[type="text"] {
   width: 54px !important;
   margin: 1px 1px 1px 1px;
   text-align: center;
+}
+
+.custom-margins .column INPUT[type="text"].invalid {
+  background-color: #ffaaaa;
 }
 
 .custom-margins .column {
