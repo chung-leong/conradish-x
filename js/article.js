@@ -3,7 +3,7 @@ import { generateFootnoteContents } from './lib/translation.js';
 import { addText, addFootnotes } from './lib/layout.js';
 import { createMenuItems, attachEditingHandlers } from './lib/editing.js';
 import { initializeStorage, loadObject } from './lib/storage.js';
-import { createArticleNavigation } from './lib/side-nav.js';
+import { createArticleNavigation } from './lib/side-bar.js';
 import { setSourceLanguage } from './lib/settings.js';
 
 const sampleDoc = { title: 'Test', lang: 'en', content: sampleText };

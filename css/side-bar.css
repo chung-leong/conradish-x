@@ -1,4 +1,4 @@
-#side-nav {
+#side-bar {
   display: flex;
   flex-grow: 0;
   flex-shrink: 0;
@@ -8,33 +8,33 @@
   font-size: 13px;
 }
 
-#side-nav-top {
+#side-bar-top {
   flex-grow: 1;
   flex-shrink: 1;
   overflow: auto;
 }
 
-#side-nav-top SECTION {
+#side-bar-top SECTION {
   padding: 16px 16px 0 16px;
 }
 
-#side-nav-top SECTION.last {
+#side-bar-top SECTION.last {
   padding-bottom: 16px;
   border-bottom: 1px solid rgb(232, 234, 237);
 }
 
-#side-nav-top SECTION SELECT,
-#side-nav-top SECTION INPUT[type="text"] {
+#side-bar-top SECTION SELECT,
+#side-bar-top SECTION INPUT[type="text"] {
   width: 200px;
 }
 
-#side-nav-top SECTION LABEL {
+#side-bar-top SECTION LABEL {
   display: inline-block;
   width: 140px;
   padding-top: 4px;
 }
 
-#side-nav-bottom {
+#side-bar-bottom {
   flex-grow: 0;
   flex-shrink: 0;
   flex-basis: auto;

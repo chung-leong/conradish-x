@@ -195,7 +195,7 @@ BODY.ready #status-container {
 }
 
 @media print {
-  #side-nav {
+  #side-bar {
     /* hide navigation */
     display: none;
   }

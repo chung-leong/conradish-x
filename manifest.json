@@ -4,7 +4,7 @@
   "version": "1.0",
   "manifest_version": 3,
   "background": {
-    "service_worker": "background.js",
+    "service_worker": "js/background.js",
     "type": "module"
   },
   "permissions": [ "storage", "activeTab", "scripting", "contextMenus", "tabs" ],
@@ -27,7 +27,7 @@
   "options_page": "options.html",
   "web_accessible_resources": [
     {
-      "resources": [ "/lib/capture.js" ],
+      "resources": [ "/js/lib/capture.js" ],
       "matches": [ "<all_urls>" ]
     }
   ]

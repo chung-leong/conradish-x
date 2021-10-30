@@ -6,7 +6,7 @@ import { getSettings, saveSettings } from './storage.js';
 export function createArticleNavigation() {
   const settings = getSettings();
   const possible = getPossibleSettings();
-  const top = document.getElementById('side-nav-top');
+  const top = document.getElementById('side-bar-top');
   const setLang = (option, lang) => {
     option.textContent = lang.label;
     option.value = lang.value;
@@ -75,7 +75,7 @@ export function createArticleNavigation() {
   if (settings.margins === 'default') {
     customMargins.classList.add('hidden');
   }
-  const bottom = document.getElementById('side-nav-bottom');
+  const bottom = document.getElementById('side-bar-bottom');
   const printButton = document.createElement('BUTTON');
   printButton.textContent = 'Print';
   printButton.className = 'default';
