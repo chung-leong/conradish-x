@@ -3,6 +3,14 @@ export function attachRippleEffectHandlers() {
   document.addEventListener('mouseup', handleRippleEffectMouseUp);
 }
 
+export function attachCustomCheckboxHandlers() {
+  document.addEventListener('click', handleCustomCheckboxClick);
+  document.addEventListener('keypress', handleCustomCheckboxKeyPress);
+  document.addEventListener('keydown', handleCustomCheckboxKeyDown);
+  document.addEventListener('focusin', handleCustomCheckboxFocusIn);
+  document.addEventListener('mousedown', handleCustomCheckboxMouseDown);
+}
+
 let currentRipple = null;
 
 function handleRippleEffectMouseDown(evt) {
@@ -29,4 +37,58 @@ function handleRippleEffectMouseUp(evt) {
     currentRipple.remove();
     currentRipple = null;
   }
+}
+
+function handleCustomCheckboxClick(evt) {
+  const { target } = evt;
+  if (target.classList.contains('checkbox')) {
+    target.classList.toggle('checked');
+    triggerChangeEvent(target);
+    setTimeout(() => target.classList.add('clicked'), 200);
+  }
+}
+
+function handleCustomCheckboxKeyPress(evt) {
+  const { target, key } = evt;
+  if (target.classList.contains('checkbox')) {
+    if (key === ' ' || key === 'Enter') {
+      target.classList.toggle('checked');
+      triggerChangeEvent(target);
+    }
+  }
+}
+
+function handleCustomCheckboxKeyDown(evt) {
+  const { target, key } = evt;
+  if (target.classList.contains('checkbox')) {
+    if (key === 'ArrowDown' || key === 'ArrowUp') {
+      const checkboxes = [ ...document.getElementsByClassName('checkbox') ];
+      const index = checkboxes.indexOf(target);
+      const offset = (key === 'ArrowDown') ? +1 : -1;
+      const nextTarget = checkboxes[index + offset];
+      if (nextTarget) {
+        nextTarget.focus();
+      }
+    }
+    target.classList.remove('clicked');
+  }
+}
+
+function handleCustomCheckboxFocusIn(evt) {
+  const { target } = evt;
+  if (target.classList.contains('checkbox')) {
+    target.classList.remove('clicked');
+  }
+}
+
+function handleCustomCheckboxMouseDown(evt) {
+  const { target } = evt;
+  if (target.classList.contains('checkbox')) {
+    target.classList.remove('clicked');
+  }
+}
+
+function triggerChangeEvent(target) {
+  const evt = new Event('change', { bubbles: true });
+  target.dispatchEvent(evt);
 }

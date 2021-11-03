@@ -80,6 +80,53 @@ button.default span.ripple {
   background-color: rgba(255, 255, 255, 0.32);
 }
 
+.checkbox {
+  display: inline-block;
+  position: relative;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgb(95, 99, 104);
+  border-radius: 3px;
+  font-size: 15px;
+  font-weight: 900;
+  line-height: 13px;
+  outline: none;
+  user-select: none;
+  cursor: pointer;
+}
+
+.checkbox.checked {
+  color: rgb(255, 255, 255);
+  background-color: rgb(51, 103, 214);
+  border-color: rgb(51, 103, 214);
+}
+
+.checkbox.checked::before {
+  content: "\2713";
+}
+
+.checkbox span.ripple {
+  display: none;
+  background-color: rgba(0, 0, 0, 0.1);
+  width: 10px;
+  height: 10px;
+  left: 1px;
+  top: 1px;
+  animation: ripple 200ms linear 0s normal forwards;
+}
+
+.checkbox:focus span.ripple {
+  display: inline-block;
+}
+
+.checkbox.checked span.ripple {
+  background-color: rgba(51, 103, 214, 0.2);
+}
+
+.checkbox.clicked span.ripple {
+  display: none;
+}
+
 @keyframes ripple {
   to {
     transform: scale(4);
