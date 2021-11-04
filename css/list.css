@@ -65,30 +65,64 @@ BODY {
   background-color: rgb(51, 103, 214);
 }
 
-#toolbar-search INPUT[type="text"] {
-  color: rgb(255, 255, 255);
+#search-input {
+  display: inline-block;
+  position: relative;
   width: 100%;
   max-width: 680px;
+}
+
+#search-input INPUT[type="text"] {
+  display: block;
+  color: rgb(255, 255, 255);
+  width: 100%;
   line-height: 24.05px;
   border: 0;
   border-radius: 0;
   background-color: rgba(0, 0, 0, 0.22);
   padding: 7px 5px 5px 48px;
   outline: none;
+}
+
+#search-input INPUT[type="text"]::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+#search-input .magnifying-glass {
+  position: absolute;
+  left: 10px;
+  top: 8px;
+  width: 20px;
+  height: 20px;
   background-image: url('../img/magnifying_glass.svg');
-  background-origin: padding-box;
-  background-position-x: 10px;
-  background-position-y: 50%;
   background-repeat: no-repeat;
   background-size: 20px;
+  cursor: pointer;
+  opacity: 0.7;
 }
 
-#toolbar-search INPUT[type="text"]:focus {
-  background-image: url('../img/magnifying_glass_white.svg');
+#search-input .magnifying-glass:hover {
+  opacity: 1;
 }
 
-#toolbar-search INPUT[type="text"]::placeholder {
-  color: #becae3;
+#search-input.focus .magnifying-glass {
+  opacity: 1;
+}
+
+#search-input .x-button {
+  display: none;
+  position: absolute;
+  color: rgba(55, 55, 55);
+  background-color: rgb(255, 255, 255);
+  right: 9px;
+  top: 9px;
+  width: 18px;
+  height: 18px;
+  line-height: 18px;
+}
+
+#search-input.active .x-button {
+  display: block;
 }
 
 #toolbar-commands {
@@ -120,7 +154,9 @@ BODY {
   display: flex;
   flex-shrink: 0;
   flex-grow: 1;
+  flex-basis: 0;
   background-color: rgb(248, 249, 250);
+  overflow-y: auto;
 }
 
 #right-side-bar, #left-side-bar {
@@ -133,14 +169,21 @@ BODY {
   flex-grow: 0;
   flex-shrink: 1;
   flex-basis: 960px;
-  padding: 10px 10px 10px 10px;
+  padding: 10px 10px 0px 10px;
+  /* need to set min width so the list item can use text-overflow */
+  min-width: 0;
 }
 
+#list-end-spacer {
+  height: 2px;
+}
 .card {
   background-color: rgb(255, 255, 255);
   border-radius: 3px;
   box-shadow: rgba(60, 64, 67, 0.3) -1px 1px 2px 0px, rgba(60, 64, 67, 0.3) 1px 1px 2px 0px;
   margin-top: 16px;
+  margin-bottom: 24px;
+  min-width: 0;
 }
 
 .card-title {
@@ -153,27 +196,39 @@ BODY {
 .card-list {
   list-style-type: none;
   padding: 0px 12px 2px 24px;
+  min-width: 0;
 }
 
 .card-list LI {
+  display: flex;
   margin: 16px 0 16px 0;
+  align-items: center;
+  min-width: 0;
 }
 
 .checkbox {
-  vertical-align: middle;
+  flex-shrink: 0;
+  flex-grow: 0;
 }
 
 .time {
-  display: inline-block;
+  flex-shrink: 0;
+  flex-grow: 0;
+  flex-basis: 100px;
   padding: 4px 18px 3px 18px;
-  vertical-align: middle;
 }
 
 .title {
-  display: inline-block;
+  flex-shrink: 1;
+  flex-grow: 1;
+  flex-basis: 100px;
   padding: 4px 0px 3px 36px;
   vertical-align: middle;
   cursor: pointer;
+  text-overflow: ellipsis;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
   background-origin: padding-box;
   background-position-x: 4px;
   background-position-y: 2px;

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="UTF-8">
     <link rel="stylesheet" href="css/ui.css">
     <link rel="stylesheet" href="css/list.css">
     <script type="module" src="js/list.js"></script>
@@ -8,13 +9,7 @@
   </head>
   <body>
     <div id="toolbar-container">
-      <div id="toolbar-search" class="toolbar active">
-        <div class="toolbar-left">Documents</div>
-        <div class="toolbar-center">
-          <input type="text" placeholder="Search documents">
-        </div>
-        <div class="toolbar-right"></div>
-      </div>
+      <div id="toolbar-search" class="toolbar active"></div>
       <div id="toolbar-commands" class="toolbar">
         <div class="toolbar-left"></div>
         <div class="toolbar-center">
@@ -30,34 +25,7 @@
     </div>
     <div id="main-container">
       <div id="left-side-bar"></div>
-      <div id="list-container">
-        <div class="card">
-          <div class="card-title">Today - Tuesday, November 2, 2021</div>
-          <ul class="card-list">
-            <li data-id="2021-10-17T01:44:19.980Z:DOC" data-type="DOC">
-              <span class="checkbox checked" tabindex="0">
-                <span class="ripple"></span>
-              </span>
-              <span class="time">10:24 PM</span>
-              <span class="title">Hello world</span>
-            </li>
-            <li>
-              <span class="checkbox" tabindex="0">
-                <span class="ripple"></span>
-              </span>
-              <span class="time">10:24 PM</span>
-              <span class="title">Hello world</span>
-            </li>
-            <li>
-              <span class="checkbox" tabindex="0">
-                <span class="ripple"></span>
-              </span>
-              <span class="time">10:24 PM</span>
-              <span class="title">Hello world</span>
-            </li>
-          </ul>
-        </div>
-      </div>
+      <div id="list-container"></div>
       <div id="right-side-bar"></div>
     </div>
   </body>

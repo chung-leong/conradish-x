@@ -1,3 +1,4 @@
+import { e } from './lib/ui.js';
 import { initializeStorage, findObjects, loadObject } from './lib/storage.js';
 
 async function start() {
@@ -5,11 +6,11 @@ async function start() {
   list.addEventListener('click', handleClick);
   document.body.appendChild(list);
   // add menu item for creating new document
-  const create = document.createElement('LI');
-  create.textContent = 'Create annotated document';
-  create.className = 'create disabled';
-  create.title = 'Select portion of document you wish to annotate first';
-  create.dataset.command = 'create';
+  const create = e('LI', {
+    className: 'create disabled',
+    title: 'Select portion of document you wish to annotate first',
+    dataset: { command: 'create' }
+  }, 'Create annotated document');
   list.appendChild(create);
   // ask service worker whether current tab has selection
   chrome.runtime.sendMessage(undefined, { type: 'query' }, (response) => {
@@ -26,31 +27,26 @@ async function start() {
   const docs = findObjects();
   if (docs.length > 0) {
     // add separator
-    const sep1 = document.createElement('LI');
-    sep1.className = 'separator';
-    list.appendChild(sep1);
+    list.appendChild(e('LI', { className: 'separator' }));
     // list up to 8 recent documents
     const recentDocs = docs.slice(-8).reverse();
     for (const { key, date, type } of recentDocs) {
       // add menu item for opening existing doc
       const doc = await loadObject(key);
-      const open = document.createElement('LI');
-      open.textContent = doc.title;
-      open.className = 'document';
-      open.dataset.command = 'open' + type;
-      open.dataset.arg = key;
-      open.title = `Created on ${date.toLocaleString()}`;
+      const open = e('LI', {
+        className: 'document',
+        dataset: { command: 'open' + type, arg: key },
+        title: `Created on ${date.toLocaleString()}`,
+      }, doc.title);
       list.appendChild(open);
     }
     // add another separator
-    const sep2 = document.createElement('LI');
-    sep2.className = 'separator';
-    list.appendChild(sep2);
+    list.appendChild(e('LI', { className: 'separator' }));
     // add menu item for opening document list page
-    const show = document.createElement('LI');
-    show.textContent = 'Show all documents';
-    show.className = 'folder';
-    show.dataset.command = 'list';
+    const show = e('LI', {
+      className: 'folder',
+      dataset: { command: 'list' }
+    }, 'Show all documents');
     list.appendChild(show);
   }
 }

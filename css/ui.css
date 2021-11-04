@@ -132,3 +132,14 @@ button.default span.ripple {
     transform: scale(4);
   }
 }
+
+.x-button {
+  display: inline-block;
+  font-size: 20px;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.x-button:before {
+  content: "\00d7";
+}

@@ -1,3 +1,41 @@
+export function createElement(name, attrs, children) {
+  const element = document.createElement(name);
+  assignAttributes(element, attrs);
+  appendContent(element, children);
+  return element;
+}
+
+export { createElement as e };
+
+function assignAttributes(object, props) {
+  if (!props) {
+    return;
+  }
+  for (const [ key, value ] of Object.entries(props)) {
+    if (value instanceof Object) {
+      assignAttributes(object[key], value);
+    } else {
+      object[key] = value;
+    }
+  }
+}
+
+function appendContent(element, content) {
+  if (!content) {
+    return;
+  }
+  if (content instanceof HTMLElement) {
+    element.appendChild(content);
+  } else if (content instanceof Array) {
+    for (const item of content) {
+      appendContent(element, item);
+    }
+  } else {
+    const child = document.createTextNode(content);
+    element.appendChild(child);
+  }
+}
+
 export function attachRippleEffectHandlers() {
   document.addEventListener('mousedown', handleRippleEffectMouseDown);
   document.addEventListener('mouseup', handleRippleEffectMouseUp);
@@ -54,6 +92,7 @@ function handleCustomCheckboxKeyPress(evt) {
     if (key === ' ' || key === 'Enter') {
       target.classList.toggle('checked');
       triggerChangeEvent(target);
+      evt.preventDefault();
     }
   }
 }
