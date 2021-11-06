@@ -1,4 +1,4 @@
-import { initializeStorage, findObjects, loadObject } from './lib/storage.js';
+import { initializeStorage, findObjects, loadObject, deleteObjects } from './lib/storage.js';
 import { e, attachCustomCheckboxHandlers, attachRippleEffectHandlers } from './lib/ui.js';
 
 const listContainer = document.getElementById('list-container');
@@ -128,8 +128,10 @@ async function createCards() {
   // load the titles now
   for (const item of items) {
     const doc = await loadObject(item.key);
-    item.titleElement.textContent = doc.title;
-    item.doc = doc;
+    if (doc) {
+      item.titleElement.textContent = doc.title;
+      item.doc = doc;
+    }
   }
 }
 
@@ -166,7 +168,7 @@ function handleChange(evt) {
     const checkboxes = getSelectedCheckboxes();
     const toolbar = document.getElementById('toolbar-commands');
     const status = document.getElementById('selection-status');
-    selection = checkboxes.map(cb => cb.parentNode.dataset.id)
+    selection = checkboxes.map(cb => cb.parentNode.dataset.key);
     if (selection.length > 0) {
       toolbar.classList.add('active');
       status.textContent = `${selection.length} selected`;
@@ -217,8 +219,26 @@ function handleCancelClick(evt) {
   selection = [];
 }
 
-function handleDeleteClick(evt) {
-    // TODO
+async function handleDeleteClick(evt) {
+  const selectedItems = items.filter(item => selection.includes(item.key));
+  const emptyLists = [];
+  for (const { itemElement } of selectedItems) {
+    const listElement = itemElement.parentNode;
+    itemElement.remove();
+    if (!listElement.hasChildNodes()) {
+      emptyLists.push(listElement);
+    }
+  }
+  const emptyCards = cards.filter(card => emptyLists.includes(card.listElement));
+  for (const { cardElement } of emptyCards) {
+    cardElement.remove();
+  }
+  cards = cards.filter((card) => !emptyCards.includes(card));
+  items = items.filter((item) => !selectedItems.includes(item));
+  const toolbar = document.getElementById('toolbar-commands');
+  toolbar.classList.remove('active');
+  await deleteObjects(selection);
+  selection = [];
 }
 
 function handleScroll(evt) {

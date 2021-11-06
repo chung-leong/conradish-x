@@ -59,16 +59,22 @@ export async function saveObject(key, object) {
 }
 
 export async function loadObject(key) {
-  return get(key);
+  const object = await get(key);
+  if (object === undefined) {
+    // remove key from the directory if object is missing
+    const index = directory.indexOf(key);
+    directory.splice(index, 1);
+    await set('directory', directory);
+  }
+  return object;
 }
 
 export async function deleteObject(key) {
-  try {
-    await remove(key);
-  } catch (e) {
-    const index = directory.indexOf(key);
-    directory.splice(index, 1);
-  }
+  await remove(key);
+}
+
+export async function deleteObjects(keys) {
+  await remove(keys);
 }
 
 async function removeOldestObject() {
@@ -88,7 +94,7 @@ async function handleChanged(changes, areaName) {
       continue;
     }
     if (change.newValue === undefined) {
-      const index = directory;
+      const index = directory.indexOf(key);
       directory.splice(index, 1);
       changed = true;
     } else if (!directory.includes(key)) {
@@ -128,9 +134,10 @@ async function get(key) {
   });
 }
 
-async function remove(key) {
+async function remove(keys) {
+  console.log(keys);
   return new Promise((resolve, reject) => {
-    chrome.storage.local.remove(key, () => {
+    chrome.storage.local.remove(keys, () => {
       if (chrome.runtime.lastError) {
         reject(chrome.runtime.lastError);
       } else {
