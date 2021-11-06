@@ -22,7 +22,7 @@ BODY {
 }
 
 #toolbar-container.shadow {
-  box-shadow: rgba(60, 64, 67, 0.5) 1px 1px 8px 0px;
+  box-shadow: rgba(60, 64, 67, 0.5) 0 3px 8px 1px;
 }
 
 .toolbar {
@@ -112,12 +112,14 @@ BODY {
 #search-input .x-button {
   display: none;
   position: absolute;
-  color: rgba(55, 55, 55);
+  color: rgb(55, 55, 55);
   background-color: rgb(255, 255, 255);
+  font-size: 20px;
   right: 9px;
   top: 9px;
   width: 18px;
   height: 18px;
+  margin: 0;
   line-height: 18px;
 }
 
@@ -138,6 +140,14 @@ BODY {
   flex-grow: 1;
   flex-shrink: 1;
   text-align: left;
+}
+
+#toolbar-commands-left SPAN {
+  vertical-align: middle;
+}
+
+#selection-status {
+  margin-left: 18px;
 }
 
 #toolbar-commands-right  {

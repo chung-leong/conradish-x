@@ -2,8 +2,10 @@ import { initializeStorage, findObjects, loadObject } from './lib/storage.js';
 import { e, attachCustomCheckboxHandlers, attachRippleEffectHandlers } from './lib/ui.js';
 
 const listContainer = document.getElementById('list-container');
+const toolbarContainer = document.getElementById('toolbar-container');
 let cards;
 let items;
+let selection;
 
 async function start() {
   await initializeStorage();
@@ -12,16 +14,19 @@ async function start() {
   document.addEventListener('click', handleClick);
   document.addEventListener('change', handleChange);
   createSearchToolbar();
+  createCommandToolbar();
   await createCards();
-  updateCommandToolbar();
+  listContainer.parentNode.addEventListener('scroll', handleScroll);
 }
 
 function createSearchToolbar() {
-  const container = document.getElementById('toolbar-search');
   const leftElement = e('DIV', { className: 'toolbar-left' }, 'Documents');
   const inputElement = e('INPUT', { type: 'text', placeholder: 'Search documents' });
   const iconElement = e('SPAN', { className: 'magnifying-glass', title: 'Search documents' });
-  const buttonElement = e('SPAN', { className: 'x-button' });
+  const buttonElement = e('SPAN', {
+    className: 'x-button',
+    title: 'Clear search',
+  });
   const searchElement = e('DIV', {
     id: 'search-input',
   }, [ inputElement, iconElement, buttonElement ]);
@@ -29,11 +34,36 @@ function createSearchToolbar() {
     className: 'toolbar-center'
   }, searchElement);
   const rightElement = e('DIV', { className: 'toolbar-right' });
+  const container = document.getElementById('toolbar-search');
   container.append(leftElement, centerElement, rightElement);
   inputElement.addEventListener('input', handleSearchInput);
   inputElement.addEventListener('focus', handleSearchFocus);
   inputElement.addEventListener('blur', handleSearchBlur);
   buttonElement.addEventListener('click', handleClearClick);
+}
+
+function createCommandToolbar() {
+  const container = document.getElementById('toolbar-commands');
+  const leftElement = e('DIV', { className: 'toolbar-left' });
+  const xButtonElement = e('SPAN', {
+    className: 'x-button',
+    title: 'Cancel',
+  });
+  const spanElement = e('SPAN', { id: 'selection-status' });
+  const centerLeftElement = e('DIV', {
+    id: 'toolbar-commands-left',
+  }, [ xButtonElement, spanElement ]);
+  const deleteButtonElement = e('BUTTON', {}, 'Delete');
+  const centerRightElement = e('DIV', {
+    id: 'toolbar-commands-lright',
+  }, [ deleteButtonElement ]);
+  const centerElement = e('DIV', {
+    className: 'toolbar-center'
+  }, [ centerLeftElement, centerRightElement ] );
+  const rightElement = e('DIV', { className: 'toolbar-right' });
+  container.append(leftElement, centerElement, rightElement);
+  xButtonElement.addEventListener('click', handleCancelClick);
+  deleteButtonElement.addEventListener('click', handleDeleteClick);
 }
 
 async function createCards() {
@@ -109,22 +139,8 @@ function clearList() {
   }
 }
 
-function updateCommandToolbar() {
-  const selection = getSelectedCheckBoxes();
-  const toolbar = document.getElementById('toolbar-commands');
-  if (selection.length > 0) {
-    toolbar.classList.add('active');
-  } else {
-    toolbar.classList.remove('active');
-  }
-}
-
-function getSelectedCheckBoxes() {
+function getSelectedCheckboxes() {
   return [ ...document.querySelectorAll('.checkbox.checked') ];
-}
-
-function getSelectedDocumentIds() {
-  return getSelectedCheckBoxes.map(cb => cb.parentNode.dataset.id);
 }
 
 function handleClick(evt) {
@@ -147,7 +163,16 @@ function handleClick(evt) {
 function handleChange(evt) {
   const { target } = evt;
   if (target.classList.contains('checkbox')) {
-    updateCommandToolbar();
+    const checkboxes = getSelectedCheckboxes();
+    const toolbar = document.getElementById('toolbar-commands');
+    const status = document.getElementById('selection-status');
+    selection = checkboxes.map(cb => cb.parentNode.dataset.id)
+    if (selection.length > 0) {
+      toolbar.classList.add('active');
+      status.textContent = `${selection.length} selected`;
+    } else {
+      toolbar.classList.remove('active');
+    }
   }
 }
 
@@ -180,6 +205,30 @@ function handleClearClick(evt) {
   const [ input ] = target.parentNode.getElementsByTagName('INPUT');
   classList.remove('active');
   input.value = '';
+}
+
+function handleCancelClick(evt) {
+  const checkboxes = getSelectedCheckboxes();
+  for (const cb of checkboxes) {
+    cb.classList.remove('checked');
+  }
+  const toolbar = document.getElementById('toolbar-commands');
+  toolbar.classList.remove('active');
+  selection = [];
+}
+
+function handleDeleteClick(evt) {
+    // TODO
+}
+
+function handleScroll(evt) {
+  const { target } = evt;
+  const { classList } = toolbarContainer;
+  if (target.scrollTop > 0) {
+    classList.add('shadow');
+  } else {
+    classList.remove('shadow');
+  }
 }
 
 start();

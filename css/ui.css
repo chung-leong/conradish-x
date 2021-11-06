@@ -135,11 +135,21 @@ button.default span.ripple {
 
 .x-button {
   display: inline-block;
-  font-size: 20px;
+  font-size: 26px;
   cursor: pointer;
+  color: rgb(99, 95, 104);
   border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  line-height: 34px;
+  text-align: center;
+  margin: 0 8px 0 8px;
 }
 
 .x-button:before {
   content: "\00d7";
+}
+
+.x-button:hover {
+  background-color: rgba(0, 0, 0, 0.1);
 }
