@@ -1,138 +1,110 @@
-import { attachRippleEffectHandlers } from './ui.js';
+import { e, attachRippleEffectHandlers } from './ui.js';
 import { getSourceLanguages, getTargetLanguages } from './translation.js';
 import { getPossibleSettings, getPaperProperties, setSourceLanguage, getSourceLanguage, applyStyles } from './settings.js';
 import { getSettings, saveSettings } from './storage.js';
+import { adjustLayout } from './layout.js';
 
 export function createArticleNavigation() {
   const settings = getSettings();
   const possible = getPossibleSettings();
   const top = document.getElementById('side-bar-top');
-  const setLang = (option, lang) => {
-    option.textContent = lang.label;
-    option.value = lang.value;
-  };
+  // add source language select
   const sourceLangs = getSourceLanguages();
-  const sourceLangSelect = addSelect(top, 'From', sourceLangs, setLang);
-  sourceLangSelect.value = getSourceLanguage();
+  const sourceLang = getSourceLanguage();
+  const sourceLangSelect = createSelect(sourceLangs, sourceLang);
   sourceLangSelect.addEventListener('change', handleSourceLanguageChange);
+  addSection(top, 'From', sourceLangSelect);
+  // add target language select
   const targetLangs = getTargetLanguages();
-  const targetLangSelect = addSelect(top, 'To', targetLangs, setLang);
-  targetLangSelect.value = settings.target;
+  const targetLangSelect = createSelect(targetLangs, settings.target);
   targetLangSelect.addEventListener('change', handleTargetLanguageChange);
-  targetLangSelect.parentNode.className = 'last';
+  addSection(top, 'To', targetLangSelect, true);
   // add font family and size dropdowns for main text
-  const setFont = (option, font) => {
-    option.textContent = font.label;
-    option.value = font.value;
-    option.style.fontFamily = font.value;
-    option.style.fontSize = '14pt';
-  };
-  const setSize = (option, size) => {
-    option.textContent = size.label;
-    option.value = size.value;
-    option.style.fontSize = size.value;
-  };
-  const articleFontSelect = addSelect(top, 'Font', possible.fontFamily, setFont);
-  articleFontSelect.value = settings.article.fontFamily;
+  const articleFontSelect = createFontFamilySelect(possible.fontFamily, settings.article.fontFamily);
   articleFontSelect.dataset.section = 'article';
   articleFontSelect.addEventListener('change', handleFontChange);
-  const articleSizeSelect = addSelect(top, 'Font size', possible.fontSize, setSize);
-  articleSizeSelect.value = settings.article.fontSize;
+  addSection(top, 'Font', articleFontSelect);
+  const articleSizeSelect = createFontSizeSelect(possible.fontSize, settings.article.fontSize);
   articleSizeSelect.dataset.section = 'article';
   articleSizeSelect.addEventListener('change', handleFontSizeChange);
+  addSection(top, 'Font size', articleSizeSelect);
   // add font family and size dropdowns for footnotes
-  const footnoteFontSelect = addSelect(top, 'Footnote font', possible.fontFamily, setFont);
-  footnoteFontSelect.value = settings.footnote.fontFamily;
+  const footnoteFontSelect = createFontFamilySelect(possible.fontFamily, settings.footnote.fontFamily);
   footnoteFontSelect.dataset.section = 'footnote';
   footnoteFontSelect.addEventListener('change', handleFontChange);
-  const footnoteSizeSelect = addSelect(top, 'Footnote font size', possible.fontSize, setSize);
-  footnoteSizeSelect.value = settings.footnote.fontSize;
+  addSection(top, 'Footnote font', footnoteFontSelect);
+  const footnoteSizeSelect = createFontSizeSelect(possible.fontSize, settings.footnote.fontSize);
   footnoteSizeSelect.dataset.section = 'footnote';
   footnoteSizeSelect.addEventListener('change', handleFontSizeChange);
-  footnoteSizeSelect.parentNode.className = 'last';
+  addSection(top, 'Footnote font', footnoteFontSelect, true);
   // add paper size dropdown
-  const paperSelect = addSelect(top, 'Paper size', possible.paper, (option, paper) => {
-    option.textContent = paper.label;
-    option.value = paper.value;
-  });
+  const paperSelect = createSelect(possible.paper, settings.paper);
   paperSelect.addEventListener('change', handlePaperChange);
-  paperSelect.value = settings.paper;
+  addSection(top, 'Paper size', paperSelect);
   // add margins dropdown
-  const marginSelect = addSelect(top, 'Margins', possible.margins, (option, margin) => {
-    option.textContent = margin.label;
-    option.value = margin.value;
-  });
-  marginSelect.value = settings.margins;
+  const marginSelect = createSelect(possible.margins, settings.margins);
   marginSelect.addEventListener('change', handleMarginChange);
+  addSection(top, 'Margins', marginSelect);
   // add custom margins input pane
-  const customMargins = addCustomMarginInputs(top);
+  const customMargins = createCustomMarginInputs(top, settings.customMargins, settings.margins === 'default');
   const inputs = customMargins.getElementsByTagName('INPUT');
   for (const input of inputs) {
-    input.value = settings.customMargins[input.name];
     input.addEventListener('input', handleCustomMarginInput);
     input.addEventListener('blur', handleCustomMarginBlur);
   }
-  if (settings.margins === 'default') {
-    customMargins.classList.add('hidden');
-  }
+  top.append(customMargins);
+
   const bottom = document.getElementById('side-bar-bottom');
-  const printButton = document.createElement('BUTTON');
-  printButton.textContent = 'Print';
-  printButton.className = 'default';
+  const printButton = e('BUTTON', { className: 'default' }, 'Print');
   printButton.addEventListener('click', handlePrintClick)
-  bottom.appendChild(printButton);
+  bottom.append(printButton);
   // add ripple effect to button
   attachRippleEffectHandlers();
 }
 
-function addSelect(container, description, items, callback) {
-  const select = document.createElement('SELECT');
-  const label = document.createElement('LABEL');
-  label.textContent = description;
-  for (let item of items) {
-    const option = document.createElement('OPTION');
-    callback(option, item);
-    select.appendChild(option);
+function addSection(container, label, control, last = false) {
+  const section = e('SECTION', {}, [ e('LABEL', {}, label), control ]);
+  if (last) {
+    section.classList.add('last');
   }
-  const section = document.createElement('SECTION');
-  section.appendChild(label);
-  section.appendChild(select);
-  container.appendChild(section);
-  return select;
+  container.append(section);
 }
 
-function addCustomMarginInputs(container) {
-  const div = document.createElement('DIV');
-  div.className = 'custom-margins';
-  const left = document.createElement('DIV');
-  left.className = 'column left';
-  addMarginInput(left, 'left');
-  div.appendChild(left);
-  const center = document.createElement('DIV');
-  center.className = 'column center';
-  const top = document.createElement('DIV');
-  top.className = 'row top';
-  addMarginInput(top, 'top');
-  center.appendChild(top);
-  const bottom = document.createElement('DIV');
-  bottom.className = 'row bottom';
-  addMarginInput(bottom, 'bottom');
-  center.appendChild(bottom);
-  div.appendChild(center);
-  const right = document.createElement('DIV');
-  right.className = 'column right';
-  addMarginInput(right, 'right');
-  div.appendChild(right);
-  container.appendChild(div);
-  return div;
+function createSelect(languages, value) {
+  return e('SELECT', { value }, languages.map(({ label, value }) => {
+    return e('OPTION', { value }, label);
+  }));
 }
 
-function addMarginInput(container, name) {
-  const input = document.createElement('INPUT')
-  input.type = 'text';
-  input.name = name;
-  container.appendChild(input);
-  return input;
+function createFontFamilySelect(fontFamilies, value) {
+  return e('SELECT', { value }, fontFamilies.map(({ label, value }) => {
+    const style = { fontFamily: value, fontSize: '14pt' };
+    return e('OPTION', { value, style }, label);
+  }));
+}
+
+function createFontSizeSelect(fontSizes, value) {
+  return e('SELECT', { value }, fontSizes.map(({ label, value }) => {
+    const style = { fontSize: value };
+    return e('OPTION', { value, style }, label);
+  }));
+}
+
+function createCustomMarginInputs(container, margins, hidden) {
+  const createInput = (name) => {
+    const value = margins[name];
+    return e('INPUT', { type: 'text', name, value });
+  };
+  const left = e('DIV', { className: 'column left' }, createInput('left'));
+  const right = e('DIV', { className: 'column right' }, createInput('right'));
+  const top = e('DIV', { className: 'row top' }, createInput('top'));
+  const bottom = e('DIV', { className: 'row bottom' }, createInput('bottom'));
+  const center = e('DIV', { className: 'column center' }, [ top, bottom ]);
+  let className = 'custom-margins';
+  if (hidden) {
+    className += 'hidden';
+  }
+  return e('DIV', { className }, [ left, center, right ]);
 }
 
 function handleFontChange(evt) {
@@ -223,5 +195,6 @@ function changeSettings(callback) {
   const settings = getSettings();
   callback(settings);
   applyStyles();
+  adjustLayout({ updatePaper: true });
   saveSettings();
 }
