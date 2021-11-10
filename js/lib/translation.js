@@ -1,11 +1,11 @@
-export async function queryDefinition(term) {
+export async function queryDefinition(term, sourceLang, targetLang) {
   try {
-    return `[DEFINITION of "${term}"]`;
+    //return `[DEFINITION of "${term}"]`;
     const url = new URL('https://clients5.google.com/translate_a/t');
     url.searchParams.set('client', 'dict-chrome-ex');
     url.searchParams.set('q', term);
-    url.searchParams.set('sl', 'en');
-    url.searchParams.set('tl', 'pl');
+    url.searchParams.set('sl', sourceLang);
+    url.searchParams.set('tl', targetLang);
     const response = await fetch(url);
     const json = await response.json();
     if (json.sentences instanceof Array) {
@@ -29,7 +29,8 @@ export function getSourceLanguages() {
 }
 
 export function getTargetLanguages() {
-  const list = [];
+  const none = { value: '', label: 'None' };
+  const list = [ none ];
   for (const { code, name, variants } of languages) {
     if (variants) {
       for (const { code, name } of variants) {

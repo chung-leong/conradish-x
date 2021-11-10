@@ -21,10 +21,10 @@ function assignAttributes(object, props) {
 }
 
 function appendContent(element, content) {
-  if (!content) {
+  if (content == null) {
     return;
   }
-  if (content instanceof HTMLElement) {
+  if (content instanceof HTMLElement || content instanceof DocumentFragment) {
     element.appendChild(content);
   } else if (content instanceof Array) {
     for (const item of content) {

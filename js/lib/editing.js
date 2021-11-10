@@ -1,6 +1,8 @@
 import { e } from './ui.js';
-import { adjustLayout, adjustFootnoteReferences } from './layout.js';
+import { adjustLayout, adjustFootnoteReferences, annotateRange, attachFootnote } from './layout.js';
 import { extractContent } from './capture.js';
+import { queryDefinition } from './translation.js';
+import { getSourceLanguage, getTargetLanguage } from './settings.js';
 
 export function attachEditingHandlers() {
   document.addEventListener('input', handleInput);
@@ -92,13 +94,13 @@ function handleFootnoteKeyPress(evt) {
 function handleFootnoteInput(evt) {
   // see if any item has gone missing or resurfaced, hiding and restoring
   // the referencing sup elements accordingly
-  adjustFootnoteReferences();
+  adjustFootnoteReferences({ updateReferences: true });
   // adjust the adjust the page layout in case the height is different
   adjustLayout({ updateFooterPosition: true });
 }
 
 function handleArticleInput(evt) {
-  adjustFootnoteReferences();
+  adjustFootnoteReferences({ updateFootnotes: true });
   adjustLayout();
 }
 
@@ -149,11 +151,60 @@ function handleMenuMouseDown(evt) {
 }
 
 function handleAddDefinition(evt) {
-  console.log('Definition: ' + lastSelectedRange.toString());
+  addFootnote(true);
 }
 
 function handleAddTranslation(evt) {
-  console.log('Translation: ' + lastSelectedRange.toString());
+  addFootnote(false);
+}
+
+async function addFootnote(includeTerm) {
+  // set the selection to what was last selected
+  const selection = getSelection();
+  const range = lastSelectedRange.cloneRange();
+  const textSelected = range.toString();
+  // trim off whitespaces
+  const wsBefore = textSelected.length - textSelected.trimLeft().length;
+  const wsAfter = textSelected.length - textSelected.trimRight().length;
+  range.setStart(range.startContainer, range.startOffset + wsBefore);
+  range.setEnd(range.endContainer, range.endOffset - wsAfter);
+  selection.removeAllRanges();
+  selection.addRange(range);
+  // create a <span> with <sup> and replace the selection
+  const element = annotateRange(range);
+  document.execCommand('insertHTML', false, element.outerHTML);
+  // attach placeholder text
+  const term = textSelected.trim();
+  const sourceLang = getSourceLanguage();
+  const targetLang = getTargetLanguage();
+  const noTranslation = (targetLang === sourceLang || !targetLang);
+  const placeholder = (noTranslation) ? '' : '...';
+  const initialText = formatDefinition(term, placeholder, includeTerm);
+  const footnote = attachFootnote(initialText);
+  adjustFootnoteReferences({ updateNumbering: true });
+  adjustLayout();
+  if (!noTranslation) {
+    let definition = '';
+    try {
+      definition = await queryDefinition(term, sourceLang, targetLang);
+    } catch (e) {
+    }
+    const { itemElement } = footnote;
+    const currentText = itemElement.textContent;
+    if (itemElement.textContent === initialText) {
+      itemElement.textContent = formatDefinition(term, definition, includeTerm);
+      adjustLayout();
+    }
+  }
+}
+
+function formatDefinition(term, definition, includeTerm) {
+  const parts = [];
+  if (includeTerm) {
+    parts.push(term, '-');
+  }
+  parts.push(definition);
+  return parts.join(' ');
 }
 
 function getWordCount(text) {

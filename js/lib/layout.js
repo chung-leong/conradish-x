@@ -15,8 +15,8 @@ export function addText(content) {
   adjustLayout();
 }
 
-export function adjustLayout(options) {
-  const { updatePaper, updateFooterPosition } = options || {};
+export function adjustLayout(options = {}) {
+  const { updatePaper, updateFooterPosition } = options;
   if (updatePaper) {
     // paper size has changed, need to update the client rects
     for (const page of pages) {
@@ -172,34 +172,37 @@ export function adjustFooterPosition(footer) {
   }
 }
 
-export function adjustFootnoteReferences() {
+export function adjustFootnoteReferences(options = {}) {
+  const { updateReferences, updateFootnotes, updateNumbering } = options;
   let changed = false;
-  for (const footnote of footnotes) {
-    const { supElement, itemElement, refElement } = footnote;
-    if (footnote.deleted) {
-      if (supElement.parentElement || itemElement.parentElement) {
-        footnote.deleted = false;
-        if (!supElement.parentElement) {
-          // stick the <sup> back on
-          refElement.append(supElement);
+  if (updateReferences || updateFootnotes) {
+    for (const footnote of footnotes) {
+      const { supElement, itemElement, refElement } = footnote;
+      if (footnote.deleted) {
+        if (supElement.parentElement || itemElement.parentElement) {
+          footnote.deleted = false;
+          if (!supElement.parentElement) {
+            // stick the <sup> back on
+            refElement.append(supElement);
+          }
+          changed = true;
         }
-        changed = true;
-      }
-    } else {
-      if (!supElement.parentElement || !itemElement.parentElement) {
-        footnote.deleted = true;
-        itemElement.remove();
-        supElement.remove();
-        const page = pages.find(p => p.footer.footnotes.includes(footnote));
-        if (page) {
-          const { footnotes } = page.footer;
-          footnotes.splice(footnotes.indexOf(footnote), 1);
+      } else {
+        if (!supElement.parentElement || !itemElement.parentElement || !refElement.parentElement) {
+          footnote.deleted = true;
+          itemElement.remove();
+          supElement.remove();
+          const page = pages.find(p => p.footer.footnotes.includes(footnote));
+          if (page) {
+            const { footnotes } = page.footer;
+            footnotes.splice(footnotes.indexOf(footnote), 1);
+          }
+          changed = true;
         }
-        changed = true;
       }
     }
   }
-  if (changed) {
+  if (changed || updateNumbering) {
     let number = 1;
     for (const footnote of footnotes.filter(f => !f.deleted)) {
       footnote.supElement.textContent = footnote.number = number++;
@@ -230,6 +233,35 @@ export function addContent(element, content) {
     }
     element.append(child);
   }
+}
+
+export function annotateRange(range) {
+  const content = range.cloneContents();
+  let number = 1;
+  for (const { supElement } of footnotes.filter(f => !f.deleted)) {
+    if (supElement.compareDocumentPosition(range.endContainer) === Node.DOCUMENT_POSITION_FOLLOWING) {
+      number++;
+    } else {
+      break;
+    }
+  }
+  const supElement = e('SUP', { className: 'footnote-number' }, number);
+  return e('SPAN', { className: 'reference' }, [ content, supElement ]);
+}
+
+export function attachFootnote(content) {
+  const refElements = [ ...document.getElementsByClassName('reference') ];
+  const refElement = refElements.find((element) => {
+    const footnote = footnotes.find(f => f.refElement === element);
+    return !footnote;
+  });
+  const supElement = refElement.getElementsByTagName('SUP')[0];
+  const itemElement = e('LI', { className: 'footnote-item' }, content);
+  const number = parseInt(supElement.textContent);
+  const page = null, deleted = false, height = '';
+  const footnote = { number, page, deleted, supElement, itemElement, refElement, height };
+  footnotes.splice(number - 1, 0, footnote);
+  return footnote;
 }
 
 function isBetween(a, b) {
