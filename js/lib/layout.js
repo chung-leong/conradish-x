@@ -1,271 +1,249 @@
+import { e } from './ui.js';
 import { applyStyles, getPageProperties } from './settings.js';
 
 const contentElement = document.getElementById('article-text');
 const backgroundElement = document.getElementById('article-background');
 const footerRootElement = document.getElementById('article-footers');
+const scrollElement = document.getElementById('article-container');
 
-let references = [];
+const pages = [];
+const footnotes = [];
 
 export function addText(content) {
   applyStyles();
-  addContent(content,  contentElement);
-  // add sheets of paper to background
-  addPapers();
-  // attach footer to each page
-  addFooters();
-  // addition of footers could lead to the need for new pages
-  addPapers();
-  addFooters();
+  addContent(contentElement, content);
+  adjustLayout();
 }
 
-export function addPapers() {
-  for (;;) {
-    const backgroundRect = backgroundElement.getBoundingClientRect();
-    const contentRect = contentElement.getBoundingClientRect();
-    if (contentRect.bottom <= backgroundRect.bottom) {
-      break;
-    } else {
-      addPaper(backgroundElement);
+export function adjustLayout(options) {
+  const { updatePaper, updateFooterPosition } = options || {};
+  if (updatePaper) {
+    // paper size has changed, need to update the client rects
+    for (const page of pages) {
+      page.paperRect = getRect(page.paperElement);
     }
   }
-}
-
-export function addPaper() {
-  const paperElement = document.createElement('DIV');
-  paperElement.className = 'paper';
-  backgroundElement.appendChild(paperElement);
-}
-
-export function addFooters() {
-  while (footerRootElement.childElementCount < backgroundElement.childElementCount) {
-    addFooter();
+  if (updateFooterPosition || updatePaper) {
+    for (const page of pages) {
+      adjustFooterPosition(page.footer);
+    }
   }
+  let reflow, reflowCount = 0;
+  do {
+    reflow = false;
+    reflowCount++;
+    // add enough pages for the content
+    while (hasExcessContent()) {
+      addPage();
+    }
+    // assign footnotes to footers based on location of
+    // <sup> element
+    let prevFootnote;
+    for (const footnote of footnotes.filter(f => !f.deleted)) {
+      const supElementRect = getRect(footnote.supElement);
+      for (const [ pageIndex, page ] of pages.entries()) {
+        if (isBetween(supElementRect, page.paperRect)) {
+          const { listElement, footnotes } = page.footer;
+          if (!footnotes.includes(footnote)) {
+            const prevPage = footnote.page;
+            if (prevPage) {
+              // don't move footnote to the previous page after a couple attempts
+              // to get everything to fit
+              const prevPageIndex = pages.indexOf(prevPage);
+              if (reflowCount > 2 && pageIndex < prevPageIndex) {
+                continue;
+              }
+              // remove it from the previous page
+              const { footnotes } = footnote.page.footer;
+              footnotes.splice(footnotes.indexOf(footnote), 1);
+            }
+            const prevIndex = footnotes.indexOf(prevFootnote);
+            if (prevIndex !== -1) {
+              // insert after the previous footnote
+              listElement.insertBefore(footnote.itemElement, prevFootnote.itemElement.nextSibling);
+              footnotes.splice(prevIndex + 1, 0, footnote);
+            } else {
+              // put it at the beginning
+              listElement.insertBefore(footnote.itemElement, listElement.firstChild);
+              footnotes.unshift(footnote);
+            }
+            footnote.page = page;
+            adjustFooterPosition(page.footer);
+            if (prevPage) {
+              adjustFooterPosition(prevPage.footer);
+            }
+            // run the loop again since the layout is affected
+            reflow = true;
+          }
+          break;
+        }
+      }
+      prevFootnote = footnote;
+    }
+    // remove excess pages
+    while(hasExcessPages()) {
+      removePage();
+    }
+  } while(reflow && reflowCount <= 5);
+  let start = 1;
+  for (const page of pages) {
+    // enable/disable editing of footer depending on whether there's content inside
+    const { footer } = page;
+    footer.listElement.contentEditable = (footer.footnotes.length > 0);
+    // adjust list counter
+    footer.listElement.start = start;
+    start += footer.footnotes.length;
+  }
+}
+
+function hasExcessContent() {
+  const contentRect = getRect(contentElement);
+  const backgroundRect = getRect(backgroundElement);
+  return (contentRect.bottom >= backgroundRect.bottom);
+}
+
+function hasExcessPages() {
+  const lastPage = pages[pages.length - 1];
+  const contentRect = getRect(contentElement)
+  if (contentRect.bottom < lastPage.paperRect.top) {
+    // the page is needed if there's a footnote there
+    const { footer } = lastPage;
+    if (footer.footnotes.length === 0) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function addPage() {
+  if (pages.length === 0) {
+    // remove the placeholder
+    while (backgroundElement.firstChild) {
+      backgroundElement.firstChild.remove();
+    }
+  }
+  // add paper to background
+  const paperElement = e('DIV', { className: 'paper' });
+  backgroundElement.append(paperElement);
+  const paperRect = getRect(paperElement);
+  // add footer
+  const footer = addFooter();
+  const page = { paperElement, paperRect, footer };
+  pages.push(page);
+  return page;
+}
+
+function removePage() {
+  const lastPage = pages.pop();
+  const { paperElement, footer } = lastPage;
+  paperElement.remove();
+  footer.containerElement.remove();
 }
 
 export function addFooter() {
   // add pusher to push the footer down the page, while leaving a space
   // that the main text can float into
-  const pusherElement = document.createElement('DIV');
-  pusherElement.className = 'footer-pusher';
-  pusherElement.textContent = '\u00a0';
-  const contentElement = document.createElement('OL');
-  contentElement.className = 'footer-content';
+  const pusherElement = e('DIV', { className: 'footer-pusher' }, '\u00a0');
+  const listElement = e('OL', { className: 'footer-content' });
   // add spacer to account of space between sheets of paper in display mode
   // it'll be hidden in print mode
-  const spacerElement = document.createElement('DIV');
-  spacerElement.className = 'footer-spacer';
-  spacerElement.textContent = '\u00a0';
-  const footerElement = document.createElement('DIV');
-  footerElement.appendChild(pusherElement);
-  footerElement.appendChild(contentElement);
-  footerElement.appendChild(spacerElement);
-  adjustFooterPosition(pusherElement, contentElement);
-  footerRootElement.appendChild(footerElement);
+  const spacerElement = e('DIV', { className: 'footer-spacer' }, '\u00a0');
+  const containerElement = e('DIV', {}, [ pusherElement, listElement, spacerElement ]);
+  footerRootElement.append(containerElement);
+  const footer = { pusherElement, listElement, containerElement, footnotes: [] };
+  adjustFooterPosition(footer);
+  return footer;
 }
 
-export function adjustFooterPosition(pusherElement, contentElement) {
+export function adjustFooterPosition(footer) {
+  const { pusherElement, listElement } = footer;
   const page = getPageProperties();
   // substract top and bottom margin from height of page
   const dims = [ page.height, page.margins.top, page.margins.bottom ];
-  const footerHeight = contentElement.offsetHeight;
-  if (footerHeight > 0) {
+  if (footer.footnotes.length > 0) {
     // substract height of foooter and the margin between it and the text
-    dims.push(`${footerHeight}px`, page.footerGap);
+    dims.push(`${listElement.offsetHeight}px`, page.footerGap);
   }
   // use CSS to do the final calculation
-  pusherElement.style.height = `calc(${dims.join(' - ')})`;
-}
-
-export function addFootnotes(footnotes) {
-  const paperElements = backgroundElement.children;
-  const footerElements = footerRootElement.children;
-  const paperRects = [];
-  for (const footnote of footnotes) {
-    // get the bounding rect of the paper elements
-    for (let i = paperRects.length; i < paperElements.length; i++) {
-      const rect = paperElements[i].getBoundingClientRect();
-      paperRects.push(rect);
-    }
-    const refElement = document.getElementById(`ref-${footnote.ref}`);
-    const supElement = refElement.lastChild;
-    const supRect = supElement.getBoundingClientRect();
-    // see which paper contains the sup element
-    const paperIndex = paperRects.findIndex(r => isBetween(supRect, r));
-    // add the footnote
-    addFootnote(footnote, footerElements[paperIndex]);
-    // addition of footnote could lead to the need for new pages
-    addPapers();
-    addFooters();
-  }
-}
-
-export function addFootnote(footnote, footerElement) {
-  const [ pusherElement, contentElement ] = footerElement.children;
-  const { ref, term, definition } = footnote;
-  const itemElement = document.createElement('LI');
-  itemElement.id = `footnote-${ref}`;
-  itemElement.className = 'footnote-item';
-  itemElement.dataset.ref = ref;
-  addContent(term, itemElement);
-  addContent(' - ', itemElement);
-  addContent(definition, itemElement);
-  contentElement.appendChild(itemElement);
-  // set the starting number if it's the first item
-  if (contentElement.childElementCount === 1) {
-    contentElement.start = ref;
-    contentElement.contentEditable = true;
-  }
-  adjustFooterPosition(pusherElement, contentElement);
-}
-
-export function adjustFootnotes() {
-  let changed = false;
-  for (const ref of references) {
-    const state = isReferenceActive(ref);
-    if (toggleFootnote(ref, state)) {
-      changed = true;
-    }
-  }
-  if (changed) {
-    // adjust the footnote numbers
-    adjustFootnoteNumbering();
-    // adjust the positions of all footers
-    const footerElements = footerRootElement.children;
-    for (const footerElement of footerElements) {
-      const [ pusherElement, contentElement ] = footerElement.children;
-      adjustFooterPosition(pusherElement, contentElement);
-    }
+  const height = `calc(${dims.join(' - ')})`;
+  if (footer.height !== height) {
+    footer.height = height;
+    pusherElement.style.height = height;
   }
 }
 
 export function adjustFootnoteReferences() {
   let changed = false;
-  for (const ref of references) {
-    const state = isFootnoteActive(ref);
-    if (toggleReference(ref, state)) {
-      changed = true;
+  for (const footnote of footnotes) {
+    const { supElement, itemElement, refElement } = footnote;
+    if (footnote.deleted) {
+      if (supElement.parentElement || itemElement.parentElement) {
+        footnote.deleted = false;
+        if (!supElement.parentElement) {
+          // stick the <sup> back on
+          refElement.append(supElement);
+        }
+        changed = true;
+      }
+    } else {
+      if (!supElement.parentElement || !itemElement.parentElement) {
+        footnote.deleted = true;
+        itemElement.remove();
+        supElement.remove();
+        const page = pages.find(p => p.footer.footnotes.includes(footnote));
+        if (page) {
+          const { footnotes } = page.footer;
+          footnotes.splice(footnotes.indexOf(footnote), 1);
+        }
+        changed = true;
+      }
     }
   }
   if (changed) {
-    // adjust the footnote numbers
-    adjustFootnoteNumbering();
-  }
-}
-
-export function adjustFootnoteNumbering() {
-  const supElements = contentElement.getElementsByClassName('footnote-number');
-  let number = 1;
-  const listElements = [];
-  for (const supElement of supElements) {
-    const { ref } = supElement.parentNode.dataset;
-    const itemElement = document.getElementById(`footnote-${ref}`);
-    const listElement = itemElement.parentNode;
-    if (!listElements.includes(listElement)) {
-      listElement.start = number;
-      listElements.push(listElement);
+    let number = 1;
+    for (const footnote of footnotes.filter(f => !f.deleted)) {
+      footnote.supElement.textContent = footnote.number = number++;
     }
-    supElement.textContent = number++;
   }
 }
 
-function toggleFootnote(ref, state) {
-  const itemElement = document.getElementById(`footnote-${ref}`);
-  if (!itemElement) {
-    return false;
-  }
-  const { classList } = itemElement;
-  if (state && classList.contains('removed')) {
-    classList.remove('removed');
-    return true;
-  } else if (!state && !classList.contains('removed')) {
-    classList.add('removed');
-    return true;
-  }
-  return false;
-}
-
-function isFootnoteActive(ref) {
-  const itemElement = document.getElementById(`footnote-${ref}`);
-  if (!itemElement) {
-    return false;
-  }
-  return !itemElement.classList.contains('removed');
-}
-
-export function addContent(content, element) {
+export function addContent(element, content) {
   if (typeof(content) === 'string') {
-    const child = document.createTextNode(content);
-    element.appendChild(child);
+    element.append(content);
   } else if (content instanceof Array) {
     for (const item of content) {
-      addContent(item, element);
+      addContent(element, item);
     }
   } else if (content instanceof Object) {
-    const child = createElement(content);
-    element.appendChild(child);
-  }
-}
-
-export function createElement({ tag, content, style, ref }) {
-  const element = document.createElement(tag);
-  addContent(content, element);
-  applyStyle(style, element);
-  addReference(ref, element);
-  return element;
-}
-
-export function applyStyle(style, element) {
-  if (style instanceof Object) {
-    for (const [ key, value ] of Object.entries(style)) {
-      element.style[key] = value;
+    const child = e(content.tag);
+    addContent(child, content.content);
+    if (content.footnote) {
+      const number = footnotes.length + 1;
+      const refElement = child;
+      const supElement = e('SUP', { className: 'footnote-number' }, number);
+      const itemElement = e('LI', { className: 'footnote-item' });
+      addContent(itemElement, content.footnote);
+      const page = null, deleted = false, height = '';
+      refElement.append(supElement);
+      refElement.className = 'reference';
+      footnotes.push({ number, page, deleted, supElement, itemElement, refElement, height });
     }
+    element.append(child);
   }
-}
-
-function addReference(ref, element) {
-  if (ref) {
-    addSupElement(ref, element);
-    element.dataset.ref = ref;
-    element.id = `ref-${ref}`;
-    element.className = 'reference';
-    references.push(ref);
-  }
-}
-
-function addSupElement(ref, element) {
-  const supElement = document.createElement('SUP');
-  supElement.textContent = ref;
-  supElement.className = 'footnote-number';
-  element.appendChild(supElement);
-}
-
-function toggleReference(ref, state) {
-  const refElement = document.getElementById(`ref-${ref}`);
-  if (!refElement) {
-    return false;
-  }
-  const supElement = refElement.lastChild;
-  const exists = (supElement && supElement.className === 'footnote-number');
-  if (state && !exists) {
-    addSupElement(ref, refElement);
-    return true;
-  } else if(!state && exists) {
-    refElement.removeChild(supElement);
-    return true;
-  }
-  return false;
-}
-
-function isReferenceActive(ref) {
-  const refElement = document.getElementById(`ref-${ref}`);
-  if (!refElement) {
-    return false;
-  }
-  const supElement = refElement.lastChild;
-  const exists = (supElement && supElement.className === 'footnote-number');
-  return (exists && !!supElement.textContent);
 }
 
 function isBetween(a, b) {
   return (a.top >= b.top && a.bottom <= b.bottom);
+}
+
+function getRect(element) {
+  let top = element.offsetTop;
+  let left = element.offsetLeft;
+  for (let e = element.offsetParent; e && e !== scrollElement; e = e.offsetParent) {
+    top += e.offsetTop;
+    left += e.offsetLeft;
+  }
+  const bottom = top + element.offsetHeight;
+  const right = bottom + element.offsetWidth;
+  return { top, left, bottom, right };
 }

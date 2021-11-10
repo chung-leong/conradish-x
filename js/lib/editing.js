@@ -1,4 +1,5 @@
-import { adjustFooterPosition, adjustFootnotes, adjustFootnoteReferences, createElement } from './layout.js';
+import { e } from './ui.js';
+import { adjustLayout, adjustFootnoteReferences } from './layout.js';
 import { extractContent } from './capture.js';
 
 export function attachEditingHandlers() {
@@ -17,24 +18,22 @@ export function createMenuItems() {
   const itemDefs = {
     addDefinition: {
       label: 'Add definition',
-      tooltip: 'show both term and definition in footnote',
+      title: 'show both term and definition in footnote',
       handler: handleAddDefinition,
     },
     addTranslation: {
       label: 'Add translation',
-      tooltip: 'show translated sentence only in footnote',
+      title: 'show translated sentence only in footnote',
       handler: handleAddTranslation,
     },
   };
-  const list = document.createElement('UL');
+  const list = e('UL');
   list.addEventListener('mousedown', handleMenuMouseDown);
   for (const [ key, itemDef ] of Object.entries(itemDefs)) {
-    const { label, tooltip, handler } = itemDef;
-    const item = document.createElement('LI');
-    item.textContent = label;
-    item.setAttribute('title', tooltip);
+    const { label, title, handler } = itemDef;
+    const item = e('LI', { title }, label);
     item.addEventListener('click', handler);
-    list.appendChild(item);
+    list.append(item);
     articleMenuItems[key] = item;
   }
   articleMenuElement.appendChild(list);
@@ -70,7 +69,8 @@ function handlePaste(evt) {
     const fragment = range.createContextualFragment(html);
     // grab content from fragment and recreate it
     const content = extractContent(fragment);
-    const element = createElement({ tag: 'DIV', content });
+    const element = e('DIV');
+    addContent(element, content);
     const filteredHTML = element.innerHTML;
     // paste it
     document.execCommand('insertHTML', false, filteredHTML);
@@ -90,17 +90,16 @@ function handleFootnoteKeyPress(evt) {
 }
 
 function handleFootnoteInput(evt) {
-  // adjust the position of the footer in case the height is different
-  const contentElement = evt.target;
-  const pusherElement = contentElement.previousSibling;
-  adjustFooterPosition(pusherElement, contentElement);
   // see if any item has gone missing or resurfaced, hiding and restoring
   // the referencing sup elements accordingly
   adjustFootnoteReferences();
+  // adjust the adjust the page layout in case the height is different
+  adjustLayout({ updateFooterPosition: true });
 }
 
 function handleArticleInput(evt) {
-  adjustFootnotes();
+  adjustFootnoteReferences();
+  adjustLayout();
 }
 
 function handleArticleKeyPress(evt) {
@@ -186,7 +185,11 @@ function getWordCount(text) {
 }
 
 function isCursorAtListItemEnd() {
-  const { endContainer, endOffset } = getSelectionRange();
+  const range = getSelectionRange();
+  if (!range) {
+    return false;
+  }
+  const { endContainer, endOffset } = range;
   // see if offset is at the end of the text node
   if (endContainer.length !== endOffset) {
     return false;
@@ -202,7 +205,10 @@ function isCursorAtListItemEnd() {
 
 function isCursorInFootnoteRef() {
   const range = getSelectionRange();
-  const { startContainer, endContainer } = getSelectionRange();
+  if (!range) {
+    return false;
+  }
+  const { startContainer, endContainer } = range;
   if (startContainer === endContainer) {
     for (let n = endContainer; n; n = n.parentNode) {
       if (n.nodeType === Node.ELEMENT_NODE) {
@@ -219,11 +225,9 @@ function isCursorInFootnoteRef() {
 
 function getSelectionRange() {
   const selection = getSelection();
-  return selection.getRangeAt(0);
-}
-
-function toggle(element, shown) {
-  element.style.display = (shown) ? 'block' : 'none';
+  if (selection.rangeCount > 0) {
+    return selection.getRangeAt(0);
+  }
 }
 
 function getRangeContainer(range) {
@@ -232,4 +236,8 @@ function getRangeContainer(range) {
       return n;
     }
   }
+}
+
+function toggle(element, shown) {
+  element.style.display = (shown) ? 'block' : 'none';
 }

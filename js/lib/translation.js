@@ -20,33 +20,6 @@ export async function queryDefinition(term) {
   }
 }
 
-export async function generateFootnoteContents(contents) {
-  // find the reference objects
-  const refObjects = [];
-  findRefObjects(refObjects, contents);
-  const footnotes = [];
-  for (const { ref, content, def } of refObjects) {
-    const term = content.trim();
-    const definition = def || await queryDefinition(term);
-    footnotes.push({ ref, term, definition });
-  }
-  return footnotes;
-}
-
-function findRefObjects(list, content) {
-  if (content instanceof Array) {
-    for (const item of content) {
-      findRefObjects(list, item);
-    }
-  } else if (content instanceof Object) {
-    if (content.ref) {
-      list.push(content);
-    } else if (content.content) {
-      findRefObjects(list, content.content);
-    }
-  }
-}
-
 export function getSourceLanguages() {
   const list = [];
   for (const { code, name } of languages) {

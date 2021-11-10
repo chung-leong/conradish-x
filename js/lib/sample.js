@@ -7,7 +7,7 @@ export default [
       {
         tag: 'span',
         content: 'dignity',
-        ref: 1,
+        footnote: 'dignity - [DEFINITION OF dignity]'
       },
       ` and of the equal and inalienable rights of all members of the human family is the foundation of freedom, justice and peace in the world,`
     ],
@@ -26,9 +26,17 @@ export default [
     tag: 'p',
     content: [
       `All human beings are born free and equal in dignity and rights. They are endowed with reason and conscience and should act towards one another in a `,
-      { tag: 'span', content: 'spirit', ref: 2 },
+      {
+        tag: 'span',
+        content: 'spirit',
+        footnote: 'spirit - [DEFINITION OF spirit]'
+      },
       ` of `,
-      { tag: 'span', content: 'brotherhood', ref: 3 },
+      {
+        tag: 'span',
+        content: 'brotherhood',
+        footnote: 'brotherhood - [DEFINITION OF brotherhood]'
+      },
       `.`
     ]
   },
@@ -170,7 +178,11 @@ export default [
       {
         tag: 'li', content: [
           `Everyone has duties to the `,
-          { tag: 'span', content: `community`, ref: 4 },
+          {
+            tag: 'span',
+            content: `community`,
+            footnote: 'community - [DEFINITION OF community]' 
+          },
           ` in which alone the free and full development of his personality is possible.`
         ]
       },

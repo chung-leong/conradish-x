@@ -1,6 +1,5 @@
 import sampleText from './lib/sample.js';
-import { generateFootnoteContents } from './lib/translation.js';
-import { addText, addFootnotes } from './lib/layout.js';
+import { addText } from './lib/layout.js';
 import { createMenuItems, attachEditingHandlers } from './lib/editing.js';
 import { initializeStorage, loadObject } from './lib/storage.js';
 import { createArticleNavigation } from './lib/side-bar.js';
@@ -26,12 +25,8 @@ async function start() {
     // create side navigation
     createArticleNavigation();
     document.title = title;
-    // look up definitions
-    const footnotes = await generateFootnoteContents(content);
     // add the article text into the DOM
     addText(content);
-    // add footnotes
-    addFootnotes(footnotes);
     // attach handlers to elements for editing contents
     attachEditingHandlers();
     setStatus('ready');

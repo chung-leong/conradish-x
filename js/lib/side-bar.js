@@ -36,7 +36,7 @@ export function createArticleNavigation() {
   const footnoteSizeSelect = createFontSizeSelect(possible.fontSize, settings.footnote.fontSize);
   footnoteSizeSelect.dataset.section = 'footnote';
   footnoteSizeSelect.addEventListener('change', handleFontSizeChange);
-  addSection(top, 'Footnote font', footnoteFontSelect, true);
+  addSection(top, 'Footnote font', footnoteSizeSelect, true);
   // add paper size dropdown
   const paperSelect = createSelect(possible.paper, settings.paper);
   paperSelect.addEventListener('change', handlePaperChange);
@@ -70,23 +70,26 @@ function addSection(container, label, control, last = false) {
   container.append(section);
 }
 
-function createSelect(languages, value) {
-  return e('SELECT', { value }, languages.map(({ label, value }) => {
-    return e('OPTION', { value }, label);
+function createSelect(items, currentValue) {
+  return e('SELECT', {}, items.map(({ label, value }) => {
+    const selected = (value === currentValue);
+    return e('OPTION', { value, selected }, label);
   }));
 }
 
-function createFontFamilySelect(fontFamilies, value) {
-  return e('SELECT', { value }, fontFamilies.map(({ label, value }) => {
+function createFontFamilySelect(fontFamilies, currentValue) {
+  return e('SELECT', {}, fontFamilies.map(({ label, value }) => {
+    const selected = (value === currentValue);
     const style = { fontFamily: value, fontSize: '14pt' };
-    return e('OPTION', { value, style }, label);
+    return e('OPTION', { value, selected, style }, label);
   }));
 }
 
-function createFontSizeSelect(fontSizes, value) {
-  return e('SELECT', { value }, fontSizes.map(({ label, value }) => {
+function createFontSizeSelect(fontSizes, currentValue) {
+  return e('SELECT', {}, fontSizes.map(({ label, value }) => {
+    const selected = (value === currentValue);
     const style = { fontSize: value };
-    return e('OPTION', { value, style }, label);
+    return e('OPTION', { value, selected, style }, label);
   }));
 }
 
@@ -102,7 +105,7 @@ function createCustomMarginInputs(container, margins, hidden) {
   const center = e('DIV', { className: 'column center' }, [ top, bottom ]);
   let className = 'custom-margins';
   if (hidden) {
-    className += 'hidden';
+    className += ' hidden';
   }
   return e('DIV', { className }, [ left, center, right ]);
 }
@@ -153,9 +156,9 @@ function handleCustomMarginInput(evt) {
   const unit = dim.substr(-2).toLowerCase();
   let valid = false;
   if (!isNaN(value) || [ 'in', 'mm' ].includes(unit)) {
-    if (unit === 'in' && value >= 0 && value <= 3) {
+    if (unit === 'in' && value >= 1 && value <= 3) {
       valid = true;
-    } else if (unit === 'mm' && value >= 0 && value <= 80) {
+    } else if (unit === 'mm' && value >= 25 && value <= 80) {
       valid = true;
     }
   }

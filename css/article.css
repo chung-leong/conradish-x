@@ -130,10 +130,6 @@ BODY.ready #article {
   display: none;
 }
 
-.footnote-item.removed {
-  display: none;
-}
-
 .paper {
   width: 210mm;
   height: 297mm;
