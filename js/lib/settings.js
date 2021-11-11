@@ -48,7 +48,7 @@ export function getDefaultSettings() {
   const paper = letterCountries.includes(country) ? 'letter' : 'A4';
   const margins = 'default';
   const customMargins = Object.assign({}, paperProperties[paper].defaultMargins);
-  return { target, article, footnote, paper, margins };
+  return { target, article, footnote, paper, margins, customMargins };
 }
 
 export function getPossibleSettings() {

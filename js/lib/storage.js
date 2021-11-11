@@ -8,17 +8,17 @@ export function getSettings() {
 }
 
 export async function saveSettings() {
-  return set('settings', settings);
+  return set('.settings', settings);
 }
 
 export async function initializeStorage() {
-  const keys = await get('directory');
+  const keys = await get('.directory');
   if (keys) {
     for (const key of keys) {
       directory.push(key);
     }
   }
-  settings = await get('settings');
+  settings = await get('.settings');
   if (!settings) {
     settings = getDefaultSettings();
   }
@@ -64,7 +64,7 @@ export async function loadObject(key) {
     // remove key from the directory if object is missing
     const index = directory.indexOf(key);
     directory.splice(index, 1);
-    await set('directory', directory);
+    await set('.directory', directory);
   }
   return object;
 }
@@ -90,7 +90,7 @@ async function removeOldestObject() {
 async function handleChanged(changes, areaName) {
   let changed = false;
   for (const [ key, change ] of Object.entries(changes)) {
-    if (key === 'directory') {
+    if (key.charAt(0) === '.') {
       continue;
     }
     if (change.newValue === undefined) {
@@ -104,7 +104,7 @@ async function handleChanged(changes, areaName) {
   }
   if (changed) {
     directory.sort();
-    await set('directory', directory);
+    await set('.directory', directory);
   }
 }
 

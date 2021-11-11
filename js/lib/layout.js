@@ -33,7 +33,7 @@ export function adjustLayout(options = {}) {
     reflow = false;
     reflowCount++;
     // add enough pages for the content
-    while (hasExcessContent()) {
+    while (hasExcessContent() || pages.length === 0) {
       addPage();
     }
     // assign footnotes to footers based on location of
@@ -103,13 +103,15 @@ function hasExcessContent() {
 }
 
 function hasExcessPages() {
-  const lastPage = pages[pages.length - 1];
-  const contentRect = getRect(contentElement)
-  if (contentRect.bottom < lastPage.paperRect.top) {
-    // the page is needed if there's a footnote there
-    const { footer } = lastPage;
-    if (footer.footnotes.length === 0) {
-      return true;
+  if (pages.length > 0) {
+    const lastPage = pages[pages.length - 1];
+    const contentRect = getRect(contentElement)
+    if (contentRect.bottom < lastPage.paperRect.top) {
+      // the page is needed if there's a footnote there
+      const { footer } = lastPage;
+      if (footer.footnotes.length === 0) {
+        return true;
+      }
     }
   }
   return false;
