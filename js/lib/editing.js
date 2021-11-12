@@ -118,20 +118,25 @@ function handleSelectionChange(evt) {
   const inArticle = (container && container.id  === 'article-text');
   const inFootntoe = (container && container.className === 'footnote-content');
   if (inArticle && !range.collapsed) {
-    const r1 = range.getBoundingClientRect();
-    const r2 = container.parentNode.getBoundingClientRect();
-    const left = r1.left - r2.left + 2;
-    let top = r1.bottom - r2.top + 2;
-    articleMenuElement.style.left = `${left}px`;
-    articleMenuElement.style.top = `${top}px`;
-    // show/hide menu item depending on how many words are selected
     const words = separateWords(range.toString());
-    const count = words.length;
-    toggle(articleMenuItems.addTranslation, count > 1);
-    toggle(articleMenuItems.addDefinition, count <= 10);
-    toggle(articleMenuElement, true);
-    // remember the range
-    lastSelectedRange = range;
+    if (words.length > 0) {
+      const r1 = range.getBoundingClientRect();
+      const r2 = container.parentNode.getBoundingClientRect();
+      const left = r1.left - r2.left + 2;
+      let top = r1.bottom - r2.top + 2;
+      articleMenuElement.style.left = `${left}px`;
+      articleMenuElement.style.top = `${top}px`;
+      // show/hide menu item depending on how many words are selected
+      const count = words.length;
+      toggle(articleMenuItems.addTranslation, count > 1);
+      toggle(articleMenuItems.addDefinition, count <= 10);
+      toggle(articleMenuElement, true);
+      // remember the range
+      lastSelectedRange = range;
+    } else {
+      toggle(articleMenuElement, false);
+      lastSelectedRange = null;
+    }
   } else {
     const clear = () => {
       toggle(articleMenuElement, false);
@@ -178,13 +183,13 @@ async function addFootnote(includeTerm) {
   const term = textSelected.trim();
   const sourceLang = getSourceLanguage();
   const targetLang = getTargetLanguage();
-  const noTranslation = (targetLang === sourceLang || !targetLang);
-  const placeholder = (noTranslation) ? '' : '...';
+  const translating = (targetLang && targetLang !== sourceLang);
+  const placeholder = (translating) ? '...' : '';
   const initialText = formatDefinition(term, placeholder, includeTerm);
   const footnote = attachFootnote(initialText);
   adjustFootnoteReferences({ updateNumbering: true });
   adjustLayout();
-  if (!noTranslation) {
+  if (translating) {
     const result = await translate(term, sourceLang, targetLang, includeTerm);
     const { itemElement } = footnote;
     if (itemElement.textContent === initialText) {
@@ -196,6 +201,15 @@ async function addFootnote(includeTerm) {
       footnote.alternatives = alternatives;
       footnote.inflections = inflections;
     }
+  } else {
+    const { footer } = footnote.page;
+    footer.listElement.focus();
+    const sel = getSelection();
+    sel.removeAllRanges();
+    const range = document.createRange();
+    range.selectNode(footnote.itemElement.lastChild);
+    range.collapse();
+    sel.addRange(range);
   }
 }
 

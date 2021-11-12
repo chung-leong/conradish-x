@@ -104,6 +104,7 @@ BODY.ready #article {
   /* page margin top plus margin bottom */
   margin-bottom: calc(25mm + 25mm);
   padding-left: 1.6em;
+  white-space: pre-wrap;
 }
 
 .footer-content:focus {
