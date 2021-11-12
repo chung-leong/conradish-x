@@ -11,8 +11,13 @@ export function applyStyles() {
       for (const rule of styleSheet.cssRules) {
         const { selectorText, cssText } = rule;
         if (selectorText === '#article-text') {
+          const justify = [ 'text', 'both' ].includes(settings.article.justification);
           rule.style.fontFamily = settings.article.fontFamily;
           rule.style.fontSize = settings.article.fontSize;
+          rule.style.textAlign = (justify) ? 'justify' : 'left';
+        } else if (/#article\-text H1/i.test(selectorText)) {
+          const justify = [ 'both' ].includes(settings.article.justification);
+          rule.style.textAlign = (justify) ? 'justify' : 'left';
         } else if (selectorText === '#article-content') {
           rule.style.paddingLeft = page.margins.left;
           rule.style.paddingRight = page.margins.right;
@@ -40,7 +45,7 @@ export function applyStyles() {
 }
 
 export function getDefaultSettings() {
-  const article = { fontFamily: 'Arial', fontSize: '12pt' };
+  const article = { fontFamily: 'Arial', fontSize: '12pt', justification: 'text' };
   const footnote = { fontFamily: 'Arial', fontSize: '10pt' };
   const codes = (navigator.languages[0] || 'en-US').toLowerCase().split('-');
   const contextMenu = true;
@@ -180,6 +185,20 @@ const possibleSettings = {
     {
       label: '48',
       value: '48pt',
+    },
+  ],
+  justification: [
+    {
+      label: 'None',
+      value: 'none'
+    },
+    {
+      label: 'Text only',
+      value: 'text'
+    },
+    {
+      label: 'Text and headings',
+      value: 'both'
     },
   ],
   paper: [

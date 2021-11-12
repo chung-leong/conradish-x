@@ -9,7 +9,6 @@ async function start() {
   if (settings.contextMenu) {
     addContextMenu();
   }
-  console.log(settings);
 }
 
 const createMenuId = 'create';
@@ -24,12 +23,10 @@ function addContextMenu() {
 }
 
 function removeContextMenu() {
-  console.log('remove');
   chrome.contextMenus.remove(createMenuId);
 }
 
 function handleSettings(evt) {
-  console.log(evt);
   if (!evt.detail.self) {
     const settings = getSettings();
     if (settings.contextMenu) {

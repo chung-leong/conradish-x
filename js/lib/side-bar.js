@@ -29,6 +29,10 @@ export function createArticleNavigation() {
   articleSizeSelect.addEventListener('change', handleFontSizeChange);
   addSection(top, 'Font size', articleSizeSelect);
   // add font family and size dropdowns for footnotes
+  const articleJustificationSelect = createSelect(possible.justification, settings.article.justification);
+  articleJustificationSelect.dataset.section = 'article';
+  articleJustificationSelect.addEventListener('change', handleJustificationChange);
+  addSection(top, 'Justification', articleJustificationSelect);
   const footnoteFontSelect = createFontFamilySelect(possible.fontFamily, settings.footnote.fontFamily);
   footnoteFontSelect.dataset.section = 'footnote';
   footnoteFontSelect.addEventListener('change', handleFontChange);
@@ -120,6 +124,12 @@ function handleFontSizeChange(evt) {
   const { target } = evt;
   const { section } = target.dataset;
   changeSettings(settings => settings[section].fontSize = target.value);
+}
+
+function handleJustificationChange(evt) {
+  const { target } = evt;
+  const { section } = target.dataset;
+  changeSettings(settings => settings[section].justification = target.value);
 }
 
 function handlePaperChange(evt) {

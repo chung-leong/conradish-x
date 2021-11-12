@@ -50,6 +50,15 @@ BODY.ready #article {
   text-align: justify;
 }
 
+#article-text H1,
+#article-text H2,
+#article-text H3,
+#article-text H4,
+#article-text H5,
+#article-text H6 {
+  text-align: left;
+}
+
 #article-text:focus {
   outline: none;
 }
