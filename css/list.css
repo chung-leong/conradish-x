@@ -246,3 +246,13 @@ BODY {
   background-size: 20px;
   background-image: url('../img/document48.png');
 }
+
+.message {
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  color: rgb(110, 110, 110);
+  font-weight: 500;
+  font-size: 14px;
+}

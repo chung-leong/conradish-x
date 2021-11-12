@@ -49,6 +49,35 @@ export function attachCustomCheckboxHandlers() {
   document.addEventListener('mousedown', handleCustomCheckboxMouseDown);
 }
 
+export function separateWords(text) {
+  // stick the text into the scratch-pad document in the iframe
+  // so we can take advantage of the browser's sophisticated
+  // word detection ability without affecting the selection in this
+  // document
+  const iframe = document.getElementById('scratch-pad');
+  const win = iframe.contentWindow;
+  const doc = win.document;
+  const bin = doc.getElementById('bin');
+  bin.textContent = text.trim();
+  // select the text we inserted
+  const sel = win.getSelection();
+  sel.removeAllRanges();
+  const range = doc.createRange();
+  range.selectNode(bin);
+  sel.addRange(range);
+  // ask the browser to move selection back by one word
+  const words = [];
+  let remaining = range.toString();
+  while (remaining.trim()) {
+    sel.modify('extend', 'backward', 'word');
+    const rangeAfter = sel.getRangeAt(0);
+    const previous = remaining;
+    remaining = rangeAfter.toString();
+    words.unshift(previous.substr(remaining.length));
+  }
+  return words;
+}
+
 let currentRipple = null;
 
 function handleRippleEffectMouseDown(evt) {

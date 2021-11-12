@@ -175,16 +175,6 @@ BODY.ready #status-container {
 #error-text {
 }
 
-#scratch-pad {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 1px;
-  height: 1px;
-  visibility: 0;
-  border: 0;
-}
-
 @page {
   size: A4 portrait;
   margin: 0;

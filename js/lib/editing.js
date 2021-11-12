@@ -1,4 +1,4 @@
-import { e } from './ui.js';
+import { e, separateWords } from './ui.js';
 import { adjustLayout, adjustFootnoteReferences, annotateRange, attachFootnote } from './layout.js';
 import { extractContent } from './capture.js';
 import { queryDefinition } from './translation.js';
@@ -125,7 +125,8 @@ function handleSelectionChange(evt) {
     articleMenuElement.style.left = `${left}px`;
     articleMenuElement.style.top = `${top}px`;
     // show/hide menu item depending on how many words are selected
-    const count = getWordCount(range.toString());
+    const words = separateWords(range.toString());
+    const count = words.length;
     toggle(articleMenuItems.addTranslation, count > 1);
     toggle(articleMenuItems.addDefinition, count <= 10);
     toggle(articleMenuElement, true);
@@ -205,34 +206,6 @@ function formatDefinition(term, definition, includeTerm) {
   }
   parts.push(definition);
   return parts.join(' ');
-}
-
-function getWordCount(text) {
-  // stick the text into the scratch-pad document in the iframe
-  // so we can take advantage of the browser's sophisticated
-  // word detection ability without affecting the selection in this
-  // document
-  const iframe = document.getElementById('scratch-pad');
-  const win = iframe.contentWindow;
-  const doc = win.document;
-  const bin = doc.getElementById('bin');
-  bin.textContent = text.trim();
-  // select the text we inserted
-  const sel = win.getSelection();
-  sel.removeAllRanges();
-  const range = doc.createRange();
-  range.selectNode(bin);
-  sel.addRange(range);
-  // ask the browser to move selection back by one word
-  let count = 0;
-  let remaining = text;
-  while (remaining) {
-    sel.modify('extend', 'backward', 'word');
-    const rangeAfter = sel.getRangeAt(0);
-    remaining = rangeAfter.toString().trim();
-    count++;
-  }
-  return count;
 }
 
 function isCursorAtListItemEnd() {

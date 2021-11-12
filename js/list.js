@@ -1,11 +1,11 @@
 import { initializeStorage, findObjects, loadObject, deleteObjects } from './lib/storage.js';
-import { e, attachCustomCheckboxHandlers, attachRippleEffectHandlers } from './lib/ui.js';
+import { e, attachCustomCheckboxHandlers, attachRippleEffectHandlers, separateWords } from './lib/ui.js';
 
 const listContainer = document.getElementById('list-container');
 const toolbarContainer = document.getElementById('toolbar-container');
-let cards;
-let items;
+const cards = [];
 let selection;
+let searching = false;
 
 async function start() {
   await initializeStorage();
@@ -69,80 +69,227 @@ function createCommandToolbar() {
 async function createCards() {
   const docs = await findObjects('DOC');
   const days = [];
-  items = [];
-  const dateOpts = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-  const timeOpts = { timeStyle: 'short' };
+  const items = [];
   // create all the items first, leaving the title blank initially
   for (const { key, date, type } of docs.reverse()) {
-    const day = date.toLocaleDateString(undefined, dateOpts);
-    const time = date.toLocaleTimeString(undefined, timeOpts);
-    const rippleElement = e('SPAN', { className: 'ripple' });
-    const checkboxElement = e('SPAN', {
-      className: 'checkbox',
-      tabIndex: 0
-    }, rippleElement);
-    const timeElement = e('SPAN', {
-      className: 'time',
-    }, time);
-    const titleElement = e('SPAN', {
-      className: 'title',
-    }, '...');
-    const itemElement = e('LI', {
-      dataset: { key, type }
-    }, [ checkboxElement, timeElement, titleElement ]);
-    items.push({ day, time, key, itemElement, titleElement });
-    if (!days.includes(day)) {
-      days.push(day);
+    const item = createItem(key, date, type);
+    items.push(item);
+    if (!days.includes(item.day)) {
+      days.push(item.day);
     }
   }
+  // add card for displaying search results
+  const searchCard = createCard(null, []);
+  cards.push(searchCard);
   // add a card for each day, then attach the list elements
-  clearList();
-  cards = [];
-  const d1 = new Date, d2 = new Date;
-  d2.setDate(d2.getDate() - 1);
-  const today = d1.toLocaleDateString(undefined, dateOpts);
-  const yesterday = d2.toLocaleDateString(undefined, dateOpts);
   for (const day of days) {
-    let title;
-    if (day === today) {
-      title = 'Today - ' + day;
-    } else if(day === yesterday) {
-      title = 'Yesterday - ' + day;
-    } else {
-      title = day;
-    }
-    const headerElement = e('DIV', {
-      className: 'card-title',
-    }, title);
-    const matchingItems = items.filter(item => item.day === day);
-    const listElement = e('UL', {
-      className: 'card-list',
-    }, matchingItems.map(item => item.itemElement));
-    const cardElement = e('DIV', {
-      className: 'card',
-    }, [ headerElement, listElement ]);
-    cards.push({ day, cardElement, listElement });
-    listContainer.append(cardElement);
+    const card = createCard(day, items.filter(i => i.day === day));
+    cards.push(card);
   }
-  listContainer.append(e('DIV', { id: 'list-end-spacer' }, '\u00a0'));
-  // load the titles now
-  for (const item of items) {
+  // set up periodic updating of the titles, as today can become yesterday
+  refreshDates();
+  setInterval(() => {
+    if (refreshDates()) {
+      updateCardTitles();
+    }
+  }, 60 * 1000);
+  updateCardTitles();
+  updateCards();
+  // load the title of each document now
+  for (const item of items.reverse()) {
     const doc = await loadObject(item.key);
     if (doc) {
       item.titleElement.textContent = doc.title;
-      item.doc = doc;
+      item.lang = doc.lang;
+      item.searchStrings = findSearchStrings(doc);
     }
   }
 }
 
-function clearList() {
-  while(listContainer.lastChild) {
-    listContainer.lastChild.remove();
+function createItem(key, date, type) {
+  const day = getDateString(date);
+  const time = getTimeString(date);
+  const rippleElement = e('SPAN', { className: 'ripple' });
+  const checkboxElement = e('SPAN', { className: 'checkbox', tabIndex: 0 }, rippleElement);
+  const timeElement = e('SPAN', { className: 'time' }, time);
+  const titleElement = e('SPAN', { className: 'title' }, '...');
+  const itemElement = e('LI', {
+    dataset: { key, type }
+  }, [ checkboxElement, timeElement, titleElement ]);
+  return { day, time, key, itemElement, titleElement };
+}
+
+function createCard(day, items) {
+  const headerElement = e('DIV', { className: 'card-title' });
+  // stick items from that day into the card
+  const listElement = e('UL', {
+    className: 'card-list',
+  }, items.map(i => i.itemElement));
+  const cardElement = e('DIV', {
+    className: 'card',
+  }, [ headerElement, listElement ]);
+  return { day, cardElement, headerElement, listElement, items };
+}
+
+function updateCardTitles() {
+  for (const card of cards) {
+    const { day, items, query, headerElement } = card;
+    let title;
+    if (day) {
+      if (isToday(day)) {
+        title = 'Today - ' + day;
+      } else if(isYesterday(day)) {
+        title = 'Yesterday - ' + day;
+      } else {
+        title = day;
+      }
+    } else {
+      // search results
+      const count = items.length;
+      const results = (count === 1) ? `1 search result` : `${count} search results`;
+      title = `${results} for "${query}"`;
+    }
+    headerElement.textContent = title;
+  }
+}
+
+function updateCards() {
+  while (listContainer.firstChild) {
+    listContainer.firstChild.remove();
+  }
+  const visible = cards.filter(c => !c.day === searching && c.items.length > 0);
+  for (const card of visible) {
+    listContainer.append(card.cardElement);
+  }
+  if (visible.length > 0) {
+    const spacerElement = e('DIV', { className: 'list-end-spacer' }, '\u00a0');
+    listContainer.append(spacerElement);
+  } else {
+    const message = (searching) ? 'No search results found' : 'No documents';
+    const messageElement = e('DIV', { className: 'message' }, message);
+    listContainer.append(messageElement);
+  }
+}
+
+function updateSelection() {
+  const checkboxes = getSelectedCheckboxes();
+  selection = checkboxes.map(cb => cb.parentNode.dataset.key);
+}
+
+function updateToolbar() {
+  const toolbar = document.getElementById('toolbar-commands');
+  const status = document.getElementById('selection-status');
+  if (selection.length > 0) {
+    toolbar.classList.add('active');
+    status.textContent = `${selection.length} selected`;
+  } else {
+    toolbar.classList.remove('active');
+  }
+}
+
+function search(query) {
+  const searchCard = cards[0];
+  const { listElement } = searchCard;
+  while (listElement.firstChild) {
+    listElement.firstChild.remove();
+  }
+  searchCard.items = [];
+  searchCard.query = query;
+  if (query) {
+    const words = separateWords(query);
+    for (const card of cards) {
+      for (const item of card.items) {
+        if (searchItem(item, words)) {
+          searchCard.items.push(item);
+          listElement.append(item.itemElement);
+        }
+      }
+    }
+    searching = true;
+  } else {
+    // insert the items back into the cards
+    for (const card of cards) {
+      const { listElement } = card;
+      for (const [ index, item ] of card.items.entries()) {
+        const { itemElement } = item;
+        if (!itemElement.parentNode) {
+          const prevItem = card.items[index - 1];
+          const refNode = prevItem ? prevItem.itemElement.nextSibling : null;
+          listElement.insertBefore(itemElement, refNode);
+        }
+      }
+    }
+    searching = false;
+  }
+  updateCards();
+  updateCardTitles();
+  updateSelection();
+}
+
+function searchItem(item, words) {
+  const { lang, searchStrings } = item;
+  const lcWords = words.map(w => w.toLocaleLowerCase(lang));
+  return lcWords.every((w) => {
+    return searchStrings.some(s => s.includes(w));
+  });
+}
+
+function findSearchStrings(doc) {
+  const list = [];
+  const { title, lang, content } = doc;
+  addSearchString(title, lang, list);
+  addSearchString(content, lang, list);
+  return list;
+}
+
+function addSearchString(content, lang, list) {
+  if (typeof(content) === 'string') {
+    const lc = content.toLocaleLowerCase(lang);
+    list.push(lc);
+  } else if (content instanceof Array) {
+    for (const item of content) {
+      addSearchString(item, lang, list);
+    }
+  } else if (content instanceof Object) {
+    addSearchString(content.content, lang, list);
   }
 }
 
 function getSelectedCheckboxes() {
   return [ ...document.querySelectorAll('.checkbox.checked') ];
+}
+
+function getTimeString(date) {
+  const timeOpts = { timeStyle: 'short' };
+  return date.toLocaleTimeString(undefined, timeOpts);
+}
+
+function getDateString(date) {
+  const dateOpts = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  return date.toLocaleDateString(undefined, dateOpts);
+}
+
+let today, yesterday;
+
+function isToday(day) {
+  return (today === day);
+}
+
+function isYesterday(day) {
+  return (yesterday === day);
+}
+
+function refreshDates() {
+  const now = new Date;
+  const todayNew = getDateString(now);
+  if (today !== todayNew) {
+    const earlier = new Date(now.getTime());
+    earlier.setDate(earlier.getDate() - 1);
+    yesterday = getDateString(earlier)
+    today = todayNew;
+    return true;
+  }
+  return false;
 }
 
 function handleClick(evt) {
@@ -165,16 +312,8 @@ function handleClick(evt) {
 function handleChange(evt) {
   const { target } = evt;
   if (target.classList.contains('checkbox')) {
-    const checkboxes = getSelectedCheckboxes();
-    const toolbar = document.getElementById('toolbar-commands');
-    const status = document.getElementById('selection-status');
-    selection = checkboxes.map(cb => cb.parentNode.dataset.key);
-    if (selection.length > 0) {
-      toolbar.classList.add('active');
-      status.textContent = `${selection.length} selected`;
-    } else {
-      toolbar.classList.remove('active');
-    }
+    updateSelection();
+    updateToolbar();
   }
 }
 
@@ -182,11 +321,8 @@ function handleSearchInput(evt) {
   const { target } = evt;
   const { classList } = target.parentNode;
   const query = target.value.trim();
-  if (query) {
-    classList.add('active');
-  } else {
-    classList.remove('active');
-  }
+  classList.toggle('active', !!query);
+  search(query);
 }
 
 function handleSearchFocus(evt) {
@@ -207,6 +343,7 @@ function handleClearClick(evt) {
   const [ input ] = target.parentNode.getElementsByTagName('INPUT');
   classList.remove('active');
   input.value = '';
+  search('');
 }
 
 function handleCancelClick(evt) {
@@ -214,41 +351,31 @@ function handleCancelClick(evt) {
   for (const cb of checkboxes) {
     cb.classList.remove('checked');
   }
-  const toolbar = document.getElementById('toolbar-commands');
-  toolbar.classList.remove('active');
-  selection = [];
+  updateSelection();
+  updateToolbar();
 }
 
 async function handleDeleteClick(evt) {
-  const selectedItems = items.filter(item => selection.includes(item.key));
-  const emptyLists = [];
-  for (const { itemElement } of selectedItems) {
-    const listElement = itemElement.parentNode;
-    itemElement.remove();
-    if (!listElement.hasChildNodes()) {
-      emptyLists.push(listElement);
+  for (const card of cards) {
+    for (let i = card.items.length - 1; i >= 0; i--) {
+      const item = card.items[i];
+      if (selection.includes(item.key)) {
+        card.items.splice(i, 1);
+        item.itemElement.remove();
+      }
     }
   }
-  const emptyCards = cards.filter(card => emptyLists.includes(card.listElement));
-  for (const { cardElement } of emptyCards) {
-    cardElement.remove();
-  }
-  cards = cards.filter((card) => !emptyCards.includes(card));
-  items = items.filter((item) => !selectedItems.includes(item));
-  const toolbar = document.getElementById('toolbar-commands');
-  toolbar.classList.remove('active');
-  await deleteObjects(selection);
-  selection = [];
+  const keys = selection;
+  updateCards();
+  updateSelection();
+  updateToolbar();
+  //await deleteObjects(keys);
 }
 
 function handleScroll(evt) {
   const { target } = evt;
   const { classList } = toolbarContainer;
-  if (target.scrollTop > 0) {
-    classList.add('shadow');
-  } else {
-    classList.remove('shadow');
-  }
+  classList.toggle('shadow', target.scrollTop > 0);
 }
 
 start();
