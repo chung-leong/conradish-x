@@ -1,23 +1,73 @@
-export async function queryDefinition(term, sourceLang, targetLang) {
+export async function translate(original, sourceLang, targetLang, singleWord) {
+  const result = { term: original };
   try {
-    //return `[DEFINITION of "${term}"]`;
     const url = new URL('https://clients5.google.com/translate_a/t');
+    let lowerCaseAlt;
+    // unless the language is German, query the word in lowercase
+    if (!capitalizingLangs.includes(sourceLang)) {
+      if (singleWord && isCapitalized(original, sourceLang)) {
+        lowerCaseAlt = original.toLocaleLowerCase(sourceLang);
+      }
+    }
+    const query = lowerCaseAlt || original;
     url.searchParams.set('client', 'dict-chrome-ex');
-    url.searchParams.set('q', term);
+    url.searchParams.set('q', query);
     url.searchParams.set('sl', sourceLang);
     url.searchParams.set('tl', targetLang);
     const response = await fetch(url);
     const json = await response.json();
     if (json.sentences instanceof Array) {
-      const sentence = json.sentences.find(s => !!s.trans);
-      if (sentence) {
-        return sentence.trans;
+      const { trans, orig } = json.sentences.find(s => !!s.trans);
+      if (trans !== orig) {
+        result.translation = trans;
+        // return the lowercase version if the translation isn't in uppercase
+        if (lowerCaseAlt && !isCapitalized(trans)) {
+          result.term = lowerCaseAlt;
+        }
+      } else {
+        // it didn't actually get translated
+        result.translation = original;
+      }
+      if (json.alternative_translations) {
+        const alternatives = [];
+        for (const at of json.alternative_translations) {
+          for (const item of at.alternative.slice(1)) {
+            alternatives.push(item.word_postproc);
+          }
+        }
+        if (alternatives.length > 0) {
+          result.alternatives = alternatives;
+        }
+      }
+      if (json.query_inflections) {
+        const inflections = {};
+        for (const qi of json.query_inflections) {
+          const word = qi.written_form;
+          const features = qi.features;
+          if (word && features) {
+            inflections[word] = features;
+          }
+        }
+        if (Object.entries(inflections).length > 0) {
+          result.inflections = inflections;
+        }
+        if (result.term !== original && lowerCaseAlt) {
+          // use inflection info to determine whether word should be capitalized
+          if (inflections[original]) {
+            result.term = original;
+          }
+        }
       }
     }
-    return '';
   } catch (e) {
-    return '';
+    console.error(e);
   }
+  return result;
+}
+
+function isCapitalized(word, lang) {
+  const c = word.charAt(0);
+  return (c.toLocaleLowerCase(lang) !== c);
 }
 
 export function getSourceLanguages() {
@@ -487,3 +537,5 @@ const languages = [
     name: 'Zulu',
   },
 ];
+
+const capitalizingLangs = [ 'de', 'lb' ];

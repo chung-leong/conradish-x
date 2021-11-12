@@ -1,7 +1,7 @@
 import { e, separateWords } from './ui.js';
 import { adjustLayout, adjustFootnoteReferences, annotateRange, attachFootnote } from './layout.js';
 import { extractContent } from './capture.js';
-import { queryDefinition } from './translation.js';
+import { translate } from './translation.js';
 import { getSourceLanguage, getTargetLanguage } from './settings.js';
 
 export function attachEditingHandlers() {
@@ -185,16 +185,16 @@ async function addFootnote(includeTerm) {
   adjustFootnoteReferences({ updateNumbering: true });
   adjustLayout();
   if (!noTranslation) {
-    let definition = '';
-    try {
-      definition = await queryDefinition(term, sourceLang, targetLang);
-    } catch (e) {
-    }
+    const result = await translate(term, sourceLang, targetLang, includeTerm);
     const { itemElement } = footnote;
-    const currentText = itemElement.textContent;
     if (itemElement.textContent === initialText) {
-      itemElement.textContent = formatDefinition(term, definition, includeTerm);
+      const { term, translation, alternatives, inflections } = result;
+      itemElement.textContent = formatDefinition(term, translation, includeTerm);
       adjustLayout();
+      // save additional information from Google Translate
+      footnote.term = term;
+      footnote.alternatives = alternatives;
+      footnote.inflections = inflections;
     }
   }
 }
