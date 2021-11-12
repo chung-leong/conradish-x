@@ -8,6 +8,7 @@ let selection;
 let searching = false;
 
 async function start() {
+  document.title = 'Documents';
   await initializeStorage();
   attachRippleEffectHandlers();
   attachCustomCheckboxHandlers();

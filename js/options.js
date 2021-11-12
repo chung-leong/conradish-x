@@ -1,46 +1,57 @@
-let page = document.getElementById("buttonDiv");
-let selectedClassName = "current";
-const presetButtonColors = ["#3aa757", "#e8453c", "#f9bb2d", "#4688f1"];
+import { initializeStorage, getSettings, saveSettings, storageChange } from './lib/storage.js';
+import { e, attachCustomCheckboxHandlers } from './lib/ui.js';
 
-// Reacts to a button click by marking the selected button and saving
-// the selection
-function handleButtonClick(event) {
-  // Remove styling from the previously selected color
-  let current = event.target.parentElement.querySelector(
-    `.${selectedClassName}`
-  );
-  if (current && current !== event.target) {
-    current.classList.remove(selectedClassName);
+async function start() {
+  await initializeStorage();
+  const settings = getSettings();
+  const { body } = document;
+  const label = 'Add option to context menu';
+  const rippleElement = e('SPAN', { className: 'ripple' });
+  const checkboxElement = e('SPAN', {
+     className: 'checkbox',
+     dataset: { name: 'contextMenu'},
+     tabIndex: 0
+   }, rippleElement);
+  const labelElement = e('LABEL', {}, label);
+  const sectionElement = e('SECTION', {}, [ checkboxElement, labelElement ]);
+  document.body.append(sectionElement);
+  document.addEventListener('click', handleClick);
+  document.addEventListener('change', handleChange);
+  storageChange.addEventListener('settings', handleSettings);
+  if (settings.contextMenu)  {
+    checkboxElement.classList.add('checked');
   }
-
-  // Mark the button as selected
-  let color = event.target.dataset.color;
-  event.target.classList.add(selectedClassName);
-  chrome.storage.sync.set({ color });
+  attachCustomCheckboxHandlers();
 }
 
-// Add a button to the page for each supplied color
-function constructOptions(buttonColors) {
-  chrome.storage.sync.get("color", (data) => {
-    let currentColor = data.color;
-    // For each color we were provided…
-    for (let buttonColor of buttonColors) {
-      // …create a button with that color…
-      let button = document.createElement("button");
-      button.dataset.color = buttonColor;
-      button.style.backgroundColor = buttonColor;
-
-      // …mark the currently selected color…
-      if (buttonColor === currentColor) {
-        button.classList.add(selectedClassName);
-      }
-
-      // …and register a listener for when that button is clicked
-      button.addEventListener("click", handleButtonClick);
-      page.appendChild(button);
+function handleSettings(evt) {
+  if (!evt.detail.self) {
+    const settings = getSettings();
+    const checkboxes = document.getElementsByClassName('checkbox');
+    for (const checkbox of checkboxes) {
+      const { name } = checkbox.dataset;
+      checkbox.classList.toggle('checked', settings[name]);
     }
-  });
+  }
 }
 
-// Initialize the page by constructing the color options
-constructOptions(presetButtonColors);
+function handleClick(evt) {
+  const { target } = evt;
+  if (target.tagName === 'LABEL') {
+    // focus the checkbox and toggle it
+    const [ checkbox ] = target.parentNode.getElementsByClassName('checkbox');
+    checkbox.focus();
+    const kbEvent = new KeyboardEvent('keypress', { key: ' ', bubbles: true });
+    checkbox.dispatchEvent(kbEvent);
+  }
+}
+
+async function handleChange(evt) {
+  const { target } = evt;
+  const { name } = target.dataset;
+  const settings = getSettings();
+  settings[name] = target.classList.contains('checked');
+  await saveSettings();
+}
+
+start();

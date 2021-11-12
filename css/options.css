@@ -1,0 +1,21 @@
+* {
+  box-sizing: border-box;
+}
+
+BODY {
+  margin: 0;
+  border-top: 1px solid rgb(232, 234, 237);
+  font-size: 13px;
+  font-family: Roboto, Segoe UI, Tahoma, sans-serif;
+  user-select: none;
+}
+
+SECTION {
+  display: flex;
+  align-items: center;
+  padding: 16px 16px 16px 16px;
+}
+
+.checkbox {
+  margin-right: 12px;
+}

@@ -24,7 +24,10 @@
     "48": "/img/conradish48.png",
     "128": "/img/conradish128.png"
   },
-  "options_page": "options.html",
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": false
+  },
   "web_accessible_resources": [
     {
       "resources": [ "/js/lib/capture.js" ],

@@ -2,6 +2,7 @@ import { getDefaultSettings } from './settings.js';
 
 const directory = [];
 let settings;
+let savingSettings = false;
 
 export const storageChange = new EventTarget;
 
@@ -10,6 +11,7 @@ export function getSettings() {
 }
 
 export async function saveSettings() {
+  savingSettings = true;
   return set('.settings', settings);
 }
 
@@ -135,6 +137,16 @@ async function handleChanged(changes, areaName) {
   let dirChanged = false;
   for (const [ key, change ] of Object.entries(changes)) {
     if (key.charAt(0) === '.') {
+      if (key === '.settings') {
+        if (!savingSettings) {
+          // modified by another process--reload it
+          settings = await get('.settings');
+        }
+        const detail = { self: savingSettings };
+        const evt = new CustomEvent('settings', { detail });
+        storageChange.dispatchEvent(evt);
+        savingSettings = false;
+      }
       continue;
     }
     let type;

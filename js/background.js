@@ -1,15 +1,43 @@
-import { initializeStorage, storeObject } from './lib/storage.js';
+import { initializeStorage, storeObject, getSettings, storageChange } from './lib/storage.js';
 
 async function start() {
   await initializeStorage();
   chrome.runtime.onMessage.addListener(handleMessage);
   chrome.contextMenus.onClicked.addListener(handleMenuClick);
+  storageChange.addEventListener('settings', handleSettings);
+  const settings = getSettings();
+  if (settings.contextMenu) {
+    addContextMenu();
+  }
+  console.log(settings);
+}
+
+const createMenuId = 'create';
+
+function addContextMenu() {
   chrome.contextMenus.create({
     contexts: [ 'selection' ],
     documentUrlPatterns: [ 'http://*/*', 'https://*/*', 'file://*' ],
     title: 'Create annotated document',
-    id: 'create',
+    id: createMenuId,
   });
+}
+
+function removeContextMenu() {
+  console.log('remove');
+  chrome.contextMenus.remove(createMenuId);
+}
+
+function handleSettings(evt) {
+  console.log(evt);
+  if (!evt.detail.self) {
+    const settings = getSettings();
+    if (settings.contextMenu) {
+      addContextMenu();
+    } else {
+      removeContextMenu();
+    }
+  }
 }
 
 function handleMessage(request, sender, sendResponse) {
