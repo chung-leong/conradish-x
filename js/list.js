@@ -1,4 +1,4 @@
-import { initializeStorage, findObjects, loadObject, deleteObjects } from './lib/storage.js';
+import { initializeStorage, findObjects, loadObject, deleteObjects, storageChange } from './lib/storage.js';
 import { e, attachCustomCheckboxHandlers, attachRippleEffectHandlers, separateWords } from './lib/ui.js';
 
 const listContainer = document.getElementById('list-container');
@@ -17,6 +17,8 @@ async function start() {
   createCommandToolbar();
   await createCards();
   listContainer.parentNode.addEventListener('scroll', handleScroll);
+  storageChange.addEventListener('create', handleCreate);
+  storageChange.addEventListener('delete', handleDelete);
 }
 
 function createSearchToolbar() {
@@ -68,7 +70,7 @@ function createCommandToolbar() {
 
 async function createCards() {
   const docs = await findObjects('DOC');
-  const days = [];
+  const days = [], ids = [];
   const items = [];
   // create all the items first, leaving the title blank initially
   for (const { key, date, type } of docs.reverse()) {
@@ -76,14 +78,16 @@ async function createCards() {
     items.push(item);
     if (!days.includes(item.day)) {
       days.push(item.day);
+      ids.push(date.toISOString().substr(0, 10));
     }
   }
   // add card for displaying search results
-  const searchCard = createCard(null, []);
+  const searchCard = createCard('?', '', []);
   cards.push(searchCard);
   // add a card for each day, then attach the list elements
-  for (const day of days) {
-    const card = createCard(day, items.filter(i => i.day === day));
+  for (const [ index, id ] of ids.entries()) {
+    const day = days[index];
+    const card = createCard(id, day, items.filter(i => i.day === day));
     cards.push(card);
   }
   // set up periodic updating of the titles, as today can become yesterday
@@ -97,12 +101,16 @@ async function createCards() {
   updateCards();
   // load the title of each document now
   for (const item of items.reverse()) {
-    const doc = await loadObject(item.key);
-    if (doc) {
-      item.titleElement.textContent = doc.title;
-      item.lang = doc.lang;
-      item.searchStrings = findSearchStrings(doc);
-    }
+    await loadItem(item);
+  }
+}
+
+async function loadItem(item) {
+  const doc = await loadObject(item.key);
+  if (doc) {
+    item.titleElement.textContent = doc.title;
+    item.lang = doc.lang;
+    item.searchStrings = findSearchStrings(doc);
   }
 }
 
@@ -116,10 +124,10 @@ function createItem(key, date, type) {
   const itemElement = e('LI', {
     dataset: { key, type }
   }, [ checkboxElement, timeElement, titleElement ]);
-  return { day, time, key, itemElement, titleElement };
+  return { day, time, key, date, itemElement, titleElement };
 }
 
-function createCard(day, items) {
+function createCard(id, day, items) {
   const headerElement = e('DIV', { className: 'card-title' });
   // stick items from that day into the card
   const listElement = e('UL', {
@@ -128,7 +136,7 @@ function createCard(day, items) {
   const cardElement = e('DIV', {
     className: 'card',
   }, [ headerElement, listElement ]);
-  return { day, cardElement, headerElement, listElement, items };
+  return { id, day, cardElement, headerElement, listElement, items };
 }
 
 function updateCardTitles() {
@@ -157,7 +165,7 @@ function updateCards() {
   while (listContainer.firstChild) {
     listContainer.firstChild.remove();
   }
-  const visible = cards.filter(c => !c.day === searching && c.items.length > 0);
+  const visible = cards.filter(c => (c.id === '?') === searching && c.items.length > 0);
   for (const card of visible) {
     listContainer.append(card.cardElement);
   }
@@ -209,13 +217,9 @@ function search(query) {
   } else {
     // insert the items back into the cards
     for (const card of cards) {
-      const { listElement } = card;
       for (const [ index, item ] of card.items.entries()) {
-        const { itemElement } = item;
-        if (!itemElement.parentNode) {
-          const prevItem = card.items[index - 1];
-          const refNode = prevItem ? prevItem.itemElement.nextSibling : null;
-          listElement.insertBefore(itemElement, refNode);
+        if (!item.itemElement.parentNode) {
+          insertItemElement(card, item, index);
         }
       }
     }
@@ -224,6 +228,24 @@ function search(query) {
   updateCards();
   updateCardTitles();
   updateSelection();
+}
+
+function removeItems(keys) {
+  let changed = false;
+  for (const card of cards) {
+    for (let i = card.items.length - 1; i >= 0; i--) {
+      const item = card.items[i];
+      if (keys.includes(item.key)) {
+        card.items.splice(i, 1);
+        item.itemElement.remove();
+        changed = true;
+      }
+    }
+  }
+  if (changed) {
+    updateCards();
+    updateSelection();
+  }
 }
 
 function searchItem(item, words) {
@@ -252,6 +274,23 @@ function addSearchString(content, lang, list) {
     }
   } else if (content instanceof Object) {
     addSearchString(content.content, lang, list);
+  }
+}
+
+function getInsertionIndex(array, item) {
+  const sorted = array.concat(item).sort().reverse();
+  return sorted.indexOf(item);
+}
+
+function insertItemElement(card, item, index) {
+  const { listElement } = card;
+  const { itemElement } = item;
+  const prevItem = card.items[index - 1];
+  if (prevItem) {
+    const refNode = prevItem.itemElement.nextSibling;
+    listElement.insertBefore(itemElement, refNode);
+  } else {
+    listElement.prepend(itemElement);
   }
 }
 
@@ -356,26 +395,42 @@ function handleCancelClick(evt) {
 }
 
 async function handleDeleteClick(evt) {
-  for (const card of cards) {
-    for (let i = card.items.length - 1; i >= 0; i--) {
-      const item = card.items[i];
-      if (selection.includes(item.key)) {
-        card.items.splice(i, 1);
-        item.itemElement.remove();
-      }
-    }
-  }
   const keys = selection;
-  updateCards();
-  updateSelection();
+  removeItems(keys);
   updateToolbar();
-  //await deleteObjects(keys);
+  await deleteObjects(keys);
 }
 
 function handleScroll(evt) {
   const { target } = evt;
   const { classList } = toolbarContainer;
   classList.toggle('shadow', target.scrollTop > 0);
+}
+
+async function handleCreate(evt) {
+  const { key, date, type } = evt.detail;
+  const item = createItem(key, date, type);
+  await loadItem(item);
+  // look for a existing card for that day
+  let card = cards.find(c => c.day === item.day);
+  if (!card) {
+    // add a new one and insert it into the right position
+    const id = date.toISOString().substr(0, 10);
+    const index = getInsertionIndex(cards.map(c => c.id), id);
+    card = createCard(id, item.day, []);
+    cards.splice(index, 0, card);
+    updateCardTitles();
+  }
+  // insert the item
+  const index = getInsertionIndex(card.items.map(i => i.date), date);
+  card.items.splice(index, 0, item);
+  insertItemElement(card, item, index);
+  updateCards();
+}
+
+function handleDelete(evt) {
+  const { key } = evt.detail;
+  removeItems([ key ]);
 }
 
 start();

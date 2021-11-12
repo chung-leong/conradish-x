@@ -3,6 +3,8 @@ import { getDefaultSettings } from './settings.js';
 const directory = [];
 let settings;
 
+export const storageChange = new EventTarget;
+
 export function getSettings() {
   return settings;
 }
@@ -29,12 +31,16 @@ export function findObjects(suffix) {
   const matches = [];
   for (const key of directory) {
     if (!suffix || key.endsWith(`:${suffix}`)) {
-      const date = new Date(key.substr(0, 24));
-      const type = key.substr(25);
-      matches.push({ key, date, type });
+      matches.push(parseKey(key));
     }
   }
   return matches;
+}
+
+function parseKey(key) {
+  const date = new Date(key.substr(0, 24));
+  const type = key.substr(25);
+  return { key, date, type };
 }
 
 export async function storeObject(suffix, object) {
@@ -87,27 +93,6 @@ async function removeOldestObject() {
   }
 }
 
-async function handleChanged(changes, areaName) {
-  let changed = false;
-  for (const [ key, change ] of Object.entries(changes)) {
-    if (key.charAt(0) === '.') {
-      continue;
-    }
-    if (change.newValue === undefined) {
-      const index = directory.indexOf(key);
-      directory.splice(index, 1);
-      changed = true;
-    } else if (!directory.includes(key)) {
-      directory.push(key);
-      changed = true;
-    }
-  }
-  if (changed) {
-    directory.sort();
-    await set('.directory', directory);
-  }
-}
-
 async function set(key, value) {
   return new Promise((resolve, reject) => {
     const obj = {};
@@ -135,7 +120,6 @@ async function get(key) {
 }
 
 async function remove(keys) {
-  console.log(keys);
   return new Promise((resolve, reject) => {
     chrome.storage.local.remove(keys, () => {
       if (chrome.runtime.lastError) {
@@ -145,4 +129,33 @@ async function remove(keys) {
       }
     });
   });
+}
+
+async function handleChanged(changes, areaName) {
+  let dirChanged = false;
+  for (const [ key, change ] of Object.entries(changes)) {
+    if (key.charAt(0) === '.') {
+      continue;
+    }
+    let type;
+    if (change.newValue === undefined) {
+      const index = directory.indexOf(key);
+      directory.splice(index, 1);
+      dirChanged = true;
+      type = 'delete';
+    } else if (!directory.includes(key)) {
+      directory.push(key);
+      dirChanged = true;
+      type = 'create';
+    } else {
+      type = 'update';
+    }
+    const detail = parseKey(key);
+    const evt = new CustomEvent(type, { detail });
+    storageChange.dispatchEvent(evt);
+  }
+  if (dirChanged) {
+    directory.sort();
+    await set('.directory', directory);
+  }
 }
