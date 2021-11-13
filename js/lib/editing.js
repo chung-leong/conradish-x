@@ -117,7 +117,7 @@ function handleSelectionChange(evt) {
   const container = getRangeContainer(range);
   const inArticle = (container && container.id  === 'article-text');
   const inFootntoe = (container && container.className === 'footnote-content');
-  if (inArticle && !range.collapsed) {
+  if (inArticle && !range.collapsed && !isMultiparagraph(range)) {
     const words = separateWords(range.toString());
     if (words.length > 0) {
       const r1 = range.getBoundingClientRect();
@@ -278,4 +278,43 @@ function getRangeContainer(range) {
 
 function toggle(element, shown) {
   element.style.display = (shown) ? 'block' : 'none';
+}
+
+function isMultiparagraph(range) {
+  const { startContainer, endContainer, commonAncestorContainer } = range;
+  let startContainerReached = false, endContainerReached = false;
+  let blockContainerReached = false, blockContainerCount = 0;
+  const scan = (node) => {
+    if (node === startContainer) {
+      startContainerReached = true;
+    }
+    if (node === endContainer) {
+      endContainerReached = true;
+    }
+    if (node.nodeType === Node.TEXT_NODE) {
+      if (startContainerReached) {
+        if (blockContainerReached) {
+          blockContainerCount++;
+          blockContainerReached = false;
+        }
+      }
+    } else if (node.nodeType === Node.ELEMENT_NODE) {
+      if (!endContainerReached) {
+        if (node !== commonAncestorContainer) {
+          // see if it's a block element
+          const { display } = getComputedStyle(node);
+          if (display === 'block') {
+            blockContainerReached = true;
+          }
+        }
+      }
+      for (const child of node.childNodes) {
+        if (!endContainerReached) {
+          scan(child);
+        }
+      }
+    }
+  };
+  scan(commonAncestorContainer);
+  return (blockContainerCount > 1);
 }

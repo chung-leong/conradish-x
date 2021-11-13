@@ -40,7 +40,7 @@ export function createArticleNavigation() {
   const footnoteSizeSelect = createFontSizeSelect(possible.fontSize, settings.footnote.fontSize);
   footnoteSizeSelect.dataset.section = 'footnote';
   footnoteSizeSelect.addEventListener('change', handleFontSizeChange);
-  addSection(top, 'Footnote font', footnoteSizeSelect, true);
+  addSection(top, 'Footnote font size', footnoteSizeSelect, true);
   // add paper size dropdown
   const paperSelect = createSelect(possible.paper, settings.paper);
   paperSelect.addEventListener('change', handlePaperChange);

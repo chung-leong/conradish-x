@@ -48,6 +48,7 @@ BODY.ready #article {
 #article-text {
   font-size: 12pt;
   text-align: justify;
+  white-space: pre-wrap;
 }
 
 #article-text H1,
