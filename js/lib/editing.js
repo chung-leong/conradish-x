@@ -1,6 +1,6 @@
 import { e, separateWords } from './ui.js';
 import { adjustLayout, adjustFootnoteReferences, annotateRange, attachFootnote } from './layout.js';
-import { extractContent } from './capture.js';
+import { tranverseRange, extractContent } from './capturing.js';
 import { translate } from './translation.js';
 import { getSourceLanguage, getTargetLanguage } from './settings.js';
 
@@ -281,40 +281,41 @@ function toggle(element, shown) {
 }
 
 function isMultiparagraph(range) {
-  const { startContainer, endContainer, commonAncestorContainer } = range;
-  let startContainerReached = false, endContainerReached = false;
-  let blockContainerReached = false, blockContainerCount = 0;
-  const scan = (node) => {
-    if (node === startContainer) {
-      startContainerReached = true;
+  let count = 0;
+  tranverseRange(range, (node, startIndex, endIndex) => {
+    if (node.nodeType === Node.ELEMENT_NODE) {
+      if (endIndex > startIndex) {
+        const style = getComputedStyle(node);
+        if (style.display === 'block') {
+          count++;
+        }
+      }
+    } else if (node.nodeType === Node.TEXT_NODE) {
+      if (count === 0) {
+        count++;
+      }
     }
-    if (node === endContainer) {
-      endContainerReached = true;
-    }
+    return !(count > 1);
+  });
+  return (count > 1);
+}
+
+function normalizeRange(range) {
+  let startContainer, endContainer;
+  let startOffset = 0, endOffset = 0;
+  tranverseRange(range, (node, startIndex, endIndex) => {
     if (node.nodeType === Node.TEXT_NODE) {
-      if (startContainerReached) {
-        if (blockContainerReached) {
-          blockContainerCount++;
-          blockContainerReached = false;
-        }
+      if (!startContainer) {
+        startContainer = node;
+        startOffset = startIndex;
       }
-    } else if (node.nodeType === Node.ELEMENT_NODE) {
-      if (!endContainerReached) {
-        if (node !== commonAncestorContainer) {
-          // see if it's a block element
-          const { display } = getComputedStyle(node);
-          if (display === 'block') {
-            blockContainerReached = true;
-          }
-        }
-      }
-      for (const child of node.childNodes) {
-        if (!endContainerReached) {
-          scan(child);
-        }
-      }
+      endContainer = node;
+      endOffset = endIndex;
     }
-  };
-  scan(commonAncestorContainer);
-  return (blockContainerCount > 1);
+  });
+  if (startContainer && endContainer) {
+    range.setStart(startContainer, startOffset);
+    range.setEnd(endContainer, endOffset);
+  }
+  return range;
 }

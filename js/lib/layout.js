@@ -64,7 +64,7 @@ export function adjustLayout(options = {}) {
               footnotes.splice(prevIndex + 1, 0, footnote);
             } else {
               // put it at the beginning
-              listElement.insertBefore(footnote.itemElement, listElement.firstChild);
+              listElement.prepend(footnote.itemElement);
               footnotes.unshift(footnote);
             }
             footnote.page = page;
@@ -222,7 +222,7 @@ export function addContent(element, content) {
   } else if (content instanceof Object) {
     const child = e(content.tag);
     addContent(child, content.content);
-    if (content.footnote) {
+    if (content.footnote != undefined) {
       const number = footnotes.length + 1;
       const refElement = child;
       const supElement = e('SUP', { className: 'footnote-number' }, number);

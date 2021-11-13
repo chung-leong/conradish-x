@@ -108,7 +108,7 @@ async function handleMenuClick(info, tab) {
 }
 
 async function createDocument(tab) {
-  const codeURL = chrome.runtime.getURL('js/lib/capture.js');
+  const codeURL = chrome.runtime.getURL('js/lib/capturing.js');
   const lang = await chrome.tabs.detectLanguage(tab.id);
   chrome.scripting.executeScript({
     target: { allFrames: true, tabId: tab.id },

@@ -1,3 +1,35 @@
+export function tranverseRange(range, cb) {
+  const { startContainer, endContainer, commonAncestorContainer } = range;
+  const { startOffset, endOffset } = range;
+  let inside = false, finished = false;
+  const scan = (node) => {
+    const content = node.nodeValue || node.childNodes;
+    const s = (node === startContainer) ? startOffset : 0;
+    const e = (node === endContainer) ? endOffset : content.length;
+    if (node === startContainer) {
+      inside = true;
+    }
+    if (inside) {
+      if (cb(node, s, e) === false) {
+        finished = true;
+      }
+    }
+    if (content instanceof NodeList && !finished) {
+      for (let i = s; i < e; i++) {
+        scan(content[i]);
+        if (finished) {
+          break;
+        }
+      }
+    }
+    if (node === endContainer) {
+      inside = false;
+      finished = true;
+    }
+  };
+  scan(commonAncestorContainer);
+}
+
 export function captureSelection(selection, lang) {
   const range = selection.getRangeAt(0);
   const fragment = range.cloneContents();
