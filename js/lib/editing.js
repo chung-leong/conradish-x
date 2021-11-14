@@ -100,16 +100,11 @@ function handleFootnoteInput(evt) {
 }
 
 function handleArticleInput(evt) {
-  adjustFootnoteReferences({ updateFootnotes: true });
-  adjustLayout();
+  const changed = adjustFootnoteReferences({ updateFootnotes: true });
+  adjustLayout({ updateFooterPosition: changed });
 }
 
 function handleArticleKeyPress(evt) {
-  // prevent modification to sup elements
-  if (isCursorInFootnoteRef()) {
-    evt.preventDefault();
-    evt.stopPropagation();
-  }
 }
 
 function handleSelectionChange(evt) {
@@ -167,18 +162,18 @@ function handleAddTranslation(evt) {
 async function addFootnote(includeTerm) {
   // set the selection to what was last selected
   const selection = getSelection();
-  const range = lastSelectedRange.cloneRange();
+  const range = normalizeRange(lastSelectedRange.cloneRange());
   const textSelected = range.toString();
   // trim off whitespaces
-  const wsBefore = textSelected.length - textSelected.trimLeft().length;
   const wsAfter = textSelected.length - textSelected.trimRight().length;
-  range.setStart(range.startContainer, range.startOffset + wsBefore);
+  // for some reason execCommand('insertHTML') only works correctly
+  // when we replace some of the existing text
   range.setEnd(range.endContainer, range.endOffset - wsAfter);
+  range.setStart(range.endContainer, range.endOffset - 1);
   selection.removeAllRanges();
   selection.addRange(range);
-  // create a <span> with <sup> and replace the selection
   const element = annotateRange(range);
-  document.execCommand('insertHTML', false, element.outerHTML);
+  document.execCommand('insertHTML', false, range.toString() + element.outerHTML);
   // attach placeholder text
   const term = textSelected.trim();
   const sourceLang = getSourceLanguage();
@@ -241,20 +236,11 @@ function isCursorAtListItemEnd() {
   return true;
 }
 
-function isCursorInFootnoteRef() {
-  const range = getSelectionRange();
-  if (!range) {
-    return false;
-  }
-  const { startContainer, endContainer } = range;
-  if (startContainer === endContainer) {
-    for (let n = endContainer; n; n = n.parentNode) {
-      if (n.nodeType === Node.ELEMENT_NODE) {
-        if (n.tagName === 'SUP' && n.className === 'footnote-number') {
-          return true;
-        } else {
-          break;
-        }
+function inFootnoteNumber(node) {
+  for (let n = node; n; n = n.parentNode) {
+    if (n.nodeType === Node.ELEMENT_NODE) {
+      if (n.tagName === 'SUP' && n.classList.contains('footnote-number')) {
+        return true;
       }
     }
   }

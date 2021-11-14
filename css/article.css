@@ -72,6 +72,10 @@ BODY.ready #article {
   font-size: 10pt;
 }
 
+.footnote-number.hidden {
+  display: none;
+}
+
 #article-menu {
   position: absolute;
   display: none;

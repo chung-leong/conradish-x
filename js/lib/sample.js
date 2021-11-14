@@ -3,10 +3,10 @@ export default [
   {
     tag: 'p',
     content: [
-      `Whereas recognition of the inherent `,
+      `Whereas recognition of the inherent dignity`,
       {
-        tag: 'span',
-        content: 'dignity',
+        tag: 'sup',
+        content: '1',
         footnote: 'dignity - [DEFINITION OF dignity]'
       },
       ` and of the equal and inalienable rights of all members of the human family is the foundation of freedom, justice and peace in the world,`
@@ -25,16 +25,16 @@ export default [
   {
     tag: 'p',
     content: [
-      `All human beings are born free and equal in dignity and rights. They are endowed with reason and conscience and should act towards one another in a `,
+      `All human beings are born free and equal in dignity and rights. They are endowed with reason and conscience and should act towards one another in a spirit`,
       {
-        tag: 'span',
-        content: 'spirit',
+        tag: 'sup',
+        content: '2',
         footnote: 'spirit - [DEFINITION OF spirit]'
       },
-      ` of `,
+      ` of brotherhood`,
       {
-        tag: 'span',
-        content: 'brotherhood',
+        tag: 'sup',
+        content: '3',
         footnote: 'brotherhood - [DEFINITION OF brotherhood]'
       },
       `.`
@@ -177,11 +177,11 @@ export default [
     content: [
       {
         tag: 'li', content: [
-          `Everyone has duties to the `,
+          `Everyone has duties to the community`,
           {
-            tag: 'span',
-            content: `community`,
-            footnote: 'community - [DEFINITION OF community]' 
+            tag: 'sub',
+            content: `4`,
+            footnote: 'community - [DEFINITION OF community]'
           },
           ` in which alone the free and full development of his personality is possible.`
         ]

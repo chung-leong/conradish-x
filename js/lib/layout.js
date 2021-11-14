@@ -179,26 +179,26 @@ export function adjustFootnoteReferences(options = {}) {
   let changed = false;
   if (updateReferences || updateFootnotes) {
     for (const footnote of footnotes) {
-      const { supElement, itemElement, refElement } = footnote;
+      const { supElement, itemElement } = footnote;
       if (footnote.deleted) {
         if (supElement.parentElement || itemElement.parentElement) {
+          // itemElement will get added back by adjustLayout()
+          // just need to unhide the sup element
           footnote.deleted = false;
-          if (!supElement.parentElement) {
-            // stick the <sup> back on
-            refElement.append(supElement);
-          }
+          supElement.classList.remove('hidden');
           changed = true;
         }
       } else {
-        if (!supElement.parentElement || !itemElement.parentElement || !refElement.parentElement) {
+        if (!supElement.parentElement || !itemElement.parentElement) {
           footnote.deleted = true;
           itemElement.remove();
-          supElement.remove();
-          const page = pages.find(p => p.footer.footnotes.includes(footnote));
-          if (page) {
-            const { footnotes } = page.footer;
-            footnotes.splice(footnotes.indexOf(footnote), 1);
-          }
+          // hide the sup element instead of removing it, as it's hard
+          // to figure out where to put it when we need to restore it
+          supElement.classList.add('hidden');
+          // take it out the page where it's attached
+          const { footnotes } = footnote.page.footer;
+          footnotes.splice(footnotes.indexOf(footnote), 1);
+          footnote.page = null;
           changed = true;
         }
       }
@@ -210,6 +210,7 @@ export function adjustFootnoteReferences(options = {}) {
       footnote.supElement.textContent = footnote.number = number++;
     }
   }
+  return changed;
 }
 
 export function addContent(element, content) {
@@ -224,21 +225,20 @@ export function addContent(element, content) {
     addContent(child, content.content);
     if (content.footnote != undefined) {
       const number = footnotes.length + 1;
-      const refElement = child;
-      const supElement = e('SUP', { className: 'footnote-number' }, number);
+      const supElement = child;
+      supElement.className = 'footnote-number';
+      supElement.contentEditable = false;
       const itemElement = e('LI', { className: 'footnote-item' });
       addContent(itemElement, content.footnote);
       const page = null, deleted = false, height = '';
-      refElement.append(supElement);
-      refElement.className = 'reference';
-      footnotes.push({ number, page, deleted, supElement, itemElement, refElement, height });
+      footnotes.push({ number, page, deleted, supElement, itemElement, height });
     }
     element.append(child);
   }
 }
 
 export function annotateRange(range) {
-  const content = range.cloneContents();
+  // figure out what number it should have
   let number = 1;
   for (const { supElement } of footnotes.filter(f => !f.deleted)) {
     if (supElement.compareDocumentPosition(range.endContainer) === Node.DOCUMENT_POSITION_FOLLOWING) {
@@ -247,21 +247,17 @@ export function annotateRange(range) {
       break;
     }
   }
-  const supElement = e('SUP', { className: 'footnote-number' }, number);
-  return e('SPAN', { className: 'reference' }, [ content, supElement ]);
+  return e('SUP', { className: 'footnote-number pending' }, number);
 }
 
 export function attachFootnote(content) {
-  const refElements = [ ...document.getElementsByClassName('reference') ];
-  const refElement = refElements.find((element) => {
-    const footnote = footnotes.find(f => f.refElement === element);
-    return !footnote;
-  });
-  const supElement = refElement.getElementsByTagName('SUP')[0];
+  const supElement = document.querySelectorAll('.footnote-number.pending')[0];
+  supElement.classList.remove('pending');
+  supElement.contentEditable = false;
   const itemElement = e('LI', { className: 'footnote-item' }, content);
   const number = parseInt(supElement.textContent);
   const page = null, deleted = false, height = '';
-  const footnote = { number, page, deleted, supElement, itemElement, refElement, height };
+  const footnote = { number, page, deleted, supElement, itemElement, height };
   footnotes.splice(number - 1, 0, footnote);
   return footnote;
 }
