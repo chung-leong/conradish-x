@@ -1,6 +1,6 @@
 import { e, separateWords } from './ui.js';
 import { adjustLayout, adjustFootnoteReferences, annotateRange, attachFootnote } from './layout.js';
-import { tranverseRange, extractContent } from './capturing.js';
+import { tranverseRange } from './capturing.js';
 import { translate } from './translation.js';
 import { getSourceLanguage, getTargetLanguage } from './settings.js';
 
@@ -65,17 +65,6 @@ function handlePaste(evt) {
     // cancel default behavior
     evt.preventDefault();
     evt.stopPropagation();
-    // parse HTML ourselves
-    const range = document.createRange();
-    range.selectNode(evt.target);
-    const fragment = range.createContextualFragment(html);
-    // grab content from fragment and recreate it
-    const content = extractContent(fragment);
-    const element = e('DIV');
-    addContent(element, content);
-    const filteredHTML = element.innerHTML;
-    // paste it
-    document.execCommand('insertHTML', false, filteredHTML);
   }
 }
 
