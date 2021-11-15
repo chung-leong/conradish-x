@@ -48,13 +48,18 @@ export function getDefaultSettings() {
   const article = { fontFamily: 'Arial', fontSize: '12pt', justification: 'text' };
   const footnote = { fontFamily: 'Arial', fontSize: '10pt' };
   const codes = (navigator.languages[0] || 'en-US').toLowerCase().split('-');
-  const contextMenu = true;
   const target = codes[0];
   const country = codes[1] || codes[0];
   const paper = letterCountries.includes(country) ? 'letter' : 'A4';
   const margins = 'default';
   const customMargins = Object.assign({}, paperProperties[paper].defaultMargins);
-  return { target, article, footnote, paper, margins, customMargins, contextMenu };
+  const filter = 'automatic';
+  const contextMenu = true;
+  const heading = 'H2';
+  return {
+    target, article, footnote, paper, margins, customMargins,
+    contextMenu, filter, heading,
+  };
 }
 
 export function getPossibleSettings() {
