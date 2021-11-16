@@ -21,6 +21,7 @@ export async function initializeStorage() {
     for (const key of keys) {
       directory.push(key);
     }
+    directory.sort();
   }
   settings = await get('.settings');
   if (!settings) {
@@ -71,8 +72,10 @@ export async function loadObject(key) {
   if (object === undefined) {
     // remove key from the directory if object is missing
     const index = directory.indexOf(key);
-    directory.splice(index, 1);
-    await set('.directory', directory);
+    if (index !== -1) {
+      directory.splice(index, 1);
+    }
+    await saveDirectory();
   }
   return object;
 }
@@ -86,7 +89,7 @@ export async function deleteObjects(keys) {
 }
 
 async function removeOldestObject() {
-  const key = directory[0];
+  const key = directory.shift();
   if (key) {
     deleteObject(key);
     return true;
@@ -101,7 +104,7 @@ async function set(key, value) {
     obj[key] = value;
     chrome.storage.local.set(obj, () => {
       if (chrome.runtime.lastError) {
-        reject(chrome.runtime.lastError);
+        reject(new Error(chrome.runtime.lastError.message));
       } else {
         resolve();
       }
@@ -113,7 +116,7 @@ async function get(key) {
   return new Promise((resolve, reject) => {
     chrome.storage.local.get(key, (items) => {
       if (chrome.runtime.lastError) {
-        reject(chrome.runtime.lastError);
+        reject(new Error(chrome.runtime.lastError.message));
       } else {
         resolve(items[key]);
       }
@@ -125,7 +128,7 @@ async function remove(keys) {
   return new Promise((resolve, reject) => {
     chrome.storage.local.remove(keys, () => {
       if (chrome.runtime.lastError) {
-        reject(chrome.runtime.lastError);
+        reject(new Error(chrome.runtime.lastError.message));
       } else {
         resolve();
       }
@@ -152,8 +155,10 @@ async function handleChanged(changes, areaName) {
     let type;
     if (change.newValue === undefined) {
       const index = directory.indexOf(key);
-      directory.splice(index, 1);
-      dirChanged = true;
+      if (index !== -1) {
+        directory.splice(index, 1);
+        dirChanged = true;
+      }
       type = 'delete';
     } else if (!directory.includes(key)) {
       directory.push(key);
@@ -167,7 +172,11 @@ async function handleChanged(changes, areaName) {
     storageChange.dispatchEvent(evt);
   }
   if (dirChanged) {
-    directory.sort();
-    await set('.directory', directory);
+    await saveDirectory();
   }
+}
+
+async function saveDirectory() {
+  directory.sort();
+  await set('.directory', directory);
 }
