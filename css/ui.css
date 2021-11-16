@@ -154,6 +154,28 @@ button.default span.ripple {
   background-color: rgba(0, 0, 0, 0.1);
 }
 
+.speech-bubble {
+	position: relative;
+	max-width: 30em;
+	background-color: #fff;
+	padding: 1em 1em;
+	border-radius: 1rem;
+  box-shadow:	0 0.125rem 0.5rem rgba(0, 0, 0, .3), 0 0.0625rem 0.125rem rgba(0, 0, 0, .2);
+}
+
+.speech-bubble::before {
+	content: '';
+	position: absolute;
+	width: 0;
+	height: 0;
+	top: 100%;
+	right: 1em; /* offset should move with padding of parent */
+	border: .75rem solid transparent;
+	border-bottom: none;
+	border-top-color: #fff;
+	filter: drop-shadow(0.125rem 0.25rem 0.125rem rgba(0, 0, 0, .1));
+}
+
 #scratch-pad {
   position: absolute;
   left: 0;

@@ -114,10 +114,6 @@ const possibleSettings = {
       value: 'Georgia',
     },
     {
-      label: 'Helvetica',
-      value: 'Helvetica',
-    },
-    {
       label: 'Tahoma',
       value: 'Tahoma',
     },

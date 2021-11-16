@@ -50,7 +50,7 @@ export function createArticleNavigation() {
   marginSelect.addEventListener('change', handleMarginChange);
   addSection(top, 'Margins', marginSelect);
   // add custom margins input pane
-  const customMargins = createCustomMarginInputs(top, settings.customMargins, settings.margins === 'default');
+  const customMargins = createCustomMarginInputs(settings.customMargins, settings.margins === 'default');
   const inputs = customMargins.getElementsByTagName('INPUT');
   for (const input of inputs) {
     input.addEventListener('input', handleCustomMarginInput);
@@ -58,11 +58,25 @@ export function createArticleNavigation() {
   }
   top.append(customMargins);
 
+  // add button to bottom pane
   const bottom = document.getElementById('side-bar-bottom');
   const printButton = e('BUTTON', { className: 'default' }, 'Print');
   printButton.addEventListener('click', handlePrintClick)
   bottom.append(printButton);
-  // add ripple effect to button
+
+  // add message about paper size and margin
+  const sidebar = bottom.parentNode;
+  const speechBubble = createSpeechBubble();
+  sidebar.append(speechBubble);
+  // show it when user mouses over the print button
+  const showBubble = () => speechBubble.classList.remove('hidden');
+  const hideBubble = () => speechBubble.classList.add('hidden');
+  printButton.addEventListener('mouseover', showBubble);
+  printButton.addEventListener('mouseout', hideBubble);
+  printButton.addEventListener('focus', showBubble);
+  printButton.addEventListener('blur', hideBubble);
+
+  // add ripple effect to buttons
   attachRippleEffectHandlers();
 }
 
@@ -97,7 +111,7 @@ function createFontSizeSelect(fontSizes, currentValue) {
   }));
 }
 
-function createCustomMarginInputs(container, margins, hidden) {
+function createCustomMarginInputs(margins, hidden) {
   const createInput = (name) => {
     const value = margins[name];
     return e('INPUT', { type: 'text', name, value });
@@ -112,6 +126,12 @@ function createCustomMarginInputs(container, margins, hidden) {
     className += ' hidden';
   }
   return e('DIV', { className }, [ left, center, right ]);
+}
+
+function createSpeechBubble() {
+  const icon = e('DIV', { className: 'icon' }, '\u26a0\ufe0f');
+  const message = e('DIV', { className: 'message' }, 'In the print window, make sure paper size matches what’s specified above and that margins are set to “Default”');
+  return e('DIV', { className: 'speech-bubble hidden' }, [ icon, message ]);
 }
 
 function handleFontChange(evt) {

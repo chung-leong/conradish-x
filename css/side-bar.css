@@ -1,4 +1,5 @@
 #side-bar {
+  position: relative;
   display: flex;
   flex-grow: 0;
   flex-shrink: 0;
@@ -86,4 +87,29 @@
 
 .custom-margins .column .row.bottom {
   align-items: flex-end;
+}
+
+.speech-bubble {
+  position: absolute;
+  display: flex;
+  right: 16px;
+  bottom: 80px;
+  width: 80%;
+  opacity: 1;
+  transition: opacity 0.3s ease-in, bottom 0.3s ease-in, visibility 0.3s;
+}
+
+.speech-bubble.hidden {
+  visibility: hidden;
+  bottom: 70px;
+  opacity: 0;
+}
+
+.speech-bubble .icon {
+  font-size: 2em;
+  margin-right: 10px;
+}
+
+.speech-bubble .message {
+  font-size: 1.1em;
 }
