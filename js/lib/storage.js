@@ -178,5 +178,5 @@ async function handleChanged(changes, areaName) {
 
 async function saveDirectory() {
   directory.sort();
-  await set('.directory', directory);
+  await saveObject('.directory', directory);
 }
