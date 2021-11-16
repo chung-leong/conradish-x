@@ -130,7 +130,13 @@ function createCustomMarginInputs(margins, hidden) {
 
 function createSpeechBubble() {
   const icon = e('DIV', { className: 'icon' }, '\u26a0\ufe0f');
-  const message = e('DIV', { className: 'message' }, 'In the print window, make sure paper size matches what’s specified above and that margins are set to “Default”');
+  const paperSize = e('B', {}, 'Paper size');
+  const margins = e('B', {}, 'Margins');
+  const message = e('DIV', { className: 'message' }, [
+    'In the print window, make sure ', paperSize,
+    ' matches what’s specified above and that ', margins,
+    ' are set to “Default”'
+  ]);
   return e('DIV', { className: 'speech-bubble hidden' }, [ icon, message ]);
 }
 
