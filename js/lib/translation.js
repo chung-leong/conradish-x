@@ -67,7 +67,13 @@ export async function translate(original, sourceLang, targetLang, singleWord) {
 
 function isCapitalized(word, lang) {
   const c = word.charAt(0);
-  return (c.toLocaleLowerCase(lang) !== c);
+  if (c.toLocaleLowerCase(lang) !== c) {
+    // see if it's all-cap
+    if (word.toLocaleUpperCase(lang) !== word) {
+      return true;
+    }
+  }
+  return false;
 }
 
 export function getSourceLanguages() {

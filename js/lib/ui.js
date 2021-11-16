@@ -14,7 +14,7 @@ function assignAttributes(object, props) {
   for (const [ key, value ] of Object.entries(props)) {
     if (value instanceof Object) {
       assignAttributes(object[key], value);
-    } else {
+    } else if (value !== undefined) {
       object[key] = value;
     }
   }

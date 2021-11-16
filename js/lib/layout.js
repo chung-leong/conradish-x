@@ -221,7 +221,7 @@ export function addContent(element, content) {
       addContent(element, item);
     }
   } else if (content instanceof Object) {
-    const child = e(content.tag);
+    const child = e(content.tag, { style: content.style });
     addContent(child, content.content);
     if (content.footnote != undefined) {
       const number = footnotes.length + 1;

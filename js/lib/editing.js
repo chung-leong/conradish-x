@@ -9,6 +9,7 @@ export function attachEditingHandlers() {
   document.addEventListener('keypress', handleKeyPress);
   document.addEventListener('paste', handlePaste);
   document.addEventListener('selectionchange', handleSelectionChange);
+  document.addEventListener('focusin', handleFocusIn);
 }
 
 const articleMenuElement = document.getElementById('article-menu');
@@ -39,113 +40,6 @@ export function createMenuItems() {
     articleMenuItems[key] = item;
   }
   articleMenuElement.appendChild(list);
-}
-
-function handleInput(evt) {
-  const { target } = evt;
-  if (target.className === 'footer-content') {
-    handleFootnoteInput(evt);
-  } else if (target.id === 'article-text') {
-    handleArticleInput(evt);
-  }
-}
-
-function handleKeyPress(evt) {
-  const { target } = evt;
-  if (target.className === 'footer-content') {
-    handleFootnoteKeyPress(evt);
-  } else if (target.id === 'article-text') {
-    handleArticleKeyPress(evt);
-  }
-}
-
-function handlePaste(evt) {
-  const html = evt.clipboardData.getData('text/html');
-  if (html) {
-    // cancel default behavior
-    evt.preventDefault();
-    evt.stopPropagation();
-  }
-}
-
-function handleFootnoteKeyPress(evt) {
-  const { key, shiftKey, ctrlKey, altKey } = evt;
-  if (key === 'Enter' && !shiftKey && !ctrlKey && !altKey) {
-    // cancel default behavior
-    evt.preventDefault();
-    evt.stopPropagation();
-    // at the end of the list item we need to insert two <BR>s
-    const count = isCursorAtListItemEnd() ? 2 : 1;
-    document.execCommand('insertHTML', false, '<br>'.repeat(count));
-  }
-}
-
-function handleFootnoteInput(evt) {
-  // see if any item has gone missing or resurfaced, hiding and restoring
-  // the referencing sup elements accordingly
-  adjustFootnoteReferences({ updateReferences: true });
-  // adjust the adjust the page layout in case the height is different
-  adjustLayout({ updateFooterPosition: true });
-}
-
-function handleArticleInput(evt) {
-  const changed = adjustFootnoteReferences({ updateFootnotes: true });
-  adjustLayout({ updateFooterPosition: changed });
-}
-
-function handleArticleKeyPress(evt) {
-}
-
-function handleSelectionChange(evt) {
-  const range = getSelectionRange();
-  const container = getRangeContainer(range);
-  const inArticle = (container && container.id  === 'article-text');
-  const inFootntoe = (container && container.className === 'footnote-content');
-  if (inArticle && !range.collapsed && !isMultiparagraph(range)) {
-    const words = separateWords(range.toString());
-    if (words.length > 0) {
-      const r1 = range.getBoundingClientRect();
-      const r2 = container.parentNode.getBoundingClientRect();
-      const left = r1.left - r2.left + 2;
-      let top = r1.bottom - r2.top + 2;
-      articleMenuElement.style.left = `${left}px`;
-      articleMenuElement.style.top = `${top}px`;
-      // show/hide menu item depending on how many words are selected
-      const count = words.length;
-      toggle(articleMenuItems.addTranslation, count > 1);
-      toggle(articleMenuItems.addDefinition, count <= 10);
-      toggle(articleMenuElement, true);
-      // remember the range
-      lastSelectedRange = range;
-    } else {
-      toggle(articleMenuElement, false);
-      lastSelectedRange = null;
-    }
-  } else {
-    const clear = () => {
-      toggle(articleMenuElement, false);
-      lastSelectedRange = null;
-    };
-    if (articleMenuClicked) {
-      // clear the menu after a small delay, so we don't lose the click event
-      articleMenuClicked = false;
-      setTimeout(clear, 150);
-    } else {
-      clear();
-    }
-  }
-}
-
-function handleMenuMouseDown(evt) {
-  articleMenuClicked = true;
-}
-
-function handleAddDefinition(evt) {
-  addFootnote(true);
-}
-
-function handleAddTranslation(evt) {
-  addFootnote(false);
 }
 
 async function addFootnote(includeTerm) {
@@ -293,4 +187,115 @@ function normalizeRange(range) {
     range.setEnd(endContainer, endOffset);
   }
   return range;
+}
+
+function handleInput(evt) {
+  const { target } = evt;
+  if (target.className === 'footer-content') {
+    handleFootnoteInput(evt);
+  } else if (target.id === 'article-text') {
+    handleArticleInput(evt);
+  }
+}
+
+function handleKeyPress(evt) {
+  const { target } = evt;
+  if (target.className === 'footer-content') {
+    handleFootnoteKeyPress(evt);
+  } else if (target.id === 'article-text') {
+    handleArticleKeyPress(evt);
+  }
+}
+
+function handlePaste(evt) {
+  const html = evt.clipboardData.getData('text/html');
+  if (html) {
+    // cancel default behavior
+    evt.preventDefault();
+    evt.stopPropagation();
+  }
+}
+
+function handleFootnoteKeyPress(evt) {
+  const { key, shiftKey, ctrlKey, altKey } = evt;
+  if (key === 'Enter' && !shiftKey && !ctrlKey && !altKey) {
+    // cancel default behavior
+    evt.preventDefault();
+    evt.stopPropagation();
+    // at the end of the list item we need to insert two <BR>s
+    const count = isCursorAtListItemEnd() ? 2 : 1;
+    document.execCommand('insertHTML', false, '<br>'.repeat(count));
+  }
+}
+
+function handleFootnoteInput(evt) {
+  // see if any item has gone missing or resurfaced, hiding and restoring
+  // the referencing sup elements accordingly
+  adjustFootnoteReferences({ updateReferences: true });
+  // adjust the adjust the page layout in case the height is different
+  adjustLayout({ updateFooterPosition: true });
+}
+
+function handleArticleInput(evt) {
+  const changed = adjustFootnoteReferences({ updateFootnotes: true });
+  adjustLayout({ updateFooterPosition: changed });
+}
+
+function handleArticleKeyPress(evt) {
+}
+
+function handleSelectionChange(evt) {
+  const range = getSelectionRange();
+  const container = getRangeContainer(range);
+  const inArticle = (container && container.id  === 'article-text');
+  const inFootntoe = (container && container.className === 'footnote-content');
+  if (inArticle && !range.collapsed && !isMultiparagraph(range)) {
+    const words = separateWords(range.toString());
+    if (words.length > 0) {
+      const r1 = range.getBoundingClientRect();
+      const r2 = container.parentNode.getBoundingClientRect();
+      const left = r1.left - r2.left + 2;
+      let top = r1.bottom - r2.top + 2;
+      articleMenuElement.style.left = `${left}px`;
+      articleMenuElement.style.top = `${top}px`;
+      // show/hide menu item depending on how many words are selected
+      const count = words.length;
+      toggle(articleMenuItems.addTranslation, count > 1);
+      toggle(articleMenuItems.addDefinition, count <= 10);
+      toggle(articleMenuElement, true);
+      // remember the range
+      lastSelectedRange = range;
+    } else {
+      toggle(articleMenuElement, false);
+      lastSelectedRange = null;
+    }
+  } else {
+    const clear = () => {
+      toggle(articleMenuElement, false);
+      lastSelectedRange = null;
+    };
+    if (articleMenuClicked) {
+      // clear the menu after a small delay, so we don't lose the click event
+      articleMenuClicked = false;
+      setTimeout(clear, 150);
+    } else {
+      clear();
+    }
+  }
+}
+
+function handleMenuMouseDown(evt) {
+  articleMenuClicked = true;
+}
+
+function handleAddDefinition(evt) {
+  addFootnote(true);
+}
+
+function handleAddTranslation(evt) {
+  addFootnote(false);
+}
+
+function handleFocusIn(evt) {
+  document.execCommand('styleWithCSS', false, true);
 }
