@@ -37,7 +37,8 @@ export function captureSelection(selection, lang) {
   // return a <div>; otherwise we'd get a <p>
   const content = (object.tag === 'DIV') ? object.content : object;
   const title = document.title;
-  const doc = { title, lang, content };
+  const url = document.location.href;
+  const doc = { url, title, lang, content };
   chrome.runtime.sendMessage(undefined, { type: 'create', document: doc });
 }
 

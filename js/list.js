@@ -109,8 +109,10 @@ async function createCards() {
 async function loadItem(item) {
   const doc = await loadObject(item.key);
   if (doc) {
-    item.titleElement.textContent = doc.title;
-    item.lang = doc.lang;
+    const { url, title, lang } = doc;
+    item.titleElement.textContent = title;
+    item.titleElement.title = url;
+    item.lang = lang;
     item.searchStrings = findSearchStrings(doc);
   }
 }
@@ -258,8 +260,8 @@ function searchItem(item, words) {
 }
 
 function findSearchStrings(doc) {
-  const list = [];
-  const { title, lang, content } = doc;
+  const { url, title, lang, content } = doc;
+  const list = [ url ];
   addSearchString(title, lang, list);
   addSearchString(content, lang, list);
   return list;
