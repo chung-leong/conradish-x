@@ -174,6 +174,10 @@ export function captureRangeContent(range, options) {
             newStyle[name] = style[name];
           }
         }
+        if (tag === 'SUP' || tag === 'SUB') {
+          newStyle.verticalAlign = (tag == 'SUP') ? 'super' : 'sub';
+          newStyle.fontSize = '83%';
+        }
         if (Object.entries(newStyle).length > 0) {
           object.style = newStyle;
         }
