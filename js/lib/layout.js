@@ -1,5 +1,5 @@
 import { e } from './ui.js';
-import { applyStyles, getPageProperties } from './settings.js';
+import { applyStyles, getPageProperties, getSourceLanguage, getTargetLanguage } from './settings.js';
 
 const contentElement = document.getElementById('article-text');
 const backgroundElement = document.getElementById('article-background');
@@ -9,7 +9,8 @@ const scrollElement = document.getElementById('article-container');
 const pages = [];
 const footnotes = [];
 
-export function addText(content) {
+export function addText(content, lang) {
+  contentElement.lang = getSourceLanguage();
   applyStyles();
   addContent(contentElement, content);
   adjustLayout();
@@ -221,20 +222,25 @@ export function addContent(element, content) {
       addContent(element, item);
     }
   } else if (content instanceof Object) {
-    const child = e(content.tag, { style: content.style });
-    addContent(child, content.content);
-    if (content.footnote != undefined) {
-      const number = footnotes.length + 1;
-      const supElement = child;
-      supElement.className = 'footnote-number';
-      supElement.contentEditable = false;
-      const itemElement = e('LI', { className: 'footnote-item' });
-      addContent(itemElement, content.footnote);
-      const page = null, deleted = false, height = '';
-      footnotes.push({ number, page, deleted, supElement, itemElement, height });
-    }
-    element.append(child);
+    addElement(element, content);
   }
+}
+
+function addElement(element, { tag, style, content, footnote }) {
+  const child = e(tag, { style });
+  addContent(child, content);
+  if (footnote instanceof Object) {
+    const { lang, content, ...extra } = footnote;
+    const number = footnotes.length + 1;
+    const supElement = child;
+    supElement.className = 'footnote-number';
+    supElement.contentEditable = false;
+    const itemElement = e('LI', { className: 'footnote-item', lang });
+    addContent(itemElement, content);
+    const page = null, deleted = false, height = '';
+    footnotes.push({ number, page, deleted, supElement, itemElement, height, lang, extra });
+  }
+  element.append(child);
 }
 
 export function annotateRange(range) {
@@ -256,8 +262,9 @@ export function attachFootnote(content) {
   supElement.contentEditable = false;
   const itemElement = e('LI', { className: 'footnote-item' }, content);
   const number = parseInt(supElement.textContent);
-  const page = null, deleted = false, height = '';
-  const footnote = { number, page, deleted, supElement, itemElement, height };
+  const lang = getTargetLanguage();
+  const page = null, deleted = false, height = '', extra = {};
+  const footnote = { number, page, deleted, supElement, itemElement, height, lang, extra };
   footnotes.splice(number - 1, 0, footnote);
   return footnote;
 }

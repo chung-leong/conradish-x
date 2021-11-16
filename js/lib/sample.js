@@ -7,7 +7,7 @@ export default [
       {
         tag: 'sup',
         content: '1',
-        footnote: 'dignity - [DEFINITION OF dignity]'
+        footnote: { lang: 'en', content: 'dignity - [DEFINITION OF dignity]' }
       },
       ` and of the equal and inalienable rights of all members of the human family is the foundation of freedom, justice and peace in the world,`
     ],
@@ -29,13 +29,13 @@ export default [
       {
         tag: 'sup',
         content: '2',
-        footnote: 'spirit - [DEFINITION OF spirit]'
+        footnote: { lang: 'en', content: 'spirit - [DEFINITION OF spirit]' }
       },
       ` of brotherhood`,
       {
         tag: 'sup',
         content: '3',
-        footnote: 'brotherhood - [DEFINITION OF brotherhood]'
+        footnote: { lang: 'en', content: 'brotherhood - [DEFINITION OF brotherhood]' }
       },
       `.`
     ]
@@ -181,7 +181,7 @@ export default [
           {
             tag: 'sub',
             content: `4`,
-            footnote: 'community - [DEFINITION OF community]'
+            footnote: { lang: 'en', content: 'community - [DEFINITION OF community]' }
           },
           ` in which alone the free and full development of his personality is possible.`
         ]

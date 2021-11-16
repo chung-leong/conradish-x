@@ -75,9 +75,9 @@ async function addFootnote(includeTerm) {
       itemElement.textContent = formatDefinition(term, translation, includeTerm);
       adjustLayout();
       // save additional information from Google Translate
-      footnote.term = term;
-      footnote.alternatives = alternatives;
-      footnote.inflections = inflections;
+      footnote.extra.term = term;
+      footnote.extra.alternatives = alternatives;
+      footnote.extra.inflections = inflections;
     }
   } else {
     const { footer } = footnote.page;
