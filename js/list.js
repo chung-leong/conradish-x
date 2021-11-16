@@ -401,6 +401,7 @@ async function handleDeleteClick(evt) {
   const keys = selection;
   removeItems(keys);
   updateToolbar();
+  updateCardTitles();
   await deleteObjects(keys);
 }
 
