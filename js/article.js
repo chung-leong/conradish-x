@@ -9,9 +9,6 @@ const sampleDoc = { title: 'Test', lang: 'en', content: sampleText };
 
 async function start() {
   const setStatus = (status) => document.body.className = status;
-  // show loader only when loading takes a while
-  let done = false;
-  setTimeout(() => done || setStatus('pending'), 250);
   try {
     await initializeStorage();
     const { searchParams } = new URL(location);
@@ -42,7 +39,6 @@ async function start() {
     errorElement.textContent = e;
     setStatus('error');
   }
-  done = true;
 }
 
 addEventListener('load', start);
