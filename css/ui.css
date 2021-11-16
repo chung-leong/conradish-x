@@ -26,7 +26,7 @@ button:active {
 button.default {
   color: rgb(255, 255, 255);
   background-color: rgba(26, 115, 232);
-  border-color: rgb(255, 255, 255);
+  border-color: rgba(26, 115, 232);
 }
 
 button.default:hover {
@@ -41,7 +41,7 @@ select, input[type="text"] {
   box-sizing: border-box;
 }
 
-select:focus, input[type="text"]:focus {
+select:focus, input[type="text"]:focus, button:focus {
   box-shadow: rgba(26, 115, 232, 0.4) 0 0 0 2px;
   outline-style: none;
 }
