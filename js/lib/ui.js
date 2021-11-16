@@ -88,9 +88,10 @@ function handleRippleEffectMouseDown(evt) {
   const ripple = document.createElement('span');
   const diameter = Math.max(button.clientWidth, button.clientHeight);
   const radius = diameter / 2;
+  const rect = button.getBoundingClientRect();
   ripple.style.width = ripple.style.height = `${diameter}px`;
-  ripple.style.left = `${event.clientX - (button.offsetLeft + radius)}px`;
-  ripple.style.top = `${event.clientY - (button.offsetTop + radius)}px`;
+  ripple.style.left = `${event.clientX - (rect.left + radius)}px`;
+  ripple.style.top = `${event.clientY - (rect.top + radius)}px`;
   ripple.className = 'ripple';
   if (currentRipple) {
     currentRipple.remove();
