@@ -1,4 +1,4 @@
-export function tranverseRange(range, cb) {
+export function transverseRange(range, cb) {
   const { startContainer, endContainer, commonAncestorContainer } = range;
   const { startOffset, endOffset } = range;
   let inside = false, finished = false;
@@ -103,8 +103,20 @@ export function captureRangeContent(range, options) {
     return (object.style) ? { ...defaultStyle, ...object.style } : defaultStyle;
   };
   let inlineOnly = true;
-  const createParentObject = (child) => {
-    const node = child.parentNode;
+  const isLink = (node) => {
+    const links = node.getElementsByTagName('A');
+    if (links.length > 0) {
+      return true;
+    }
+    for (let n = node; n && n !== rootNode; n = n.parentNode) {
+      if (n.tagName === 'A') {
+        return true;
+      }
+    }
+    return false;
+  };
+  const createObject = (node) => {
+    const { parentNode } = node;
     const style = getNodeStyle(node);
     const { display, visibility } = style;
     if (display === 'none' || visibility === 'hidden') {
@@ -114,7 +126,7 @@ export function captureRangeContent(range, options) {
     switch (tagName) {
       case 'A':
         // don't include any hyperlinks (or anchors)
-        return getParentObject(node);
+        return getObject(parentNode);
       case 'BUTTON':
       case 'FIGCAPTION':
       case 'NOSCRIPT':
@@ -134,11 +146,16 @@ export function captureRangeContent(range, options) {
       }
     } else if (/list|table|grid|ruby/.test(display)) {
       // list, table, and grid retain the original structure
-      parentObject = getParentObject(node);
+      parentObject = getObject(parentNode);
       tag = tagName;
     } else if (display === 'inline') {
+      if (tagName === 'SUP') {
+        if (isLink(node)) {
+          return;
+        }
+      }
       // all inline elements become span
-      parentObject = getParentObject(node);
+      parentObject = getObject(parentNode);
       if (parentObject && parentObject.tag === 'SPAN') {
         // don't nest spans
         parentObject = objectParents.get(parentObject);
@@ -173,26 +190,30 @@ export function captureRangeContent(range, options) {
       return object;
     }
   };
-  const getParentObject = (child) => {
+  const getObject = (node) => {
     // see if there's an object for this node already
-    const node = child.parentNode;
     let object = nodeObjects.get(node);
     if (object !== undefined) {
       return object;
     }
     // create it
-    object = createParentObject(child) || null;
+    object = createObject(node) || null;
     nodeObjects.set(node, object);
     return object;
   };
   // walk through the range and build the object tree
-  tranverseRange(range, (node, startOffset, endOffset) => {
-    const { nodeType, nodeValue } = node;
+  transverseRange(range, (node, startOffset, endOffset) => {
+    const { nodeType, nodeValue, parentNode } = node;
     if (nodeType === Node.TEXT_NODE) {
-      const parentObject = getParentObject(node);
+      const parentObject = getObject(parentNode);
       if (parentObject) {
         const text = nodeValue.substring(startOffset, endOffset);
         insertContent(parentObject, text);
+      }
+    } else if (nodeType === Node.ELEMENT_NODE) {
+      // create these tags even when they don't contain any text
+      if (canBeEmpty(node.tagName)) {
+        getObject(node);
       }
     }
   });
@@ -203,13 +224,13 @@ export function captureRangeContent(range, options) {
   // replace spans that don't have any styling information with just its
   // content; couldn't do it earlier since the inline element could in theory
   // employ a different white-space rule
-  replaceUselessSpan(root);
+  replaceUselessElements(root);
   // remove empty nodes
   removeEmptyNodes(root);
   // filter out content that's probably garbage
   if (filter === 'automatic' || filter === 'manual') {
     if (root.content instanceof Array && !inlineOnly) {
-      const objects = root.content;
+      const objects = root.content.filter(i => i instanceof Object);
       // figure out the dominant color and position of the content
       // most of the text we want should have the same color and similar
       // left and right boundaries
@@ -244,8 +265,7 @@ export function captureRangeContent(range, options) {
       const maxRect = { left: maxLeft, right: maxRight };
       // remove paragraphs that are way off
       alter(root.content, (object) => {
-        const { tag } = object;
-        if (tag === 'P') {
+        if (object instanceof Object && object.tag === 'P') {
           const rect = objectRects.get(object);
           const style = objectStyles.get(object);
           const charCount = objectCounts.get(object);
@@ -262,6 +282,7 @@ export function captureRangeContent(range, options) {
               object.junk = true;
             }
           }
+          object.score = { color: scoreColor, position: scorePos };
         }
         return object;
       });
@@ -282,6 +303,7 @@ function getCharacterCount(content) {
     for (const item of content) {
       length += getCharacterCount(item);
     }
+    return length;
   } else if (content instanceof Object) {
     return getCharacterCount(content.content);
   } else {
@@ -292,7 +314,8 @@ function getCharacterCount(content) {
 function calculatePositionScore(rect1, rect2, charCount) {
   const leftDiff = rect1.left - rect2.left;
   const rightDiff = rect2.right - rect1.right;
-  return Math.abs(leftDiff + rightDiff) / charCount;
+  const diff = Math.abs(leftDiff + rightDiff);
+  return (diff > 0) ? diff / charCount : 0;
 }
 
 function calculateColorScore(color1, color2, charCount) {
@@ -310,13 +333,16 @@ function calculateColorScore(color1, color2, charCount) {
   const diffG = Math.abs(g1 - g2);
   const diffB = Math.abs(b1 - b2);
   const diffA = Math.abs(a1 - a2) * 255;
-  return (diffR + diffG + diffB + diffA) / charCount;
+  const diff = diffR + diffG + diffB + diffA;
+  return (diff > 0) ? diff / charCount : 0;
 }
 
 function applyWhitespaceRule(s, ws, inline, pos) {
   if (typeof(s) === 'string') {
     if (ws === 'normal' || ws === 'nowrap') {
       s = s.replace(/\r?\n/g, ' ');
+    } else {
+      s = s.replace(/\r\n/g, '\n');
     }
     if (ws === 'normal' || ws === 'nowrap' || ws === 'pre-line') {
       s = s.replace(/\s+/g, ' ');
@@ -355,18 +381,30 @@ function collapseWhitespaces(object, style) {
   }
 }
 
-export function replaceUselessSpan(object) {
+export function replaceUselessElements(object) {
   if (object.content instanceof Array) {
     alter(object.content, (item) => {
       if (item instanceof Object) {
         if (item.tag === 'SPAN' && !item.style) {
           return item.content;
+        } else if (item.tag === 'BR') {
+          return '\n';
         } else {
-          replaceUselessSpan(item);
-          return item;
+          replaceUselessElements(item);
         }
       }
+      return item;
     });
+  }
+}
+
+function canBeEmpty(tag) {
+  switch (tag) {
+    case 'TH':
+    case 'TD':
+    case 'HR':
+    case 'BR': return true;
+    default: return false;
   }
 }
 
@@ -393,9 +431,11 @@ export function removeEmptyNodes(object) {
         }
       } else if (item instanceof Object) {
         removeEmptyNodes(item);
-        if (item.content.length === 0) {
-          // it's empty--remove it
-          return;
+        if (!item.content || item.content.length === 0) {
+          // it's empty--remove it if it's not one of the special ones like <hr>
+          if (!canBeEmpty(item.tag)) {
+            return;
+          }
         }
       }
       return item;

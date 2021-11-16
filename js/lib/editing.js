@@ -1,6 +1,6 @@
 import { e, separateWords } from './ui.js';
 import { adjustLayout, adjustFootnoteReferences, annotateRange, attachFootnote } from './layout.js';
-import { tranverseRange } from './capturing.js';
+import { transverseRange } from './capturing.js';
 import { translate } from './translation.js';
 import { getSourceLanguage, getTargetLanguage } from './settings.js';
 
@@ -257,7 +257,7 @@ function toggle(element, shown) {
 
 function isMultiparagraph(range) {
   let count = 0;
-  tranverseRange(range, (node, startIndex, endIndex) => {
+  transverseRange(range, (node, startIndex, endIndex) => {
     if (node.nodeType === Node.ELEMENT_NODE) {
       if (endIndex > startIndex) {
         const style = getComputedStyle(node);
@@ -278,7 +278,7 @@ function isMultiparagraph(range) {
 function normalizeRange(range) {
   let startContainer, endContainer;
   let startOffset = 0, endOffset = 0;
-  tranverseRange(range, (node, startIndex, endIndex) => {
+  transverseRange(range, (node, startIndex, endIndex) => {
     if (node.nodeType === Node.TEXT_NODE) {
       if (!startContainer) {
         startContainer = node;

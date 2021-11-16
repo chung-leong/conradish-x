@@ -16,7 +16,7 @@ const createMenuId = 'create';
 function addContextMenu() {
   chrome.contextMenus.create({
     contexts: [ 'selection' ],
-    documentUrlPatterns: [ 'http://*/*', 'https://*/*', 'file://*' ],
+    documentUrlPatterns: [ 'http://*/*', 'https://*/*' ],
     title: 'Create annotated document',
     id: createMenuId,
   });
