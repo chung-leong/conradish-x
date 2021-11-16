@@ -30,9 +30,9 @@ export function transverseRange(range, cb) {
   scan(commonAncestorContainer);
 }
 
-export function captureSelection(selection, lang) {
+export function captureSelection(selection, lang, filter) {
   const range = selection.getRangeAt(0);
-  const object = captureRangeContent(range, { filter: 'automatic' });
+  const object = captureRangeContent(range, { filter });
   // where multiple paragraphs are present, captureRangeContent() will
   // return a <div>; otherwise we'd get a <p>
   const content = (object.tag === 'DIV') ? object.content : object;
