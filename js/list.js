@@ -101,7 +101,7 @@ async function createCards() {
   updateCardTitles();
   updateCards();
   // load the title of each document now
-  for (const item of items.reverse()) {
+  for (const item of items) {
     await loadItem(item);
   }
 }
