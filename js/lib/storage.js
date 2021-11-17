@@ -16,6 +16,8 @@ export async function saveSettings() {
 }
 
 export async function initializeStorage() {
+  // set up listener prior to any async call
+  chrome.storage.onChanged.addListener(handleChanged);
   const keys = await get('.directory');
   if (keys) {
     for (const key of keys) {
@@ -27,7 +29,6 @@ export async function initializeStorage() {
   if (!settings) {
     settings = getDefaultSettings();
   }
-  chrome.storage.onChanged.addListener(handleChanged);
 }
 
 export function findObjects(suffix) {
