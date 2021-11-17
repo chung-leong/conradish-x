@@ -68,6 +68,11 @@ BODY.ready #article {
   margin-top: 0;
 }
 
+#article-text SUP {
+  font-size: 10pt;
+  font-weight: 400;
+}
+
 #article-footers {
   font-size: 10pt;
 }

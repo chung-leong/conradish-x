@@ -15,7 +15,7 @@ export function applyStyles() {
           rule.style.fontFamily = settings.article.fontFamily;
           rule.style.fontSize = settings.article.fontSize;
           rule.style.textAlign = (justify) ? 'justify' : 'left';
-        } else if (/#article\-text H1/i.test(selectorText)) {
+        } else if (/#article\-text h\d/i.test(selectorText)) {
           const justify = [ 'both' ].includes(settings.article.justification);
           rule.style.textAlign = (justify) ? 'justify' : 'left';
         } else if (selectorText === '#article-content') {
@@ -23,6 +23,8 @@ export function applyStyles() {
           rule.style.paddingRight = page.margins.right;
           rule.style.paddingTop = page.margins.top;
           rule.style.paddingBottom = page.margins.bottom;
+        } else if (selectorText === '#article-text sup') {
+          rule.style.fontSize = `calc(${settings.article.fontSize} * 5 / 6)`;
         } else if (selectorText === '.footer-content') {
           rule.style.fontFamily = settings.footnote.fontFamily;
           rule.style.fontSize = settings.footnote.fontSize;
