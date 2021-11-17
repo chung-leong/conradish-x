@@ -66,7 +66,7 @@ async function addFootnote(includeTerm) {
   const initialText = (includeTerm) ? `${term} - ${placeholder}` : placeholder;
   const footnote = attachFootnote(initialText);
   adjustFootnoteReferences({ updateNumbering: true });
-  adjustLayout();
+  adjustLayout({ updateFooterPosition: true });
   if (translating) {
     const result = await translate(term, sourceLang, targetLang, includeTerm);
     const { itemElement } = footnote;
@@ -75,7 +75,7 @@ async function addFootnote(includeTerm) {
       const text = (includeTerm) ? `${term} - ${translation}` : translation;
       itemElement.textContent = text;
       adjustFootnoteReferences({ updateContent: true });
-      adjustLayout();
+      adjustLayout({ updateFooterPosition: true });
       // save additional information from Google Translate
       footnote.extra = { term, ...extra };
       autosave(500);
