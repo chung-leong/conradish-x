@@ -17,16 +17,12 @@ export async function translate(original, sourceLang, targetLang, singleWord) {
     const response = await fetch(url);
     const json = await response.json();
     if (json.sentences instanceof Array) {
-      const { trans, orig } = json.sentences.find(s => !!s.trans);
-      if (trans !== orig) {
-        result.translation = trans;
-        // return the lowercase version if the translation isn't in uppercase
-        if (lowerCaseAlt && !isCapitalized(trans)) {
-          result.term = lowerCaseAlt;
-        }
-      } else {
-        // it didn't actually get translated
-        result.translation = original;
+      const sentences = json.sentences.filter(s => !!s.trans);
+      const trans = sentences.map(s => s.trans).join('');
+      result.translation = trans;
+      // return the lowercase version if the translation isn't in uppercase
+      if (lowerCaseAlt && !isCapitalized(trans)) {
+        result.term = lowerCaseAlt;
       }
       if (json.alternative_translations) {
         const alternatives = [];
