@@ -1,5 +1,5 @@
 import { e, separateWords } from './ui.js';
-import { adjustLayout, adjustFootnoteReferences, annotateRange, attachFootnote } from './layout.js';
+import { adjustLayout, adjustFootnoteReferences, annotateRange, attachFootnote, saveDocument } from './layout.js';
 import { transverseRange } from './capturing.js';
 import { translate } from './translation.js';
 import { getSourceLanguage, getTargetLanguage } from './settings.js';
@@ -63,7 +63,7 @@ async function addFootnote(includeTerm) {
   const targetLang = getTargetLanguage();
   const translating = (targetLang && targetLang !== sourceLang);
   const placeholder = (translating) ? '...' : '';
-  const initialText = formatDefinition(term, placeholder, includeTerm);
+  const initialText = (includeTerm) ? `${term} - ${placeholder}` : placeholder;
   const footnote = attachFootnote(initialText);
   adjustFootnoteReferences({ updateNumbering: true });
   adjustLayout();
@@ -71,13 +71,14 @@ async function addFootnote(includeTerm) {
     const result = await translate(term, sourceLang, targetLang, includeTerm);
     const { itemElement } = footnote;
     if (itemElement.textContent === initialText) {
-      const { term, translation, alternatives, inflections } = result;
-      itemElement.textContent = formatDefinition(term, translation, includeTerm);
+      const { term, translation, ...extra } = result;
+      const text = (includeTerm) ? `${term} - ${translation}` : translation;
+      itemElement.textContent = text;
+      adjustFootnoteReferences({ updateContent: true });
       adjustLayout();
       // save additional information from Google Translate
-      footnote.extra.term = term;
-      footnote.extra.alternatives = alternatives;
-      footnote.extra.inflections = inflections;
+      footnote.extra = { term, ...extra };
+      autosave(500);
     }
   } else {
     const { footer } = footnote.page;
@@ -88,16 +89,8 @@ async function addFootnote(includeTerm) {
     range.selectNode(footnote.itemElement.lastChild);
     range.collapse();
     sel.addRange(range);
+    autosave();
   }
-}
-
-function formatDefinition(term, definition, includeTerm) {
-  const parts = [];
-  if (includeTerm) {
-    parts.push(term, '-');
-  }
-  parts.push(definition);
-  return parts.join(' ');
 }
 
 function isCursorAtListItemEnd() {
@@ -189,6 +182,13 @@ function normalizeRange(range) {
   return range;
 }
 
+let autosaveTimeout = 0;
+
+function autosave(delay = 2000) {
+  clearTimeout(autosaveTimeout);
+  autosaveTimeout = setTimeout(async() => await saveDocument(), 2000);
+}
+
 function handleInput(evt) {
   const { target } = evt;
   if (target.className === 'footer-content') {
@@ -231,14 +231,17 @@ function handleFootnoteKeyPress(evt) {
 function handleFootnoteInput(evt) {
   // see if any item has gone missing or resurfaced, hiding and restoring
   // the referencing sup elements accordingly
-  adjustFootnoteReferences({ updateReferences: true });
+  adjustFootnoteReferences({ updateReferences: true, updateContent: true });
   // adjust the adjust the page layout in case the height is different
   adjustLayout({ updateFooterPosition: true });
+  // save changes
+  autosave();
 }
 
 function handleArticleInput(evt) {
-  const changed = adjustFootnoteReferences({ updateFootnotes: true });
+  const changed = adjustFootnoteReferences({ updateFootnotes: true, updateContent: true });
   adjustLayout({ updateFooterPosition: changed });
+  autosave();
 }
 
 function handleArticleKeyPress(evt) {

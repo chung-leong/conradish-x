@@ -1,5 +1,5 @@
 export async function translate(original, sourceLang, targetLang, singleWord) {
-  const result = { term: original, lang: sourceLang };
+  const result = { term: original, lang: `${sourceLang},${targetLang}` };
   try {
     const url = new URL('https://clients5.google.com/translate_a/t');
     let lowerCaseAlt;

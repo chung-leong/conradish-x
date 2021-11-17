@@ -1,5 +1,10 @@
 import { e } from './ui.js';
-import { applyStyles, getPageProperties, getSourceLanguage, getTargetLanguage } from './settings.js';
+import { applyStyles, getPageProperties, setSourceLanguage } from './settings.js';
+import { insertContent, replaceUselessElements, removeEmptyNodes } from './capturing.js';
+import { loadObject, saveObject } from './storage.js';
+
+import sampleText from './sample.js';
+const sampleDoc = { title: 'Test', lang: 'en', content: sampleText };
 
 const contentElement = document.getElementById('article-text');
 const backgroundElement = document.getElementById('article-background');
@@ -9,11 +14,39 @@ const scrollElement = document.getElementById('article-container');
 const pages = [];
 const footnotes = [];
 
-export function addText(content, lang) {
-  contentElement.lang = getSourceLanguage();
+let documentKey;
+let documentTitle;
+let documentLanguage;
+
+export async function loadDocument(key) {
+  const doc = (key) ? await loadObject(key) : sampleDoc;
+  const { title, content, lang } = doc;
+  // set the source language
+  setSourceLanguage(lang);
+  document.title = title;
+  // alter CSS rules based on settings
   applyStyles();
+  // add the article text into the DOM
   addContent(contentElement, content);
+  // adjust layout, inserting footnotes into appropriate page
   adjustLayout();
+  documentKey = key;
+  documentTitle = title;
+  documentLanguage = lang;
+}
+
+export async function saveDocument() {
+  const root = extractContent(contentElement);
+  const doc = {
+    title: documentTitle,
+    lang: documentLanguage,
+    content: root.content,
+  };
+  if (!documentKey) {
+    console.log(doc);
+    return;
+  }
+  saveObject(documentKey, doc);
 }
 
 export function adjustLayout(options = {}) {
@@ -176,8 +209,16 @@ export function adjustFooterPosition(footer) {
 }
 
 export function adjustFootnoteReferences(options = {}) {
-  const { updateReferences, updateFootnotes, updateNumbering } = options;
+  const { updateReferences, updateFootnotes, updateNumbering, updateContent } = options;
   let changed = false;
+  const newContents = new Map;
+  if (updateReferences || updateFootnotes || updateContent) {
+    const itemElements = footerRootElement.getElementsByTagName('LI');
+    for (const itemElement of itemElements) {
+      const { content } = extractContent(itemElement);
+      newContents.set(itemElement, content);
+    }
+  }
   if (updateReferences || updateFootnotes) {
     for (const footnote of footnotes) {
       const { supElement, itemElement } = footnote;
@@ -205,10 +246,20 @@ export function adjustFootnoteReferences(options = {}) {
       }
     }
   }
+  if (updateContent) {
+    for (const footnote of footnotes) {
+      const content = newContents.get(footnote.itemElement);
+      if (!footnote.deleted) {
+        footnote.content = content;
+      }
+    }
+  }
   if (changed || updateNumbering) {
     let number = 1;
-    for (const footnote of footnotes.filter(f => !f.deleted)) {
-      footnote.supElement.textContent = footnote.number = number++;
+    for (const footnote of footnotes) {
+      if (!footnote.deleted) {
+        footnote.supElement.textContent = footnote.number = number++;
+      }
     }
   }
   return changed;
@@ -230,15 +281,15 @@ function addElement(element, { tag, style, content, footnote }) {
   const child = e(tag, { style });
   addContent(child, content);
   if (footnote instanceof Object) {
-    const { lang, content, ...extra } = footnote;
+    const { content, ...extra } = footnote;
     const number = footnotes.length + 1;
     const supElement = child;
     supElement.className = 'footnote-number';
     supElement.contentEditable = false;
-    const itemElement = e('LI', { className: 'footnote-item', lang });
+    const itemElement = e('LI', { className: 'footnote-item' });
     addContent(itemElement, content);
     const page = null, deleted = false, height = '';
-    footnotes.push({ number, page, deleted, supElement, itemElement, height, lang, extra });
+    footnotes.push({ number, page, deleted, supElement, itemElement, height, content, extra });
   }
   element.append(child);
 }
@@ -262,11 +313,49 @@ export function attachFootnote(content) {
   supElement.contentEditable = false;
   const itemElement = e('LI', { className: 'footnote-item' }, content);
   const number = parseInt(supElement.textContent);
-  const lang = getTargetLanguage();
-  const page = null, deleted = false, height = '', extra = {};
-  const footnote = { number, page, deleted, supElement, itemElement, height, lang, extra };
+  const page = null, deleted = false, height = '';
+  const footnote = { number, page, deleted, supElement, itemElement, height };
   footnotes.splice(number - 1, 0, footnote);
   return footnote;
+}
+
+function extractContent(node) {
+  const includeFootnotes = (node === contentElement);
+  const extractFromNode = (node) => {
+    const { nodeType, nodeValue } = node;
+    if (nodeType === Node.TEXT_NODE) {
+      return nodeValue;
+    } else if (nodeType === Node.ELEMENT_NODE) {
+      const { tagName, className, childNodes, style } = node;
+      const object = { tag: tagName, content: undefined };
+      for (const child of childNodes) {
+        const content = extractFromNode(child);
+        insertContent(object, content);
+      }
+      const newStyle = {};
+      for (const [ name, value ] of Object.entries(style)) {
+        newStyle[name] = value;
+      }
+      if (Object.entries(newStyle) > 0) {
+        object.style = newStyle;
+      }
+      if (includeFootnotes) {
+        if (tagName === 'SUP') {
+          const footnote = footnotes.find((f) => f.supElement === node);
+          if (footnote) {
+            const { content, extra } = footnote;
+            object.footnote = { content };
+            Object.assign(object.footnote, extra)
+          }
+        }
+      }
+      return object;
+    }
+  };
+  const root = extractFromNode(node);
+  replaceUselessElements(root);
+  removeEmptyNodes(root);
+  return root;
 }
 
 function isBetween(a, b) {

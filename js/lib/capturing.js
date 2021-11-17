@@ -54,27 +54,6 @@ export function captureRangeContent(range, options) {
   const objectParents = new Map;
   const objectStyles = new Map([ [ rootNode, getComputedStyle(rootNode) ] ]);
   const objectRects = new Map;
-  const insertContent = (object, content) => {
-    if (!object.content) {
-      if (typeof(content) === 'string') {
-        object.content = content;
-      } else {
-        object.content = [ content ];
-      }
-    } else if (object.content instanceof Array) {
-      const arr = object.content, last = arr[arr.length - 1];
-      // merge with last item if possible
-      if (typeof(last) === 'string' && typeof(content) === 'string') {
-        arr[arr.length - 1] = last + content;
-      } else {
-        arr.push(content);
-      }
-    } else if (typeof(object.content) === 'string' && typeof(content) === 'string') {
-      object.content += content;
-    } else {
-      object.content = [ object.content, content ];
-    }
-  };
   const rootClientRect = rootNode.getBoundingClientRect();
   const getRect = (node) => {
     const clientRect = node.getBoundingClientRect();
@@ -298,6 +277,31 @@ export function captureRangeContent(range, options) {
     root.tag = 'P';
   }
   return root;
+}
+
+export function insertContent(object, content) {
+  if (!content) {
+    return;
+  }
+  if (!object.content) {
+    if (typeof(content) === 'string') {
+      object.content = content;
+    } else {
+      object.content = [ content ];
+    }
+  } else if (object.content instanceof Array) {
+    const arr = object.content, last = arr[arr.length - 1];
+    // merge with last item if possible
+    if (typeof(last) === 'string' && typeof(content) === 'string') {
+      arr[arr.length - 1] = last + content;
+    } else {
+      arr.push(content);
+    }
+  } else if (typeof(object.content) === 'string' && typeof(content) === 'string') {
+    object.content += content;
+  } else {
+    object.content = [ object.content, content ];
+  }
 }
 
 function getCharacterCount(content) {
