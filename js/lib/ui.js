@@ -107,21 +107,45 @@ function handleRippleEffectMouseUp(evt) {
   }
 }
 
+let lastCheckbox;
+
+function toggleCheckbox(checkbox, shiftKey) {
+  let range;
+  if (shiftKey) {
+    const checkboxes = [ ...document.getElementsByClassName('checkbox') ];
+    const index = checkboxes.indexOf(checkbox);
+    const lastIndex = checkboxes.indexOf(lastCheckbox);
+    if (index !== -1 && lastIndex !== -1 && index !== lastIndex) {
+      const s = (index > lastIndex) ? lastIndex : index;
+      const e = (index > lastIndex) ? index + 1 : lastIndex + 1;
+      range = checkboxes.slice(s, e);
+    }
+  }
+  if (range) {
+    const allChecked = range.every((c) => c.classList.contains('checked'));
+    for (const checkbox of range) {
+      checkbox.classList.toggle('checked', !allChecked);
+    }
+  } else {
+    checkbox.classList.toggle('checked');
+  }
+  lastCheckbox = checkbox;
+  triggerChangeEvent(checkbox);
+}
+
 function handleCustomCheckboxClick(evt) {
-  const { target } = evt;
+  const { target, shiftKey } = evt;
   if (target.classList.contains('checkbox')) {
-    target.classList.toggle('checked');
-    triggerChangeEvent(target);
+    toggleCheckbox(target, shiftKey);
     setTimeout(() => target.classList.add('clicked'), 200);
   }
 }
 
 function handleCustomCheckboxKeyPress(evt) {
-  const { target, key } = evt;
+  const { target, key, shiftKey } = evt;
   if (target.classList.contains('checkbox')) {
     if (key === ' ' || key === 'Enter') {
-      target.classList.toggle('checked');
-      triggerChangeEvent(target);
+      toggleCheckbox(target, shiftKey);
       evt.preventDefault();
     }
   }

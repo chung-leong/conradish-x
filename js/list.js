@@ -335,7 +335,7 @@ function refreshDates() {
 }
 
 function handleClick(evt) {
-  const { target } = evt;
+  const { target, shiftKey } = evt;
   if (target.classList.contains('title')) {
     // ask the service worker to open the document
     const { key, type } = target.parentNode.dataset;
@@ -346,7 +346,7 @@ function handleClick(evt) {
     // focus the checkbox and toggle it
     const [ checkbox ] = target.parentNode.getElementsByClassName('checkbox');
     checkbox.focus();
-    const kbEvent = new KeyboardEvent('keypress', { key: ' ', bubbles: true });
+    const kbEvent = new KeyboardEvent('keypress', { key: ' ', bubbles: true, shiftKey });
     checkbox.dispatchEvent(kbEvent);
   }
 }
