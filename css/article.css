@@ -119,7 +119,7 @@ BODY.ready #article {
 .footer-content {
   float: right;
   width: 100%;
-  margin-top: 10mm;
+  margin-top: 5mm;
   /* page margin top plus margin bottom */
   margin-bottom: calc(25mm + 25mm);
   padding-left: 1.6em;
