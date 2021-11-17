@@ -212,7 +212,7 @@ export function adjustFootnoteReferences(options = {}) {
   const { updateReferences, updateFootnotes, updateNumbering, updateContent } = options;
   let changed = false;
   const newContents = new Map;
-  if (updateReferences || updateFootnotes || updateContent) {
+  if (updateReferences || updateContent) {
     const itemElements = footerRootElement.getElementsByTagName('LI');
     for (const itemElement of itemElements) {
       const { content } = extractContent(itemElement);
@@ -333,10 +333,14 @@ function extractContent(node) {
         insertContent(object, content);
       }
       const newStyle = {};
-      for (const [ name, value ] of Object.entries(style)) {
-        newStyle[name] = value;
+      const styleNames = [ 'fontWeight', 'fontStyle', 'fontSize', 'textDecorationLine', 'verticalAlign' ];
+      for (const name of styleNames) {
+        const value = style[name];
+        if (value) {
+          newStyle[name] = value;
+        }
       }
-      if (Object.entries(newStyle) > 0) {
+      if (Object.entries(newStyle).length > 0) {
         object.style = newStyle;
       }
       if (includeFootnotes) {

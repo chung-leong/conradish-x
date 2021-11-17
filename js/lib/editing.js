@@ -239,7 +239,7 @@ function handleFootnoteInput(evt) {
 }
 
 function handleArticleInput(evt) {
-  const changed = adjustFootnoteReferences({ updateFootnotes: true, updateContent: true });
+  const changed = adjustFootnoteReferences({ updateFootnotes: true });
   adjustLayout({ updateFooterPosition: changed });
   autosave();
 }
