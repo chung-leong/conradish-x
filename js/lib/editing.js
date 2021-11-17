@@ -266,6 +266,7 @@ function handleSelectionChange(evt) {
       toggle(articleMenuItems.addTranslation, count > 1);
       toggle(articleMenuItems.addDefinition, count <= 10);
       toggle(articleMenuElement, true);
+      articleMenuElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       // remember the range
       lastSelectedRange = range;
     } else {
