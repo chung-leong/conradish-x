@@ -162,6 +162,48 @@ function isMultiparagraph(range) {
   return (count > 1);
 }
 
+function atFootnoteNumber(range) {
+  const { endContainer, endOffset } = range;
+  if (endContainer.nodeType === Node.TEXT_NODE) {
+    const { nodeValue } = endContainer;
+    if (endOffset > 0 && endOffset < nodeValue.length) {
+      // ignore whitespaces
+      if (nodeValue.substring(0, endOffset).trim()) {
+        return false;
+      }
+    }
+  }
+  const isFootnoteNumber = (node) => {
+    return node.tagName === 'SUP' && node.className === 'footnote-number';
+  };
+  const getNextNode = (node) => {
+    const { nextSibling, parentNode } = node;
+    if (nextSibling) {
+      return nextSibling;
+    } else if (parentNode) {
+      getNextNode(parentNode);
+    }
+  };
+  const nextNode = getNextNode(endContainer);
+  if (nextNode && isFootnoteNumber(nextNode)) {
+    return true;
+  }
+  const getPreviousNode = (node) => {
+    const { previousSibling, parentNode } = node;
+    if (previousSibling) {
+      return previousSibling;
+    } else if (parentNode) {
+      getPreviousNode(parentNode);
+    }
+  };
+  const prevNode = getPreviousNode(endContainer);
+  if (prevNode && isFootnoteNumber(prevNode)) {
+    return true;
+  }
+  if (prevNode.textContent.trim())
+  return false;
+}
+
 function normalizeRange(range) {
   let startContainer, endContainer;
   let startOffset = 0, endOffset = 0;
@@ -292,7 +334,7 @@ function handleSelectionChange(evt) {
   const container = getRangeContainer(range);
   const inArticle = (container && container.id  === 'article-text');
   const inFootntoe = (container && container.className === 'footnote-content');
-  if (inArticle && !range.collapsed && !isMultiparagraph(range)) {
+  if (inArticle && !range.collapsed && !isMultiparagraph(range) && !atFootnoteNumber(range)) {
     const words = separateWords(range.toString());
     if (words.length > 0) {
       const r1 = range.getBoundingClientRect();
