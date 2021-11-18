@@ -16,18 +16,25 @@ async function start() {
 }
 
 const createMenuId = 'create';
+let hasContextMenu = false;
 
 function addContextMenu() {
-  chrome.contextMenus.create({
-    contexts: [ 'selection' ],
-    documentUrlPatterns: [ 'http://*/*', 'https://*/*' ],
-    title: 'Create annotated document',
-    id: createMenuId,
-  });
+  if (!hasContextMenu) {
+    chrome.contextMenus.create({
+      contexts: [ 'selection' ],
+      documentUrlPatterns: [ 'http://*/*', 'https://*/*' ],
+      title: 'Create annotated document',
+      id: createMenuId,
+    });
+    hasContextMenu = true;
+  }
 }
 
 function removeContextMenu() {
-  chrome.contextMenus.remove(createMenuId);
+  if (hasContextMenu) {
+    chrome.contextMenus.remove(createMenuId);
+    hasContextMenu = false;
+  }
 }
 
 function handleSettings(evt) {
