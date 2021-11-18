@@ -1,5 +1,5 @@
 import { e, separateWords } from './ui.js';
-import { adjustLayout, adjustFootnoteReferences, annotateRange, attachFootnote, saveDocument } from './layout.js';
+import { adjustLayout, adjustFootnotes, annotateRange, attachFootnote, saveDocument } from './layout.js';
 import { transverseRange } from './capturing.js';
 import { translate } from './translation.js';
 import { getSourceLanguage, getTargetLanguage } from './settings.js';
@@ -65,7 +65,7 @@ async function addFootnote(includeTerm) {
   const placeholder = (translating) ? '...' : '';
   const initialText = (includeTerm) ? `${term} - ${placeholder}` : placeholder;
   const footnote = attachFootnote(initialText);
-  adjustFootnoteReferences({ updateNumbering: true });
+  adjustFootnotes({ updateNumbering: true });
   adjustLayout({ updateFooterPosition: true });
   if (translating) {
     const result = await translate(term, sourceLang, targetLang, includeTerm);
@@ -74,7 +74,7 @@ async function addFootnote(includeTerm) {
       const { term, translation, ...extra } = result;
       const text = (includeTerm) ? `${term} - ${translation}` : translation;
       itemElement.textContent = text;
-      adjustFootnoteReferences({ updateContent: true });
+      adjustFootnotes({ updateContent: true });
       adjustLayout({ updateFooterPosition: true });
       // save additional information from Google Translate
       footnote.extra = { term, ...extra };
@@ -250,12 +250,7 @@ function handleKeyPress(evt) {
 }
 
 function handlePaste(evt) {
-  const html = evt.clipboardData.getData('text/html');
-  if (html) {
-    // cancel default behavior
-    evt.preventDefault();
-    evt.stopPropagation();
-  }
+  // TODO
 }
 
 function handleFootnoteKeyPress(evt) {
@@ -274,18 +269,21 @@ function preserveCursorPosition() {
   const range = getSelectionRange();
   let { startContainer, endContainer, startOffset, endOffset } = range;
   if (startContainer.tagName === 'OL') {
-    startContainer = startContainer.childNodes[startOffset];
     startOffset = 0;
+    startContainer = startContainer.childNodes[startOffset];
   }
   if (endContainer.tagName === 'OL') {
+    endOffset = endContainer.childNodes.length;
     endContainer = endContainer.childNodes[endOffset];
-    endOffset = newEndContainer.childNodes.length;
   }
   return { startContainer, endContainer, startOffset, endOffset };
 }
 
 function restoreCursorPosition(cursor) {
   const { startContainer, endContainer, startOffset, endOffset } = cursor;
+  if (!startContainer || !endContainer) {
+    return;
+  }
   // find the list element where the cursor is suppose to be
   let listElement;
   for (let n = endContainer; n; n = n.parentNode) {
@@ -310,7 +308,7 @@ function handleFootnoteInput(evt) {
   const cursor = preserveCursorPosition();
   // see if any item has gone missing or resurfaced, hiding and restoring
   // the referencing sup elements accordingly
-  adjustFootnoteReferences({ updateReferences: true, updateContent: true });
+  adjustFootnotes({ updateItems: true, updateContent: true });
   // adjust the adjust the page layout in case the height is different
   adjustLayout({ updateFooterPosition: true });
   // put the cursor back onto the correct item, in the event it got moved
@@ -321,7 +319,7 @@ function handleFootnoteInput(evt) {
 }
 
 function handleArticleInput(evt) {
-  const changed = adjustFootnoteReferences({ updateFootnotes: true });
+  const changed = adjustFootnotes({ updateReferences: true });
   adjustLayout({ updateFooterPosition: changed });
   autosave();
 }
