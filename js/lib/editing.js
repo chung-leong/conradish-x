@@ -119,6 +119,9 @@ function getSelectionRange() {
 }
 
 function getRangeContainer(range) {
+  if (!range) {
+    return;
+  }
   for (let n = range.startContainer; n; n = n .parentNode) {
     if (n.contentEditable === 'true') {
       return n;

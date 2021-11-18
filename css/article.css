@@ -10,6 +10,7 @@ BODY {
   top: 0;
   bottom: 0;
   position: absolute;
+  user-select: none;
 }
 
 #article-container {

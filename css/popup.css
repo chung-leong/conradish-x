@@ -2,6 +2,7 @@ BODY {
   margin: 0;
   width: 250px;
   font-size: 13px;
+  user-select: none;
 }
 
 UL {
