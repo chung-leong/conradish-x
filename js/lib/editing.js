@@ -1,5 +1,5 @@
 import { e, separateWords } from './ui.js';
-import { adjustLayout, adjustFootnotes, annotateRange, attachFootnote, saveDocument } from './layout.js';
+import { adjustLayout, adjustFootnotes, annotateRange, saveDocument } from './layout.js';
 import { transverseRange } from './capturing.js';
 import { translate } from './translation.js';
 import { getSourceLanguage, getTargetLanguage } from './settings.js';
@@ -44,27 +44,15 @@ export function createMenuItems() {
 
 async function addFootnote(includeTerm) {
   // set the selection to what was last selected
-  const selection = getSelection();
   const range = normalizeRange(lastSelectedRange.cloneRange());
-  const textSelected = range.toString();
-  // trim off whitespaces
-  const wsAfter = textSelected.length - textSelected.trimRight().length;
-  // for some reason execCommand('insertHTML') only works correctly
-  // when we replace some of the existing text
-  range.setEnd(range.endContainer, range.endOffset - wsAfter);
-  range.setStart(range.endContainer, range.endOffset - 1);
-  selection.removeAllRanges();
-  selection.addRange(range);
-  const element = annotateRange(range);
-  document.execCommand('insertHTML', false, range.toString() + element.outerHTML);
-  // attach placeholder text
-  const term = textSelected.trim();
+  // put placeholder text in footer initially
+  const term = range.toString().trim();
   const sourceLang = getSourceLanguage();
   const targetLang = getTargetLanguage();
   const translating = (targetLang && targetLang !== sourceLang);
   const placeholder = (translating) ? '...' : '';
   const initialText = (includeTerm) ? `${term} - ${placeholder}` : placeholder;
-  const footnote = attachFootnote(initialText);
+  const footnote = annotateRange(range, initialText);
   adjustFootnotes({ updateNumbering: true });
   adjustLayout({ updateFooterPosition: true });
   if (translating) {

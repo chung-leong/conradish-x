@@ -374,7 +374,7 @@ function addElement(element, { tag, style, content, footnote }) {
   element.append(child);
 }
 
-export function annotateRange(range) {
+export function annotateRange(range, content) {
   // figure out what number it should have
   let number = 1;
   for (const { supElement } of footnotes.filter(f => !f.deleted)) {
@@ -384,15 +384,23 @@ export function annotateRange(range) {
       break;
     }
   }
-  return e('SUP', { className: 'footnote-number pending' }, number);
-}
-
-export function attachFootnote(content) {
+  const fragment = range.cloneContents();
+  const fragmentHTML = e('DIV', {}, fragment).innerHTML;
+  const tempSupElement = e('SUP', { className: 'footnote-number pending' }, number);
+  // trim off whitespaces
+  const htmlBefore = fragmentHTML.trimRight();
+  const wsAfter = fragmentHTML.substr(htmlBefore.length);
+  const html = htmlBefore + tempSupElement.outerHTML + wsAfter;
+  // insert into editor
+  const selection = getSelection();
+  selection.removeAllRanges();
+  selection.addRange(range);
+  document.execCommand('insertHTML', false, html);
+  // find the <sup>
   const supElement = document.querySelectorAll('.footnote-number.pending')[0];
   supElement.classList.remove('pending');
   supElement.contentEditable = false;
   const itemElement = e('LI', { className: 'footnote-item' }, content);
-  const number = parseInt(supElement.textContent);
   const page = null, deleted = 0, height = '';
   const footnote = { number, page, deleted, supElement, itemElement, height };
   footnotes.splice(number - 1, 0, footnote);
