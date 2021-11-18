@@ -9,7 +9,7 @@ export function attachEditingHandlers() {
   document.addEventListener('keypress', handleKeyPress);
   document.addEventListener('paste', handlePaste);
   document.addEventListener('selectionchange', handleSelectionChange);
-  document.addEventListener('focusin', handleFocusIn);
+  document.execCommand('styleWithCSS', false, true);
 }
 
 const articleMenuElement = document.getElementById('article-menu');
@@ -228,12 +228,52 @@ function handleFootnoteKeyPress(evt) {
   }
 }
 
+function preserveCursorPosition() {
+  const range = getSelectionRange();
+  let { startContainer, endContainer, startOffset, endOffset } = range;
+  if (startContainer.tagName === 'OL') {
+    startContainer = startContainer.childNodes[startOffset];
+    startOffset = 0;
+  }
+  if (endContainer.tagName === 'OL') {
+    endContainer = endContainer.childNodes[endOffset];
+    endOffset = newEndContainer.childNodes.length;
+  }
+  return { startContainer, endContainer, startOffset, endOffset };
+}
+
+function restoreCursorPosition(cursor) {
+  const { startContainer, endContainer, startOffset, endOffset } = cursor;
+  // find the list element where the cursor is suppose to be
+  let listElement;
+  for (let n = endContainer; n; n = n.parentNode) {
+    if (n.tagName === 'OL') {
+      listElement = n;
+      break;
+    }
+  }
+  // give the list focus if it isn't focused and scroll it into view
+  if (listElement && document.activeElement !== listElement) {
+    listElement.focus();
+    listElement.scrollIntoView({ behavior: 'auto', block: 'nearest' });
+  }
+  // restore the cursor
+  const range = getSelectionRange();
+  range.setStart(startContainer, startOffset);
+  range.setEnd(endContainer, endOffset);
+}
+
 function handleFootnoteInput(evt) {
+  // remember which item has the cursor
+  const cursor = preserveCursorPosition();
   // see if any item has gone missing or resurfaced, hiding and restoring
   // the referencing sup elements accordingly
   adjustFootnoteReferences({ updateReferences: true, updateContent: true });
   // adjust the adjust the page layout in case the height is different
   adjustLayout({ updateFooterPosition: true });
+  // put the cursor back onto the correct item, in the event it got moved
+  // to another footer
+  restoreCursorPosition(cursor);
   // save changes
   autosave();
 }
@@ -298,8 +338,4 @@ function handleAddDefinition(evt) {
 
 function handleAddTranslation(evt) {
   addFootnote(false);
-}
-
-function handleFocusIn(evt) {
-  document.execCommand('styleWithCSS', false, true);
 }
