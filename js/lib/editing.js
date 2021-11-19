@@ -10,6 +10,9 @@ export function attachEditingHandlers() {
   document.addEventListener('beforeinput', handleBeforeInput);
   document.addEventListener('input', handleInput);
   document.addEventListener('paste', handlePaste);
+  document.addEventListener('dragstart', handleDragStart);
+  document.addEventListener('dragend', handleDragEnd);
+  document.addEventListener('drop', handleDrop);
   document.addEventListener('selectionchange', handleSelectionChange);
   document.execCommand('styleWithCSS', false, true);
   document.execCommand('insertBrOnReturn', false, false);
@@ -183,7 +186,6 @@ function atFootnoteNumber(range) {
   if (prevNode && isFootnoteNumber(prevNode)) {
     return true;
   }
-  if (prevNode.textContent.trim())
   return false;
 }
 
@@ -347,13 +349,14 @@ function filterHTML(html) {
     return;
   }
   // extract the actual fragment
-  const startIndex = html.indexOf('<!--StartFragment-->');
-  const endIndex = html.indexOf('<!--EndFragment-->');
-  if (startIndex === -1 || endIndex === -1) {
-    return;
+  const startMarker = '<!--StartFragment-->', endMarker = '<!--EndFragment-->';
+  const startIndex = html.indexOf(startMarker);
+  const endIndex = html.indexOf(endMarker);
+  if (startIndex !== -1 && endIndex !== -1) {
+    html = html.substring(startIndex + startMarker.length, endIndex);
   }
   const div = e('DIV');
-  div.innerHTML = html.substring(startIndex, endIndex);
+  div.innerHTML = html;
   if (div.getElementsByClassName('conradish').length > 0) {
     // remove footnote numbers that don't correspond to a footnote that
     // was deleted earlier
@@ -363,46 +366,82 @@ function filterHTML(html) {
         supElement.remove();
       }
     }
-    // strip out any <br> tag; since we use white-space: pre-wrap
-    // they shouldn't be there
-    const brElements = div.getElementsByTagName('BR');
-    for (const brElement of brElements) {
-      brElement.remove();
-    }
   }
-  return div.innerHTML.trim();
+  return div.innerHTML;
 }
 
-function handlePaste(evt) {
-  const { target, clipboardData } = evt;
-  let forcePlainText = true;
+function insertData(target, dataTransfer) {
   if (isArticleEditor(target)) {
-    const html = clipboardData.getData('text/html');
+    const html = dataTransfer.getData('text/html');
     const filteredHTML = filterHTML(html);
     if (filteredHTML) {
       document.execCommand('insertHTML', false, filteredHTML);
     } else {
-      const text = clipboardData.getData('text/plain');
+      const text = dataTransfer.getData('text/plain');
       document.execCommand('insertText', false, text);
     }
-    evt.preventDefault();
-    evt.stopPropagation();
   } else if (isFootnoteEditor(target)) {
     // always force plain-text
     // use insertHTML here to prevent creation of new list items
-    const text = clipboardData.getData('text/plain');
+    const text = dataTransfer.getData('text/plain');
     const html = e('DIV', {}, text).innerHTML;
     document.execCommand('insertHTML', false, html);
-    evt.preventDefault();
-    evt.stopPropagation();
   }
 }
 
-function getRangeContainer(range) {
-  if (!range) {
+function handlePaste(evt) {
+  const { target, clipboardData } = evt;
+  insertData(target, clipboardData);
+  evt.preventDefault();
+  evt.stopPropagation();
+}
+
+let dropSource = null;
+
+function handleDragStart(evt) {
+  const { target } = evt;
+  dropSource = target;
+}
+
+function handleDragEnd(evt) {
+  const { target } = evt;
+  dropSource = null;
+}
+
+function handleDrop(evt) {
+  const { target, dataTransfer } = evt;
+  const range = document.caretRangeFromPoint(evt.clientX, evt.clientY);
+  const container = getEditableContainer(target);
+  const sourceContainer = getEditableContainer(dropSource);
+  if (container === sourceContainer && !evt.ctrlKey) {
+    // a move within the container, let chrome take case of it
     return;
   }
-  for (let n = range.startContainer; n; n = n .parentNode) {
+  if (sourceContainer && !evt.ctrlKey) {
+    // delete the content from the source container
+    // unfortunately, this introduces a second op in the undo stack
+    // drag-and-drop between article text and footnotes should be
+    // pretty rare so this isn't too bad
+    sourceContainer.focus();
+    document.execCommand('delete', false);
+  }
+  container.focus();
+  const selection = getSelection();
+  selection.removeAllRanges()
+  selection.addRange(range);
+  insertData(container, dataTransfer);
+  evt.preventDefault();
+  evt.stopPropagation();
+}
+
+function getRangeContainer(range) {
+  if (range) {
+    return getEditableContainer(range.startContainer);
+  }
+}
+
+function getEditableContainer(node) {
+  for (let n = node; n; n = n .parentNode) {
     if (n.contentEditable === 'true') {
       return n;
     }
