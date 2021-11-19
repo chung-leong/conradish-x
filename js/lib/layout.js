@@ -43,8 +43,8 @@ export async function saveDocument() {
     lang: documentLanguage,
     content: root.content,
   };
+  console.log(doc);
   if (!documentKey) {
-    console.log(doc);
     return;
   }
   saveObject(documentKey, doc);
@@ -440,7 +440,7 @@ function extractContent(node) {
     if (nodeType === Node.TEXT_NODE) {
       return nodeValue;
     } else if (nodeType === Node.ELEMENT_NODE) {
-      const { tagName, className, childNodes, style } = node;
+      const { tagName, classList, childNodes, style } = node;
       const object = { tag: tagName, content: undefined };
       for (const child of childNodes) {
         const content = extractFromNode(child);
@@ -458,7 +458,7 @@ function extractContent(node) {
         object.style = newStyle;
       }
       if (includeFootnotes) {
-        if (className === 'footnote-number') {
+        if (classList.contains('footnote-number')) {
           const footnote = footnotes.find((f) => f.supElement === node);
           if (footnote) {
             const { content, extra } = footnote;
