@@ -72,7 +72,7 @@ async function addFootnote(includeTerm) {
       adjustLayout({ updateFooterPosition: true });
       // save additional information from Google Translate
       footnote.extra = { term, ...extra };
-      autosave(500);
+      autosave(100);
     }
   } else {
     const { footer } = footnote.page;
@@ -213,7 +213,7 @@ let autosaveTimeout = 0;
 
 function autosave(delay = 2000) {
   clearTimeout(autosaveTimeout);
-  autosaveTimeout = setTimeout(async() => await saveDocument(), 2000);
+  autosaveTimeout = setTimeout(async() => await saveDocument(), delay);
 }
 
 function isArticleEditor(node) {
@@ -236,6 +236,52 @@ function isFootnoteEditor(node) {
     }
   }
   return false;
+}
+
+function adjustAttributes(container, addIdentifyingClass = false) {
+  const scan = (node) => {
+    const { classList, style, children } = node;
+    if (addIdentifyingClass) {
+      if (!classList.contains('conradish')) {
+        classList.add('conradish');
+      }
+    }
+    const styleAttr = node.getAttribute('style');
+    if (styleAttr) {
+      const items = styleAttr.split(/\s*;\s*/);
+      const itemsKept = [];
+      for (const item of items) {
+        const [ name, value ] = item.split(/\s*:\s*/);
+        if (value) {
+          let keep = false;
+          switch (name) {
+            case 'font-style':
+            case 'font-weight':
+            case 'text-decoration-line':
+            case 'text-decoration-style':
+            case 'vertical-align':
+              keep = true;
+              break;
+            case 'text-size':
+              keep = value.endsWith('%');
+              break;
+          }
+          if (keep) {
+            itemsKept.push(item);
+          }
+        }
+      }
+      if (itemsKept.length > 0) {
+        node.setAttribute('style', itemsKept.join(';'));
+      } else {
+        node.removeAttribute('style');
+      }
+    }
+    for (const child of children) {
+      scan(child);
+    }
+  };
+  scan(container);
 }
 
 function preserveCursorPosition() {
@@ -279,8 +325,13 @@ function restoreCursorPosition(cursor) {
 function handleInput(evt) {
   const { target } = evt;
   if (isArticleEditor(target)) {
-    const changed = adjustFootnotes({ updateReferences: true });
-    adjustLayout({ updateFooterPosition: changed });
+    // see if any footnote number has been deleted
+    const updateFooterPosition = adjustFootnotes({ updateReferences: true });
+    // adjust the layout
+    adjustLayout({ updateFooterPosition });
+    // clean up the tags, making sure they all have the "conradish" class
+    adjustAttributes(target, true);
+    // save changes
     autosave();
   } else if (isFootnoteEditor(target)) {
     // remember which item has the cursor
@@ -290,6 +341,8 @@ function handleInput(evt) {
     adjustFootnotes({ updateItems: true, updateContent: true });
     // adjust the adjust the page layout in case the height is different
     adjustLayout({ updateFooterPosition: true });
+    // clean up the tags
+    adjustAttributes(target);
     // put the cursor back onto the correct item, in the event it got moved
     // to another footer
     restoreCursorPosition(cursor);
@@ -366,8 +419,9 @@ function filterHTML(html) {
         supElement.remove();
       }
     }
+    adjustAttributes(div);
+    return div.innerHTML;
   }
-  return div.innerHTML;
 }
 
 function insertData(target, dataTransfer) {
