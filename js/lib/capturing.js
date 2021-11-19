@@ -31,15 +31,20 @@ export function transverseRange(range, cb) {
 }
 
 export function captureSelection(selection, lang, filter) {
-  const range = selection.getRangeAt(0);
-  const object = captureRangeContent(range, { filter });
-  // where multiple paragraphs are present, captureRangeContent() will
-  // return a <div>; otherwise we'd get a <p>
-  const content = (object.tag === 'DIV') ? object.content : object;
-  const title = document.title;
-  const url = document.location.href;
-  const doc = { url, title, lang, content };
-  chrome.runtime.sendMessage(undefined, { type: 'create', document: doc });
+  try {
+    const range = selection.getRangeAt(0);
+    const object = captureRangeContent(range, { filter });
+    // where multiple paragraphs are present, captureRangeContent() will
+    // return a <div>; otherwise we'd get a <p>
+    const content = (object.tag === 'DIV') ? object.content : object;
+    const title = document.title;
+    const url = document.location.href;
+    const doc = { url, title, lang, content };
+    chrome.runtime.sendMessage(undefined, { type: 'create', document: doc });
+  } catch (err) {
+    chrome.runtime.sendMessage(undefined, { type: 'error', message: err.message });
+    throw err;
+  }
 }
 
 export function captureRangeContent(range, options) {

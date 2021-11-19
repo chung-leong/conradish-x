@@ -1,17 +1,16 @@
 import { storeObject, getSettingsAsync, storageChange } from './lib/storage.js';
 
 async function start() {
+  chrome.contextMenus.onClicked.addListener(handleMenuClick);
   chrome.runtime.onMessage.addListener(handleMessage);
   chrome.runtime.onInstalled.addListener(async () => {
     // create message here, since the extension could have been
     // loaded before and got unloaded
     const settings = await getSettingsAsync();
-    console.log(settings);
     if (settings.contextMenu) {
       addContextMenu();
     }
   });
-  chrome.contextMenus.onClicked.addListener(handleMenuClick);
   storageChange.addEventListener('settings', handleSettings);
 }
 
@@ -39,7 +38,7 @@ function removeContextMenu() {
 
 async function handleSettings(evt) {
   if (!evt.detail.self) {
-    const settings = getSettingsAsync();
+    const settings = await getSettingsAsync();
     if (settings.contextMenu) {
       addContextMenu();
     } else {
@@ -60,6 +59,8 @@ function handleMessage(request, sender, sendResponse) {
       return true;
     case 'response':
       return handleSelectionResponse(true);
+    case 'error':
+      console.error(request.message);
   }
 }
 
@@ -121,7 +122,8 @@ async function handleMenuClick(info, tab) {
 async function createDocument(tab) {
   const codeURL = chrome.runtime.getURL('js/lib/capturing.js');
   const lang = await chrome.tabs.detectLanguage(tab.id);
-  const settings = getSettings();
+  console.log({ lang });
+  const settings = await getSettingsAsync();
   chrome.scripting.executeScript({
     target: { allFrames: true, tabId: tab.id },
     args: [ codeURL, lang, settings.filter ],
@@ -132,6 +134,10 @@ async function createDocument(tab) {
         const { captureSelection } = await import(codeURL);
         captureSelection(selection, lang, filter);
       }
+    }
+  }, () => {
+    if (chrome.runtime.lastError) {
+      console.error(chrome.runtime.lastError.message);
     }
   });
 }
