@@ -1,18 +1,18 @@
-import { initializeStorage, storeObject, getSettings, storageChange } from './lib/storage.js';
+import { storeObject, getSettingsAsync, storageChange } from './lib/storage.js';
 
 async function start() {
   chrome.runtime.onMessage.addListener(handleMessage);
-  chrome.contextMenus.onClicked.addListener(handleMenuClick);
-  await initializeStorage();
-  storageChange.addEventListener('settings', handleSettings);
-  chrome.runtime.onInstalled.addListener(() => {
+  chrome.runtime.onInstalled.addListener(async () => {
     // create message here, since the extension could have been
     // loaded before and got unloaded
-    const settings = getSettings();
+    const settings = await getSettingsAsync();
+    console.log(settings);
     if (settings.contextMenu) {
       addContextMenu();
     }
   });
+  chrome.contextMenus.onClicked.addListener(handleMenuClick);
+  storageChange.addEventListener('settings', handleSettings);
 }
 
 const createMenuId = 'create';
@@ -37,9 +37,9 @@ function removeContextMenu() {
   }
 }
 
-function handleSettings(evt) {
+async function handleSettings(evt) {
   if (!evt.detail.self) {
-    const settings = getSettings();
+    const settings = getSettingsAsync();
     if (settings.contextMenu) {
       addContextMenu();
     } else {

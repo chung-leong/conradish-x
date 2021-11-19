@@ -1,6 +1,7 @@
 import { getDefaultSettings } from './settings.js';
 
 const directory = [];
+let initialized = false;
 let settings;
 let savingSettings = false;
 
@@ -10,14 +11,22 @@ export function getSettings() {
   return settings;
 }
 
+export async function getSettingsAsync() {
+  await initializeStorage();
+  return settings;
+}
+
 export async function saveSettings() {
   savingSettings = true;
   return set('.settings', settings);
 }
 
+chrome.storage.onChanged.addListener(handleChanged);
+
 export async function initializeStorage() {
-  // set up listener prior to any async call
-  chrome.storage.onChanged.addListener(handleChanged);
+  if (initialized) {
+    return;
+  }
   const keys = await get('.directory');
   if (keys) {
     for (const key of keys) {
@@ -29,6 +38,7 @@ export async function initializeStorage() {
   if (!settings) {
     settings = getDefaultSettings();
   }
+  initialized = true;
 }
 
 export function findObjects(suffix) {
