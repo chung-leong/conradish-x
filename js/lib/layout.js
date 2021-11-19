@@ -213,23 +213,42 @@ export function adjustFootnotes(options = {}) {
   const { updateReferences, updateItems, updateNumbering, updateContent } = options;
   let changed = false;
   if (updateReferences) {
-    for (const footnote of footnotes) {
-      const { supElement, itemElement } = footnote;
-      if (footnote.deleted) {
-        if (supElement.parentElement) {
+    const supElements = contentElement.getElementsByClassName('footnote-number');
+    for (const [ index, supElement ] of [ ...supElements ].entries()) {
+      let footnote = footnotes.find(f => f.supElement === supElement);
+      if (!footnote) {
+        footnote = findDeletedFootnote(supElement.id);
+      }
+      if (footnote) {
+        if (footnote.deleted) {
+          // mark it as not deleted
           // itemElement will get added back by adjustLayout()
           footnote.deleted = 0;
+          // the sup element could be different if it reappears thanks to
+          // a copy-and-paste operation
+          footnote.supElement = supElement;
           changed = true;
         }
-      } else {
-        if (!supElement.parentElement) {
-          footnote.deleted = deletionCount++;
-          itemElement.remove();
-          // take it out the page where it's attached
-          remove(footnote.page.footer.footnotes, footnote);
-          footnote.page = null;
-          changed = true;
+        const currentIndex = footnotes.indexOf(footnote);
+        if (currentIndex !== index) {
+          // put it in the correct position
+          footnotes.splice(currentIndex, 1);
+          footnotes.splice(index, 0, footnote);
         }
+      }
+    }
+    // any extra ones must have been deleted by the user
+    const extraFootnotes = footnotes.slice(supElements.length);
+    for (const footnote of extraFootnotes) {
+      const { supElement, itemElement } = footnote;
+      if (!footnote.deleted) {
+        // mark it as not deleted
+        footnote.deleted = deletionCount++;
+        itemElement.remove();
+        // take it out the page where it's attached
+        remove(footnote.page.footer.footnotes, footnote);
+        footnote.page = null;
+        changed = true;
       }
     }
   }
@@ -357,23 +376,32 @@ export function addContent(element, content) {
   }
 }
 
+export function findDeletedFootnote(id) {
+  return footnotes.find(f => f.deleted && f.id === id);
+}
+
+let nextFootnoteId = Math.round(Math.random() * 0x00FFFFFF) * 1000;
+
 function addElement(element, { tag, style, content, footnote }) {
-  const child = e(tag, { style });
+  const child = e(tag, { style, className: 'conradish' });
   addContent(child, content);
   if (footnote instanceof Object) {
     const { content, ...extra } = footnote;
     const number = footnotes.length + 1;
     const supElement = child;
-    supElement.className = 'footnote-number';
+    const id = `footnote-${nextFootnoteId++}`;
+    supElement.id = id;
+    supElement.classList.add('footnote-number');
     const itemElement = e('LI', { className: 'footnote-item' });
     addContent(itemElement, content);
     const page = null, deleted = 0, height = '';
-    footnotes.push({ number, page, deleted, supElement, itemElement, height, content, extra });
+    footnotes.push({ id, number, page, deleted, supElement, itemElement, height, content, extra });
   }
   element.append(child);
 }
 
 export function annotateRange(range, content) {
+  const id = `footnote-${nextFootnoteId++}`;
   // figure out what number it should have
   let number = 1;
   for (const { supElement } of footnotes.filter(f => !f.deleted)) {
@@ -385,7 +413,8 @@ export function annotateRange(range, content) {
   }
   const fragment = range.cloneContents();
   const fragmentHTML = e('DIV', {}, fragment).innerHTML;
-  const tempSupElement = e('SUP', { className: 'footnote-number pending' }, number);
+  const className = 'conradish footnote-number pending';
+  const tempSupElement = e('SUP', { id, className }, number);
   // trim off whitespaces
   const htmlBefore = fragmentHTML.trimRight();
   const wsAfter = fragmentHTML.substr(htmlBefore.length);
@@ -396,11 +425,11 @@ export function annotateRange(range, content) {
   selection.addRange(range);
   document.execCommand('insertHTML', false, html);
   // find the <sup>
-  const supElement = document.querySelectorAll('.footnote-number.pending')[0];
+  const supElement = contentElement.querySelectorAll('.footnote-number.pending')[0];
   supElement.classList.remove('pending');
   const itemElement = e('LI', { className: 'footnote-item' }, content);
   const page = null, deleted = 0, height = '';
-  const footnote = { number, page, deleted, supElement, itemElement, height };
+  const footnote = { id, number, page, deleted, supElement, itemElement, height };
   footnotes.splice(number - 1, 0, footnote);
   return footnote;
 }
@@ -430,7 +459,7 @@ function extractContent(node) {
         object.style = newStyle;
       }
       if (includeFootnotes) {
-        if (tagName === 'SUP') {
+        if (className === 'footnote-number') {
           const footnote = footnotes.find((f) => f.supElement === node);
           if (footnote) {
             const { content, extra } = footnote;

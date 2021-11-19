@@ -1,5 +1,5 @@
 import { e, separateWords } from './ui.js';
-import { adjustLayout, adjustFootnotes, annotateRange, saveDocument } from './layout.js';
+import { adjustLayout, adjustFootnotes, findDeletedFootnote, annotateRange, saveDocument } from './layout.js';
 import { transverseRange } from './capturing.js';
 import { translate } from './translation.js';
 import { getSourceLanguage, getTargetLanguage } from './settings.js';
@@ -12,6 +12,7 @@ export function attachEditingHandlers() {
   document.addEventListener('paste', handlePaste);
   document.addEventListener('selectionchange', handleSelectionChange);
   document.execCommand('styleWithCSS', false, true);
+  document.execCommand('insertBrOnReturn', false, false);
 }
 
 const articleMenuElement = document.getElementById('article-menu');
@@ -105,7 +106,7 @@ function isCursorAtListItemEnd() {
 function inFootnoteNumber(node) {
   for (let n = node; n; n = n.parentNode) {
     if (n.nodeType === Node.ELEMENT_NODE) {
-      if (n.tagName === 'SUP' && n.classList.contains('footnote-number')) {
+      if (n.classList.contains('footnote-number')) {
         return true;
       }
     }
@@ -144,53 +145,6 @@ function isMultiparagraph(range) {
   return (count > 1);
 }
 
-function getFootnoteNumber(range) {
-  const { endContainer, endOffset } = range;
-  let container = endContainer;
-  if (endContainer.nodeType === Node.TEXT_NODE) {
-    const { nodeValue } = endContainer;
-    if (endOffset > 0 && endOffset < nodeValue.length) {
-      // ignore whitespaces
-      if (nodeValue.substring(0, endOffset).trim()) {
-        return;
-      }
-    }
-    container = endContainer.parentNode;
-  }
-  console.log(container.tagName);
-  const isFootnoteNumber = (node) => {
-    return node.tagName === 'SUP' && node.className === 'footnote-number';
-  };
-  if (isFootnoteNumber(container)) {
-    return container;
-  }
-  const getNextNode = (node) => {
-    const { nextSibling, parentNode } = node;
-    if (nextSibling) {
-      return nextSibling;
-    } else if (parentNode) {
-      getNextNode(parentNode);
-    }
-  };
-  const nextNode = getNextNode(container);
-  if (nextNode && isFootnoteNumber(nextNode)) {
-    return nextNode;
-  }
-  const getPreviousNode = (node) => {
-    const { previousSibling, parentNode } = node;
-    if (previousSibling) {
-      return previousSibling;
-    } else if (parentNode) {
-      getPreviousNode(parentNode);
-    }
-  };
-  const prevNode = getPreviousNode(container);
-  if (prevNode && isFootnoteNumber(prevNode)) {
-    return prevNode;
-  }
-  return null;
-}
-
 function atFootnoteNumber(range) {
   const { endContainer, endOffset } = range;
   if (endContainer.nodeType === Node.TEXT_NODE) {
@@ -203,7 +157,7 @@ function atFootnoteNumber(range) {
     }
   }
   const isFootnoteNumber = (node) => {
-    return node.tagName === 'SUP' && node.className === 'footnote-number';
+    return node.classList.contains('footnote-number');
   };
   const getNextNode = (node) => {
     const { nextSibling, parentNode } = node;
@@ -261,11 +215,25 @@ function autosave(delay = 2000) {
 }
 
 function isArticleEditor(node) {
-  return (node && node.id === 'article-text');
+  if (node) {
+    if (node.id === 'article-text') {
+      return true;
+    } else {
+      return isArticleEditor(node.parentNode);
+    }
+  }
+  return false;
 }
 
 function isFootnoteEditor(node) {
-  return (node && node.className === 'footer-content');
+  if (node) {
+    if (node.className === 'footer-content') {
+      return true;
+    } else {
+      return isFootnoteEditor(node.parentNode);
+    }
+  }
+  return false;
 }
 
 function preserveCursorPosition() {
@@ -328,11 +296,10 @@ function handleInput(evt) {
   }
 }
 
-let dummyElement;
-
 function handleBeforeInput(evt) {
   const { target } = evt;
   if (isArticleEditor(target)) {
+    // prevent editing of footnote numbers
     const range = getSelectionRange();
     const { endContainer } = range;
     if (endContainer.nodeType === Node.TEXT_NODE) {
@@ -373,8 +340,62 @@ function handleKeyPress(evt) {
   }
 }
 
+function filterHTML(html) {
+  // tags in the article editor always have the "conradish" class
+  //
+  if (!html.includes('conradish')) {
+    return;
+  }
+  // extract the actual fragment
+  const startIndex = html.indexOf('<!--StartFragment-->');
+  const endIndex = html.indexOf('<!--EndFragment-->');
+  if (startIndex === -1 || endIndex === -1) {
+    return;
+  }
+  const div = e('DIV');
+  div.innerHTML = html.substring(startIndex, endIndex);
+  if (div.getElementsByClassName('conradish').length > 0) {
+    // remove footnote numbers that don't correspond to a footnote that
+    // was deleted earlier
+    const supElements = div.getElementsByClassName('footnote-number');
+    for (const supElement of supElements) {
+      if (!findDeletedFootnote(supElement.id)) {
+        supElement.remove();
+      }
+    }
+    // strip out any <br> tag; since we use white-space: pre-wrap
+    // they shouldn't be there
+    const brElements = div.getElementsByTagName('BR');
+    for (const brElement of brElements) {
+      brElement.remove();
+    }
+  }
+  return div.innerHTML.trim();
+}
+
 function handlePaste(evt) {
-  // TODO
+  const { target, clipboardData } = evt;
+  let forcePlainText = true;
+  if (isArticleEditor(target)) {
+    const html = clipboardData.getData('text/html');
+    const filteredHTML = filterHTML(html);
+    if (filteredHTML) {
+      document.execCommand('insertHTML', false, filteredHTML);
+    } else {
+      const text = clipboardData.getData('text/plain');
+      document.execCommand('insertText', false, text);
+    }
+    evt.preventDefault();
+    evt.stopPropagation();
+  } else if (isFootnoteEditor(target)) {
+    // always force plain-text
+    // use insertHTML here to prevent creation of new list items
+    const text = clipboardData.getData('text/plain');
+    const html = e('DIV', {}, text).innerHTML;
+    document.execCommand('insertHTML', false, html);
+    evt.preventDefault();
+    evt.stopPropagation();
+  }
 }
 
 function getRangeContainer(range) {
