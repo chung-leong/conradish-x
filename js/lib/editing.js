@@ -5,8 +5,10 @@ import { translate } from './translation.js';
 import { getSourceLanguage, getTargetLanguage } from './settings.js';
 
 export function attachEditingHandlers() {
-  document.addEventListener('input', handleInput);
+  document.addEventListener('keydown', handleKeyDown);
   document.addEventListener('keypress', handleKeyPress);
+  document.addEventListener('beforeinput', handleBeforeInput);
+  document.addEventListener('input', handleInput);
   document.addEventListener('paste', handlePaste);
   document.addEventListener('selectionchange', handleSelectionChange);
   document.execCommand('styleWithCSS', false, true);
@@ -118,17 +120,6 @@ function getSelectionRange() {
   }
 }
 
-function getRangeContainer(range) {
-  if (!range) {
-    return;
-  }
-  for (let n = range.startContainer; n; n = n .parentNode) {
-    if (n.contentEditable === 'true') {
-      return n;
-    }
-  }
-}
-
 function toggle(element, shown) {
   element.style.display = (shown) ? 'block' : 'none';
 }
@@ -151,6 +142,53 @@ function isMultiparagraph(range) {
     return !(count > 1);
   });
   return (count > 1);
+}
+
+function getFootnoteNumber(range) {
+  const { endContainer, endOffset } = range;
+  let container = endContainer;
+  if (endContainer.nodeType === Node.TEXT_NODE) {
+    const { nodeValue } = endContainer;
+    if (endOffset > 0 && endOffset < nodeValue.length) {
+      // ignore whitespaces
+      if (nodeValue.substring(0, endOffset).trim()) {
+        return;
+      }
+    }
+    container = endContainer.parentNode;
+  }
+  console.log(container.tagName);
+  const isFootnoteNumber = (node) => {
+    return node.tagName === 'SUP' && node.className === 'footnote-number';
+  };
+  if (isFootnoteNumber(container)) {
+    return container;
+  }
+  const getNextNode = (node) => {
+    const { nextSibling, parentNode } = node;
+    if (nextSibling) {
+      return nextSibling;
+    } else if (parentNode) {
+      getNextNode(parentNode);
+    }
+  };
+  const nextNode = getNextNode(container);
+  if (nextNode && isFootnoteNumber(nextNode)) {
+    return nextNode;
+  }
+  const getPreviousNode = (node) => {
+    const { previousSibling, parentNode } = node;
+    if (previousSibling) {
+      return previousSibling;
+    } else if (parentNode) {
+      getPreviousNode(parentNode);
+    }
+  };
+  const prevNode = getPreviousNode(container);
+  if (prevNode && isFootnoteNumber(prevNode)) {
+    return prevNode;
+  }
+  return null;
 }
 
 function atFootnoteNumber(range) {
@@ -222,38 +260,12 @@ function autosave(delay = 2000) {
   autosaveTimeout = setTimeout(async() => await saveDocument(), 2000);
 }
 
-function handleInput(evt) {
-  const { target } = evt;
-  if (target.className === 'footer-content') {
-    handleFootnoteInput(evt);
-  } else if (target.id === 'article-text') {
-    handleArticleInput(evt);
-  }
+function isArticleEditor(node) {
+  return (node && node.id === 'article-text');
 }
 
-function handleKeyPress(evt) {
-  const { target } = evt;
-  if (target.className === 'footer-content') {
-    handleFootnoteKeyPress(evt);
-  } else if (target.id === 'article-text') {
-    handleArticleKeyPress(evt);
-  }
-}
-
-function handlePaste(evt) {
-  // TODO
-}
-
-function handleFootnoteKeyPress(evt) {
-  const { key, shiftKey, ctrlKey, altKey } = evt;
-  if (key === 'Enter' && !shiftKey && !ctrlKey && !altKey) {
-    // cancel default behavior
-    evt.preventDefault();
-    evt.stopPropagation();
-    // at the end of the list item we need to insert two <BR>s
-    const count = isCursorAtListItemEnd() ? 2 : 1;
-    document.execCommand('insertHTML', false, '<br>'.repeat(count));
-  }
+function isFootnoteEditor(node) {
+  return (node && node.className === 'footer-content');
 }
 
 function preserveCursorPosition() {
@@ -294,68 +306,137 @@ function restoreCursorPosition(cursor) {
   range.setEnd(endContainer, endOffset);
 }
 
-function handleFootnoteInput(evt) {
-  // remember which item has the cursor
-  const cursor = preserveCursorPosition();
-  // see if any item has gone missing or resurfaced, hiding and restoring
-  // the referencing sup elements accordingly
-  adjustFootnotes({ updateItems: true, updateContent: true });
-  // adjust the adjust the page layout in case the height is different
-  adjustLayout({ updateFooterPosition: true });
-  // put the cursor back onto the correct item, in the event it got moved
-  // to another footer
-  restoreCursorPosition(cursor);
-  // save changes
-  autosave();
+function handleInput(evt) {
+  const { target } = evt;
+  if (isArticleEditor(target)) {
+    const changed = adjustFootnotes({ updateReferences: true });
+    adjustLayout({ updateFooterPosition: changed });
+    autosave();
+  } else if (isFootnoteEditor(target)) {
+    // remember which item has the cursor
+    const cursor = preserveCursorPosition();
+    // see if any item has gone missing or resurfaced, hiding and restoring
+    // the referencing sup elements accordingly
+    adjustFootnotes({ updateItems: true, updateContent: true });
+    // adjust the adjust the page layout in case the height is different
+    adjustLayout({ updateFooterPosition: true });
+    // put the cursor back onto the correct item, in the event it got moved
+    // to another footer
+    restoreCursorPosition(cursor);
+    // save changes
+    autosave();
+  }
 }
 
-function handleArticleInput(evt) {
-  const changed = adjustFootnotes({ updateReferences: true });
-  adjustLayout({ updateFooterPosition: changed });
-  autosave();
+let dummyElement;
+
+function handleBeforeInput(evt) {
+  const { target } = evt;
+  if (isArticleEditor(target)) {
+    const range = getSelectionRange();
+    const { endContainer } = range;
+    if (endContainer.nodeType === Node.TEXT_NODE) {
+      const { parentNode } = endContainer;
+      if (parentNode.className === 'footnote-number') {
+        const allowKeys = [ 'Backspace', 'Delete', 'Enter' ];
+        if (!allowKeys.includes(lastKeyDown)) {
+          evt.preventDefault();
+          evt.stopPropagation();
+        }
+      }
+    }
+  }
 }
 
-function handleArticleKeyPress(evt) {
+let lastKeyDown = '';
+
+function handleKeyDown(evt) {
+  if (evt.key === 'Escape') {
+    hideArticleMenu();
+  }
+  // remember the last key pressed
+  lastKeyDown = evt.key;
+}
+
+function handleKeyPress(evt) {
+  const { target } = evt;
+  if (isFootnoteEditor(target)) {
+    const { key, shiftKey, ctrlKey, altKey } = evt;
+    if (key === 'Enter' && !shiftKey && !ctrlKey && !altKey) {
+      // cancel default behavior
+      evt.preventDefault();
+      evt.stopPropagation();
+      // at the end of the list item we need to insert two <BR>s
+      const count = isCursorAtListItemEnd() ? 2 : 1;
+      document.execCommand('insertHTML', false, '<br>'.repeat(count));
+    }
+  }
+}
+
+function handlePaste(evt) {
+  // TODO
+}
+
+function getRangeContainer(range) {
+  if (!range) {
+    return;
+  }
+  for (let n = range.startContainer; n; n = n .parentNode) {
+    if (n.contentEditable === 'true') {
+      return n;
+    }
+  }
+}
+
+function showArticleMenu(container, range) {
+  const words = separateWords(range.toString());
+  if (words.length > 0) {
+    const r1 = range.getBoundingClientRect();
+    const r2 = articleMenuElement.parentNode.getBoundingClientRect();
+    const left = r1.left - r2.left;
+    let top = r1.bottom - r2.top + 2;
+    articleMenuElement.style.left = `${left}px`;
+    articleMenuElement.style.top = `${top}px`;
+    // show/hide menu item depending on how many words are selected
+    const count = words.length;
+    toggle(articleMenuItems.addTranslation, count > 1);
+    toggle(articleMenuItems.addDefinition, count <= 10);
+    toggle(articleMenuElement, true);
+    articleMenuElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    // remember the range
+    lastSelectedRange = range;
+    return true;
+  }
+  return false;
+}
+
+function hideArticleMenu() {
+  const clear = () => {
+    toggle(articleMenuElement, false);
+    lastSelectedRange = null;
+  };
+  if (articleMenuClicked) {
+    // clear the menu after a small delay, so we don't lose the click event
+    articleMenuClicked = false;
+    setTimeout(clear, 150);
+  } else {
+    clear();
+  }
 }
 
 function handleSelectionChange(evt) {
   const range = getSelectionRange();
   const container = getRangeContainer(range);
-  const inArticle = (container && container.id  === 'article-text');
-  const inFootntoe = (container && container.className === 'footnote-content');
-  if (inArticle && !range.collapsed && !isMultiparagraph(range) && !atFootnoteNumber(range)) {
-    const words = separateWords(range.toString());
-    if (words.length > 0) {
-      const r1 = range.getBoundingClientRect();
-      const r2 = container.parentNode.getBoundingClientRect();
-      const left = r1.left - r2.left + 2;
-      let top = r1.bottom - r2.top + 2;
-      articleMenuElement.style.left = `${left}px`;
-      articleMenuElement.style.top = `${top}px`;
-      // show/hide menu item depending on how many words are selected
-      const count = words.length;
-      toggle(articleMenuItems.addTranslation, count > 1);
-      toggle(articleMenuItems.addDefinition, count <= 10);
-      toggle(articleMenuElement, true);
-      articleMenuElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      // remember the range
-      lastSelectedRange = range;
-    } else {
-      toggle(articleMenuElement, false);
-      lastSelectedRange = null;
+  let hideMenu = true;
+  if (isArticleEditor(container)) {
+    if (!range.collapsed) {
+      if (!isMultiparagraph(range) && !atFootnoteNumber(range)) {
+        hideMenu = !showArticleMenu(container, range);
+      }
     }
-  } else {
-    const clear = () => {
-      toggle(articleMenuElement, false);
-      lastSelectedRange = null;
-    };
-    if (articleMenuClicked) {
-      // clear the menu after a small delay, so we don't lose the click event
-      articleMenuClicked = false;
-      setTimeout(clear, 150);
-    } else {
-      clear();
-    }
+  }
+  if (hideMenu) {
+    hideArticleMenu();
   }
 }
 

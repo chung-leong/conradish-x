@@ -365,7 +365,6 @@ function addElement(element, { tag, style, content, footnote }) {
     const number = footnotes.length + 1;
     const supElement = child;
     supElement.className = 'footnote-number';
-    supElement.contentEditable = false;
     const itemElement = e('LI', { className: 'footnote-item' });
     addContent(itemElement, content);
     const page = null, deleted = 0, height = '';
@@ -399,7 +398,6 @@ export function annotateRange(range, content) {
   // find the <sup>
   const supElement = document.querySelectorAll('.footnote-number.pending')[0];
   supElement.classList.remove('pending');
-  supElement.contentEditable = false;
   const itemElement = e('LI', { className: 'footnote-item' }, content);
   const page = null, deleted = 0, height = '';
   const footnote = { number, page, deleted, supElement, itemElement, height };
