@@ -3,8 +3,7 @@ import { applyStyles, getPageProperties, setSourceLanguage } from './settings.js
 import { insertContent, replaceUselessElements, removeEmptyNodes } from './capturing.js';
 import { loadObject, saveObject } from './storage.js';
 
-import sampleText from './sample.js';
-const sampleDoc = { title: 'Test', lang: 'en', content: sampleText };
+import sampleDoc from './sample.js';
 
 const contentElement = document.getElementById('article-text');
 const backgroundElement = document.getElementById('article-background');

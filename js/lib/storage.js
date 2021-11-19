@@ -75,8 +75,9 @@ export async function loadObject(key) {
     const index = directory.indexOf(key);
     if (index !== -1) {
       directory.splice(index, 1);
+      await saveDirectory();
     }
-    await saveDirectory();
+    throw new Error(`There is no document with the key "${key}"`);
   }
   return object;
 }
