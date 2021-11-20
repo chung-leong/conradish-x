@@ -149,6 +149,9 @@ async function remove(keys) {
 }
 
 async function handleChanged(changes, areaName) {
+  if (!initialized) {
+    return;
+  }
   let dirChanged = false;
   for (const [ key, change ] of Object.entries(changes)) {
     if (key.charAt(0) === '.') {
