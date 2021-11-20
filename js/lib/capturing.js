@@ -118,13 +118,23 @@ export function captureRangeContent(range, options) {
     let tag, parentObject;
     if (/block|flex/.test(display)) {
       parentObject = root;
-      if (tagName === 'H1') {
+      switch (tagName) {
         // for the purpose of printing, H1 is almost always too large
-        tag = 'H2';
-      } else if (/^H\d$/.test(tagName) || tagName === 'BLOCKQUOTE') {
-        tag = tagName;
-      } else {
-        tag = 'P';
+        case 'H1':
+          tag = 'H2';
+          break;
+        case 'H2':
+        case 'H3':
+        case 'H4':
+        case 'H5':
+        case 'H6':
+        case 'BLOCKQUOTE':
+        case 'UL':
+        case 'OL':
+          tag = tagName;
+          break;
+        default:
+          tag = 'P';
       }
     } else if (/list|table|grid|ruby/.test(display)) {
       // list, table, and grid retain the original structure
@@ -414,8 +424,10 @@ function canBeEmpty(tag) {
     case 'TH':
     case 'TD':
     case 'HR':
-    case 'BR': return true;
-    default: return false;
+    case 'BR':
+      return true;
+    default:
+      return false;
   }
 }
 

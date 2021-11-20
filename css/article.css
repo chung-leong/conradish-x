@@ -61,6 +61,17 @@ BODY.ready #article {
   text-align: left;
 }
 
+#article-text TABLE {
+  border-collapse: collapse;
+  text-align: left;
+}
+
+#article-text TD,
+#article-text TH {
+  border: 0.5pt solid rgb(0, 0, 0);
+  padding: 1pt 1pt 0 1pt;
+}
+
 #article-text:focus {
   outline: none;
 }
