@@ -30,6 +30,7 @@ export async function loadDocument(key) {
   addContent(contentElement, content);
   // adjust layout, inserting footnotes into appropriate page
   adjustLayout();
+  console.log(currentDocument);
 }
 
 export async function saveDocument() {
@@ -54,6 +55,9 @@ export function adjustLayout(options = {}) {
       page.paperRect = getRect(page.paperElement);
     }
   }
+  if (pages.length === 0) {
+    addPage();
+  }
   if (updateFooterPosition || updatePaper) {
     for (const page of pages) {
       adjustFooterPosition(page.footer);
@@ -64,7 +68,7 @@ export function adjustLayout(options = {}) {
     reflow = false;
     reflowCount++;
     // add enough pages for the content
-    while (hasExcessContent() || pages.length === 0) {
+    while (hasExcessContent()) {
       addPage();
     }
     // assign footnotes to footers based on location of

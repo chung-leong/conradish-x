@@ -54,7 +54,7 @@ export function captureRangeContent(range, options) {
   const nodeObjects = new Map([ [ rootNode, root ] ]);
   const nodeStyles = new Map;
   const objectParents = new Map;
-  const objectStyles = new Map([ [ rootNode, getComputedStyle(rootNode) ] ]);
+  const objectStyles = new Map([ [ root, getComputedStyle(rootNode) ] ]);
   const objectRects = new Map;
   const rootClientRect = rootNode.getBoundingClientRect();
   const getRect = (node) => {
@@ -73,15 +73,26 @@ export function captureRangeContent(range, options) {
     }
     return style;
   };
-  const paragraphStyle = {
+  const normalText = {
     fontWeight: '400',
     fontStyle: 'normal',
     textDecorationLine: 'none',
     textDecorationStyle: 'solid',
+    verticalAlign: 'baseline',
   };
-  const headingStyle = { ...paragraphStyle, fontWeight: '700' };
+  const heavyText = { ...normalText, fontWeight: '700' };
+  const styleNames = Object.keys(normalText);
+  const getDefaultStyle = (object) => {
+    switch (object.tag) {
+      case 'H1': case 'H2': case 'H3': case 'H4': case 'H5': case 'H6':
+      case 'TH':
+        return heavyText;
+      default:
+        return normalText;
+    }
+  };
   const getTextStyle = (object) => {
-    const defaultStyle = /^H\d$/.test(object.tag) ? headingStyle : paragraphStyle;
+    const defaultStyle = getDefaultStyle(object);
     return (object.style) ? { ...defaultStyle, ...object.style } : defaultStyle;
   };
   let inlineOnly = true;
@@ -92,7 +103,12 @@ export function captureRangeContent(range, options) {
     }
     for (let n = node; n && n !== rootNode; n = n.parentNode) {
       if (n.tagName === 'A') {
-        return true;
+        const parentText = n.textContent.trim();
+        const nodeText = node.textContent;
+        if (parentText.length - nodeText.length <= 2) {
+          // the link is mostly just the node in question
+          return true;
+        }
       }
     }
     return false;
@@ -116,63 +132,114 @@ export function captureRangeContent(range, options) {
         return;
     }
     let tag, parentObject;
-    if (/block|flex/.test(display)) {
-      parentObject = root;
-      switch (tagName) {
-        // for the purpose of printing, H1 is almost always too large
-        case 'H1':
-          tag = 'H2';
-          break;
-        case 'H2':
-        case 'H3':
-        case 'H4':
-        case 'H5':
-        case 'H6':
-        case 'BLOCKQUOTE':
-        case 'UL':
-        case 'OL':
-          tag = tagName;
-          break;
-        default:
-          tag = 'P';
-      }
-    } else if (/list|table|grid|ruby/.test(display)) {
-      // list, table, and grid retain the original structure
-      parentObject = getObject(parentNode);
-      tag = tagName;
-    } else if (display === 'inline') {
-      if (tagName === 'SUP') {
-        if (isLink(node)) {
+    switch (display) {
+      case 'inline':
+        // remove sup tags that are links
+        if (style.verticalAlign === 'super' && isLink(node)) {
           return;
         }
-      }
-      // all inline elements become span
-      parentObject = getObject(parentNode);
-      if (parentObject && parentObject.tag === 'SPAN') {
-        // don't nest spans
-        parentObject = objectParents.get(parentObject);
-      }
-      tag = 'SPAN';
+        parentObject = getObject(parentNode);
+        if (parentObject && parentObject.tag === 'SPAN') {
+          // don't nest spans
+          parentObject = objectParents.get(parentObject);
+        }
+        if (tagName === 'BR') {
+          tag = tagName;
+        } else {
+          // all other inline elements become span
+          tag = 'SPAN';
+        }
+        break;
+      case 'block': case 'inline-block':
+      case 'flex': case 'inline-flex':
+      case 'grid': case 'inline-grid':
+        // block elements all go into the root
+        parentObject = root;
+        switch (tagName) {
+          case 'H1': case 'H2': case 'H3': case 'H4': case 'H5': case 'H6':
+          case 'UL': case 'OL':
+          case 'BLOCKQUOTE':
+          case 'HR':
+            tag = tagName;
+            break;
+          default:
+            tag = 'P';
+        }
+        break;
+      case 'list-item':
+        parentObject = getObject(parentNode);
+        tag = 'LI';
+        // make sure is a list
+        if (parentObject.tag !== 'OL' && parentObject.tag !== 'UL') {
+          parentObject.tag = (style.listStyleType === 'decimal') ? 'OL' : 'UL';
+        }
+        break;
+      case 'table':
+        parentObject = root;
+        tag = 'TABLE';
+        break;
+      case 'table-row-group':
+        parentObject = getObject(parentNode);
+        tag = 'TBODY';
+        break;
+      case 'table-header-group':
+        parentObject = getObject(parentNode);
+        tag = 'THEAD';
+        break;
+      case 'table-footer-group':
+        parentObject = getObject(parentNode);
+        tag = 'TFOOT';
+        break;
+      case 'table-row':
+        parentObject = getObject(parentNode);
+        tag = 'TR';
+        break;
+      case 'table-cell':
+        parentObject = getObject(parentNode);
+        tag = (style.fontWeight > 400) ? 'TH' : 'TD';
+        break;
+      case 'table-column-group':
+        parentObject = getObject(parentNode);
+        tag = 'COLGROUP';
+        break;
+      case 'table-column':
+        parentObject = getObject(parentNode);
+        tag = 'COL';
+        break;
+      case 'table-caption':
+        parentObject = getObject(parentNode);
+        tag = 'CAPTION';
+        break;
     }
     if (parentObject && tag) {
       const rect = getRect(node);
       const object = { tag, content: undefined };
-      // copy style only if it's not a heading
-      if (!/^H\d$/.test(tag)) {
-        const newStyle = {};
-        const parentStyle = getTextStyle(parentObject);
-        for (const [ name, value ] of Object.entries(parentStyle)) {
-          if (style[name] != value) {
-            newStyle[name] = style[name];
+      const newStyle = {};
+      const parentStyle = getTextStyle(parentObject);
+      const defaultStyle = getDefaultStyle(object);
+      for (const name of styleNames) {
+        const parentValue = parentStyle[name];
+        const defaultValue = defaultStyle[name];
+        let value = style[name];
+        if (name === 'fontWeight') {
+          // stick with standard values
+          value = (value >= 600) ? '700' : '400';
+        }
+        if (value !== parentValue && value !== defaultValue) {
+          if (name === 'verticalAlign') {
+            if (value === 'super' || value === 'sub') {
+              // set the font size as well
+              newStyle.fontSize = 'smaller';
+            } else {
+              // skip it
+              continue;
+            }
           }
+          newStyle[name] = value;
         }
-        if (tag === 'SUP' || tag === 'SUB') {
-          newStyle.verticalAlign = (tag == 'SUP') ? 'super' : 'sub';
-          newStyle.fontSize = '83%';
-        }
-        if (Object.entries(newStyle).length > 0) {
-          object.style = newStyle;
-        }
+      }
+      if (Object.entries(newStyle).length > 0) {
+        object.style = newStyle;
       }
       if (object.tag !== 'SPAN') {
         inlineOnly = false;
@@ -214,9 +281,7 @@ export function captureRangeContent(range, options) {
     }
   });
   // apply white-space rules
-  for (const [ object, style ] of objectStyles.entries()) {
-    collapseWhitespaces(object, style);
-  }
+  collapseWhitespaces(root, objectStyles);
   // replace spans that don't have any styling information with just its
   // content; couldn't do it earlier since the inline element could in theory
   // employ a different white-space rule
@@ -267,18 +332,25 @@ export function captureRangeContent(range, options) {
           const charCount = objectCounts.get(object);
           const color = style.color;
           // calculate the "junk" scores
-          const scoreColor = calculateColorScore(color, maxColor, charCount);
-          const scorePos = calculatePositionScore(rect, maxRect, charCount);
-          if (scoreColor > 5 || scorePos > 10) {
-            if (filter === 'automatic') {
-              // throw it out
-              return;
-            } else {
-              // mark it as junk and wait for the user to decide what to do
-              object.junk = true;
-            }
+          const scoreColor = calculateColorScore(color, maxColor);
+          const scorePos = calculatePositionScore(rect, maxRect);
+          let junkFactor = 0;
+          if (scoreColor / charCount > 5 || scorePos / charCount > 10) {
+            // probably junk
+            junkFactor = 1;
+          } else if (scoreColor > 50 || scorePos > 100) {
+            // might be junk
+            junkFactor = 0.5;
           }
-          object.score = { color: scoreColor, position: scorePos };
+          if (junkFactor > 0) {
+            if (junkFactor === 1 && filter === 'automatic') {
+              // throw it out now
+              return;
+            }
+            // mark it as junk and wait for the user to decide what to do
+            object.junk = junkFactor;
+          }
+          //object.score = { color: scoreColor / charCount, position: scorePos / charCount};
         }
         return object;
       });
@@ -332,11 +404,10 @@ function getCharacterCount(content) {
   }
 }
 
-function calculatePositionScore(rect1, rect2, charCount) {
+function calculatePositionScore(rect1, rect2) {
   const leftDiff = rect1.left - rect2.left;
   const rightDiff = rect2.right - rect1.right;
-  const diff = Math.abs(leftDiff + rightDiff);
-  return (diff > 0) ? diff / charCount : 0;
+  return Math.abs(leftDiff + rightDiff);
 }
 
 function calculateColorScore(color1, color2, charCount) {
@@ -354,52 +425,64 @@ function calculateColorScore(color1, color2, charCount) {
   const diffG = Math.abs(g1 - g2);
   const diffB = Math.abs(b1 - b2);
   const diffA = Math.abs(a1 - a2) * 255;
-  const diff = diffR + diffG + diffB + diffA;
-  return (diff > 0) ? diff / charCount : 0;
+  return diffR + diffG + diffB + diffA;
 }
 
-function applyWhitespaceRule(s, ws, inline, pos) {
-  if (typeof(s) === 'string') {
-    if (ws === 'normal' || ws === 'nowrap') {
-      s = s.replace(/\r?\n/g, ' ');
-    } else {
-      s = s.replace(/\r\n/g, '\n');
+const AT_BEGINNING = 0x0001;
+const AT_END = 0x0002;
+
+function applyWhitespaceRule(s, ws, pos) {
+  if (ws === 'normal' || ws === 'nowrap') {
+    s = s.replace(/\r?\n/g, ' ');
+  } else {
+    s = s.replace(/\r\n/g, '\n');
+  }
+  if (ws === 'normal' || ws === 'nowrap' || ws === 'pre-line') {
+    s = s.replace(/\s+/g, ' ');
+  }
+  if (ws === 'normal'  || ws === 'nowrap' || ws === 'pre-line') {
+    if (pos & AT_BEGINNING) {
+      s = s.trimLeft();
     }
-    if (ws === 'normal' || ws === 'nowrap' || ws === 'pre-line') {
-      s = s.replace(/\s+/g, ' ');
-    }
-    if (!inline) {
-      if (ws === 'normal'  || ws === 'nowrap' || ws === 'pre-line') {
-        if (pos === 'beginning' || pos === 'both') {
-          s = s.trimLeft();
-        }
-        if (pos === 'end' || pos === 'both') {
-          s = s.trimRight();
-        }
-      }
+    if (pos & AT_END) {
+      s = s.trimRight();
     }
   }
   return s;
 }
 
-function collapseWhitespaces(object, style) {
+function collapseWhitespaces(object, styleMap, pos = AT_BEGINNING | AT_END) {
+  const style = styleMap.get(object);
   const ws = style.whiteSpace;
-  const inline = (style.display === 'inline');
+  const inline = style.display.includes('inline');
+  if (!inline) {
+    pos = AT_BEGINNING | AT_END;
+  }
   if (typeof(object.content) === 'string') {
-    object.content = applyWhitespaceRule(object.content, ws, inline, 'both');
+    object.content = applyWhitespaceRule(object.content, ws, pos);
   } else if (object.content instanceof Array) {
-    alter(object.content, (s, i, arr) => {
-      let pos = (i);
-      if (i === 0) {
-        pos = (i === arr.length - 1) ? 'both' : 'beginning';
-      } else if (i === arr.length - 1) {
-        pos = 'end';
-      } else {
-        pos = 'middle';
+    let mask = AT_BEGINNING;
+    alter(object.content, (item, i, arr) => {
+      if (i === 1) {
+        // not at the begging anymore
+        mask &= ~AT_BEGINNING;
       }
-      return applyWhitespaceRule(s, ws, inline, pos);
+      if (i === arr.length - 1) {
+        // we've reached the end
+        mask |= AT_END;
+      }
+      if (typeof(item) === 'string') {
+        return applyWhitespaceRule(item, ws, pos & mask);
+      } else if (item instanceof Object) {
+        if (collapseWhitespaces(item, styleMap, pos & mask)) {
+          // restart the line after a block element or <BR>
+          mask |= AT_BEGINNING;
+        }
+        return item;
+      }
     });
   }
+  return !inline || object.tag === 'BR';
 }
 
 export function replaceUselessElements(object) {
@@ -442,15 +525,6 @@ export function removeEmptyNodes(object) {
           // merge to previous string
           arr[i - 1] += item;
           return;
-        } else if (!item.trim()) {
-          // remove whitespace between block elements
-          const prev = arr[i - 1];
-          const next = arr[i + 1];
-          if (prev && next) {
-            if (prev.tag !== 'SPAN' && next.tag !== 'SPAN') {
-              return;
-            }
-          }
         }
       } else if (item instanceof Object) {
         removeEmptyNodes(item);

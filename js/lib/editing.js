@@ -263,7 +263,7 @@ function adjustAttributes(container, addIdentifyingClass = false) {
               keep = true;
               break;
             case 'text-size':
-              keep = value.endsWith('%');
+              keep = (value === 'smaller');
               break;
           }
           if (keep) {
