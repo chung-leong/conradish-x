@@ -6,7 +6,10 @@ export async function translate(original, sourceLang, targetLang, singleWord) {
     // unless the language is German, query the word in lowercase
     if (!capitalizingLangs.includes(sourceLang)) {
       if (singleWord && isCapitalized(original, sourceLang)) {
-        lowerCaseAlt = original.toLocaleLowerCase(sourceLang);
+        try {
+          lowerCaseAlt = original.toLocaleLowerCase(sourceLang);
+        } catch (e) {
+        }
       }
     }
     const query = lowerCaseAlt || original;
@@ -73,7 +76,8 @@ function isCapitalized(word, lang) {
 }
 
 export function getSourceLanguages() {
-  const list = [];
+  const unknown = { value: '', label: 'Unknown' };
+  const list = [ unknown ];
   for (const { code, name } of languages) {
     list.push({ value: code, label: name });
   }

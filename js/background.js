@@ -121,25 +121,28 @@ async function handleMenuClick(info, tab) {
 
 async function createDocument(tab) {
   const codeURL = chrome.runtime.getURL('js/lib/capturing.js');
-  const lang = await chrome.tabs.detectLanguage(tab.id);
-  console.log({ lang });
   const settings = await getSettingsAsync();
-  chrome.scripting.executeScript({
+  await chrome.scripting.executeScript({
     target: { allFrames: true, tabId: tab.id },
-    args: [ codeURL, lang, settings.filter ],
-    func: async (codeURL, lang, filter) => {
+    args: [ codeURL, settings.filter ],
+    func: async (codeURL, filter) => {
       const selection = getSelection();
       if (!selection.isCollapsed) {
         // load the code for capturing only if the frame has selection
         const { captureSelection } = await import(codeURL);
-        captureSelection(selection, lang, filter);
+        const doc = await captureSelection(selection, filter);
+        try {
+          chrome.runtime.sendMessage(undefined, { type: 'create', document: doc });
+        } catch (err) {
+          chrome.runtime.sendMessage(undefined, { type: 'error', message: err.message });
+          throw err;
+        }
       }
     }
-  }, () => {
-    if (chrome.runtime.lastError) {
-      console.error(chrome.runtime.lastError.message);
-    }
   });
+  if (chrome.runtime.lastError) {
+    console.error(chrome.runtime.lastError.message);
+  }
 }
 
 async function openDocument(key) {

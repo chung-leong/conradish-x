@@ -30,21 +30,18 @@ export function transverseRange(range, cb) {
   scan(commonAncestorContainer);
 }
 
-export function captureSelection(selection, lang, filter) {
-  try {
-    const range = selection.getRangeAt(0);
-    const object = captureRangeContent(range, { filter });
-    // where multiple paragraphs are present, captureRangeContent() will
-    // return a <div>; otherwise we'd get a <p>
-    const content = (object.tag === 'DIV') ? object.content : object;
-    const title = document.title;
-    const url = document.location.href;
-    const doc = { url, title, lang, content };
-    chrome.runtime.sendMessage(undefined, { type: 'create', document: doc });
-  } catch (err) {
-    chrome.runtime.sendMessage(undefined, { type: 'error', message: err.message });
-    throw err;
-  }
+export async function captureSelection(selection, filter) {
+  const url = document.location.href;
+  const title = getTitle();
+  const image = getImage();
+  const lang = await getLanguage(range);
+  const range = selection.getRangeAt(0);
+  const object = captureRangeContent(range, { filter });
+  // where multiple paragraphs are present, captureRangeContent() will
+  // return a <div>; otherwise we'd get a <p>
+  const content = (object.tag === 'DIV') ? object.content : object;
+  const doc = { url, title, image, lang, content };
+  return doc;
 }
 
 export function captureRangeContent(range, options) {
@@ -459,6 +456,60 @@ export function removeEmptyNodes(object) {
       object.content = object.content[0];
     }
   }
+}
+
+function getTitle() {
+  let title = getMeta('og:title');
+  if (!title) {
+    title = document.title;
+  }
+  return title;
+}
+
+function getImage() {
+  return getMeta('og:image');
+}
+
+async function getLanguage(range) {
+  let lang = await detectLanguage(range.toString());
+  if (!lang) {
+    lang = getMeta('og:locale')
+  }
+  if (!lang) {
+    const { commonAncestorContainer } = range;
+    for (let n = commonAncestorContainer; n; n = n.parentNode) {
+      if (n.lang) {
+        lang = n.lang;
+        break;
+      }
+    }
+  }
+  lang = lang.substr(0, 2).toLowerCase();
+  return lang;
+}
+
+function getMeta(propName) {
+  const metaElements = document.head.getElementsByTagName('META');
+  for (const metaElement of metaElements) {
+    const name = metaElement.getAttribute('property');
+    if (name && name === propName) {
+      return metaElement.getAttribute('content');
+    }
+  }
+}
+
+async function detectLanguage(text) {
+  return new Promise((resolve) => {
+    chrome.i18n.detectLanguage(text, (result) => {
+      let lang;
+      for (const { language, percentage } of result.languages) {
+        if (percentage >= 80) {
+          lang = language;
+        }
+      }
+      resolve(lang);
+    });
+  });
 }
 
 function alter(arr, cb) {

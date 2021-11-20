@@ -107,13 +107,14 @@ async function createCards() {
 }
 
 async function loadItem(item) {
-  const doc = await loadObject(item.key);
-  if (doc) {
+  try {
+    const doc = await loadObject(item.key);
     const { url, title, lang } = doc;
     item.titleElement.textContent = title;
     item.titleElement.title = url;
     item.lang = lang;
     item.searchStrings = findSearchStrings(doc);
+  } catch (err) {
   }
 }
 
@@ -251,9 +252,17 @@ function removeItems(keys) {
   }
 }
 
+function toLower(s, lang) {
+  try {
+    return s.toLocaleLowerCase(lang);
+  } catch (err) {
+    return s.toLowerCase();
+  }
+}
+
 function searchItem(item, words) {
   const { lang, searchStrings } = item;
-  const lcWords = words.map(w => w.toLocaleLowerCase(lang));
+  const lcWords = words.map(w => toLower(w, lang));
   return lcWords.every((w) => {
     return searchStrings.some(s => s.includes(w));
   });
@@ -269,7 +278,7 @@ function findSearchStrings(doc) {
 
 function addSearchString(content, lang, list) {
   if (typeof(content) === 'string') {
-    const lc = content.toLocaleLowerCase(lang);
+    const lc = toLower(content, lang);
     list.push(lc);
   } else if (content instanceof Array) {
     for (const item of content) {

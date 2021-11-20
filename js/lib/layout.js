@@ -1,5 +1,5 @@
 import { e } from './ui.js';
-import { applyStyles, getPageProperties, setSourceLanguage } from './settings.js';
+import { applyStyles, getPageProperties, setSourceLanguage, getSourceLanguage } from './settings.js';
 import { insertContent, replaceUselessElements, removeEmptyNodes } from './capturing.js';
 import { loadObject, saveObject } from './storage.js';
 
@@ -13,15 +13,14 @@ const scrollElement = document.getElementById('article-container');
 const pages = [];
 const footnotes = [];
 
-let documentKey;
-let documentTitle;
-let documentLanguage;
-
+let currentDocumentKey;
+let currentDocument;
 let deletionCount = 1;
 
 export async function loadDocument(key) {
-  const doc = (key) ? await loadObject(key) : sampleDoc;
-  const { title, content, lang } = doc;
+  currentDocument = (key) ? await loadObject(key) : sampleDoc;
+  currentDocumentKey = key;
+  const { title, content, lang } = currentDocument;
   // set the source language
   setSourceLanguage(lang);
   document.title = title;
@@ -31,23 +30,20 @@ export async function loadDocument(key) {
   addContent(contentElement, content);
   // adjust layout, inserting footnotes into appropriate page
   adjustLayout();
-  documentKey = key;
-  documentTitle = title;
-  documentLanguage = lang;
 }
 
 export async function saveDocument() {
   const root = extractContent(contentElement);
-  const doc = {
-    title: documentTitle,
-    lang: documentLanguage,
-    content: root.content,
-  };
+  const doc = { ...currentDocument, content: root.content };
+  if (!doc.lang) {
+    doc.lang = getSourceLanguage();
+  }
+  currentDocument = doc;
   console.log(doc);
-  if (!documentKey) {
+  if (!currentDocumentKey) {
     return;
   }
-  saveObject(documentKey, doc);
+  saveObject(currentDocumentKey, doc);
 }
 
 export function adjustLayout(options = {}) {
