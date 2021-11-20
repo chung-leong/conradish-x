@@ -62,8 +62,16 @@ BODY.ready #article {
 }
 
 #article-text TABLE {
+  display: grid;
   border-collapse: collapse;
   text-align: left;
+  font-size: 80%;
+  /* page height minus top and bottom margins minus footer margin minus some extra space */
+  max-height: calc(297mm - 25mm - 25mm - 5mm - 10mm);
+  /* page width minus left and right margins minus some extra space */
+  width: calc(210mm - 25mm - 25mm - 2mm);
+  margin-left: 1mm;
+  overflow: hidden;
 }
 
 #article-text TD,

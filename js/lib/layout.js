@@ -131,6 +131,10 @@ export function adjustLayout(options = {}) {
 }
 
 function hasExcessContent() {
+  if (pages.length > 100) {
+    // something is wrong
+    return false;
+  }
   const contentRect = getRect(contentElement);
   const backgroundRect = getRect(backgroundElement);
   return (contentRect.bottom >= backgroundRect.bottom);
