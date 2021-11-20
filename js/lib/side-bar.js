@@ -98,7 +98,7 @@ function createSelect(items, currentValue) {
 function createFontFamilySelect(fontFamilies, currentValue) {
   return e('SELECT', {}, fontFamilies.map(({ label, value }) => {
     const selected = (value === currentValue);
-    const style = { fontFamily: value, fontSize: '14pt' };
+    const style = { fontFamily: value, fontSize: '13pt' };
     return e('OPTION', { value, selected, style }, label);
   }));
 }
