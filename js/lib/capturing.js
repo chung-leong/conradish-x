@@ -31,11 +31,11 @@ export function transverseRange(range, cb) {
 }
 
 export async function captureSelection(selection, filter) {
+  const range = selection.getRangeAt(0);
   const url = document.location.href;
   const title = getTitle();
   const image = getImage();
   const lang = await getLanguage(range);
-  const range = selection.getRangeAt(0);
   const object = captureRangeContent(range, { filter });
   // where multiple paragraphs are present, captureRangeContent() will
   // return a <div>; otherwise we'd get a <p>
