@@ -326,7 +326,7 @@ export function captureRangeContent(range, options) {
       const maxRect = { left: maxLeft, right: maxRight };
       // remove paragraphs that are way off
       alter(root.content, (object) => {
-        if (object instanceof Object && object.tag === 'P') {
+        if (object instanceof Object) {
           const rect = objectRects.get(object);
           const style = objectStyles.get(object);
           const charCount = objectCounts.get(object);
@@ -463,23 +463,24 @@ function collapseWhitespaces(object, styleMap, pos = AT_BEGINNING | AT_END) {
   } else if (object.content instanceof Array) {
     let mask = AT_BEGINNING;
     alter(object.content, (item, i, arr) => {
-      if (i === 1) {
-        // not at the begging anymore
-        mask &= ~AT_BEGINNING;
-      }
       if (i === arr.length - 1) {
         // we've reached the end
         mask |= AT_END;
       }
+      let result, newLine = false;
       if (typeof(item) === 'string') {
-        return applyWhitespaceRule(item, ws, pos & mask);
+        result = applyWhitespaceRule(item, ws, pos & mask);
       } else if (item instanceof Object) {
-        if (collapseWhitespaces(item, styleMap, pos & mask)) {
-          // restart the line after a block element or <BR>
-          mask |= AT_BEGINNING;
-        }
-        return item;
+        newLine = collapseWhitespaces(item, styleMap, pos & mask);
+        result = item;
       }
+      if (newLine) {
+        // restart the line after a block element or <BR>
+        mask |= AT_BEGINNING;
+      } else {
+        mask &= ~AT_BEGINNING;
+      }
+      return result;
     });
   }
   return !inline || object.tag === 'BR';
@@ -491,11 +492,11 @@ export function replaceUselessElements(object) {
       if (item instanceof Object) {
         if (item.tag === 'SPAN' && !item.style) {
           return item.content;
-        } else if (item.tag === 'BR') {
-          return '\n';
-        } else {
-          replaceUselessElements(item);
         }
+        if (item.tag === 'BR') {
+          return '\n';
+        }
+        replaceUselessElements(item);
       }
       return item;
     });
