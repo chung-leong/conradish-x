@@ -139,10 +139,6 @@ export function captureRangeContent(range, options) {
           return;
         }
         parentObject = getObject(parentNode);
-        if (parentObject && parentObject.tag === 'SPAN') {
-          // don't nest spans
-          parentObject = objectParents.get(parentObject);
-        }
         if (tagName === 'BR') {
           tag = tagName;
         } else {

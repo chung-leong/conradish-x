@@ -5,7 +5,7 @@ async function start() {
   await initializeStorage();
   const binary = [ false, true ];
   const filters = [ 'none', 'automatic', 'manual' ];
-  addCheckbox('contextMenu', binary, 'Add option to context menu');
+  addCheckbox('contextMenu', binary, 'Add item to browser context menu');
   addCheckbox('filter', filters, 'Filter page content');
   document.addEventListener('click', handleClick);
   document.addEventListener('change', handleChange);
