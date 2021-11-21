@@ -149,42 +149,50 @@ function isMultiparagraph(range) {
 }
 
 function atFootnoteNumber(range) {
+  // assume that the range has been normalized
   const { endContainer, endOffset } = range;
-  if (endContainer.nodeType === Node.TEXT_NODE) {
-    const { nodeValue } = endContainer;
-    if (endOffset > 0 && endOffset < nodeValue.length) {
-      // ignore whitespaces
-      if (nodeValue.substring(0, endOffset).trim()) {
-        return false;
-      }
+  if (endContainer.nodeType !== Node.TEXT_NODE) {
+    return false;
+  }
+  const { nodeValue, parentNode } = endContainer;
+  if (endOffset > 0 && endOffset < nodeValue.length) {
+    // ignore whitespaces before cursor
+    if (nodeValue.substring(0, endOffset).trim()) {
+      return false;
     }
   }
   const isFootnoteNumber = (node) => {
     return node.classList.contains('footnote-number');
   };
-  const getNextNode = (node) => {
-    const { nextSibling, parentNode } = node;
-    if (nextSibling) {
-      return nextSibling;
-    } else if (parentNode) {
-      getNextNode(parentNode);
-    }
-  };
-  const nextNode = getNextNode(endContainer);
-  if (nextNode && isFootnoteNumber(nextNode)) {
+  if (isFootnoteNumber(parentNode)) {
     return true;
   }
-  const getPreviousNode = (node) => {
-    const { previousSibling, parentNode } = node;
-    if (previousSibling) {
-      return previousSibling;
-    } else if (parentNode) {
-      getPreviousNode(parentNode);
+  if (endOffset === nodeValue.length) {
+    const getNextNode = (node) => {
+      const { nextSibling, parentNode } = node;
+      if (nextSibling) {
+        return nextSibling;
+      } else if (parentNode) {
+        getNextNode(parentNode);
+      }
+    };
+    const nextNode = getNextNode(endContainer);
+    if (nextNode && isFootnoteNumber(nextNode)) {
+      return true;
     }
-  };
-  const prevNode = getPreviousNode(endContainer);
-  if (prevNode && isFootnoteNumber(prevNode)) {
-    return true;
+  } else {
+    const getPreviousNode = (node) => {
+      const { previousSibling, parentNode } = node;
+      if (previousSibling) {
+        return previousSibling;
+      } else if (parentNode) {
+        getPreviousNode(parentNode);
+      }
+    };
+    const prevNode = getPreviousNode(endContainer);
+    if (prevNode && isFootnoteNumber(prevNode)) {
+      return true;
+    }
   }
   return false;
 }
