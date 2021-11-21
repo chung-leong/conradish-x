@@ -18,7 +18,8 @@
 
 #side-bar-top SECTION {
   display: flex;
-  padding: 16px 16px 0 16px;
+  padding: 0 16px 0 16px;
+  margin: 16px 0 16px 0;
   align-items: center;
 }
 
@@ -27,14 +28,17 @@
   border-bottom: 1px solid rgb(232, 234, 237);
 }
 
-#side-bar-top SECTION SELECT,
-#side-bar-top SECTION INPUT[type="text"] {
+#side-bar-top SECTION .control {
   flex-grow: 1;
   flex-shrink: 0;
   flex-basis: 135px;
 }
 
-#side-bar-top SECTION LABEL {
+#side-bar-top SECTION .control > SELECT {
+  width: 100%;
+}
+
+#side-bar-top SECTION .label {
   flex-grow: 1;
   flex-shrink: 1;
   flex-basis: 100px;
@@ -50,24 +54,13 @@
 
 .custom-margins {
   display: flex;
-  margin: 16px 26px 16px auto;
+  margin-top: 8px;
   border: 1px solid rgb(232, 234, 237);
-  height: 200px;
-  width: 178px;
+  height: 180px;
 }
 
 .custom-margins.hidden {
   display: none;
-}
-
-.custom-margins .column INPUT[type="text"] {
-  width: 54px !important;
-  margin: 1px 1px 1px 1px;
-  text-align: center;
-}
-
-.custom-margins .column INPUT[type="text"].invalid {
-  background-color: #ffaaaa;
 }
 
 .custom-margins .column {
@@ -92,6 +85,31 @@
 
 .custom-margins .column .row.bottom {
   align-items: flex-end;
+}
+
+.custom-margins .column INPUT {
+  width: 54px !important;
+  text-align: center;
+}
+
+.custom-margins .column INPUT.invalid {
+  background-color: rgb(255, 178, 178);
+}
+
+.custom-margins .top INPUT {
+  margin-top: -8px;
+}
+
+.custom-margins .left INPUT {
+  margin-left: -8px;
+}
+
+.custom-margins .bottom INPUT {
+  margin-bottom: -8px;
+}
+
+.custom-margins .right INPUT {
+  margin-right: -8px;
 }
 
 .speech-bubble {

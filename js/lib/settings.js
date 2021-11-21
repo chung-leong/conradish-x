@@ -14,6 +14,7 @@ export function applyStyles() {
           const justify = [ 'text', 'both' ].includes(settings.article.justification);
           rule.style.fontFamily = settings.article.fontFamily;
           rule.style.fontSize = settings.article.fontSize;
+          rule.style.lineHeight = settings.article.spacing;
           rule.style.textAlign = (justify) ? 'justify' : 'left';
         } else if (/#article\-text h\d/.test(selectorText)) {
           const justify = [ 'both' ].includes(settings.article.justification);
@@ -52,8 +53,16 @@ export function applyStyles() {
 }
 
 export function getDefaultSettings() {
-  const article = { fontFamily: 'Arial', fontSize: '12pt', justification: 'text' };
-  const footnote = { fontFamily: 'Arial', fontSize: '10pt' };
+  const article = {
+    fontFamily: 'Arial',
+    fontSize: '12pt',
+    justification: 'text',
+    spacing: 'normal',
+  };
+  const footnote = {
+    fontFamily: 'Arial',
+    fontSize: '10pt'
+  };
   const codes = (navigator.languages[0] || 'en-US').toLowerCase().split('-');
   const target = codes[0];
   const country = codes[1] || codes[0];
@@ -207,6 +216,28 @@ const possibleSettings = {
     {
       label: 'Text and headings',
       value: 'both'
+    },
+  ],
+  spacing: [
+    {
+      label: '1',
+      value: '1',
+    },
+    {
+      label: 'Normal',
+      value: 'normal',
+    },
+    {
+      label: '1.5',
+      value: '1.5',
+    },
+    {
+      label: '2',
+      value: '2',
+    },
+    {
+      label: '3',
+      value: '3',
     },
   ],
   paper: [

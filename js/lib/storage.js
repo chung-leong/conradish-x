@@ -35,10 +35,26 @@ export async function initializeStorage() {
     directory.sort();
   }
   settings = await get('.settings');
-  if (!settings) {
-    settings = getDefaultSettings();
+  const defaultSettings = getDefaultSettings();
+  if (settings) {
+    applyMissingDefault(settings, defaultSettings);
+  } else {
+    settings = defaultSettings;
   }
   initialized = true;
+}
+
+function applyMissingDefault(dest, src) {
+  for (const [ name, value ] of Object.entries(src)) {
+    if (dest[name] === undefined) {
+      dest[name] = value;
+    } else if (value instanceof Object) {
+      if (!(dest[name] instanceof Object)) {
+        dest[name] = {};
+      }
+      applyMissingDefault(dest[name], value);
+    }
+  }
 }
 
 export function findObjects(suffix) {

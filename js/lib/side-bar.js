@@ -21,25 +21,29 @@ export function createArticleNavigation() {
   addSection(top, 'To', targetLangSelect, true);
   // add font family and size dropdowns for main text
   const articleFontSelect = createFontFamilySelect(possible.fontFamily, settings.article.fontFamily);
-  articleFontSelect.dataset.section = 'article';
-  articleFontSelect.addEventListener('change', handleFontChange);
+  articleFontSelect.dataset.setting = 'article.fontFamily';
+  articleFontSelect.addEventListener('change', handleSettingChange);
   addSection(top, 'Font', articleFontSelect);
   const articleSizeSelect = createFontSizeSelect(possible.fontSize, settings.article.fontSize);
-  articleSizeSelect.dataset.section = 'article';
-  articleSizeSelect.addEventListener('change', handleFontSizeChange);
+  articleSizeSelect.dataset.setting = 'article.fontSize';
+  articleSizeSelect.addEventListener('change', handleSettingChange);
   addSection(top, 'Font size', articleSizeSelect);
-  // add font family and size dropdowns for footnotes
   const articleJustificationSelect = createSelect(possible.justification, settings.article.justification);
-  articleJustificationSelect.dataset.section = 'article';
-  articleJustificationSelect.addEventListener('change', handleJustificationChange);
+  articleJustificationSelect.dataset.setting = 'article.justification';
+  articleJustificationSelect.addEventListener('change', handleSettingChange);
   addSection(top, 'Justification', articleJustificationSelect);
+  const articleSpacingSelect = createSelect(possible.spacing, settings.article.spacing);
+  articleSpacingSelect.dataset.setting = 'article.spacing';
+  articleSpacingSelect.addEventListener('change', handleSettingChange);
+  addSection(top, 'Spacing', articleSpacingSelect);
+  // add font family and size dropdowns for footnotes
   const footnoteFontSelect = createFontFamilySelect(possible.fontFamily, settings.footnote.fontFamily);
-  footnoteFontSelect.dataset.section = 'footnote';
-  footnoteFontSelect.addEventListener('change', handleFontChange);
+  footnoteFontSelect.dataset.setting = 'footnote.fontFamily';
+  footnoteFontSelect.addEventListener('change', handleSettingChange);
   addSection(top, 'Footnote font', footnoteFontSelect);
   const footnoteSizeSelect = createFontSizeSelect(possible.fontSize, settings.footnote.fontSize);
-  footnoteSizeSelect.dataset.section = 'footnote';
-  footnoteSizeSelect.addEventListener('change', handleFontSizeChange);
+  footnoteSizeSelect.dataset.setting = 'footnote.fontSize';
+  footnoteSizeSelect.addEventListener('change', handleSettingChange);
   addSection(top, 'Footnote font size', footnoteSizeSelect, true);
   // add paper size dropdown
   const paperSelect = createSelect(possible.paper, settings.paper);
@@ -56,7 +60,7 @@ export function createArticleNavigation() {
     input.addEventListener('input', handleCustomMarginInput);
     input.addEventListener('blur', handleCustomMarginBlur);
   }
-  top.append(customMargins);
+  addSection(top, '', customMargins);
 
   // add button to bottom pane
   const bottom = document.getElementById('side-bar-bottom');
@@ -81,7 +85,10 @@ export function createArticleNavigation() {
 }
 
 function addSection(container, label, control, last = false) {
-  const section = e('SECTION', {}, [ e('LABEL', {}, label), control ]);
+  const section = e('SECTION', {}, [
+    e('LABEL', { className: 'label' }, label),
+    e('DIV', { className: 'control' }, control)
+  ]);
   if (last) {
     section.classList.add('last');
   }
@@ -140,22 +147,19 @@ function createSpeechBubble() {
   return e('DIV', { className: 'speech-bubble hidden' }, [ icon, message ]);
 }
 
-function handleFontChange(evt) {
+function handleSettingChange(evt) {
   const { target } = evt;
-  const { section } = target.dataset;
-  changeSettings(settings => settings[section].fontFamily = target.value);
-}
-
-function handleFontSizeChange(evt) {
-  const { target } = evt;
-  const { section } = target.dataset;
-  changeSettings(settings => settings[section].fontSize = target.value);
-}
-
-function handleJustificationChange(evt) {
-  const { target } = evt;
-  const { section } = target.dataset;
-  changeSettings(settings => settings[section].justification = target.value);
+  const { setting } = target.dataset;
+  const path = setting.split('.');
+  changeSettings((settings) => {
+    let section = settings;
+    while (path.length > 1) {
+      const name = path.shift();
+      section = section[name];
+    }
+    const name = path.shift();
+    section[name] = target.value
+  });
 }
 
 function handlePaperChange(evt) {
@@ -181,6 +185,7 @@ function handleMarginChange(evt) {
       customMargins.classList.add('hidden');
     } else {
       customMargins.classList.remove('hidden');
+      customMargins.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
   });
 }
