@@ -36,6 +36,60 @@ function removeContextMenu() {
   }
 }
 
+async function createDocument(tab) {
+  const codeURL = chrome.runtime.getURL('js/lib/capturing.js');
+  const settings = await getSettingsAsync();
+  await chrome.scripting.executeScript({
+    target: { allFrames: true, tabId: tab.id },
+    args: [ codeURL, settings.filter ],
+    func: async (codeURL, filter) => {
+      const selection = getSelection();
+      if (!selection.isCollapsed) {
+        // load the code for capturing only if the frame has selection
+        const { captureSelection } = await import(codeURL);
+        const doc = await captureSelection(selection, filter);
+        try {
+          chrome.runtime.sendMessage(undefined, { type: 'create', document: doc });
+        } catch (err) {
+          chrome.runtime.sendMessage(undefined, { type: 'error', message: err.message });
+          throw err;
+        }
+      }
+    }
+  });
+  if (chrome.runtime.lastError) {
+    console.error(chrome.runtime.lastError.message);
+  }
+}
+
+async function openDocument(key) {
+  const url = new URL(chrome.runtime.getURL('article.html'));
+  url.searchParams.set('t', key);
+  return openTab(url);
+}
+
+async function openDocumentList() {
+  const url = new URL(chrome.runtime.getURL('list.html'));
+  return openTab(url);
+}
+
+async function openTab(url) {
+  url = url.toString();
+  const [ tab ] = await chrome.tabs.query({ url });
+  if (tab) {
+    // highlight the tab and bring window into focus
+    const win = await chrome.tabs.highlight({
+      tabs: [ tab.index ],
+      windowId: tab.windowId
+    });
+    if (!win.focused) {
+      chrome.windows.update(win.id, { focused: true });
+    }
+  } else {
+    await chrome.tabs.create({ url });
+  }
+}
+
 async function handleSettings(evt) {
   if (!evt.detail.self) {
     const settings = await getSettingsAsync();
@@ -116,60 +170,6 @@ async function handleMenuClick(info, tab) {
   switch (info.menuItemId) {
     case 'create':
       return createDocument(tab);
-  }
-}
-
-async function createDocument(tab) {
-  const codeURL = chrome.runtime.getURL('js/lib/capturing.js');
-  const settings = await getSettingsAsync();
-  await chrome.scripting.executeScript({
-    target: { allFrames: true, tabId: tab.id },
-    args: [ codeURL, settings.filter ],
-    func: async (codeURL, filter) => {
-      const selection = getSelection();
-      if (!selection.isCollapsed) {
-        // load the code for capturing only if the frame has selection
-        const { captureSelection } = await import(codeURL);
-        const doc = await captureSelection(selection, filter);
-        try {
-          chrome.runtime.sendMessage(undefined, { type: 'create', document: doc });
-        } catch (err) {
-          chrome.runtime.sendMessage(undefined, { type: 'error', message: err.message });
-          throw err;
-        }
-      }
-    }
-  });
-  if (chrome.runtime.lastError) {
-    console.error(chrome.runtime.lastError.message);
-  }
-}
-
-async function openDocument(key) {
-  const url = new URL(chrome.runtime.getURL('article.html'));
-  url.searchParams.set('t', key);
-  return openTab(url);
-}
-
-async function openDocumentList() {
-  const url = new URL(chrome.runtime.getURL('list.html'));
-  return openTab(url);
-}
-
-async function openTab(url) {
-  url = url.toString();
-  const [ tab ] = await chrome.tabs.query({ url });
-  if (tab) {
-    // highlight the tab and bring window into focus
-    const win = await chrome.tabs.highlight({
-      tabs: [ tab.index ],
-      windowId: tab.windowId
-    });
-    if (!win.focused) {
-      chrome.windows.update(win.id, { focused: true });
-    }
-  } else {
-    await chrome.tabs.create({ url });
   }
 }
 
