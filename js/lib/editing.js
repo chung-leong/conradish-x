@@ -1,8 +1,7 @@
 import { e, separateWords } from './ui.js';
 import { adjustLayout, adjustFootnotes, findDeletedFootnote, annotateRange, saveDocument } from './layout.js';
 import { transverseRange } from './capturing.js';
-import { translate } from './translation.js';
-import { getSourceLanguage, getTargetLanguage } from './settings.js';
+import { translate, getSourceLanguage, getTargetLanguage } from './i18n.js';
 
 export function attachEditingHandlers() {
   document.addEventListener('keydown', handleKeyDown);

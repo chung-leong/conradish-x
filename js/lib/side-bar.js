@@ -1,7 +1,6 @@
 import { e, attachRippleEffectHandlers } from './ui.js';
-import { getSourceLanguages, getTargetLanguages } from './translation.js';
-import { getPossibleSettings, getPaperProperties, setSourceLanguage, getSourceLanguage, applyStyles } from './settings.js';
-import { getSettings, saveSettings } from './storage.js';
+import { setSourceLanguage, getSourceLanguage, getSourceLanguages, getTargetLanguages } from './i18n.js';
+import { getPossibleSettings, getPaperProperties, applyStyles, getSettings, saveSettings } from './settings.js';
 import { adjustLayout } from './layout.js';
 
 export function createArticleNavigation() {

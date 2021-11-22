@@ -1,3 +1,43 @@
+import { getSettings } from './settings.js';
+let sourceLanguage;
+
+export function getSourceLanguage() {
+  return sourceLanguage;
+}
+
+export function setSourceLanguage(lang) {
+  sourceLanguage = lang;
+}
+
+export function getTargetLanguage() {
+  const settings = getSettings();
+  return settings.target;
+}
+
+export function getSourceLanguages() {
+  const unknown = { value: '', label: 'Unknown' };
+  const list = [ unknown ];
+  for (const { code, name } of languages) {
+    list.push({ value: code, label: name });
+  }
+  return list;
+}
+
+export function getTargetLanguages() {
+  const none = { value: '', label: 'None' };
+  const list = [ none ];
+  for (const { code, name, variants } of languages) {
+    if (variants) {
+      for (const { code, name } of variants) {
+        list.push({ value: code, label: name });
+      }
+    } else {
+      list.push({ value: code, label: name });
+    }
+  }
+  return list;
+}
+
 export async function translate(original, sourceLang, targetLang, singleWord) {
   const result = { term: original, lang: `${sourceLang},${targetLang}` };
   try {
@@ -64,7 +104,7 @@ export async function translate(original, sourceLang, targetLang, singleWord) {
   return result;
 }
 
-function isCapitalized(word, lang) {
+export function isCapitalized(word, lang) {
   const c = word.charAt(0);
   if (c.toLocaleLowerCase(lang) !== c) {
     // see if it's all-cap
@@ -73,30 +113,6 @@ function isCapitalized(word, lang) {
     }
   }
   return false;
-}
-
-export function getSourceLanguages() {
-  const unknown = { value: '', label: 'Unknown' };
-  const list = [ unknown ];
-  for (const { code, name } of languages) {
-    list.push({ value: code, label: name });
-  }
-  return list;
-}
-
-export function getTargetLanguages() {
-  const none = { value: '', label: 'None' };
-  const list = [ none ];
-  for (const { code, name, variants } of languages) {
-    if (variants) {
-      for (const { code, name } of variants) {
-        list.push({ value: code, label: name });
-      }
-    } else {
-      list.push({ value: code, label: name });
-    }
-  }
-  return list;
 }
 
 const languages = [

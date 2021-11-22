@@ -1,5 +1,6 @@
 import { e } from './ui.js';
-import { applyStyles, getPageProperties, setSourceLanguage, getSourceLanguage } from './settings.js';
+import { applyStyles, getPageProperties } from './settings.js';
+import { setSourceLanguage, getSourceLanguage } from './i18n.js';
 import { insertContent, replaceUselessElements, removeEmptyNodes } from './capturing.js';
 import { loadObject, saveObject } from './storage.js';
 

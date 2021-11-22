@@ -1,7 +1,8 @@
-import { getSettings } from './storage.js';
+import { getSettings, saveSettings } from './storage.js';
+
+export { getSettings, saveSettings };
 
 let footerMarginTop;
-let sourceLanguage;
 
 export function applyStyles() {
   const settings = getSettings();
@@ -92,19 +93,6 @@ export function getPageProperties() {
   const { width, height, size, defaultMargins } = paper;
   const margins = (settings.margins === 'custom') ? settings.customMargins : defaultMargins;
   return { width, height, size, margins, footerGap: footerMarginTop };
-}
-
-export function getTargetLanguage() {
-  const settings = getSettings();
-  return settings.target;
-}
-
-export function getSourceLanguage() {
-  return sourceLanguage;
-}
-
-export function setSourceLanguage(lang) {
-  sourceLanguage = lang;
 }
 
 const possibleSettings = {
