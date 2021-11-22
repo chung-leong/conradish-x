@@ -128,6 +128,10 @@ export function captureRangeContent(range, options) {
     return object;
   };
   const getRootObject = (node) => {
+    // if we're going to put stuff into the root instead, we need to make
+    // sure that things don't get placed into the parentNode's object
+    // (if there's one created earlier)
+    nodeObjects.delete(node);
     for (let n = node; n; n = n.parentNode) {
       if (n === rootNode) {
         return root;
@@ -468,7 +472,7 @@ function filterContent(root, filter, objectStyles, objectRects) {
     // calculate the "junk" scores
     const scoreColor = calculateColorScore(color, maxColor);
     const scorePos = calculatePositionScore(rect, maxRect);
-    const isHeading = /^H\d$/.test(object.tag);
+    const isHeading = /^H[123]$/.test(object.tag);
     // greater tolerance for heading
     const limitPos = (isHeading) ? 20 : 10;
     const limitColor = (isHeading) ? 10 : 5;
@@ -602,14 +606,20 @@ function canBeEmpty(tag) {
 }
 
 export function removeEmptyNodes(root) {
+  const merge = (item, i, arr) => {
+    // merge to previous string
+    if (i > 0 && arr && typeof(arr[i - 1]) === 'string') {
+      arr[i - 1] += item;
+      return true;
+    }
+    return false;
+  };
   const clean = (item, i, arr) => {
     if (typeof(item) === 'string') {
       if (item.length === 0) {
         // remove empty string
         return;
-      } else if (arr && typeof(arr[i - 1]) === 'string') {
-        // merge to previous string
-        arr[i - 1] += item;
+      } else if (merge(item, i, arr)) {
         return;
       }
     } else if (item instanceof Array) {
@@ -617,8 +627,7 @@ export function removeEmptyNodes(root) {
       if (item.length === 0) {
         return;
       } else if (item.length === 1) {
-        if (typeof(item[0]) === 'string' && arr && typeof(arr[i - 1]) === 'string') {
-          arr[i - 1] += item[0];
+        if (typeof(item[0]) === 'string' && merge(item[0], i, arr)) {
           return;
         }
         return item[0];
