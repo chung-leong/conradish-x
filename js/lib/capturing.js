@@ -98,23 +98,68 @@ export function captureRangeContent(range, options) {
     const defaultStyle = getDefaultStyle(object);
     return (object.style) ? { ...defaultStyle, ...object.style } : defaultStyle;
   };
-  let inlineOnly = true;
-  const isLink = (node) => {
-    const links = node.getElementsByTagName('A');
-    if (links.length > 0) {
-      return true;
-    }
-    for (let n = node; n && n !== rootNode; n = n.parentNode) {
-      if (n.tagName === 'A') {
-        const parentText = n.textContent.trim();
-        const nodeText = node.textContent;
-        if (parentText.length - nodeText.length <= 2) {
-          // the link is mostly just the node in question
-          return true;
+  const isSuperscriptLink = (node) => {
+    const { verticalAlign } = getNodeStyle(node);
+    if (verticalAlign === 'super') {
+      const links = node.getElementsByTagName('A');
+      if (links.length > 0) {
+        return true;
+      }
+      // see if a parent node is a link
+      for (let n = node; n && n !== rootNode; n = n.parentNode) {
+        if (n.tagName === 'A' && n.href) {
+          const parentText = n.innerText.trim();
+          const nodeText = node.innerText;
+          if (parentText.length - nodeText.length <= 2) {
+            // the link is mostly just the node in question
+            return true;
+          }
         }
       }
     }
     return false;
+  };
+  const getLinkParentObject = (node) => {
+    let parentNode, linkNode;
+    if (node.tagName === 'A' && node.href) {
+      // while styling tags are used to style a link like this:
+      // <i><b><a href="..."> ... </a></b></i>
+      // return the parent of <i>
+      const { innerText } = node;
+      for (let n = node.parentNode; n && n !== rootNode; n = n.parentNode) {
+        const { display } = getNodeStyle(n);
+        if (display !== 'inline' || n.innerText !== innerText) {
+          parentNode = n;
+          linkNode = node;
+          break;
+        }
+      }
+    } else if (node.tagName !== 'A') {
+      // while a hyperlink wraps styling tags like this:
+      // <a href="..."><i><b> ... </b></i></a>
+      // return the parent of <a> when node is <b>
+      for (let n = node; n && n !== rootNode; n = n.parentNode) {
+        if (n.tagName === 'A' && n.href) {
+          const { innerText } = node;
+          if (n.innerText === innerText) {
+            linkNode = n;
+            parentNode = n.parentNode;
+            break;
+          }
+        }
+      }
+    }
+    if (parentNode && linkNode) {
+      const parentObject = getObject(parentNode);
+      // remember that the parent has links
+      const parentLinks = objectLinks.get(parentObject);
+      if (parentLinks) {
+        parentLinks.push(linkNode);
+      } else {
+        objectLinks.set(parentObject, [ linkNode ]);
+      }
+      return parentObject;
+    }
   };
   const getObject = (node) => {
     // see if there's an object for this node already
@@ -150,6 +195,7 @@ export function captureRangeContent(range, options) {
       }
     }
   };
+  let inlineOnly = true;
   const createObject = (node) => {
     const { parentNode } = node;
     const style = getNodeStyle(node);
@@ -165,32 +211,24 @@ export function captureRangeContent(range, options) {
     }
     const { tagName } = node;
     switch (tagName) {
-      case 'A':
-        // don't include any hyperlinks (or anchors)
-        const anchorParentObject = getObject(parentNode);
-        if (node.href && anchorParentObject) {
-          // remember that the parent node has links
-          const parentObjectLinks = objectLinks.get(anchorParentObject);
-          if (parentObjectLinks) {
-            parentObjectLinks.push(node);
-          } else {
-            objectLinks.set(anchorParentObject, [ node ]);
-          }
-        }
-        return anchorParentObject;
+      // skip these
       case 'BUTTON':
       case 'FIGCAPTION':
       case 'NOSCRIPT':
-        // skip these
         return;
     }
+    // remove sup tags that are links
+    if (isSuperscriptLink(node)) {
+      return;
+    }
     let tag, parentObject;
+    // don't include any hyperlinks
+    parentObject = getLinkParentObject(node);
+    if (parentObject) {
+      return parentObject;
+    }
     switch (display) {
       case 'inline':
-        // remove sup tags that are links
-        if (style.verticalAlign === 'super' && isLink(node)) {
-          return;
-        }
         parentObject = getObject(parentNode);
         if (tagName === 'BR') {
           tag = tagName;
