@@ -330,9 +330,9 @@ export function captureRangeContent(range, options) {
   removeEmptyNodes(root);
   if (filter === 'automatic' || filter === 'manual') {
     // filter out links
-    // filterLinks(root, filter, objectLinks);
+    filterLinks(root, filter, objectLinks);
     // filter out content that's probably garbage
-    // filterContent(root, filter, objectStyles, objectRects);
+    filterContent(root, filter, objectStyles, objectRects);
   }
   return root;
 }
@@ -468,11 +468,15 @@ function filterContent(root, filter, objectStyles, objectRects) {
     // calculate the "junk" scores
     const scoreColor = calculateColorScore(color, maxColor);
     const scorePos = calculatePositionScore(rect, maxRect);
+    const isHeading = /^H\d$/.test(object.tag);
+    // greater tolerance for heading
+    const limitPos = (isHeading) ? 20 : 10;
+    const limitColor = (isHeading) ? 10 : 5;
     let junkFactor = 0;
-    if (scoreColor / charCount > 5 || scorePos / charCount > 10) {
+    if (scoreColor / charCount > limitColor || scorePos / charCount > limitPos) {
       // probably junk
       junkFactor = 1;
-    } else if (scoreColor > 50 || scorePos > 100) {
+    } else if (scoreColor > (limitColor * 10) || scorePos > (limitPos * 10)) {
       // might be junk
       junkFactor = 0.5;
     }
