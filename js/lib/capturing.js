@@ -56,6 +56,7 @@ export function captureRangeContent(range, options) {
   const objectParents = new Map;
   const objectStyles = new Map([ [ root, getComputedStyle(rootNode) ] ]);
   const objectRects = new Map;
+  const objectLinks = new Map;
   const rootClientRect = rootNode.getBoundingClientRect();
   const getRect = (node) => {
     const clientRect = node.getBoundingClientRect();
@@ -68,16 +69,6 @@ export function captureRangeContent(range, options) {
     return { top, left, bottom, right, width, height };
   };
   const bodyRect = getRect(rootNode.ownerDocument.body);
-  const isOutside = (rect) => {
-    const { top, left, bottom, right, width, height } = rect;
-    if (width === 0 || height === 0) {
-      return true;
-    }
-    if (right < bodyRect.left || left > bodyRect.right || bottom < bodyRect.top || top > bodyRect.bottom) {
-      return true;
-    }
-    return false;
-  };
   const getNodeStyle = (node) => {
     let style = nodeStyles.get(node);
     if (style === undefined) {
@@ -149,7 +140,7 @@ export function captureRangeContent(range, options) {
         return;
       }
       const rect = getRect(node);
-      if (isOutside(rect)) {
+      if (rect.width === 0 || rect.height === 0) {
         return;
       }
     }
@@ -162,14 +153,24 @@ export function captureRangeContent(range, options) {
       return;
     }
     const rect = getRect(node);
-    if (isOutside(rect)) {
+    if (rect.width === 0 || rect.height === 0) {
       return;
     }
     const { tagName } = node;
     switch (tagName) {
       case 'A':
         // don't include any hyperlinks (or anchors)
-        return getObject(parentNode);
+        const anchorParentObject = getObject(parentNode);
+        if (node.href && anchorParentObject) {
+          // remember that the parent node has links
+          const parentObjectLinks = objectLinks.get(anchorParentObject);
+          if (parentObjectLinks) {
+            parentObjectLinks.push(node);
+          } else {
+            objectLinks.set(anchorParentObject, [ node ]);
+          }
+        }
+        return anchorParentObject;
       case 'BUTTON':
       case 'FIGCAPTION':
       case 'NOSCRIPT':
@@ -312,6 +313,10 @@ export function captureRangeContent(range, options) {
       }
     }
   });
+  // change the root tag to P if all we have are inline elements
+  if (inlineOnly) {
+    root.tag = 'P';
+  }
   // apply white-space rules
   collapseWhitespaces(root, objectStyles);
   // replace spans that don't have any styling information with just its
@@ -320,77 +325,11 @@ export function captureRangeContent(range, options) {
   replaceUselessElements(root);
   // remove empty nodes
   removeEmptyNodes(root);
-  // filter out content that's probably garbage
   if (filter === 'automatic' || filter === 'manual') {
-    if (root.content instanceof Array && !inlineOnly) {
-      const objects = root.content.filter(i => i instanceof Object);
-      // figure out the dominant color and position of the content
-      // most of the text we want should have the same color and similar
-      // left and right boundaries
-      const objectCounts = new Map;
-      const leftCounts = new Map;
-      const rightCounts = new Map;
-      const colorCounts = new Map;
-      for (const object of objects) {
-        const rect = objectRects.get(object);
-        const style = objectStyles.get(object);
-        const charCount = getCharacterCount(object);
-        const { color } = style;
-        const { left, right } = rect;
-        objectCounts.set(object, charCount);
-        colorCounts.set(color, charCount + (colorCounts.get(color) || 0)) ;
-        leftCounts.set(left, charCount + (leftCounts.get(left) || 0)) ;
-        rightCounts.set(right, charCount + (rightCounts.get(right) || 0)) ;
-      }
-      const getMaxKey = (map) => {
-        let maxKey, maxValue;
-        for (const [ key, value ] of map.entries()) {
-          if (!(maxValue > value)) {
-            maxValue = value;
-            maxKey = key;
-          }
-        }
-        return maxKey;
-      };
-      const maxColor = getMaxKey(colorCounts);
-      const maxLeft = getMaxKey(leftCounts);
-      const maxRight = getMaxKey(rightCounts);
-      const maxRect = { left: maxLeft, right: maxRight };
-      // remove paragraphs that are way off
-      alter(root.content, (object) => {
-        if (object instanceof Object) {
-          const rect = objectRects.get(object);
-          const style = objectStyles.get(object);
-          const charCount = objectCounts.get(object);
-          const color = style.color;
-          // calculate the "junk" scores
-          const scoreColor = calculateColorScore(color, maxColor);
-          const scorePos = calculatePositionScore(rect, maxRect);
-          let junkFactor = 0;
-          if (scoreColor / charCount > 5 || scorePos / charCount > 10) {
-            // probably junk
-            junkFactor = 1;
-          } else if (scoreColor > 50 || scorePos > 100) {
-            // might be junk
-            junkFactor = 0.5;
-          }
-          if (junkFactor > 0) {
-            if (junkFactor === 1 && filter === 'automatic') {
-              // throw it out now
-              return;
-            }
-            // mark it as junk and wait for the user to decide what to do
-            object.junk = junkFactor;
-          }
-          //object.score = { color: scoreColor / charCount, position: scorePos / charCount};
-        }
-        return object;
-      });
-    }
-  }
-  // change the root tag to P if all we have are inline elements
-  if (inlineOnly) {
-    root.tag = 'P';
+    // filter out links
+    filterLinks(root, filter, objectLinks);
+    // filter out content that's probably garbage
+    filterContent(root, filter, objectStyles, objectRects);
   }
   return root;
 }
@@ -420,15 +359,144 @@ export function insertContent(object, content) {
   }
 }
 
+function filterLinks(root, filter, objectLinks) {
+  if (!(root.content instanceof Array) || root.tag === 'P') {
+    return;
+  }
+  const calculateLinkScore = (object) => {
+    const links = objectLinks.get(object);
+    if (links && links.length === 1) {
+      const objectText = getPlainText(object).trim();
+      const linkText = links[0].innerText.trim();
+      if (objectText === linkText) {
+        return 1;
+      } else if (linkText.length / objectText.length >= 0.6) {
+        return 0.5;
+      }
+    }
+    return 0;
+  };
+  alterObjects(root.content, (object) => {
+    let junkFactor = 0;
+    if (object.tag === 'UL' || object.tag === 'OL') {
+      // see if the list is nothing but links
+      if (object.content instanceof Array) {
+        const scores = object.content.map(calculateLinkScore);
+        // if every item is mostly link, then it's probably junk
+        if (scores.every(s => s === 1)) {
+          junkFactor = 1;
+        } else if (scores.every(s => s >= 0.5)) {
+          junkFactor = 0.5;
+        }
+      }
+    } else {
+      junkFactor = calculateLinkScore(object);
+    }
+    return rejectJunk(object, filter, junkFactor);
+  });
+}
+
+function filterContent(root, filter, objectStyles, objectRects) {
+  if (!(root.content instanceof Array) || root.tag === 'P') {
+    return;
+  }
+  // figure out the dominant color and position of the content
+  // most of the text we want should have the same color and similar
+  // left and right boundaries
+  const objectCounts = new Map;
+  const leftCounts = new Map;
+  const rightCounts = new Map;
+  const colorCounts = new Map;
+  for (const object of root.content) {
+    if (object instanceof Object) {
+      const rect = objectRects.get(object);
+      const style = objectStyles.get(object);
+      const charCount = getCharacterCount(object);
+      const { color } = style;
+      const { left, right } = rect;
+      objectCounts.set(object, charCount);
+      colorCounts.set(color, charCount + (colorCounts.get(color) || 0)) ;
+      leftCounts.set(left, charCount + (leftCounts.get(left) || 0)) ;
+      rightCounts.set(right, charCount + (rightCounts.get(right) || 0)) ;
+    }
+  }
+  const getMaxKey = (map) => {
+    let maxKey, maxValue;
+    for (const [ key, value ] of map.entries()) {
+      if (!(maxValue > value)) {
+        maxValue = value;
+        maxKey = key;
+      }
+    }
+    return maxKey;
+  };
+  const maxColor = getMaxKey(colorCounts);
+  const maxLeft = getMaxKey(leftCounts);
+  const maxRight = getMaxKey(rightCounts);
+  const maxRect = { left: maxLeft, right: maxRight };
+  const calculatePositionScore = (rect1, rect2) => {
+    const leftDiff = rect1.left - rect2.left;
+    const rightDiff = rect2.right - rect1.right;
+    return Math.abs(leftDiff + rightDiff);
+  };
+  const calculateColorScore = (color1, color2, charCount) => {
+    const parseRGB = (color) => {
+      const m = color.replace(/[rgba\(\)]/, '').split(',');
+      const r = parseInt(m[0]) || 255;
+      const g = parseInt(m[1]) || 255;
+      const b = parseInt(m[2]) || 255;
+      const a = parseFloat(m[3]) || 1;
+      return [ r, g, b, a ];
+    };
+    const [ r1, g1, b1, a1 ] = parseRGB(color1);
+    const [ r2, g2, b2, a2 ] = parseRGB(color2);
+    const diffR = Math.abs(r1 - r2);
+    const diffG = Math.abs(g1 - g2);
+    const diffB = Math.abs(b1 - b2);
+    const diffA = Math.abs(a1 - a2) * 255;
+    return diffR + diffG + diffB + diffA;
+  };
+  // remove paragraphs that are way off
+  alterObjects(root.content, (object) => {
+    const rect = objectRects.get(object);
+    const style = objectStyles.get(object);
+    const charCount = objectCounts.get(object);
+    const color = style.color;
+    // calculate the "junk" scores
+    const scoreColor = calculateColorScore(color, maxColor);
+    const scorePos = calculatePositionScore(rect, maxRect);
+    let junkFactor = 0;
+    if (scoreColor / charCount > 5 || scorePos / charCount > 10) {
+      // probably junk
+      junkFactor = 1;
+    } else if (scoreColor > 50 || scorePos > 100) {
+      // might be junk
+      junkFactor = 0.5;
+    }
+    //object.score = { color: scoreColor / charCount, position: scorePos / charCount};
+    return rejectJunk(object, filter, junkFactor)
+  });
+}
+
+function rejectJunk(object, filter, junkFactor) {
+  if (junkFactor > 0) {
+    if (junkFactor === 1 && filter === 'automatic') {
+      // throw it out now
+      return;
+    }
+    if (!object.junk || junkFactor < object.junk) {
+      // mark it as junk and wait for the user to decide what to do
+      object.junk = junkFactor;
+    }
+  }
+  return object;
+}
+
 function getCharacterCount(content) {
   if (typeof(content) === 'string') {
     return content.length;
   } else if (content instanceof Array) {
-    let length = 0;
-    for (const item of content) {
-      length += getCharacterCount(item);
-    }
-    return length;
+    return content.reduce((t, i) => t + getCharacterCount(i), 0);
   } else if (content instanceof Object) {
     return getCharacterCount(content.content);
   } else {
@@ -436,28 +504,16 @@ function getCharacterCount(content) {
   }
 }
 
-function calculatePositionScore(rect1, rect2) {
-  const leftDiff = rect1.left - rect2.left;
-  const rightDiff = rect2.right - rect1.right;
-  return Math.abs(leftDiff + rightDiff);
-}
-
-function calculateColorScore(color1, color2, charCount) {
-  const parseRGB = (color) => {
-    const m = color.replace(/[rgba\(\)]/, '').split(',');
-    const r = parseInt(m[0]) || 255;
-    const g = parseInt(m[1]) || 255;
-    const b = parseInt(m[2]) || 255;
-    const a = parseFloat(m[3]) || 1;
-    return [ r, g, b, a ];
-  };
-  const [ r1, g1, b1, a1 ] = parseRGB(color1);
-  const [ r2, g2, b2, a2 ] = parseRGB(color2);
-  const diffR = Math.abs(r1 - r2);
-  const diffG = Math.abs(g1 - g2);
-  const diffB = Math.abs(b1 - b2);
-  const diffA = Math.abs(a1 - a2) * 255;
-  return diffR + diffG + diffB + diffA;
+function getPlainText(content) {
+  if (typeof(content) === 'string') {
+    return content;
+  } else if (content instanceof Array) {
+    return content.map(getPlainText).join('');
+  } else if (content instanceof Object) {
+    return getPlainText(content.content);
+  } else {
+    return '';
+  }
 }
 
 const AT_BEGINNING = 0x0001;
@@ -520,16 +576,14 @@ function collapseWhitespaces(object, styleMap, pos = AT_BEGINNING | AT_END) {
 
 export function replaceUselessElements(object) {
   if (object.content instanceof Array) {
-    alter(object.content, (item) => {
-      if (item instanceof Object) {
-        if (item.tag === 'SPAN' && !item.style) {
-          return item.content;
-        }
-        if (item.tag === 'BR') {
-          return '\n';
-        }
-        replaceUselessElements(item);
+    alterObjects(object.content, (item) => {
+      if (item.tag === 'SPAN' && !item.style) {
+        return item.content;
       }
+      if (item.tag === 'BR') {
+        return '\n';
+      }
+      replaceUselessElements(item);
       return item;
     });
   }
@@ -629,6 +683,10 @@ async function detectLanguage(text) {
       resolve(lang);
     });
   });
+}
+
+function alterObjects(arr, cb) {
+  alter(arr, i => (i instanceof Object) ? cb(i) : i);
 }
 
 function alter(arr, cb) {
