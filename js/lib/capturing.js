@@ -63,7 +63,20 @@ export function captureRangeContent(range, options) {
     const left = clientRect.left - rootClientRect.left;
     const bottom = clientRect.bottom - rootClientRect.top;
     const right = clientRect.right - rootClientRect.left;
-    return { top, left, bottom, right };
+    const width = right - left;
+    const height = bottom - top;
+    return { top, left, bottom, right, width, height };
+  };
+  const bodyRect = getRect(rootNode.ownerDocument.body);
+  const isOutside = (rect) => {
+    const { top, left, bottom, right, width, height } = rect;
+    if (width === 0 || height === 0) {
+      return true;
+    }
+    if (right < bodyRect.left || left > bodyRect.right || bottom < bodyRect.top || top > bodyRect.bottom) {
+      return true;
+    }
+    return false;
   };
   const getNodeStyle = (node) => {
     let style = nodeStyles.get(node);
@@ -113,11 +126,43 @@ export function captureRangeContent(range, options) {
     }
     return false;
   };
+  const getObject = (node) => {
+    // see if there's an object for this node already
+    let object = nodeObjects.get(node);
+    if (object !== undefined) {
+      return object;
+    }
+    // create it
+    object = createObject(node) || null;
+    nodeObjects.set(node, object);
+    return object;
+  };
+  const getRootObject = (node) => {
+    for (let n = node; n; n = n.parentNode) {
+      if (n === rootNode) {
+        return root;
+      }
+      // make sure the node isn't hidden
+      const style = getNodeStyle(node);
+      const { display, visibility } = style;
+      if (!display || display === 'none' || visibility === 'hidden') {
+        return;
+      }
+      const rect = getRect(node);
+      if (isOutside(rect)) {
+        return;
+      }
+    }
+  };
   const createObject = (node) => {
     const { parentNode } = node;
     const style = getNodeStyle(node);
     const { display, visibility } = style;
-    if (display === 'none' || visibility === 'hidden') {
+    if (!display || display === 'none' || visibility === 'hidden') {
+      return;
+    }
+    const rect = getRect(node);
+    if (isOutside(rect)) {
       return;
     }
     const { tagName } = node;
@@ -150,7 +195,7 @@ export function captureRangeContent(range, options) {
       case 'flex': case 'inline-flex':
       case 'grid': case 'inline-grid':
         // block elements all go into the root
-        parentObject = root;
+        parentObject = getRootObject(parentNode);
         switch (tagName) {
           case 'H1': case 'H2': case 'H3': case 'H4': case 'H5': case 'H6':
           case 'UL': case 'OL':
@@ -171,7 +216,7 @@ export function captureRangeContent(range, options) {
         }
         break;
       case 'table':
-        parentObject = root;
+        parentObject = getRootObject(parentNode);
         tag = 'TABLE';
         break;
       case 'table-row-group':
@@ -208,7 +253,6 @@ export function captureRangeContent(range, options) {
         break;
     }
     if (parentObject && tag) {
-      const rect = getRect(node);
       const object = { tag, content: undefined };
       const newStyle = {};
       const parentStyle = getTextStyle(parentObject);
@@ -249,25 +293,17 @@ export function captureRangeContent(range, options) {
       return object;
     }
   };
-  const getObject = (node) => {
-    // see if there's an object for this node already
-    let object = nodeObjects.get(node);
-    if (object !== undefined) {
-      return object;
-    }
-    // create it
-    object = createObject(node) || null;
-    nodeObjects.set(node, object);
-    return object;
-  };
   // walk through the range and build the object tree
   transverseRange(range, (node, startOffset, endOffset) => {
     const { nodeType, nodeValue, parentNode } = node;
     if (nodeType === Node.TEXT_NODE) {
-      const parentObject = getObject(parentNode);
-      if (parentObject) {
-        const text = nodeValue.substring(startOffset, endOffset);
-        insertContent(parentObject, text);
+      const { userSelect } = getNodeStyle(parentNode);
+      if (userSelect !== 'none') {
+        const parentObject = getObject(parentNode);
+        if (parentObject) {
+          const text = nodeValue.substring(startOffset, endOffset);
+          insertContent(parentObject, text);
+        }
       }
     } else if (nodeType === Node.ELEMENT_NODE) {
       // create these tags even when they don't contain any text
