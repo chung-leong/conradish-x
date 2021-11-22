@@ -68,7 +68,6 @@ export function captureRangeContent(range, options) {
     const height = bottom - top;
     return { top, left, bottom, right, width, height };
   };
-  const bodyRect = getRect(rootNode.ownerDocument.body);
   const getNodeStyle = (node) => {
     let style = nodeStyles.get(node);
     if (style === undefined) {
@@ -139,9 +138,11 @@ export function captureRangeContent(range, options) {
       if (!display || display === 'none' || visibility === 'hidden') {
         return;
       }
-      const rect = getRect(node);
-      if (rect.width === 0 || rect.height === 0) {
-        return;
+      if (!canBeEmpty(node.tagName)) {
+        const rect = getRect(node);
+        if (rect.width === 0 || rect.height === 0) {
+          return;
+        }
       }
     }
   };
@@ -153,8 +154,10 @@ export function captureRangeContent(range, options) {
       return;
     }
     const rect = getRect(node);
-    if (rect.width === 0 || rect.height === 0) {
-      return;
+    if (!canBeEmpty(node.tagName)) {
+      if (rect.width === 0 || rect.height === 0) {
+        return;
+      }
     }
     const { tagName } = node;
     switch (tagName) {
@@ -327,9 +330,9 @@ export function captureRangeContent(range, options) {
   removeEmptyNodes(root);
   if (filter === 'automatic' || filter === 'manual') {
     // filter out links
-    filterLinks(root, filter, objectLinks);
+    // filterLinks(root, filter, objectLinks);
     // filter out content that's probably garbage
-    filterContent(root, filter, objectStyles, objectRects);
+    // filterContent(root, filter, objectStyles, objectRects);
   }
   return root;
 }
@@ -516,74 +519,67 @@ function getPlainText(content) {
   }
 }
 
-const AT_BEGINNING = 0x0001;
-const AT_END = 0x0002;
-
-function applyWhitespaceRule(s, ws, pos) {
-  if (ws === 'normal' || ws === 'nowrap') {
-    s = s.replace(/\r?\n/g, ' ');
-  } else {
-    s = s.replace(/\r\n/g, '\n');
-  }
-  if (ws === 'normal' || ws === 'nowrap' || ws === 'pre-line') {
-    s = s.replace(/\s+/g, ' ');
-  }
-  if (ws === 'normal'  || ws === 'nowrap' || ws === 'pre-line') {
-    if (pos & AT_BEGINNING) {
-      s = s.trimLeft();
+function collapseWhitespaces(root, styleMap) {
+  const trim = (text, whiteSpace, atStart, atEnd) => {
+    if (whiteSpace === 'normal' || whiteSpace === 'nowrap') {
+      text = text.replace(/\r?\n/g, ' ');
+    } else {
+      text = text.replace(/\r\n/g, '\n');
     }
-    if (pos & AT_END) {
-      s = s.trimRight();
+    if (whiteSpace === 'normal' || whiteSpace === 'nowrap' || whiteSpace === 'pre-line') {
+      text = text.replace(/\s+/g, ' ');
     }
-  }
-  return s;
-}
-
-function collapseWhitespaces(object, styleMap, pos = AT_BEGINNING | AT_END) {
-  const style = styleMap.get(object);
-  const ws = style.whiteSpace;
-  const inline = style.display.includes('inline');
-  if (!inline) {
-    pos = AT_BEGINNING | AT_END;
-  }
-  if (typeof(object.content) === 'string') {
-    object.content = applyWhitespaceRule(object.content, ws, pos);
-  } else if (object.content instanceof Array) {
-    let mask = AT_BEGINNING;
-    alter(object.content, (item, i, arr) => {
+    if (whiteSpace === 'normal'  || whiteSpace === 'nowrap' || whiteSpace === 'pre-line') {
+      if (atStart) {
+        text = text.trimLeft();
+      }
+      if (atEnd) {
+        text = text.trimRight();
+      }
+    }
+    return text;
+  };
+  const collapse = (object, atStart, atEnd) => {
+    const style = styleMap.get(object);
+    const { whiteSpace } = style;
+    const inline = (object.tag === 'SPAN');
+    let childAtStart = (inline) ? atStart : true;
+    let childAtEnd = false;
+    const children = (object.content instanceof Array) ? object.content : [ object.content ];
+    alter(children, (item, i, arr) => {
       if (i === arr.length - 1) {
-        // we've reached the end
-        mask |= AT_END;
+        // if the element is inline, then it's only at an end when
+        // the element itself is at an end
+        childAtEnd = (inline) ? atEnd : true;
       }
-      let result, newLine = false;
+      let result = item, newLine = false;
       if (typeof(item) === 'string') {
-        result = applyWhitespaceRule(item, ws, pos & mask);
+        result = trim(item, whiteSpace, childAtStart, childAtEnd);
       } else if (item instanceof Object) {
-        newLine = collapseWhitespaces(item, styleMap, pos & mask);
-        result = item;
+        newLine = collapse(item, childAtStart, childAtEnd);
       }
-      if (newLine) {
-        // restart the line after a block element or <BR>
-        mask |= AT_BEGINNING;
-      } else {
-        mask &= ~AT_BEGINNING;
-      }
+      // restart the line after a block element or <br>
+      childAtStart = newLine;
       return result;
     });
-  }
-  return !inline || object.tag === 'BR';
+    if (object.content !== children) {
+      object.content = children[0];
+    }
+    return (inline) ? childAtStart : true;
+  };
+  collapse(root);
 }
 
 export function replaceUselessElements(object) {
   if (object.content instanceof Array) {
     alterObjects(object.content, (item) => {
+      replaceUselessElements(item);
       if (item.tag === 'SPAN' && !item.style) {
         return item.content;
       }
       if (item.tag === 'BR') {
         return '\n';
       }
-      replaceUselessElements(item);
       return item;
     });
   }
@@ -601,34 +597,40 @@ function canBeEmpty(tag) {
   }
 }
 
-export function removeEmptyNodes(object) {
-  if (object.content instanceof Array) {
-    alter(object.content, (item, i, arr) => {
-      if (typeof(item) === 'string') {
-        if (item.length === 0) {
-          // remove empty string
-          return;
-        } else if (typeof(arr[i - 1]) === 'string') {
-          // merge to previous string
-          arr[i - 1] += item;
+export function removeEmptyNodes(root) {
+  const clean = (item, i, arr) => {
+    if (typeof(item) === 'string') {
+      if (item.length === 0) {
+        // remove empty string
+        return;
+      } else if (arr && typeof(arr[i - 1]) === 'string') {
+        // merge to previous string
+        arr[i - 1] += item;
+        return;
+      }
+    } else if (item instanceof Array) {
+      alter(item, clean);
+      if (item.length === 0) {
+        return;
+      } else if (item.length === 1) {
+        if (typeof(item[0]) === 'string' && arr && typeof(arr[i - 1]) === 'string') {
+          arr[i - 1] += item[0];
           return;
         }
-      } else if (item instanceof Object) {
-        removeEmptyNodes(item);
-        if (!item.content || item.content.length === 0) {
-          // it's empty--remove it if it's not one of the special ones like <hr>
-          if (!canBeEmpty(item.tag)) {
-            return;
-          }
+        return item[0];
+      }
+    } else if (item instanceof Object) {
+      item.content = clean(item.content);
+      if (!item.content) {
+        // it's empty--remove it if it's not one of the special ones like <hr>
+        if (!canBeEmpty(item.tag)) {
+          return;
         }
       }
-      return item;
-    });
-    // don't need an array when there's just one item
-    if (object.content.length === 1) {
-      object.content = object.content[0];
     }
-  }
+    return item;
+  };
+  clean(root);
 }
 
 function getTitle() {
@@ -686,7 +688,7 @@ async function detectLanguage(text) {
 }
 
 function alterObjects(arr, cb) {
-  alter(arr, i => (i instanceof Object) ? cb(i) : i);
+  alter(arr, (o, i, arr) => (o instanceof Object) ? cb(o, i, arr) : o);
 }
 
 function alter(arr, cb) {
