@@ -50,6 +50,22 @@ export function captureRangeContent(range, options) {
   if (rootNode.nodeType === Node.TEXT_NODE) {
     rootNode = rootNode.parentNode;
   }
+  // get "@media print" selectors from the page's CSS style sheet
+  // specifying elements that ought to be hidden when printing
+  const hiddenSelectors = getHiddenSelectors();
+  const nodeHiddenStates = new Map;
+  for (const selector of hiddenSelectors) {
+    try {
+      // mark all the matching nodes (including their descendents) as hidden
+      for (const node of rootNode.querySelectorAll(selector)) {
+        nodeHiddenStates.set(node, true);
+        for (const child of node.getElementsByTagName('*')) {
+          nodeHiddenStates.set(child, true);
+        }
+      }
+    } catch (e) {
+    }
+  }
   const root = { tag: 'DIV', content: undefined };
   const outsideRoot = { tag: '#INVALID' };
   const nodeObjects = new Map([ [ rootNode, root ] ]);
@@ -98,6 +114,18 @@ export function captureRangeContent(range, options) {
   const getTextStyle = (object) => {
     const defaultStyle = getDefaultStyle(object);
     return (object.style) ? { ...defaultStyle, ...object.style } : defaultStyle;
+  };
+  const isHidden = (node) => {
+    if (nodeHiddenStates.get(node)) {
+      return true;
+    }
+    // make sure the node isn't hidden
+    const style = getNodeStyle(node);
+    const { display, visibility } = style;
+    if (!display || display === 'none' || visibility === 'hidden') {
+      return true;
+    }
+    return false;
   };
   const isDisallowedTag = (node) => {
     for (let n = node; n && n !== rootNode; n = n.parentNode) {
@@ -211,9 +239,7 @@ export function captureRangeContent(range, options) {
         return root;
       }
       // make sure the node isn't hidden
-      const style = getNodeStyle(node);
-      const { display, visibility } = style;
-      if (!display || display === 'none' || visibility === 'hidden') {
+      if (isHidden(node)) {
         return;
       }
       if (!canBeEmpty(node.tagName)) {
@@ -229,14 +255,12 @@ export function captureRangeContent(range, options) {
     if (!rootNode.contains(node)) {
       return outsideRoot;
     }
-    const { parentNode, tagName } = node;
-    const style = getNodeStyle(node);
-    const { display, visibility } = style;
-    if (!display || display === 'none' || visibility === 'hidden') {
+    if (isHidden(node)) {
       return;
     }
+    const { parentNode, tagName } = node;
     const rect = getRect(node);
-    if (!canBeEmpty(node.tagName)) {
+    if (!canBeEmpty(tagName)) {
       if (rect.width === 0 || rect.height === 0) {
         return;
       }
@@ -249,13 +273,14 @@ export function captureRangeContent(range, options) {
     if (isSuperscriptLink(node)) {
       return;
     }
-    let tag, parentObject;
+    const style = getNodeStyle(node);
     // don't include any hyperlinks
-    parentObject = getLinkParentObject(node);
+    let parentObject = getLinkParentObject(node);
     if (parentObject) {
       return parentObject;
     }
-    switch (display) {
+    let tag;
+    switch (style.display) {
       case 'inline':
         parentObject = getObject(parentNode);
         if (tagName === 'BR') {
@@ -796,6 +821,27 @@ async function detectLanguage(text) {
       resolve(lang);
     });
   });
+}
+
+function getHiddenSelectors() {
+  const list = [];
+  for (const styleSheet of document.styleSheets) {
+    try {
+      for (const rule of styleSheet.cssRules) {
+        if (rule.media && [ ...rule.media ].includes('print')) {
+          for (const printRule of rule.cssRules) {
+            const { display, visibility } = printRule.style;
+            if (display === 'none' || visibility === 'hidden') {
+              list.push(printRule.selectorText);
+            }
+          }
+        }
+      }
+    } catch (e) {
+      // probably 'cause the CSS file is cross-domain
+    }
+  }
+  return list;
 }
 
 function alterObjects(arr, cb) {
