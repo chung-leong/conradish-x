@@ -384,13 +384,10 @@ export function captureRangeContent(range, options) {
   transverseRange(range, (node, startOffset, endOffset) => {
     const { nodeType, nodeValue, parentNode } = node;
     if (nodeType === Node.TEXT_NODE) {
-      const { userSelect } = getNodeStyle(parentNode);
-      if (userSelect !== 'none') {
-        const parentObject = getObject(parentNode);
-        if (parentObject) {
-          const text = nodeValue.substring(startOffset, endOffset);
-          insertContent(parentObject, text);
-        }
+      const parentObject = getObject(parentNode);
+      if (parentObject) {
+        const text = nodeValue.substring(startOffset, endOffset);
+        insertContent(parentObject, text);
       }
     } else if (nodeType === Node.ELEMENT_NODE) {
       // create these tags even when they don't contain any text

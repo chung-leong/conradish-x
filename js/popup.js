@@ -1,5 +1,6 @@
 import { e } from './lib/ui.js';
 import { initializeStorage, findObjects, loadObject } from './lib/storage.js';
+import { openPage } from './lib/navigation.js';
 
 async function start() {
   const list = document.createElement('UL');
@@ -56,8 +57,14 @@ function handleClick(evt) {
   if (!target.classList.contains('disabled')) {
     const { command, arg } = target.dataset;
     if (command) {
-      // ask service worker to carry out the command
-      chrome.runtime.sendMessage(undefined, { type: 'command', command, arg });
+      switch (command) {
+        case 'openDOC':
+          openPage('article', { t: arg });
+          break;
+        case 'list':
+          openPage('list');
+          break;
+      }
       window.close();
     }
   }

@@ -1,5 +1,6 @@
 import { initializeStorage, findObjects, loadObject, deleteObjects, storageChange } from './lib/storage.js';
 import { e, attachCustomCheckboxHandlers, attachRippleEffectHandlers, separateWords } from './lib/ui.js';
+import { setWindowName, openPage } from './lib/navigation.js';
 
 const listContainer = document.getElementById('list-container');
 const toolbarContainer = document.getElementById('toolbar-container');
@@ -8,6 +9,7 @@ let selection;
 let searching = false;
 
 async function start() {
+  setWindowName('list');
   document.title = 'Documents';
   await initializeStorage();
   attachRippleEffectHandlers();
@@ -348,9 +350,7 @@ function handleClick(evt) {
   if (target.classList.contains('title')) {
     // ask the service worker to open the document
     const { key, type } = target.parentNode.dataset;
-    const command = `open${type}`;
-    const arg = key;
-    chrome.runtime.sendMessage(undefined, { type: 'command', command, arg });
+    openPage('article', { t: key });
   } else if (target.classList.contains('time')) {
     // focus the checkbox and toggle it
     const [ checkbox ] = target.parentNode.getElementsByClassName('checkbox');

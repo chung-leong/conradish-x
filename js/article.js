@@ -2,6 +2,7 @@ import { loadDocument } from './lib/layout.js';
 import { createMenuItems, attachEditingHandlers } from './lib/editing.js';
 import { initializeStorage, storageChange } from './lib/storage.js';
 import { createArticleNavigation } from './lib/side-bar.js';
+import { setWindowName } from './lib/navigation.js';
 
 async function start() {
   const setStatus = (status) => document.body.className = status;
@@ -9,6 +10,7 @@ async function start() {
     await initializeStorage();
     const { searchParams } = new URL(location);
     const key = searchParams.get('t');
+    setWindowName('article', [ key ]);
     // load the document
     await loadDocument(key);
     // create menu items

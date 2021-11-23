@@ -1,4 +1,5 @@
 import { storeObject, getSettingsAsync, storageChange } from './lib/storage.js';
+import { getPageURL } from './lib/navigation.js';
 
 async function start() {
   chrome.contextMenus.onClicked.addListener(handleMenuClick);
@@ -62,34 +63,6 @@ async function createDocument(tab) {
   }
 }
 
-async function openDocument(key) {
-  const url = new URL(chrome.runtime.getURL('article.html'));
-  url.searchParams.set('t', key);
-  return openTab(url);
-}
-
-async function openDocumentList() {
-  const url = new URL(chrome.runtime.getURL('list.html'));
-  return openTab(url);
-}
-
-async function openTab(url) {
-  url = url.toString();
-  const [ tab ] = await chrome.tabs.query({ url });
-  if (tab) {
-    // highlight the tab and bring window into focus
-    const win = await chrome.tabs.highlight({
-      tabs: [ tab.index ],
-      windowId: tab.windowId
-    });
-    if (!win.focused) {
-      chrome.windows.update(win.id, { focused: true });
-    }
-  } else {
-    await chrome.tabs.create({ url });
-  }
-}
-
 async function handleSettings(evt) {
   if (!evt.detail.self) {
     const settings = await getSettingsAsync();
@@ -120,7 +93,8 @@ function handleMessage(request, sender, sendResponse) {
 
 async function handleCreateDocument({ document }) {
   const key = await storeObject('DOC', document);
-  await openDocument(key);
+  const url = getPageURL('article', { t: key });
+  await chrome.tabs.create({ url });
 }
 
 async function handleCommand({ command, arg }) {
@@ -128,10 +102,6 @@ async function handleCommand({ command, arg }) {
     case 'create':
       let [ tab ] = await chrome.tabs.query({ active: true, currentWindow: true });
       return createDocument(tab);
-    case 'openDOC':
-      return openDocument(arg);
-    case 'list':
-      return openDocumentList();
   }
 }
 
