@@ -149,12 +149,13 @@ export function captureRangeContent(range, options) {
       // return the parent of <i>
       const { innerText } = node;
       for (let n = node.parentNode; n && n !== rootNode; n = n.parentNode) {
-        const { display } = getNodeStyle(n);
-        if (display === 'inline') {
-          if (isSuperscriptLink(n)) {
+        const { display, verticalAlign } = getNodeStyle(n);
+        if (display !== 'inline' || n.innerText !== innerText) {
+          if (verticalAlign === 'super') {
+            // the link along with the text should be removed
+            // later when isSuperscriptLink() returns true
             return;
           }
-        } else if (n.innerText !== innerText) {
           parentNode = n;
           linkNode = node;
           break;
