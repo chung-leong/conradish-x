@@ -410,12 +410,10 @@ export function captureRangeContent(range, options) {
   replaceUselessElements(root);
   // remove empty nodes
   removeEmptyNodes(root);
-  if (filter === 'automatic' || filter === 'manual') {
-    // filter out links
-    filterLinks(root, filter, objectLinks);
-    // filter out content that's probably garbage
-    filterContent(root, filter, objectStyles, objectRects);
-  }
+  // filter out links
+  filterLinks(root, filter, objectLinks);
+  // filter out content that's probably garbage
+  filterContent(root, filter, objectStyles, objectRects);
   return root;
 }
 
