@@ -51,6 +51,7 @@ export function captureRangeContent(range, options) {
     rootNode = rootNode.parentNode;
   }
   const root = { tag: 'DIV', content: undefined };
+  const outsideRoot = { tag: '#INVALID' };
   const nodeObjects = new Map([ [ rootNode, root ] ]);
   const nodeStyles = new Map;
   const objectParents = new Map;
@@ -97,6 +98,27 @@ export function captureRangeContent(range, options) {
   const getTextStyle = (object) => {
     const defaultStyle = getDefaultStyle(object);
     return (object.style) ? { ...defaultStyle, ...object.style } : defaultStyle;
+  };
+  const isDisallowedTag = (node) => {
+    for (let n = node; n && n !== rootNode; n = n.parentNode) {
+      switch (n.tagName) {
+        // skip these
+        case 'BUTTON':
+        case 'FIGCAPTION':
+        case 'NOSCRIPT':
+          return true;
+      }
+    }
+    return false;
+  }
+  const isInsideCell = (node) => {
+    for (let n = node.parentNode; n && n !== rootNode; n = n.parentNode) {
+      const { display } = getNodeStyle(n.parentNode);
+      if (display === 'table-cell' || display === 'list-item') {
+        return true;
+      }
+    }
+    return false;
   };
   const isSuperscriptLink = (node) => {
     const { verticalAlign } = getNodeStyle(node);
@@ -151,13 +173,8 @@ export function captureRangeContent(range, options) {
     }
     if (parentNode && linkNode) {
       const parentObject = getObject(parentNode);
-      // remember that the parent has links
-      const parentLinks = objectLinks.get(parentObject);
-      if (parentLinks) {
-        parentLinks.push(linkNode);
-      } else {
-        objectLinks.set(parentObject, [ linkNode ]);
-      }
+      // remember that the parent has this link
+      objectLinks.set(parentObject, linkNode);
       return parentObject;
     }
   };
@@ -168,15 +185,22 @@ export function captureRangeContent(range, options) {
       return object;
     }
     // create it
-    object = createObject(node) || null;
-    nodeObjects.set(node, object);
-    return object;
+    object = createObject(node);
+    if (object && object !== outsideRoot) {
+      nodeObjects.set(node, object);
+      return object;
+    } else {
+      nodeObjects.set(node, null);
+      return null;
+    }
   };
   const getRootObject = (node) => {
     // if we're going to put stuff into the root instead, we need to make
     // sure that things don't get placed into the parentNode's object
     // (if there's one created earlier)
-    nodeObjects.delete(node);
+    if (node !== rootNode) {
+      nodeObjects.delete(node);
+    }
     for (let n = node; n; n = n.parentNode) {
       if (n === rootNode) {
         return root;
@@ -197,7 +221,10 @@ export function captureRangeContent(range, options) {
   };
   let inlineOnly = true;
   const createObject = (node) => {
-    const { parentNode } = node;
+    if (!rootNode.contains(node)) {
+      return outsideRoot;
+    }
+    const { parentNode, tagName } = node;
     const style = getNodeStyle(node);
     const { display, visibility } = style;
     if (!display || display === 'none' || visibility === 'hidden') {
@@ -209,13 +236,9 @@ export function captureRangeContent(range, options) {
         return;
       }
     }
-    const { tagName } = node;
-    switch (tagName) {
-      // skip these
-      case 'BUTTON':
-      case 'FIGCAPTION':
-      case 'NOSCRIPT':
-        return;
+    // remove <button>, <figcaption>, and such
+    if (isDisallowedTag(node)) {
+      return;
     }
     // remove sup tags that are links
     if (isSuperscriptLink(node)) {
@@ -240,8 +263,13 @@ export function captureRangeContent(range, options) {
       case 'block': case 'inline-block':
       case 'flex': case 'inline-flex':
       case 'grid': case 'inline-grid':
-        // block elements all go into the root
-        parentObject = getRootObject(parentNode);
+        // block elements all go into the root, unless they're inside
+        // a table cell or list item
+        if (isInsideCell(node)) {
+          parentObject = getObject(parentNode);
+        } else {
+          parentObject = getRootObject(parentNode);
+        }
         switch (tagName) {
           case 'H1': case 'H2': case 'H3': case 'H4': case 'H5': case 'H6':
           case 'UL': case 'OL':
@@ -297,6 +325,14 @@ export function captureRangeContent(range, options) {
         parentObject = getObject(parentNode);
         tag = 'CAPTION';
         break;
+    }
+    if (parentObject === outsideRoot) {
+      // deal with situation where a table or a list is used for layout purpose
+      if (tag === 'TD' || tag === 'LI') {
+        parentObject = rootNode;
+        tag = 'P';
+      }
+      return outsideRoot;
     }
     if (parentObject && tag) {
       const object = { tag, content: undefined };
@@ -409,10 +445,10 @@ function filterLinks(root, filter, objectLinks) {
     return;
   }
   const calculateLinkScore = (object) => {
-    const links = objectLinks.get(object);
-    if (links && links.length === 1) {
+    const link = objectLinks.get(object);
+    if (link) {
       const objectText = getPlainText(object).trim();
-      const linkText = links[0].innerText.trim();
+      const linkText = link.innerText.trim();
       if (objectText === linkText) {
         return 1;
       } else if (linkText.length / objectText.length >= 0.6) {
@@ -421,19 +457,25 @@ function filterLinks(root, filter, objectLinks) {
     }
     return 0;
   };
+  const calculateCollectiveScore = (object, tag, tough) => {
+    const items = getChildrenByTag(object, tag);
+    // see if the items are nothing but links
+    const scores = items.map(calculateLinkScore);
+    // if every item is mostly link, then it's probably junk
+    if (scores.every(s => s === 1)) {
+      return 1;
+    } else if (scores.every(s => s >= 0.5)) {
+      return (tough) ? 1 : 0.5;
+    } else {
+      return 0;
+    }
+  };
   alterObjects(root.content, (object) => {
     let junkFactor = 0;
     if (object.tag === 'UL' || object.tag === 'OL') {
-      // see if the list is nothing but links
-      if (object.content instanceof Array) {
-        const scores = object.content.map(calculateLinkScore);
-        // if every item is mostly link, then it's probably junk
-        if (scores.every(s => s === 1)) {
-          junkFactor = 1;
-        } else if (scores.every(s => s >= 0.5)) {
-          junkFactor = 0.5;
-        }
-      }
+      junkFactor = calculateCollectiveScore(object, 'LI', false);
+    } else if (object.tag === 'TABLE') {
+      junkFactor = calculateCollectiveScore(object, 'TD', true);
     } else {
       junkFactor = calculateLinkScore(object);
     }
@@ -563,6 +605,24 @@ function getPlainText(content) {
   } else {
     return '';
   }
+}
+
+function getChildrenByTag(object, tag) {
+  const list = [];
+  const check = (object) => {
+    if (object instanceof Array) {
+      for (const child of object) {
+        check(child);
+      }
+    } else if (object instanceof Object) {
+      if (object.tag === tag) {
+        list.push(object);
+      }
+      check(object.content);
+    }
+  };
+  check(object);
+  return list;
 }
 
 function collapseWhitespaces(root, styleMap) {
