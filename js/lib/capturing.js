@@ -150,7 +150,11 @@ export function captureRangeContent(range, options) {
       const { innerText } = node;
       for (let n = node.parentNode; n && n !== rootNode; n = n.parentNode) {
         const { display } = getNodeStyle(n);
-        if (display !== 'inline' || n.innerText !== innerText) {
+        if (display === 'inline') {
+          if (isSuperscriptLink(n)) {
+            return;
+          }
+        } else if (n.innerText !== innerText) {
           parentNode = n;
           linkNode = node;
           break;
