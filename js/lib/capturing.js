@@ -174,48 +174,6 @@ export function captureRangeContent(range, options) {
     }
     return false;
   };
-  const getLinkParentObject = (node) => {
-    let parentNode, linkNode;
-    if (node.tagName === 'A' && node.href) {
-      // while styling tags are used to style a link like this:
-      // <i><b><a href="..."> ... </a></b></i>
-      // return the parent of <i>
-      const { innerText } = node;
-      for (let n = node.parentNode; n && n !== rootNode; n = n.parentNode) {
-        const { display, verticalAlign } = getNodeStyle(n);
-        if (display !== 'inline' || n.innerText !== innerText) {
-          if (verticalAlign === 'super') {
-            // the link along with the text should be removed
-            // later when isSuperscriptLink() returns true
-            return;
-          }
-          parentNode = n;
-          linkNode = node;
-          break;
-        }
-      }
-    } else if (node.tagName !== 'A') {
-      // while a hyperlink wraps styling tags like this:
-      // <a href="..."><i><b> ... </b></i></a>
-      // return the parent of <a> when node is <b>
-      for (let n = node; n && n !== rootNode; n = n.parentNode) {
-        if (n.tagName === 'A' && n.href) {
-          const { innerText } = node;
-          if (n.innerText === innerText) {
-            linkNode = n;
-            parentNode = n.parentNode;
-            break;
-          }
-        }
-      }
-    }
-    if (parentNode && linkNode) {
-      const parentObject = getObject(parentNode);
-      // remember that the parent has this link
-      objectLinks.set(parentObject, linkNode);
-      return parentObject;
-    }
-  };
   const getObject = (node) => {
     // see if there's an object for this node already
     let object = nodeObjects.get(node);
@@ -279,12 +237,7 @@ export function captureRangeContent(range, options) {
       return;
     }
     const style = getNodeStyle(node);
-    // don't include any hyperlinks
-    let parentObject = getLinkParentObject(node);
-    if (parentObject) {
-      return parentObject;
-    }
-    let tag;
+    let parentObject, tag;
     switch (style.display) {
       case 'inline':
         parentObject = getObject(parentNode);
@@ -690,7 +643,7 @@ function getChildrenByTag(object, tag) {
 }
 
 function collapseWhitespaces(root, styleMap) {
-  const trim = (text, whiteSpace, atStart, atEnd) => {
+  const trim = (text, whiteSpace, trimLeft, trimRight) => {
     if (whiteSpace === 'normal' || whiteSpace === 'nowrap') {
       text = text.replace(/\r?\n/g, ' ');
     } else {
@@ -700,42 +653,43 @@ function collapseWhitespaces(root, styleMap) {
       text = text.replace(/\s+/g, ' ');
     }
     if (whiteSpace === 'normal'  || whiteSpace === 'nowrap' || whiteSpace === 'pre-line') {
-      if (atStart) {
+      if (trimLeft) {
         text = text.trimLeft();
       }
-      if (atEnd) {
+      if (trimRight) {
         text = text.trimRight();
       }
     }
     return text;
   };
-  const collapse = (object, atStart, atEnd) => {
+  const collapse = (object, trimLeft, trimRight) => {
     const style = styleMap.get(object);
     const { whiteSpace } = style;
     const inline = (object.tag === 'SPAN');
-    let childAtStart = (inline) ? atStart : true;
-    let childAtEnd = false;
+    let trimItemLeft = (inline) ? trimLeft : true;
+    let trimItemRight = false;
     const children = (object.content instanceof Array) ? object.content : [ object.content ];
     alter(children, (item, i, arr) => {
       if (i === arr.length - 1) {
         // if the element is inline, then it's only at an end when
         // the element itself is at an end
-        childAtEnd = (inline) ? atEnd : true;
+        trimItemRight = (inline) ? trimRight : true;
       }
-      let result = item, newLine = false;
+      let result;
       if (typeof(item) === 'string') {
-        result = trim(item, whiteSpace, childAtStart, childAtEnd);
+        result = trim(item, whiteSpace, trimItemLeft, trimItemRight);
+        // see if it ends in whitespaces
+        trimItemLeft = (result) ? result !== result.trimRight() : trimItemLeft;
       } else if (item instanceof Object) {
-        newLine = collapse(item, childAtStart, childAtEnd);
+        result = item;
+        trimItemLeft = collapse(item, trimItemLeft, trimItemRight);
       }
-      // restart the line after a block element or <br>
-      childAtStart = newLine;
       return result;
     });
     if (object.content !== children) {
       object.content = children[0];
     }
-    return (inline) ? childAtStart : true;
+    return (inline) ? trimItemLeft : true;
   };
   collapse(root);
 }
