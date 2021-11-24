@@ -311,10 +311,12 @@ export function captureRangeContent(range, options) {
         if (tagName === 'BR') {
           if (!isInsideCell(node) && isConsecutativeBreaks(node)) {
             // just force subsequent contents to go into a new paragraph
-            getRootObject(parentNode);
-          } else {
-            tag = 'BR';
+            if (parentNode !== rootNode) {
+              nodeObjects.delete(parentNode);
+              return;
+            }
           }
+          tag = 'BR';
         } else {
           // all other inline elements become span
           tag = 'SPAN';
