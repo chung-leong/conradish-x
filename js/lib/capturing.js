@@ -174,6 +174,64 @@ export function captureRangeContent(range, options) {
     }
     return false;
   };
+  const isStylingLink = (node) => {
+    if (node.tagName === 'A') {
+      return true;
+    }
+    let linkNode = node.getElementsByTagName('A')[0];
+    if (!linkNode) {
+      // see if a parent node is a link
+      for (let n = node; n && n !== rootNode; n = n.parentNode) {
+        if (n.tagName === 'A' && n.href) {
+          linkNode = n;
+          break;
+        }
+      }
+    }
+    if (linkNode && linkNode.innerText === node.innerText) {
+      return true;
+    }
+    return false;
+  };
+  const isMarginalBreak = (node) => {
+    if (node.tagName === 'BR') {
+      const getPreviousNode = (node) => {
+        const { previousElementSibling, parentNode } = node;
+        if (previousElementSibling) {
+          return previousElementSibling;
+        } else if (parentNode) {
+          return getPreviousNode(parentNode);
+        }
+      };
+      const previousNode = getPreviousNode(node);
+      if (previousNode) {
+        const { display, marginBottom } = getNodeStyle(previousNode);
+        if (!display.includes('inline')) {
+          if (parseFloat(marginBottom) === 0) {
+            return true;
+          }
+        }
+      }
+      const getNextNode = (node) => {
+        const { nextElementSibling, parentNode } = node;
+        if (nextElementSibling) {
+          return nextElementSibling;
+        } else if (parentNode) {
+          return getNextNode(parentNode);
+        }
+      };
+      const nextNode = getNextNode(node);
+      if (nextNode) {
+        const { display, marginTop } = getNodeStyle(nextNode);
+        if (!display.includes('inline')) {
+          if (parseFloat(marginTop) === 0) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  };
   const getObject = (node) => {
     // see if there's an object for this node already
     let object = nodeObjects.get(node);
@@ -234,6 +292,11 @@ export function captureRangeContent(range, options) {
     }
     // remove sup tags that are links
     if (isSuperscriptLink(node)) {
+      return;
+    }
+    // remove <br> tags used to created separation from block elements
+    // without top or bottom margin
+    if (isMarginalBreak(node)) {
       return;
     }
     const style = getNodeStyle(node);
@@ -327,25 +390,28 @@ export function captureRangeContent(range, options) {
       const newStyle = {};
       const parentStyle = getTextStyle(parentObject);
       const defaultStyle = getDefaultStyle(object);
-      for (const name of styleNames) {
-        const parentValue = parentStyle[name];
-        const defaultValue = defaultStyle[name];
-        let value = style[name];
-        if (name === 'fontWeight') {
-          // stick with standard values
-          value = (value >= 600) ? '700' : '400';
-        }
-        if (value !== parentValue && value !== defaultValue) {
-          if (name === 'verticalAlign') {
-            if (value === 'super' || value === 'sub') {
-              // set the font size as well
-              newStyle.fontSize = 'smaller';
-            } else {
-              // skip it
-              continue;
-            }
+      // don't copy styling info meant for hyperlinks
+      if (!isStylingLink(node)) {
+        for (const name of styleNames) {
+          const parentValue = parentStyle[name];
+          const defaultValue = defaultStyle[name];
+          let value = style[name];
+          if (name === 'fontWeight') {
+            // stick with standard values
+            value = (value >= 600) ? '700' : '400';
           }
-          newStyle[name] = value;
+          if (value !== parentValue && value !== defaultValue) {
+            if (name === 'verticalAlign') {
+              if (value === 'super' || value === 'sub') {
+                // set the font size as well
+                newStyle.fontSize = 'smaller';
+              } else {
+                // skip it
+                continue;
+              }
+            }
+            newStyle[name] = value;
+          }
         }
       }
       if (Object.entries(newStyle).length > 0) {
@@ -696,7 +762,7 @@ function collapseWhitespaces(root, styleMap) {
 
 export function replaceUselessElements(object) {
   if (object.content instanceof Array) {
-    alterObjects(object.content, (item) => {
+    alterObjects(object.content, (item, index, arr) => {
       replaceUselessElements(item);
       if (item.tag === 'SPAN' && !item.style) {
         return item.content;
