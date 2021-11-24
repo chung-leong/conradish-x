@@ -9,9 +9,9 @@ async function start() {
   // add menu item for creating new document
   const create = e('LI', {
     className: 'create disabled',
-    title: 'Select portion of document you wish to annotate first',
+    title: 'Select portion of document you wish to print first',
     dataset: { command: 'create' }
-  }, 'Create annotated document');
+  }, 'Create print version');
   list.appendChild(create);
   // ask service worker whether current tab has selection
   chrome.runtime.sendMessage(undefined, { type: 'query' }, (response) => {

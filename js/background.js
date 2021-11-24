@@ -23,9 +23,9 @@ function addContextMenu() {
     chrome.contextMenus.create({
       contexts: [ 'selection' ],
       documentUrlPatterns: [ 'http://*/*', 'https://*/*' ],
-      title: 'Create annotated document',
+      title: 'Create print version',
       id: createMenuId,
-    });
+    }, () => chrome.runtime.lastError);
     hasContextMenu = true;
   }
 }

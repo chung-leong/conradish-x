@@ -454,6 +454,13 @@ export function captureRangeContent(range, options) {
       // purpose of filtering out junk content
       objectRects.set(object, rect);
       objectStyles.set(object, style);
+      if (tag === 'LI' || tag === 'TD' || tag === 'P') {
+        // save links
+        const links = [ ...node.getElementsByTagName('A') ].filter(a => !!a.href);
+        if (links.length > 0) {
+          objectLinks.set(object, links);
+        }
+      }
       return object;
     }
   };
@@ -553,10 +560,10 @@ function filterLinks(root, filter, objectLinks) {
     return;
   }
   const calculateLinkScore = (object) => {
-    const link = objectLinks.get(object);
-    if (link) {
+    const links = objectLinks.get(object);
+    if (links) {
       const objectText = getPlainText(object).trim();
-      const linkText = link.innerText.trim();
+      const linkText = links.map(l => l.innerText).join('').trim();
       if (objectText === linkText) {
         return 1;
       } else if (linkText.length / objectText.length >= 0.6) {
