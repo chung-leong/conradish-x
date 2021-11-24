@@ -193,41 +193,50 @@ export function captureRangeContent(range, options) {
     }
     return false;
   };
-  const isMarginalBreak = (node) => {
+  const isConsecutativeBreaks = (node) => {
     if (node.tagName === 'BR') {
       const getPreviousNode = (node) => {
-        const { previousElementSibling, parentNode } = node;
-        if (previousElementSibling) {
-          return previousElementSibling;
-        } else if (parentNode) {
-          return getPreviousNode(parentNode);
+        const { previousSibling, parentNode } = node;
+        for (let n = previousSibling; n; n = n.previousSibling) {
+          if (n.nodeType === Node.ELEMENT_NODE) {
+            return n;
+          } else if (n.nodeType === Node.TEXT_NODE) {
+            if (n.nodeValue.trim()) {
+              break;
+            }
+          }
         }
+        return;
+      };
+      const getNextNode = (node) => {
+        const { nextSibling, parentNode } = node;
+        for (let n = nextSibling; n; n = n.nextSibling) {
+          if (n.nodeType === Node.ELEMENT_NODE) {
+            return n;
+          } else if (n.nodeType === Node.TEXT_NODE) {
+            if (n.nodeValue.trim()) {
+              break;
+            }
+          }
+        }
+        return;
+      };
+      const hasSpacing = (node) => {
+        if (node && !isHidden(node)) {
+          if (node.tagName === 'BR') {
+            return true;
+          }
+          const { display } = getNodeStyle(node);
+          if (!display.includes('inline')) {
+            return true;
+          }
+        }
+        return false;
       };
       const previousNode = getPreviousNode(node);
-      if (previousNode) {
-        const { display, marginBottom } = getNodeStyle(previousNode);
-        if (!display.includes('inline')) {
-          if (parseFloat(marginBottom) === 0) {
-            return true;
-          }
-        }
-      }
-      const getNextNode = (node) => {
-        const { nextElementSibling, parentNode } = node;
-        if (nextElementSibling) {
-          return nextElementSibling;
-        } else if (parentNode) {
-          return getNextNode(parentNode);
-        }
-      };
       const nextNode = getNextNode(node);
-      if (nextNode) {
-        const { display, marginTop } = getNodeStyle(nextNode);
-        if (!display.includes('inline')) {
-          if (parseFloat(marginTop) === 0) {
-            return true;
-          }
-        }
+      if (hasSpacing(previousNode) || hasSpacing(nextNode)) {
+        return true;
       }
     }
     return false;
@@ -294,18 +303,18 @@ export function captureRangeContent(range, options) {
     if (isSuperscriptLink(node)) {
       return;
     }
-    // remove <br> tags used to created separation from block elements
-    // without top or bottom margin
-    if (isMarginalBreak(node)) {
-      return;
-    }
     const style = getNodeStyle(node);
     let parentObject, tag;
     switch (style.display) {
       case 'inline':
         parentObject = getObject(parentNode);
         if (tagName === 'BR') {
-          tag = tagName;
+          if (!isInsideCell(node) && isConsecutativeBreaks(node)) {
+            // just force subsequent contents to go into a new paragraph
+            getRootObject(parentNode);
+          } else {
+            tag = 'BR';
+          }
         } else {
           // all other inline elements become span
           tag = 'SPAN';
