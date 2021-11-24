@@ -586,19 +586,19 @@ function filterContent(root, filter, objectStyles, objectRects) {
   const maxRight = getMaxKey(rightCounts);
   const maxRect = { left: maxLeft, right: maxRight };
   const calculatePositionScore = (rect1, rect2) => {
-    const leftDiff = rect1.left - rect2.left;
-    const rightDiff = rect2.right - rect1.right;
-    return Math.abs(leftDiff + rightDiff);
+    const leftDiff = Math.abs(rect1.left - rect2.left);
+    const rightDiff = Math.abs(rect1.right - rect2.right);
+    return (leftDiff > 0) ? leftDiff + rightDiff : 0;
+  };
+  const parseRGB = (color) => {
+    const m = color.replace(/[rgba\(\)\s]/g, '').split(',');
+    const r = m[0] ? parseInt(m[0]) : 255;
+    const g = m[1] ? parseInt(m[1]) : 255;
+    const b = m[2] ? parseInt(m[2]) : 255;
+    const a = m[3] ? parseFloat(m[3]) : 1;
+    return [ r, g, b, a ];
   };
   const calculateColorScore = (color1, color2, charCount) => {
-    const parseRGB = (color) => {
-      const m = color.replace(/[rgba\(\)]/, '').split(',');
-      const r = parseInt(m[0]) || 255;
-      const g = parseInt(m[1]) || 255;
-      const b = parseInt(m[2]) || 255;
-      const a = parseFloat(m[3]) || 1;
-      return [ r, g, b, a ];
-    };
     const [ r1, g1, b1, a1 ] = parseRGB(color1);
     const [ r2, g2, b2, a2 ] = parseRGB(color2);
     const diffR = Math.abs(r1 - r2);
