@@ -670,7 +670,7 @@ function filterContent(root, filter, objectStyles, objectRects) {
     const isHeading = /^H[123]$/.test(object.tag);
     // greater tolerance for heading
     const limitPos = (isHeading) ? 20 : 10;
-    const limitColor = (isHeading) ? 10 : 5;
+    const limitColor = (isHeading) ? 20 : 10;
     let junkFactor = 0;
     if (scoreColor / charCount > limitColor || scorePos / charCount > limitPos) {
       // probably junk
