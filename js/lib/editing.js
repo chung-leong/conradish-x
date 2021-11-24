@@ -129,9 +129,9 @@ function toggle(element, shown) {
 
 function isMultiparagraph(range) {
   let count = 0;
-  transverseRange(range, (node, startIndex, endIndex) => {
+  transverseRange(range, (node, startIndex, endIndex, endTag) => {
     if (node.nodeType === Node.ELEMENT_NODE) {
-      if (endIndex > startIndex) {
+      if (!endTag && endIndex > startIndex) {
         const style = getComputedStyle(node);
         if (style.display === 'block') {
           count++;

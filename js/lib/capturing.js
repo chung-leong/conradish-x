@@ -10,7 +10,7 @@ export function transverseRange(range, cb) {
       inside = true;
     }
     if (inside) {
-      if (cb(node, s, e) === false) {
+      if (cb(node, s, e, false) === false) {
         finished = true;
       }
     }
@@ -19,6 +19,11 @@ export function transverseRange(range, cb) {
         scan(content[i]);
         if (finished) {
           break;
+        }
+      }
+      if (inside) {
+        if (cb(node, s, e, true) === false) {
+          finished = true;
         }
       }
     }
@@ -405,19 +410,53 @@ export function captureRangeContent(range, options) {
       return object;
     }
   };
+  const privateCharacters = /\p{Private_Use}/ug;
+  const parseCSSContent = (content) => {
+    if (content.charAt(0) === '"') {
+      const s = content.substr(1, content.length - 2);
+      return s.replace(/\\(["\\])/g, '$1').replace(privateCharacters, '');
+    }
+  };
+  const getPseudoElement = (node, id) => {
+    if (!isHidden(node)) {
+      const style = getComputedStyle(node, id);
+      const content = parseCSSContent(style.content);
+      if (content) {
+        const object = { tag: 'SPAN', content };
+        objectStyles.set(object, style);
+        return object;
+      }
+    }
+  };
   // walk through the range and build the object tree
-  transverseRange(range, (node, startOffset, endOffset) => {
+  transverseRange(range, (node, startOffset, endOffset, endTag) => {
     const { nodeType, nodeValue, parentNode } = node;
     if (nodeType === Node.TEXT_NODE) {
       const parentObject = getObject(parentNode);
       if (parentObject) {
-        const text = nodeValue.substring(startOffset, endOffset);
+        const text = nodeValue.substring(startOffset, endOffset).replace(privateCharacters, '');
         insertContent(parentObject, text);
       }
     } else if (nodeType === Node.ELEMENT_NODE) {
-      // create these tags even when they don't contain any text
-      if (canBeEmpty(node.tagName)) {
-        getObject(node);
+      if (!endTag) {
+        const pseudo = getPseudoElement(node, '::before');
+        if (pseudo) {
+          const object = getObject(node);
+          if (object) {
+            insertContent(object, pseudo);
+          }
+        } else if (canBeEmpty(node.tagName)) {
+          // create these tags even when they don't contain any text
+          getObject(node);
+        }
+      } else {
+        const pseudo = getPseudoElement(node, '::after');
+        if (pseudo) {
+          const object = getObject(node);
+          if (object) {
+            insertContent(object, pseudo);
+          }
+        }
       }
     }
   });
