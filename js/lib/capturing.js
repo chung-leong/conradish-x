@@ -517,6 +517,8 @@ export function captureRangeContent(range, options) {
   });
   // apply white-space rules
   collapseWhitespaces(root, objectStyles);
+  // add spaces when spans are separated by margin
+  addSpacers(root, objectStyles);
   // replace spans that don't have any styling information with just its
   // content; couldn't do it earlier since the inline element could in theory
   // employ a different white-space rule
@@ -530,7 +532,7 @@ export function captureRangeContent(range, options) {
   return root.content;
 }
 
-export function insertContent(object, content) {
+export function insertContent(object, content, atBeginning = false) {
   if (!content) {
     return;
   }
@@ -541,17 +543,36 @@ export function insertContent(object, content) {
       object.content = [ content ];
     }
   } else if (object.content instanceof Array) {
-    const arr = object.content, last = arr[arr.length - 1];
-    // merge with last item if possible
-    if (typeof(last) === 'string' && typeof(content) === 'string') {
-      arr[arr.length - 1] = last + content;
+    const arr = object.content;
+    if (!atBeginning) {
+      const last = arr[arr.length - 1];
+      // merge with last item if possible
+      if (typeof(last) === 'string' && typeof(content) === 'string') {
+        arr[arr.length - 1] = last + content;
+      } else {
+        arr.push(content);
+      }
     } else {
-      arr.push(content);
+      const first = arr[0];
+      // merge with last item if possible
+      if (typeof(first) === 'string' && typeof(content) === 'string') {
+        arr[0] = content + first;
+      } else {
+        arr.unshift(content);
+      }
     }
   } else if (typeof(object.content) === 'string' && typeof(content) === 'string') {
-    object.content += content;
+    if (!atBeginning) {
+      object.content += content;
+    } else {
+      object.content = content + object.content;
+    }
   } else {
-    object.content = [ object.content, content ];
+    if (!atBeginning) {
+      object.content = [ object.content, content ];
+    } else {
+      object.content = [ content, object.content ];
+    }
   }
 }
 
@@ -698,25 +719,25 @@ function rejectJunk(object, filter, junkFactor) {
   return object;
 }
 
-function getCharacterCount(content) {
-  if (typeof(content) === 'string') {
-    return content.length;
-  } else if (content instanceof Array) {
-    return content.reduce((t, i) => t + getCharacterCount(i), 0);
-  } else if (content instanceof Object) {
-    return getCharacterCount(content.content);
+function getCharacterCount(item) {
+  if (typeof(item) === 'string') {
+    return item.length;
+  } else if (item instanceof Array) {
+    return item.reduce((t, i) => t + getCharacterCount(i), 0);
+  } else if (item instanceof Object) {
+    return getCharacterCount(item.content);
   } else {
     return 0;
   }
 }
 
-function getPlainText(content) {
-  if (typeof(content) === 'string') {
-    return content;
-  } else if (content instanceof Array) {
-    return content.map(getPlainText).join('');
-  } else if (content instanceof Object) {
-    return getPlainText(content.content);
+function getPlainText(item) {
+  if (typeof(item) === 'string') {
+    return item;
+  } else if (item instanceof Array) {
+    return item.map(getPlainText).join('');
+  } else if (item instanceof Object) {
+    return getPlainText(item.content);
   } else {
     return '';
   }
@@ -790,6 +811,42 @@ function collapseWhitespaces(root, styleMap) {
     return (inline) ? trimItemLeft : true;
   };
   collapse(root);
+}
+
+function addSpacers(root, styleMap) {
+  const scan = (item) => {
+    if (item instanceof Array) {
+      item.forEach(scan);
+      item.forEach((item, i, arr) => {
+        if (item.tag === 'SPAN') {
+          const text = getPlainText(item);
+          const style = styleMap.get(item);
+          const height = parseInt(style.fontSize);
+          const left = parseInt(style.marginLeft) + parseInt(style.paddingLeft);
+          const right = parseInt(style.marginRight) + parseInt(style.paddingRight);
+          if (left / height > 0.25) {
+            if (i > 0) {
+              const leftText = getPlainText(arr[i - 1]);
+              if (!/\s$/.test(leftText) && !/^\s/.test(text)) {
+                insertContent(item, ' ', true);
+              }
+            }
+          }
+          if (right / height > 0.25) {
+            if (i < arr.length - 1) {
+              const rightText = getPlainText(arr[i + 1]);
+              if (!/\s$/.test(text) && !/^\s/.test(rightText)) {
+                insertContent(item, ' ');
+              }
+            }
+          }
+        }
+      });
+    } else if (item instanceof Object) {
+      scan(item.content);
+    }
+  };
+  scan(root);
 }
 
 export function replaceUselessElements(object) {
