@@ -34,6 +34,11 @@ export function createMenuItems() {
       title: 'show translated sentence only in footnote',
       handler: handleAddTranslation,
     },
+    addExplanation: {
+      label: 'Add explanation',
+      title: 'show explanation in footnote',
+      handler: handleAddTranslation,
+    }
   };
   const list = e('UL');
   list.addEventListener('mousedown', handleMenuMouseDown);
@@ -520,7 +525,11 @@ function showArticleMenu(container, range) {
     articleMenuElement.style.top = `${top}px`;
     // show/hide menu item depending on how many words are selected
     const count = words.length;
-    toggle(articleMenuItems.addTranslation, count > 1);
+    const sourceLang = getSourceLanguage();
+    const targetLang = getTargetLanguage();
+    const translating = (targetLang && targetLang !== sourceLang);
+    toggle(articleMenuItems.addTranslation, translating && count > 1);
+    toggle(articleMenuItems.addExplanation, !translating && count > 1);
     toggle(articleMenuItems.addDefinition, count <= 10);
     toggle(articleMenuElement, true);
     articleMenuElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
