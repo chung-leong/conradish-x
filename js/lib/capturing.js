@@ -41,42 +41,71 @@ export async function captureSelection(selection, filter) {
   const title = getTitle();
   const image = getImage();
   const lang = await getLanguage(range);
-  const object = captureRangeContent(range, { filter });
-  // where multiple paragraphs are present, captureRangeContent() will
-  // return a <div>; otherwise we'd get a <p>
-  const content = (object.tag === 'DIV') ? object.content : object;
+  const content = captureRangeContent(range, { filter });
   const doc = { url, title, image, lang, content };
   return doc;
 }
 
 export function captureRangeContent(range, options) {
   const { filter } = options;
-  let { commonAncestorContainer: rootNode } = range;
-  if (rootNode.nodeType === Node.TEXT_NODE) {
-    rootNode = rootNode.parentNode;
+  const nodeStyles = new Map;
+  const getNodeStyle = (node) => {
+    let style = nodeStyles.get(node);
+    if (style === undefined) {
+      style = getComputedStyle(node);
+      nodeStyles.set(node, style);
+    }
+    return style;
+  };
+  // figure out when the root node ought to be
+  let rootNode;
+  for (let n = range.commonAncestorContainer; n; n = n.parentNode) {
+    if (n.nodeType === Node.ELEMENT_NODE) {
+      const { display } = getNodeStyle(n);
+      rootNode = n;
+      if (display !== 'inline') {
+        break;
+      }
+    }
+  }
+  // go up one more level if it contains inline content
+  for (let child of rootNode.childNodes) {
+    let inline = false;
+    if (range.intersectsNode(child)) {
+      if (child.nodeType === Node.TEXT_NODE) {
+        if (child.nodeValue.trim()) {
+          inline = true;
+        }
+      } else if (child.nodeType === Node.ELEMENT_NODE) {
+        const { display } = getNodeStyle(child);
+        if (display === 'inline') {
+          inline = true;
+        }
+      }
+    }
+    if (inline) {
+      rootNode = rootNode.parentNode;
+      break;
+    }
   }
   // get "@media print" selectors from the page's CSS style sheet
   // specifying elements that ought to be hidden when printing
   const hiddenSelectors = getHiddenSelectors();
   const nodeHiddenStates = new Map;
   for (const selector of hiddenSelectors) {
-    try {
-      // mark all the matching nodes (including their descendents) as hidden
-      for (const node of rootNode.querySelectorAll(selector)) {
-        nodeHiddenStates.set(node, true);
-        for (const child of node.getElementsByTagName('*')) {
-          nodeHiddenStates.set(child, true);
-        }
+    // mark all the matching nodes (including their descendents) as hidden
+    for (const node of rootNode.querySelectorAll(selector)) {
+      nodeHiddenStates.set(node, true);
+      for (const child of node.getElementsByTagName('*')) {
+        nodeHiddenStates.set(child, true);
       }
-    } catch (e) {
     }
   }
   const root = { tag: 'DIV', content: undefined };
   const outsideRoot = { tag: '#INVALID' };
   const nodeObjects = new Map([ [ rootNode, root ] ]);
-  const nodeStyles = new Map;
   const objectParents = new Map;
-  const objectStyles = new Map([ [ root, getComputedStyle(rootNode) ] ]);
+  const objectStyles = new Map([ [ root, getNodeStyle(rootNode) ] ]);
   const objectRects = new Map;
   const objectLinks = new Map;
   const rootClientRect = rootNode.getBoundingClientRect();
@@ -89,14 +118,6 @@ export function captureRangeContent(range, options) {
     const width = right - left;
     const height = bottom - top;
     return { top, left, bottom, right, width, height };
-  };
-  const getNodeStyle = (node) => {
-    let style = nodeStyles.get(node);
-    if (style === undefined) {
-      style = getComputedStyle(node);
-      nodeStyles.set(node, style);
-    }
-    return style;
   };
   const normalText = {
     fontWeight: '400',
@@ -280,15 +301,14 @@ export function captureRangeContent(range, options) {
       }
     }
   };
-  let inlineOnly = true;
   const createObject = (node) => {
+    const { parentNode, tagName } = node;
     if (!rootNode.contains(node)) {
       return outsideRoot;
     }
     if (isHidden(node)) {
       return;
     }
-    const { parentNode, tagName } = node;
     const rect = getRect(node);
     if (!canBeEmpty(tagName)) {
       if (rect.width === 0 || rect.height === 0) {
@@ -428,9 +448,6 @@ export function captureRangeContent(range, options) {
       if (Object.entries(newStyle).length > 0) {
         object.style = newStyle;
       }
-      if (object.tag !== 'SPAN') {
-        inlineOnly = false;
-      }
       insertContent(parentObject, object);
       objectParents.set(object, parentObject);
       // remember the object's position and style, which will be used for the
@@ -463,7 +480,8 @@ export function captureRangeContent(range, options) {
     const { nodeType, nodeValue, parentNode } = node;
     if (nodeType === Node.TEXT_NODE) {
       const parentObject = getObject(parentNode);
-      if (parentObject) {
+      // don't insert text into the root object
+      if (parentObject && parentObject !== root) {
         const text = nodeValue.substring(startOffset, endOffset).replace(privateCharacters, '');
         insertContent(parentObject, text);
       }
@@ -472,7 +490,7 @@ export function captureRangeContent(range, options) {
         const pseudo = getPseudoElement(node, '::before');
         if (pseudo) {
           const object = getObject(node);
-          if (object) {
+          if (object && object !== root) {
             insertContent(object, pseudo);
           }
         } else if (canBeEmpty(node.tagName)) {
@@ -483,17 +501,13 @@ export function captureRangeContent(range, options) {
         const pseudo = getPseudoElement(node, '::after');
         if (pseudo) {
           const object = getObject(node);
-          if (object) {
+          if (object && object !== root) {
             insertContent(object, pseudo);
           }
         }
       }
     }
   });
-  // change the root tag to P if all we have are inline elements
-  if (inlineOnly) {
-    root.tag = 'P';
-  }
   // apply white-space rules
   collapseWhitespaces(root, objectStyles);
   // replace spans that don't have any styling information with just its
@@ -506,7 +520,7 @@ export function captureRangeContent(range, options) {
   filterLinks(root, filter, objectLinks);
   // filter out content that's probably garbage
   filterContent(root, filter, objectStyles, objectRects);
-  return root;
+  return root.content;
 }
 
 export function insertContent(object, content) {
@@ -535,7 +549,7 @@ export function insertContent(object, content) {
 }
 
 function filterLinks(root, filter, objectLinks) {
-  if (!(root.content instanceof Array) || root.tag === 'P') {
+  if (!(root.content instanceof Array)) {
     return;
   }
   const calculateLinkScore = (object) => {
@@ -578,7 +592,7 @@ function filterLinks(root, filter, objectLinks) {
 }
 
 function filterContent(root, filter, objectStyles, objectRects) {
-  if (!(root.content instanceof Array) || root.tag === 'P') {
+  if (!(root.content instanceof Array)) {
     return;
   }
   // figure out the dominant color and position of the content
