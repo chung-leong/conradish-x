@@ -56,7 +56,12 @@ async function addFootnote(includeTerm) {
   // set the selection to what was last selected
   const range = normalizeRange(lastSelectedRange.cloneRange());
   // put placeholder text in footer initially
-  const term = range.toString().trim();
+  const fragment = range.cloneContents();
+  const fragmentDIV = e('DIV', {}, fragment);
+  for (const supElement of [ ...fragmentDIV.getElementsByClassName('footnote-number') ]) {
+    supElement.remove();
+  }
+  const term = fragmentDIV.innerText.trim();
   const sourceLang = getSourceLanguage();
   const targetLang = getTargetLanguage();
   const translating = (targetLang && targetLang !== sourceLang);
