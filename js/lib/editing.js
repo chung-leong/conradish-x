@@ -385,8 +385,42 @@ function handleBeforeInput(evt) {
 let lastKeyDown = '';
 
 function handleKeyDown(evt) {
-  if (evt.key === 'Escape') {
-    hideArticleMenu();
+  const keys = [];
+  if (evt.ctrlKey) {
+    keys.push('Ctrl');
+  }
+  if (evt.altKey) {
+    keys.push('Alt');
+  }
+  if (evt.shiftKey) {
+    keys.push('Shift');
+  }
+  switch (evt.key) {
+    case 'Control':
+    case 'Shift':
+    case 'Alt':
+      return;
+    default:
+      keys.push(evt.key);
+  }
+  const combo = keys.join('-');
+  let command, arg;
+  switch (combo) {
+    case 'Ctrl-0': command = 'formatBlock'; arg = 'P'; break;
+    case 'Ctrl-1': command = 'formatBlock'; arg = 'H1'; break;
+    case 'Ctrl-2': command = 'formatBlock'; arg = 'H2'; break;
+    case 'Ctrl-3': command = 'formatBlock'; arg = 'H3'; break;
+    case 'Ctrl-4': command = 'formatBlock'; arg = 'H4'; break;
+    case 'Ctrl-5': command = 'formatBlock'; arg = 'H5'; break;
+    case 'Ctrl-6': command = 'formatBlock'; arg = 'H6'; break;
+    case 'Escape':
+      hideArticleMenu();
+      break;
+  }
+  if (command) {
+    document.execCommand(command, false, arg);
+    evt.preventDefault();
+    evt.stopPropagation();
   }
   // remember the last key pressed
   lastKeyDown = evt.key;
