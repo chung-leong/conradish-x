@@ -110,17 +110,6 @@ function isCursorAtListItemEnd() {
   return true;
 }
 
-function inFootnoteNumber(node) {
-  for (let n = node; n; n = n.parentNode) {
-    if (n.nodeType === Node.ELEMENT_NODE) {
-      if (n.classList.contains('footnote-number')) {
-        return true;
-      }
-    }
-  }
-  return false;
-}
-
 function getSelectionRange() {
   const selection = getSelection();
   if (selection.rangeCount > 0) {
@@ -152,26 +141,31 @@ function isMultiparagraph(range) {
   return (count > 1);
 }
 
-function atFootnoteNumber(range) {
-  // assume that the range has been normalized
+function getFootnoteNumber(range, ignoreWhitespaceBefore = false) {
   const { endContainer, endOffset } = range;
-  if (endContainer.nodeType !== Node.TEXT_NODE) {
-    return false;
+  const { nodeValue, nodeType, childNodes, parentNode } = endContainer;
+  let atEnd;
+  if (nodeType === Node.TEXT_NODE) {
+    atEnd = (endOffset === nodeValue.length);
+  } else {
+    atEnd = (endOffset === childNodes.length);
   }
-  const { nodeValue, parentNode } = endContainer;
-  if (endOffset > 0 && endOffset < nodeValue.length) {
-    // ignore whitespaces before cursor
-    if (nodeValue.substring(0, endOffset).trim()) {
-      return false;
+  let atBeginning = (endOffset === 0);
+  if (ignoreWhitespaceBefore && nodeValue && endOffset > 0) {
+    if (!nodeValue.substring(0, endOffset).trim()) {
+      atBeginning = true;
     }
   }
   const isFootnoteNumber = (node) => {
-    return node.classList.contains('footnote-number');
+    if (node && node.nodeType === Node.ELEMENT_NODE) {
+      return node.classList.contains('footnote-number');
+    }
+    return false;
   };
   if (isFootnoteNumber(parentNode)) {
-    return true;
+    return { node: parentNode, position: (atEnd) ? 'before' : 'at' };
   }
-  if (endOffset === nodeValue.length) {
+  if (atEnd) {
     const getNextNode = (node) => {
       const { nextSibling, parentNode } = node;
       if (nextSibling) {
@@ -181,10 +175,10 @@ function atFootnoteNumber(range) {
       }
     };
     const nextNode = getNextNode(endContainer);
-    if (nextNode && isFootnoteNumber(nextNode)) {
-      return true;
+    if (isFootnoteNumber(nextNode)) {
+      return { node: nextNode, position: 'after' };
     }
-  } else {
+  } else if (atBeginning) {
     const getPreviousNode = (node) => {
       const { previousSibling, parentNode } = node;
       if (previousSibling) {
@@ -194,11 +188,15 @@ function atFootnoteNumber(range) {
       }
     };
     const prevNode = getPreviousNode(endContainer);
-    if (prevNode && isFootnoteNumber(prevNode)) {
-      return true;
+    if (isFootnoteNumber(prevNode)) {
+      return { node: prevNode, position: 'before' };
     }
   }
-  return false;
+  return;
+}
+
+function atFootnoteNumber(range) {
+  return !!getFootnoteNumber(range, true);
 }
 
 function normalizeRange(range) {
@@ -364,66 +362,85 @@ function handleInput(evt) {
 }
 
 function handleBeforeInput(evt) {
-  const { target } = evt;
+  const { target, ctrlKey } = evt;
   if (isArticleEditor(target)) {
     // prevent editing of footnote numbers
     const range = getSelectionRange();
-    const { endContainer } = range;
-    if (endContainer.nodeType === Node.TEXT_NODE) {
-      const { parentNode } = endContainer;
-      if (parentNode.className === 'footnote-number') {
-        const allowKeys = [ 'Backspace', 'Delete', 'Enter' ];
-        if (!allowKeys.includes(lastKeyDown)) {
-          evt.preventDefault();
-          evt.stopPropagation();
-        }
+    const number = getFootnoteNumber(range);
+    if (number) {
+      switch (lastKeyDown) {
+        case 'Backspace':
+          if (number.position !== 'after') {
+            // delete the whole number
+            range.selectNode(number.node);
+          }
+          break;
+        case 'Delete':
+          if (number.position !== 'before') {
+            range.selectNode(number.node);
+          }
+          break;
+        case 'Enter':
+          if (number.position === 'before') {
+            break;
+          }
+        default:
+          if (number.position !== 'after') {
+            if (lastKeyCombo !== 'Ctrl-KeyY' && lastKeyCombo !== 'Ctrl-KeyZ') {
+              evt.preventDefault();
+              evt.stopPropagation();
+            }
+          }
       }
     }
   }
 }
 
 let lastKeyDown = '';
+let lastKeyCombo = '';
 
 function handleKeyDown(evt) {
+  const { code, ctrlKey, altKey, shiftKey } = evt;
   const keys = [];
-  if (evt.ctrlKey) {
+  if (ctrlKey) {
     keys.push('Ctrl');
   }
-  if (evt.altKey) {
+  if (altKey) {
     keys.push('Alt');
   }
-  if (evt.shiftKey) {
+  if (shiftKey) {
     keys.push('Shift');
   }
-  switch (evt.key) {
+  switch (code) {
     case 'Control':
     case 'Shift':
     case 'Alt':
       return;
     default:
-      keys.push(evt.key);
+      keys.push(code);
   }
   const combo = keys.join('-');
   let command, arg;
   switch (combo) {
-    case 'Ctrl-0': command = 'formatBlock'; arg = 'P'; break;
-    case 'Ctrl-1': command = 'formatBlock'; arg = 'H1'; break;
-    case 'Ctrl-2': command = 'formatBlock'; arg = 'H2'; break;
-    case 'Ctrl-3': command = 'formatBlock'; arg = 'H3'; break;
-    case 'Ctrl-4': command = 'formatBlock'; arg = 'H4'; break;
-    case 'Ctrl-5': command = 'formatBlock'; arg = 'H5'; break;
-    case 'Ctrl-6': command = 'formatBlock'; arg = 'H6'; break;
-    case 'Escape':
-      hideArticleMenu();
-      break;
+    case 'Ctrl-Digit0': command = 'formatBlock'; arg = 'P'; break;
+    case 'Ctrl-Digit1': command = 'formatBlock'; arg = 'H1'; break;
+    case 'Ctrl-Digit2': command = 'formatBlock'; arg = 'H2'; break;
+    case 'Ctrl-Digit3': command = 'formatBlock'; arg = 'H3'; break;
+    case 'Ctrl-Digit4': command = 'formatBlock'; arg = 'H4'; break;
+    case 'Ctrl-Digit5': command = 'formatBlock'; arg = 'H5'; break;
+    case 'Ctrl-Digit6': command = 'formatBlock'; arg = 'H6'; break;
   }
   if (command) {
     document.execCommand(command, false, arg);
     evt.preventDefault();
     evt.stopPropagation();
   }
+  if (code === 'Escape') {
+    hideArticleMenu();
+  }
   // remember the last key pressed
-  lastKeyDown = evt.key;
+  lastKeyDown = code;
+  lastKeyCombo = combo;
 }
 
 function handleKeyPress(evt) {
@@ -491,7 +508,11 @@ function insertData(target, dataTransfer) {
 
 function handlePaste(evt) {
   const { target, clipboardData } = evt;
-  insertData(target, clipboardData);
+  const range = getSelectionRange();
+  const number = isArticleEditor(target) ? getFootnoteNumber(range) : null;
+  if (!number || number.position === 'after') {
+    insertData(target, clipboardData);
+  }
   evt.preventDefault();
   evt.stopPropagation();
 }
