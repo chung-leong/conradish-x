@@ -454,11 +454,13 @@ export function captureRangeContent(range, options) {
       // purpose of filtering out junk content
       objectRects.set(object, rect);
       objectStyles.set(object, style);
-      if (tag === 'LI' || tag === 'TD' || tag === 'P') {
-        // save links
-        const links = [ ...node.getElementsByTagName('A') ].filter(a => !!a.href);
-        if (links.length > 0) {
-          objectLinks.set(object, links);
+      if (tagName === 'A') {
+        // let associate the parent with the link
+        for (let obj = parentObject; obj; obj = objectParents.get(obj)) {
+          if (obj.tag !== 'SPAN') {
+            objectLinks.set(obj, node);
+            break;
+          }
         }
       }
       return object;
@@ -581,10 +583,10 @@ function filterLinks(root, filter, objectLinks) {
     return;
   }
   const calculateLinkScore = (object) => {
-    const links = objectLinks.get(object);
-    if (links) {
+    const link = objectLinks.get(object);
+    if (link) {
       const objectText = getPlainText(object).trim();
-      const linkText = links.map(l => l.innerText).join('').trim();
+      const linkText = link.innerText.trim();
       if (objectText === linkText) {
         return 1;
       } else if (linkText.length / objectText.length >= 0.6) {
@@ -660,7 +662,7 @@ function filterContent(root, filter, objectStyles, objectRects) {
   const calculatePositionScore = (rect1, rect2) => {
     const leftDiff = Math.abs(rect1.left - rect2.left);
     const rightDiff = Math.abs(rect1.right - rect2.right);
-    return (leftDiff > 0) ? leftDiff + rightDiff : 0;
+    return leftDiff + (rightDiff / 5);
   };
   const parseRGB = (color) => {
     const m = color.replace(/[rgba\(\)\s]/g, '').split(',');
@@ -691,16 +693,16 @@ function filterContent(root, filter, objectStyles, objectRects) {
     const isHeading = /^H[123]$/.test(object.tag);
     // greater tolerance for heading
     const limitPos = (isHeading) ? 20 : 10;
-    const limitColor = (isHeading) ? 20 : 10;
+    const limitColor = (isHeading) ? 40 : 20;
     let junkFactor = 0;
     if (scoreColor / charCount > limitColor || scorePos / charCount > limitPos) {
       // probably junk
       junkFactor = 1;
-    } else if (scoreColor > (limitColor * 10) || scorePos > (limitPos * 10)) {
+    } else if (scoreColor > (limitColor * 5) || scorePos > (limitPos * 5)) {
       // might be junk
       junkFactor = 0.5;
     }
-    //object.score = { color: scoreColor / charCount, position: scorePos / charCount};
+    //object.score = { charCount, color: scoreColor, position: scorePos };
     return rejectJunk(object, filter, junkFactor)
   });
 }
