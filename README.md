@@ -1,15 +1,14 @@
 # Conradish
 
-**Conradish** is blah blah blah
+**Conradish** is a Chrome extension that lets you create print version of news articles with footnotes. It's designed for educators who wish to use online materials in the classroom. With its automatic translation feature, this extension is especially useful for teachers of foreign languages.
 
-# Features
+![Conradish transformation](doc/img/transform-1.jpg)
 
-* [About](#conradish)
 * [Features](#features)
 * [User Guide](#user-guide)
   - [Creating print version of article](#creating-print-version-of-article)
   - [Annotating article](#annotating-article)
-     - [Adding a definition](#adding-definition)
+     - [Adding definition](#adding-definition)
      - [Adding translation/explanation](#adding-translationexplanation)
      - [Removing footnotes](#removing-footnotes)
      - [Applying text style](#applying-text-style)
@@ -18,6 +17,14 @@
   - [Finding documents](#finding-documents)
 * [Limitations](#limitations)
 * [Privacy](#privacy)
+
+# Features
+
+* Printing only selected portions of articles
+* Removal of ads and images
+* Simplification of page layout
+* Addition of footnotes
+* Integration with Google Translate
 
 # User Guide
 
@@ -89,7 +96,7 @@ The following hot-keys can be used to add basic text style:
 | **Alt-Shift-5**      | Strikethrough     |
 | **Ctrl-Shift-Minus** | Subscript         |
 | **Ctrl-Shift-Equal** | Superscript       |
-| **Ctrl-\**           | Clear formatting  |
+| **Ctrl-\\**          | Clear formatting  |
 | **Ctrl-1**           | Heading 1         |
 | **Ctrl-2**           | Heading 2         |
 | **Ctrl-3**           | Heading 3         |
@@ -106,7 +113,7 @@ Initial view:
 
 ![Initial view](doc/img/filter-1.jpg)
 
-With hidden contents:
+With hidden contents shown:
 
 ![Complete view](doc/img/filter-2.jpg)
 
@@ -114,8 +121,26 @@ Filtered contents will appear in red. Contents that Conradish deemed questionabl
 
 Click on a section to either restore or hide it. When you're done, press **Ctrl-Shift-H** again.
 
+This feature is available even when "Filter page content" is disabled in the option pane.
+
 ## Printing
+
+Click the Print button to print. Chrome's print window will appear. Double-check that the **Paper size** matches what is set in Conradish and that **Margins** is set to "Default". The document will not print correctly if either one of these is off.
+
+![Print window](doc/img/print-1.jpg)
+
+## Finding documents
 
 # Limitations
 
+* The extension currently cannot handle right-to-left languages.
+* Font selection has no impact on the display of East-Asian languages.
+* Long tables can get cut off.
+* User interface in English only.
+* User interface is sub-optimal on devices with smaller screens.
+
+These issues will be addressed in future versions.
+
 # Privacy
+
+Conradish does not capture any user information. It does not monitor your browsing history. All date is stored locally. The extension does sent text to Google for the purpose of translation. The privacy implications are the same as those of using [Google Translate](https://policies.google.com/privacy).
