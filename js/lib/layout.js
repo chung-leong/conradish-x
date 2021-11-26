@@ -189,7 +189,7 @@ export function addFooter() {
   // add pusher to push the footer down the page, while leaving a space
   // that the main text can float into
   const pusherElement = e('DIV', { className: 'footer-pusher' }, '\u00a0');
-  const listElement = e('OL', { className: 'footer-content' });
+  const listElement = e('OL', { className: 'footer-content', spellcheck: false });
   // add spacer to account of space between sheets of paper in display mode
   // it'll be hidden in print mode
   const spacerElement = e('DIV', { className: 'footer-spacer' }, '\u00a0');
