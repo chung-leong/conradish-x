@@ -117,7 +117,7 @@
   display: flex;
   right: 16px;
   bottom: 80px;
-  width: 85%;
+  width: 80%;
   opacity: 1;
   transition: opacity 0.3s ease-in, bottom 0.3s ease-in, visibility 0.3s;
 }

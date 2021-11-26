@@ -110,9 +110,9 @@ With hidden contents:
 
 ![Complete view](doc/img/filter-2.jpg)
 
-Filtered contents will appear in red. Contents that Conradish deemed questionable will pulsate in yellow (in the example above, the line "*Catch up on the developing stories making headlines.*" is probably not something you want to keep).
+Filtered contents will appear in red. Contents that Conradish deemed questionable will pulsate in yellow. In the example above, the line "*Catch up on the developing stories making headlines.*" is probably not something you want to keep.
 
-Click on a section to either restore or hide it. When you're done, press **Ctrl-Shift-H** again. 
+Click on a section to either restore or hide it. When you're done, press **Ctrl-Shift-H** again.
 
 ## Printing
 
