@@ -77,18 +77,23 @@ async function handleSettings(evt) {
 function handleMessage(request, sender, sendResponse) {
   switch (request.type) {
     case 'create':
-      return handleCreateDocument(request);
-    case 'command':
-      return handleCommand(request);
+      handleCreateDocument(request);
+      break;
+    case 'capture':
+      handleCapture();
+      break;
     case 'query':
       handleSelectionQuery(sendResponse);
       // keep sendResponse alive by returning true
       return true;
     case 'response':
-      return handleSelectionResponse(true);
+      handleSelectionResponse(true);
+      break;
     case 'error':
       console.error(request.message);
+      break;
   }
+  return false;
 }
 
 async function handleCreateDocument({ document }) {
@@ -97,12 +102,9 @@ async function handleCreateDocument({ document }) {
   await chrome.tabs.create({ url });
 }
 
-async function handleCommand({ command, arg }) {
-  switch (command) {
-    case 'create':
-      let [ tab ] = await chrome.tabs.query({ active: true, currentWindow: true });
-      return createDocument(tab);
-  }
+async function handleCapture() {
+  let [ tab ] = await chrome.tabs.query({ active: true, currentWindow: true });
+  return createDocument(tab);
 }
 
 let responseFunc = null;

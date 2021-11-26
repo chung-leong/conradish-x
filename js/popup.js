@@ -58,6 +58,9 @@ function handleClick(evt) {
     const { command, arg } = target.dataset;
     if (command) {
       switch (command) {
+        case 'create':
+          chrome.runtime.sendMessage(undefined, { type: 'capture' });
+          break;
         case 'openDOC':
           openPage('article', { t: arg });
           break;
