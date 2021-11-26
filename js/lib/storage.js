@@ -11,11 +11,6 @@ export function getSettings() {
   return settings;
 }
 
-export async function getSettingsAsync() {
-  await initializeStorage();
-  return settings;
-}
-
 export async function saveSettings() {
   savingSettings = true;
   return set('.settings', settings);

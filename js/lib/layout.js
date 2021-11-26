@@ -1,11 +1,12 @@
 import { e } from './ui.js';
-import { applyStyles, getPageProperties } from './settings.js';
+import { applyStyles, getPageProperties, getSettings } from './settings.js';
 import { setSourceLanguage, getSourceLanguage } from './i18n.js';
 import { insertContent, replaceUselessElements, removeEmptyNodes } from './capturing.js';
 import { loadObject, saveObject } from './storage.js';
 
 import sampleDoc from './sample.js';
 
+const articleElement = document.getElementById('article');
 const contentElement = document.getElementById('article-text');
 const backgroundElement = document.getElementById('article-background');
 const footerRootElement = document.getElementById('article-footers');
@@ -17,8 +18,11 @@ const footnotes = [];
 let currentDocumentKey;
 let currentDocument;
 let deletionCount = 1;
+let filterMode = 'automatic';
 
 export async function loadDocument(key) {
+  const { filter } = getSettings();
+  setFilterMode(filter);
   currentDocument = (key) ? await loadObject(key) : sampleDoc;
   currentDocumentKey = key;
   const { title, content, lang } = currentDocument;
@@ -370,7 +374,16 @@ export function adjustFootnotes(options = {}) {
   return changed;
 }
 
-export function addContent(element, content) {
+export function setFilterMode(mode) {
+  if (filterMode !== mode) {
+    articleElement.classList.remove(`filter-${filterMode}`);
+    filterMode = mode;
+    articleElement.classList.add(`filter-${filterMode}`);
+    adjustLayout();
+  }
+}
+
+function addContent(element, content) {
   if (typeof(content) === 'string') {
     element.append(content);
   } else if (content instanceof Array) {
@@ -388,9 +401,16 @@ export function findDeletedFootnote(id) {
 
 let nextFootnoteId = Math.round(Math.random() * 0x00FFFFFF) * 1000;
 
-function addElement(element, { tag, style, content, footnote }) {
+function addElement(element, { tag, style, content, footnote, junk }) {
   const child = e(tag, { style, className: 'conradish' });
   addContent(child, content);
+  if (junk > 0) {
+    if (junk === 1) {
+      child.classList.add('likely-junk');
+    } else {
+      child.classList.add('possibly-junk');
+    }
+  }
   if (footnote instanceof Object) {
     const { content, ...extra } = footnote;
     const number = footnotes.length + 1;
@@ -448,6 +468,9 @@ function extractContent(node) {
       return nodeValue;
     } else if (nodeType === Node.ELEMENT_NODE) {
       const { tagName, classList, childNodes, style } = node;
+      if (filterMode === 'automatic' && classList.contains('likely-junk')) {
+        return;
+      }
       const object = { tag: tagName, content: undefined };
       for (const child of childNodes) {
         const content = extractFromNode(child);

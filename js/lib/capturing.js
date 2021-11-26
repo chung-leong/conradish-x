@@ -35,19 +35,18 @@ export function transverseRange(range, cb) {
   scan(commonAncestorContainer);
 }
 
-export async function captureSelection(selection, filter) {
+export async function captureSelection(selection) {
   const range = selection.getRangeAt(0);
   const url = document.location.href;
   const title = getTitle();
   const image = getImage();
   const lang = await getLanguage(range);
-  const content = captureRangeContent(range, { filter });
+  const content = captureRangeContent(range);
   const doc = { url, title, image, lang, content };
   return doc;
 }
 
-export function captureRangeContent(range, options) {
-  const { filter } = options;
+export function captureRangeContent(range) {
   const nodeStyles = new Map;
   const getNodeStyle = (node) => {
     let style = nodeStyles.get(node);
@@ -451,7 +450,7 @@ export function captureRangeContent(range, options) {
       insertContent(parentObject, object);
       objectParents.set(object, parentObject);
       // remember the object's position and style, which will be used for the
-      // purpose of filtering out junk content
+      // purpose of detecting junk content
       objectRects.set(object, rect);
       objectStyles.set(object, style);
       if (tagName === 'A') {
@@ -527,10 +526,10 @@ export function captureRangeContent(range, options) {
   replaceUselessElements(root);
   // remove empty nodes
   removeEmptyNodes(root);
-  // filter out links
-  filterLinks(root, filter, objectLinks);
-  // filter out content that's probably garbage
-  filterContent(root, filter, objectStyles, objectRects);
+  // add junk rating based on presence of links
+  rateContentByLinks(root, objectLinks);
+  // add junk rating based on positions and colors
+  rateContentBySimiliarity(root, objectStyles, objectRects);
   return root.content;
 }
 
@@ -578,7 +577,7 @@ export function insertContent(object, content, atBeginning = false) {
   }
 }
 
-function filterLinks(root, filter, objectLinks) {
+function rateContentByLinks(root, objectLinks) {
   if (!(root.content instanceof Array)) {
     return;
   }
@@ -608,20 +607,24 @@ function filterLinks(root, filter, objectLinks) {
       return 0;
     }
   };
-  alterObjects(root.content, (object) => {
-    let junkFactor = 0;
-    if (object.tag === 'UL' || object.tag === 'OL') {
-      junkFactor = calculateCollectiveScore(object, 'LI', false);
-    } else if (object.tag === 'TABLE') {
-      junkFactor = calculateCollectiveScore(object, 'TD', true);
-    } else {
-      junkFactor = calculateLinkScore(object);
+  for (const object of root.content) {
+    if (object instanceof Object) {
+      let junkFactor = 0;
+      if (object.tag === 'UL' || object.tag === 'OL') {
+        junkFactor = calculateCollectiveScore(object, 'LI', false);
+      } else if (object.tag === 'TABLE') {
+        junkFactor = calculateCollectiveScore(object, 'TD', true);
+      } else {
+        junkFactor = calculateLinkScore(object);
+      }
+      if (junkFactor > 0 && !(object.junk > junkFactor)) {
+        object.junk = junkFactor;
+      }
     }
-    return rejectJunk(object, filter, junkFactor);
-  });
+  }
 }
 
-function filterContent(root, filter, objectStyles, objectRects) {
+function rateContentBySimiliarity(root, objectStyles, objectRects) {
   if (!(root.content instanceof Array)) {
     return;
   }
@@ -682,43 +685,33 @@ function filterContent(root, filter, objectStyles, objectRects) {
     return diffR + diffG + diffB + diffA;
   };
   // remove paragraphs that are way off
-  alterObjects(root.content, (object) => {
-    const rect = objectRects.get(object);
-    const style = objectStyles.get(object);
-    const charCount = objectCounts.get(object);
-    const color = style.color;
-    // calculate the "junk" scores
-    const scoreColor = calculateColorScore(color, maxColor);
-    const scorePos = calculatePositionScore(rect, maxRect);
-    const isHeading = /^H[123]$/.test(object.tag);
-    // greater tolerance for heading
-    const limitPos = (isHeading) ? 20 : 10;
-    const limitColor = (isHeading) ? 40 : 20;
-    let junkFactor = 0;
-    if (scoreColor / charCount > limitColor || scorePos / charCount > limitPos) {
-      // probably junk
-      junkFactor = 1;
-    } else if (scoreColor > (limitColor * 5) || scorePos > (limitPos * 5)) {
-      // might be junk
-      junkFactor = 0.5;
-    }
-    //object.score = { charCount, color: scoreColor, position: scorePos };
-    return rejectJunk(object, filter, junkFactor)
-  });
-}
-
-function rejectJunk(object, filter, junkFactor) {
-  if (junkFactor > 0) {
-    if (junkFactor === 1 && filter === 'automatic') {
-      // throw it out now
-      return;
-    }
-    if (!object.junk || junkFactor < object.junk) {
-      // mark it as junk and wait for the user to decide what to do
-      object.junk = junkFactor;
+  for (const object of root.content) {
+    if (object instanceof Object) {
+      const rect = objectRects.get(object);
+      const style = objectStyles.get(object);
+      const charCount = objectCounts.get(object);
+      const color = style.color;
+      // calculate the "junk" scores
+      const scoreColor = calculateColorScore(color, maxColor);
+      const scorePos = calculatePositionScore(rect, maxRect);
+      const isHeading = /^H[123]$/.test(object.tag);
+      // greater tolerance for heading
+      const limitPos = (isHeading) ? 20 : 10;
+      const limitColor = (isHeading) ? 40 : 20;
+      let junkFactor = 0;
+      if (scoreColor / charCount > limitColor || scorePos / charCount > limitPos) {
+        // probably junk
+        junkFactor = 1;
+      } else if (scoreColor > (limitColor * 5) || scorePos > (limitPos * 5)) {
+        // might be junk
+        junkFactor = 0.5;
+      }
+      //object.score = { charCount, color: scoreColor, position: scorePos };
+      if (junkFactor > 0 && !(object.junk > junkFactor)) {
+        object.junk = junkFactor;
+      }
     }
   }
-  return object;
 }
 
 function getCharacterCount(item) {

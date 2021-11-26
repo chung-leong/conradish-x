@@ -1,7 +1,14 @@
 import { e, separateWords } from './ui.js';
-import { adjustLayout, adjustFootnotes, findDeletedFootnote, annotateRange, saveDocument } from './layout.js';
+import { adjustLayout, adjustFootnotes, findDeletedFootnote, annotateRange, saveDocument, setFilterMode } from './layout.js';
 import { transverseRange } from './capturing.js';
 import { translate, getSourceLanguage, getTargetLanguage } from './i18n.js';
+
+const articleMenuElement = document.getElementById('article-menu');
+const articleMenuItems = {};
+let lastSelectedRange = null;
+let articleMenuClicked = false;
+let editMode = 'annotate';
+let cleaned = false;
 
 export function attachEditingHandlers() {
   document.addEventListener('keydown', handleKeyDown);
@@ -13,14 +20,11 @@ export function attachEditingHandlers() {
   document.addEventListener('dragend', handleDragEnd);
   document.addEventListener('drop', handleDrop);
   document.addEventListener('selectionchange', handleSelectionChange);
+  document.addEventListener('click', handleClick);
+  document.addEventListener('mousedown', handleMouseDown);
   document.execCommand('styleWithCSS', false, true);
   document.execCommand('insertBrOnReturn', false, false);
 }
-
-const articleMenuElement = document.getElementById('article-menu');
-const articleMenuItems = {};
-let lastSelectedRange = null;
-let articleMenuClicked = false;
 
 export function createMenuItems() {
   const itemDefs = {
@@ -434,6 +438,7 @@ function handleKeyDown(evt) {
     case 'Ctrl-Digit4': command = 'formatBlock'; arg = 'H4'; break;
     case 'Ctrl-Digit5': command = 'formatBlock'; arg = 'H5'; break;
     case 'Ctrl-Digit6': command = 'formatBlock'; arg = 'H6'; break;
+    case 'Ctrl-Shift-KeyH': toggleMode(); break;
   }
   if (command) {
     document.execCommand(command, false, arg);
@@ -511,55 +516,6 @@ function insertData(target, dataTransfer) {
   }
 }
 
-function handlePaste(evt) {
-  const { target, clipboardData } = evt;
-  const range = getSelectionRange();
-  const number = isArticleEditor(target) ? getFootnoteNumber(range) : null;
-  if (!number || number.position === 'after') {
-    insertData(target, clipboardData);
-  }
-  evt.preventDefault();
-  evt.stopPropagation();
-}
-
-let dropSource = null;
-
-function handleDragStart(evt) {
-  const { target } = evt;
-  dropSource = target;
-}
-
-function handleDragEnd(evt) {
-  const { target } = evt;
-  dropSource = null;
-}
-
-function handleDrop(evt) {
-  const { target, dataTransfer } = evt;
-  const range = document.caretRangeFromPoint(evt.clientX, evt.clientY);
-  const container = getEditableContainer(target);
-  const sourceContainer = getEditableContainer(dropSource);
-  if (container === sourceContainer && !evt.ctrlKey) {
-    // a move within the container, let chrome take case of it
-    return;
-  }
-  if (sourceContainer && !evt.ctrlKey) {
-    // delete the content from the source container
-    // unfortunately, this introduces a second op in the undo stack
-    // drag-and-drop between article text and footnotes should be
-    // pretty rare so this isn't too bad
-    sourceContainer.focus();
-    document.execCommand('delete', false);
-  }
-  container.focus();
-  const selection = getSelection();
-  selection.removeAllRanges()
-  selection.addRange(range);
-  insertData(container, dataTransfer);
-  evt.preventDefault();
-  evt.stopPropagation();
-}
-
 function getRangeContainer(range) {
   if (range) {
     return getEditableContainer(range.startContainer);
@@ -614,7 +570,7 @@ function hideArticleMenu() {
   }
 }
 
-function handleSelectionChange(evt) {
+function checkArticleSelection() {
   const range = getSelectionRange();
   const container = getRangeContainer(range);
   let hideMenu = true;
@@ -628,6 +584,114 @@ function handleSelectionChange(evt) {
   if (hideMenu) {
     hideArticleMenu();
   }
+}
+
+export function setEditMode(mode) {
+  if (editMode === 'annotate') {
+    hideArticleMenu();
+    cleaned = false;
+  } else {
+    if (cleaned) {
+      autosave();
+    }
+  }
+  editMode = mode;
+  setFilterMode(editMode === 'clean' ? 'manual' : 'automatic');
+  if (editMode === 'annotate') {
+    checkArticleSelection();
+  }
+}
+
+function toggleMode() {
+  setEditMode(editMode === 'annotate' ? 'clean' : 'annotate');
+}
+
+function handlePaste(evt) {
+  const { target, clipboardData } = evt;
+  const range = getSelectionRange();
+  const number = isArticleEditor(target) ? getFootnoteNumber(range) : null;
+  if (!number || number.position === 'after') {
+    insertData(target, clipboardData);
+  }
+  evt.preventDefault();
+  evt.stopPropagation();
+}
+
+let dropSource = null;
+
+function handleDragStart(evt) {
+  const { target } = evt;
+  dropSource = target;
+}
+
+function handleDragEnd(evt) {
+  const { target } = evt;
+  dropSource = null;
+}
+
+function handleDrop(evt) {
+  const { target, dataTransfer } = evt;
+  const range = document.caretRangeFromPoint(evt.clientX, evt.clientY);
+  const container = getEditableContainer(target);
+  const sourceContainer = getEditableContainer(dropSource);
+  if (container === sourceContainer && !evt.ctrlKey) {
+    // a move within the container, let chrome take case of it
+    return;
+  }
+  if (sourceContainer && !evt.ctrlKey) {
+    // delete the content from the source container
+    // unfortunately, this introduces a second op in the undo stack
+    // drag-and-drop between article text and footnotes should be
+    // pretty rare so this isn't too bad
+    sourceContainer.focus();
+    document.execCommand('delete', false);
+  }
+  container.focus();
+  const selection = getSelection();
+  selection.removeAllRanges()
+  selection.addRange(range);
+  insertData(container, dataTransfer);
+  evt.preventDefault();
+  evt.stopPropagation();
+}
+
+function handleSelectionChange(evt) {
+  if (editMode !== 'annotate') {
+    return;
+  }
+  checkArticleSelection();
+}
+
+function handleClick(evt) {
+  if (editMode !== 'clean') {
+    return;
+  }
+  const { target } = evt;
+  for (let n = target; n && n.parentNode; n = n.parentNode) {
+    if (n.parentNode.id === 'article-text') {
+      const { classList } = n;
+      if (classList.contains('possibly-junk')) {
+        classList.remove('possibly-junk');
+        classList.add('likely-junk');
+      } else if (classList.contains('likely-junk')) {
+        classList.remove('likely-junk');
+      } else {
+        classList.add('likely-junk');
+      }
+      cleaned = true;
+      break;
+    }
+  }
+  evt.preventDefault();
+  evt.stopPropagation();
+}
+
+function handleMouseDown(evt) {
+  if (editMode !== 'clean') {
+    return;
+  }
+  evt.preventDefault();
+  evt.stopPropagation();
 }
 
 function handleMenuMouseDown(evt) {

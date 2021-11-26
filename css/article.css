@@ -93,6 +93,38 @@ BODY.ready #article {
   font-weight: 400;
 }
 
+#article.filter-automatic #article-text .likely-junk {
+  display: none;
+}
+
+#article.filter-manual #article-text .likely-junk {
+  background-color: rgb(255, 102, 102);
+}
+
+#article.filter-manual #article-text .possibly-junk {
+  animation-name: flashing-background;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  animation-delay: 1s;
+}
+
+@keyframes flashing-background {
+  0%   { background-color: rgba(255, 255, 102, 0); }
+  10%  { background-color: rgba(255, 255, 102, 0.8); }
+  40%  { background-color: rgba(255, 255, 102, 0.8); }
+  80%  { background-color: rgba(255, 255, 102, 0); }
+  100% { background-color: rgba(255, 255, 102, 0); }
+}
+
+#article.filter-manual #article-text * {
+  cursor: pointer;
+}
+
+#article.filter-manual #article-footers {
+  opacity: 0.25;
+}
+
 #article-footers {
   font-size: 10pt;
 }
@@ -253,5 +285,13 @@ BODY.ready #status-container {
   .footer-spacer {
     /* remove spacing between sheets */
     display: none;
+  }
+
+  #article.filter-manual #article-text .likely-junk {
+    background: none;
+  }
+
+  #article.filter-manual #article-text .possibly-junk {
+    animation: none;
   }
 }

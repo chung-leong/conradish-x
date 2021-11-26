@@ -1,54 +1,53 @@
-import { storeObject, getSettingsAsync, storageChange } from './lib/storage.js';
+import { initializeStorage, getSettings, storeObject, storageChange } from './lib/storage.js';
 import { getPageURL } from './lib/navigation.js';
 
+let currentSettings;
+
 async function start() {
+  const storageInitialization = initializeStorage();
   chrome.contextMenus.onClicked.addListener(handleMenuClick);
   chrome.runtime.onMessage.addListener(handleMessage);
   chrome.runtime.onInstalled.addListener(async () => {
-    // create message here, since the extension could have been
+    // create menu here, since the extension could have been
     // loaded before and got unloaded
-    const settings = await getSettingsAsync();
+    await storageInitialization;
+    const settings = getSettings();
     if (settings.contextMenu) {
       addContextMenu();
     }
   });
+  // wait for storage initiation then listen for changes
+  await storageInitialization;
+  currentSettings = getSettings();
   storageChange.addEventListener('settings', handleSettings);
 }
 
 const createMenuId = 'create';
-let hasContextMenu = false;
 
 function addContextMenu() {
-  if (!hasContextMenu) {
-    chrome.contextMenus.create({
-      contexts: [ 'selection' ],
-      documentUrlPatterns: [ 'http://*/*', 'https://*/*' ],
-      title: 'Create print version',
-      id: createMenuId,
-    }, () => chrome.runtime.lastError);
-    hasContextMenu = true;
-  }
+  chrome.contextMenus.create({
+    contexts: [ 'selection' ],
+    documentUrlPatterns: [ 'http://*/*', 'https://*/*' ],
+    title: 'Create print version',
+    id: createMenuId,
+  }, () => chrome.runtime.lastError);
 }
 
 function removeContextMenu() {
-  if (hasContextMenu) {
-    chrome.contextMenus.remove(createMenuId);
-    hasContextMenu = false;
-  }
+  chrome.contextMenus.remove(createMenuId, () => chrome.runtime.lastError);
 }
 
 async function createDocument(tab) {
   const codeURL = chrome.runtime.getURL('js/lib/capturing.js');
-  const settings = await getSettingsAsync();
   await chrome.scripting.executeScript({
     target: { allFrames: true, tabId: tab.id },
-    args: [ codeURL, settings.filter ],
-    func: async (codeURL, filter) => {
+    args: [ codeURL ],
+    func: async (codeURL) => {
       const selection = getSelection();
       if (!selection.isCollapsed) {
         // load the code for capturing only if the frame has selection
         const { captureSelection } = await import(codeURL);
-        const doc = await captureSelection(selection, filter);
+        const doc = await captureSelection(selection);
         try {
           chrome.runtime.sendMessage(undefined, { type: 'create', document: doc });
         } catch (err) {
@@ -65,11 +64,15 @@ async function createDocument(tab) {
 
 async function handleSettings(evt) {
   if (!evt.detail.self) {
-    const settings = await getSettingsAsync();
-    if (settings.contextMenu) {
-      addContextMenu();
-    } else {
-      removeContextMenu();
+    const { contextMenu: before } = currentSettings;
+    currentSettings = getSettings();
+    const { contextMenu: after } = currentSettings;
+    if (before !== after) {
+      if (after) {
+        addContextMenu();
+      } else {
+        removeContextMenu();
+      }
     }
   }
 }
