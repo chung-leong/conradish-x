@@ -395,9 +395,13 @@ function handleBeforeInput(evt) {
           }
         default:
           if (number.position !== 'after') {
-            if (lastKeyCombo !== 'Ctrl-KeyY' && lastKeyCombo !== 'Ctrl-KeyZ') {
-              evt.preventDefault();
-              evt.stopPropagation();
+            switch (lastKeyCombo) {
+              case 'Ctrl-KeyY':
+              case 'Ctrl-KeyZ':
+                break;
+              default:
+                evt.preventDefault();
+                evt.stopPropagation();
             }
           }
       }
@@ -421,9 +425,12 @@ function handleKeyDown(evt) {
     keys.push('Shift');
   }
   switch (code) {
-    case 'Control':
-    case 'Shift':
-    case 'Alt':
+    case 'ControlRight':
+    case 'ControlLeft':
+    case 'ShiftLeft':
+    case 'ShiftRight':
+    case 'AltLeft':
+    case 'AltRight':
       return;
     default:
       keys.push(code);
@@ -438,6 +445,10 @@ function handleKeyDown(evt) {
     case 'Ctrl-Digit4': command = 'formatBlock'; arg = 'H4'; break;
     case 'Ctrl-Digit5': command = 'formatBlock'; arg = 'H5'; break;
     case 'Ctrl-Digit6': command = 'formatBlock'; arg = 'H6'; break;
+    case 'Ctrl-Shift-Minus': command = 'subscript'; break;
+    case 'Ctrl-Shift-Equal': command = 'superscript'; break;
+    case 'Alt-Shift-Digit5': command = 'strikeThrough'; break;
+    case 'Ctrl-Backslash': command = 'removeFormat'; break;
     case 'Ctrl-Shift-KeyH': toggleMode(); break;
   }
   if (command) {
