@@ -1,7 +1,6 @@
 export function openPage(name, params = {}) {
   const url = getPageURL(name, params);
   const target = getWindowName(name, Object.values(params));
-  console.log(url, target);
   window.open(url, target);
 }
 

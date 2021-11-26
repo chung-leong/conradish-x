@@ -4,8 +4,6 @@ import { setSourceLanguage, getSourceLanguage } from './i18n.js';
 import { insertContent, replaceUselessElements, removeEmptyNodes } from './capturing.js';
 import { loadObject, saveObject } from './storage.js';
 
-import sampleDoc from './sample.js';
-
 const articleElement = document.getElementById('article');
 const contentElement = document.getElementById('article-text');
 const backgroundElement = document.getElementById('article-background');
@@ -23,7 +21,7 @@ let filterMode = 'automatic';
 export async function loadDocument(key) {
   const { filter } = getSettings();
   setFilterMode(filter);
-  currentDocument = (key) ? await loadObject(key) : sampleDoc;
+  currentDocument = await loadObject(key);
   currentDocumentKey = key;
   const { title, content, lang } = currentDocument;
   // set the source language
@@ -35,7 +33,7 @@ export async function loadDocument(key) {
   addContent(contentElement, content);
   // adjust layout, inserting footnotes into appropriate page
   adjustLayout();
-  console.log(currentDocument);
+  //console.log(currentDocument);
 }
 
 export async function saveDocument() {
@@ -45,7 +43,7 @@ export async function saveDocument() {
     doc.lang = getSourceLanguage();
   }
   currentDocument = doc;
-  console.log(doc);
+  //console.log(doc);
   if (!currentDocumentKey) {
     return;
   }
