@@ -221,18 +221,20 @@ export function adjustFootnotes(options = {}) {
     for (const [ index, supElement ] of [ ...supElements ].entries()) {
       let footnote = footnotes.find(f => f.supElement === supElement);
       if (!footnote) {
-        footnote = findDeletedFootnote(supElement.id);
+        const { id } = supElement;
+        footnote = footnotes.find(f => f.id === id);
       }
       if (footnote) {
         if (footnote.deleted) {
           // mark it as not deleted
           // itemElement will get added back by adjustLayout()
           footnote.deleted = 0;
-          // the sup element could be different if it reappears thanks to
-          // a copy-and-paste operation
-          footnote.supElement = supElement;
           changed = true;
         }
+        // the sup element could be different if it reappears thanks to
+        // a copy-and-paste operation or it's got overwritten during a
+        // execCommand('insertHTML')
+        footnote.supElement = supElement;
         const currentIndex = footnotes.indexOf(footnote);
         if (currentIndex !== index) {
           // put it in the correct position

@@ -68,7 +68,7 @@ async function addFootnote(includeTerm) {
   const placeholder = (translating) ? '...' : '';
   const initialText = (includeTerm) ? `${term} - ${placeholder}` : placeholder;
   const footnote = annotateRange(range, initialText);
-  adjustFootnotes({ updateNumbering: true });
+  adjustFootnotes({ updateReferences: true, updateNumbering: true });
   adjustLayout({ updateFooterPosition: true });
   if (translating) {
     const result = await translate(term, sourceLang, targetLang, includeTerm);
