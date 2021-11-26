@@ -1,6 +1,6 @@
 {
   "name": "Conradish",
-  "description": "Create print-outs of foreign-language articles with definitions as footnotes",
+  "description": "Create print version of news articles with footnotes",
   "version": "1.0",
   "manifest_version": 3,
   "background": {
