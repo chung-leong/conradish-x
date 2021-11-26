@@ -47,7 +47,7 @@ export async function captureSelection(selection) {
 }
 
 export function captureRangeContent(range) {
-  const nodeStyles = new Map;
+  const nodeStyles = new WeakMap;
   const getNodeStyle = (node) => {
     let style = nodeStyles.get(node);
     if (style === undefined) {
@@ -90,7 +90,7 @@ export function captureRangeContent(range) {
   // get "@media print" selectors from the page's CSS style sheet
   // specifying elements that ought to be hidden when printing
   const hiddenSelectors = getHiddenSelectors();
-  const nodeHiddenStates = new Map;
+  const nodeHiddenStates = new WeakMap;
   for (const selector of hiddenSelectors) {
     // mark all the matching nodes (including their descendents) as hidden
     for (const node of rootNode.querySelectorAll(selector)) {
@@ -102,11 +102,11 @@ export function captureRangeContent(range) {
   }
   const root = { tag: 'DIV', content: undefined };
   const outsideRoot = { tag: '#INVALID' };
-  const nodeObjects = new Map([ [ rootNode, root ] ]);
-  const objectParents = new Map;
-  const objectStyles = new Map([ [ root, getNodeStyle(rootNode) ] ]);
-  const objectRects = new Map;
-  const objectLinks = new Map;
+  const nodeObjects = new WeakMap([ [ rootNode, root ] ]);
+  const objectParents = new WeakMap;
+  const objectStyles = new WeakMap([ [ root, getNodeStyle(rootNode) ] ]);
+  const objectRects = new WeakMap;
+  const objectLinks = new WeakMap;
   const rootClientRect = rootNode.getBoundingClientRect();
   const getRect = (node) => {
     const clientRect = node.getBoundingClientRect();
@@ -631,7 +631,7 @@ function rateContentBySimiliarity(root, objectStyles, objectRects) {
   // figure out the dominant color and position of the content
   // most of the text we want should have the same color and similar
   // left and right boundaries
-  const objectCounts = new Map;
+  const objectCounts = new WeakMap;
   const leftCounts = new Map;
   const rightCounts = new Map;
   const colorCounts = new Map;
