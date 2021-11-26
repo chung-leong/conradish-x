@@ -131,6 +131,16 @@ Click the Print button to print. Chrome's print window will appear. Double-check
 
 ## Finding documents
 
+To find a document you had created earlier, activate the extension's pop-up menu and choose "Show all documents":
+
+![Pop-up menu](doc/img/pop-up-1.jpg)
+
+Documents are arranged by date. If you remember particular keywords, you can narrow the search by entering them into the search box.
+
+![Search results](doc/img/search-1.jpg)
+
+Note that older documents would get automatically deleted if you hadn't granted unlimited storage to the extension.
+
 # Limitations
 
 * The extension currently cannot handle right-to-left languages.
