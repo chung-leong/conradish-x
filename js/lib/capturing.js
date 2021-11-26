@@ -848,11 +848,18 @@ export function replaceUselessElements(object) {
   if (object.content instanceof Array) {
     alterObjects(object.content, (item, index, arr) => {
       replaceUselessElements(item);
-      if (item.tag === 'SPAN' && !item.style) {
-        return item.content;
+      const { tag, style, content } = item;
+      if (tag === 'SPAN' && !style) {
+        return content;
       }
-      if (item.tag === 'BR') {
+      if (tag === 'BR') {
         return '\n';
+      }
+      if (tag === 'TABLE') {
+        const text = getPlainText(content);
+        if (!text.trim()) {
+          return;
+        }
       }
       return item;
     });
