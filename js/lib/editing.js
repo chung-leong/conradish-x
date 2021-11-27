@@ -497,7 +497,7 @@ function filterHTML(html) {
   if (div.getElementsByClassName('conradish').length > 0) {
     // remove footnote numbers that don't correspond to a footnote that
     // was deleted earlier
-    const supElements = div.getElementsByClassName('footnote-number');
+    const supElements = [ ...div.getElementsByClassName('footnote-number') ];
     for (const supElement of supElements) {
       if (!findDeletedFootnote(supElement.id)) {
         supElement.remove();
