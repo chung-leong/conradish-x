@@ -142,6 +142,7 @@ BODY.ready #article {
   border-radius: 4px;
   box-shadow: 1px 1px 5px black;
   padding: 2px 2px 2px 2px;
+  white-space: nowrap;
 }
 
 #article-menu UL {
