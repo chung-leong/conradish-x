@@ -1,40 +1,43 @@
 import { initializeStorage, getSettings, storeObject, storageChange } from './lib/storage.js';
 import { getPageURL } from './lib/navigation.js';
 
-let currentSettings;
-
 async function start() {
-  const storageInitialization = initializeStorage();
   chrome.contextMenus.onClicked.addListener(handleMenuClick);
   chrome.runtime.onMessage.addListener(handleMessage);
-  chrome.runtime.onInstalled.addListener(async () => {
-    // create menu here, since the extension could have been
-    // loaded before and got unloaded
-    await storageInitialization;
-    const settings = getSettings();
-    if (settings.contextMenu) {
-      addContextMenu();
-    }
-  });
-  // wait for storage initiation then listen for changes
-  await storageInitialization;
-  currentSettings = getSettings();
-  storageChange.addEventListener('settings', handleSettings);
+  await initializeStorage();
+  updateContextMenu();
+  storageChange.addEventListener('settings', updateContextMenu);
 }
 
 const createMenuId = 'create';
+let menuCreated = undefined;
+
+function updateContextMenu() {
+  const { contextMenu } = getSettings();
+  if (contextMenu) {
+    addContextMenu();
+  } else {
+    removeContextMenu();
+  }
+}
 
 function addContextMenu() {
-  chrome.contextMenus.create({
-    contexts: [ 'selection' ],
-    documentUrlPatterns: [ 'http://*/*', 'https://*/*' ],
-    title: 'Create print version',
-    id: createMenuId,
-  }, () => chrome.runtime.lastError);
+  if (menuCreated !== true) {
+    chrome.contextMenus.create({
+      contexts: [ 'selection' ],
+      documentUrlPatterns: [ 'http://*/*', 'https://*/*' ],
+      title: 'Create print version',
+      id: createMenuId,
+    }, () => chrome.runtime.lastError);
+    menuCreated = true;
+  }
 }
 
 function removeContextMenu() {
-  chrome.contextMenus.remove(createMenuId, () => chrome.runtime.lastError);
+  if (menuCreated !== false) {
+    chrome.contextMenus.remove(createMenuId, () => chrome.runtime.lastError);
+    menuCreated = false;
+  }
 }
 
 async function createDocument(tab) {
@@ -59,21 +62,6 @@ async function createDocument(tab) {
   });
   if (chrome.runtime.lastError) {
     console.error(chrome.runtime.lastError.message);
-  }
-}
-
-async function handleSettings(evt) {
-  if (!evt.detail.self) {
-    const before = currentSettings.contextMenu;
-    currentSettings = getSettings();
-    const after = currentSettings.contextMenu;
-    if (before !== after) {
-      if (after) {
-        addContextMenu();
-      } else {
-        removeContextMenu();
-      }
-    }
   }
 }
 
