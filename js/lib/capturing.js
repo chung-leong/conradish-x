@@ -352,7 +352,11 @@ export function captureRangeContent(range) {
           parentObject = getRootObject(parentNode);
         }
         switch (tagName) {
-          case 'H1': case 'H2': case 'H3': case 'H4': case 'H5': case 'H6':
+          case 'H1':
+            // H1 is generally too large for printing
+            tag = 'H2';
+            break;
+          case 'H2': case 'H3': case 'H4': case 'H5': case 'H6':
           case 'UL': case 'OL':
           case 'BLOCKQUOTE':
           case 'HR':
