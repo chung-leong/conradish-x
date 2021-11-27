@@ -498,7 +498,8 @@ export function captureRangeContent(range) {
         const pseudo = getPseudoElement(node, '::before');
         if (pseudo) {
           const object = getObject(node);
-          if (object && object !== root) {
+          // don't add ::before element to list item
+          if (object && object.tag !== 'LI' && object !== root) {
             insertContent(object, pseudo);
           }
         } else if (canBeEmpty(node.tagName)) {
