@@ -633,6 +633,7 @@ let dropSource = null;
 function handleDragStart(evt) {
   const { target } = evt;
   dropSource = target;
+  hideArticleMenu();
 }
 
 function handleDragEnd(evt) {
