@@ -76,7 +76,7 @@ The translated sentence will then appear in the page's footer:
 
 ### Removing footnotes
 
-To remove a footnote, simply delete the associated footnote number (by press Backspace):
+To remove a footnote, simply delete the associated footnote number:
 
 ![Footnote number](doc/img/footnote-number-1.jpg)
 
@@ -107,7 +107,7 @@ The following hot-keys can be used to add basic text style:
 
 ## Removing irrelevant contents
 
-By default, Conradish will automatically filter out contents it deems irrelevant (based on their on-screen position). Sometimes bylines and dates can be removed as a result. Too see (and perhaps restore) what got filtered out, press **Ctrl-Shift-H**.
+By default, Conradish will automatically filter out contents it deems irrelevant (based on their on-screen position). Sometimes bylines and dates can be removed as a result. Too see what got filtered out, press **Ctrl-Shift-H**.
 
 Initial view:
 
@@ -119,7 +119,7 @@ With hidden contents shown:
 
 Filtered contents will appear in red. Contents that Conradish deemed questionable will pulsate in yellow. Click on a section to restore or hide it. When you're done, press **Ctrl-Shift-H** again.
 
-This feature is available even when "Filter page content" is disabled in the option pane.
+This feature is available even when **Filter page content** is disabled in the option pane.
 
 ## Printing
 
