@@ -49,9 +49,9 @@ async function createDocument(tab) {
         const { captureSelection } = await import(codeURL);
         const doc = await captureSelection(selection);
         try {
-          chrome.runtime.sendMessage(undefined, { type: 'create', document: doc });
+          chrome.runtime.sendMessage({ type: 'create', document: doc });
         } catch (err) {
-          chrome.runtime.sendMessage(undefined, { type: 'error', message: err.message });
+          chrome.runtime.sendMessage({ type: 'error', message: err.message });
           throw err;
         }
       }
@@ -123,7 +123,7 @@ async function handleSelectionQuery(sendResponse) {
       func: () => {
         const selection = getSelection();
         if (!selection.isCollapsed) {
-          chrome.runtime.sendMessage(undefined, { type: 'response' });
+          chrome.runtime.sendMessage({ type: 'response' });
         }
       }
     });

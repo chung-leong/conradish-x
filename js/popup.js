@@ -14,7 +14,7 @@ async function start() {
   }, 'Create print version');
   list.appendChild(create);
   // ask service worker whether current tab has selection
-  chrome.runtime.sendMessage(undefined, { type: 'query' }, (response) => {
+  chrome.runtime.sendMessage({ type: 'query' }, (response) => {
     // response is true if there is selection, false if there isn't, and null
     // if we're in a page with unsupported protocol (e.g. chrome://)
     if (response !== false) {
@@ -59,8 +59,13 @@ function handleClick(evt) {
     if (command) {
       switch (command) {
         case 'create':
-          // close window only after message is delivered
-          chrome.runtime.sendMessage(undefined, { type: 'capture' }, close);
+        // close window only after message is delivered
+          chrome.runtime.sendMessage({ type: 'capture' }, () => {
+            // the message port could be closed before we receive a response
+            // due to the pop-up being forcibly closed by the opening of a new tab
+            chrome.runtime.lastError;
+            close();
+          });
           break;
         case 'openDOC':
           openPage('article', { t: arg });
