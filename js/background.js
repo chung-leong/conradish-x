@@ -64,9 +64,9 @@ async function createDocument(tab) {
 
 async function handleSettings(evt) {
   if (!evt.detail.self) {
-    const { contextMenu: before } = currentSettings;
+    const before = currentSettings.contextMenu;
     currentSettings = getSettings();
-    const { contextMenu: after } = currentSettings;
+    const after = currentSettings.contextMenu;
     if (before !== after) {
       if (after) {
         addContextMenu();
