@@ -1,6 +1,6 @@
 # Conradish
 
-**Conradish** is a Chrome extension that lets you create print version of news articles with footnotes. It's designed for educators who wish to use online materials in the classroom. With its automatic translation feature, this extension is especially useful for teachers of foreign languages.
+Conradish is a Chrome extension that lets you create print version of news articles with footnotes. It's designed for educators who wish to use online materials in the classroom. With its automatic translation feature, this extension is especially useful for teachers of foreign languages.
 
 ![Conradish transformation](doc/img/transform-1.jpg)
 
@@ -30,7 +30,7 @@
 
 ## Creating print version of article
 
-To create a print version of the article you're viewing, first select the portion that you wish to print. Then right click (or press the menu key on your keyboard) and choose "Create print version":
+To create a print version of the article you're viewing, first select the portion that you wish to print. Then right click (or press the menu key on your keyboard) and choose **Create print version**:
 
 ![Context menu](doc/img/capture-1.jpg)
 
@@ -50,29 +50,29 @@ Select the term for which the definition is desired. A pop-up menu will appear u
 
 ![Annotation menu](doc/img/annotate-1.jpg)
 
-If the "To" language specified in the side-bar differs from the "From" language, Conradish will look up the definition at Google Translate and insert it automatically as a footnote:
+If the **To** language specified in the side-bar differs from the **From** language, Conradish will look up the definition at Google Translate and insert it automatically as a footnote:
 
 ![Footnote](doc/img/footnote-1.jpg)
 
-If the "To" language matches the "From" language or it is "None", then you'll need enter the definition yourself.
+If the **To** language matches the **From** language or if "None" is selected, then you'll need to enter the definition yourself.
 
 ![Footnote](doc/img/footnote-2.jpg)
 
-You can undo the operation by pressing **Ctrl-Z** on your keyboard.
+You can undo the result by pressing **Ctrl-Z** on your keyboard.
 
 ### Adding translation/explanation
 
-Select the sentence you wish translated. A pop-up menu will appear underneath. Choose "Add translation":
+Select the sentence you wish translated. A pop-up menu will appear underneath. Choose **Add translation**:
 
 ![Annotation menu](doc/img/annotate-2.jpg)
 
-The translated sentence will then appear in the footer:
+The translated sentence will then appear in the page's footer:
 
 ![Footnote](doc/img/footnote-3.jpg)
 
-The "Add translation" function only differs from "Add definition" in that the original text is omitted from the footnote.
+**Add translation** function only differs from **Add definition** in that the original text is omitted from the footnote.
 
-The "Add explanation" option will appear in the menu instead when the "To" language is the same as the "From" language or "None".
+**Add explanation** will appear in the menu instead when no translation would actually occur (the **To** language is the same as the **From** language or "None" is selected).
 
 ### Removing footnotes
 
@@ -117,21 +117,19 @@ With hidden contents shown:
 
 ![Complete view](doc/img/filter-2.jpg)
 
-Filtered contents will appear in red. Contents that Conradish deemed questionable will pulsate in yellow. In the example above, the line "*Catch up on the developing stories making headlines.*" is probably not something you want to keep.
-
-Click on a section to either restore or hide it. When you're done, press **Ctrl-Shift-H** again.
+Filtered contents will appear in red. Contents that Conradish deemed questionable will pulsate in yellow. Click on a section to restore or hide it. When you're done, press **Ctrl-Shift-H** again.
 
 This feature is available even when "Filter page content" is disabled in the option pane.
 
 ## Printing
 
-Click the Print button to print. Chrome's print window will appear. Double-check that the **Paper size** matches what is set in Conradish and that **Margins** is set to "Default". The document will not print correctly if either one of these is off.
+To print, click the **Print** button. Chrome's print window will appear. Double-check that **Paper size** matches what is set in Conradish and that **Margins** is set to "Default". The document will not print correctly if either one of these is off.
 
 ![Print window](doc/img/print-1.jpg)
 
 ## Finding documents
 
-To find a document you had created earlier, activate the extension's pop-up menu and choose "Show all documents":
+To find a document you had created earlier, activate the extension's pop-up menu and choose **Show all documents**:
 
 ![Pop-up menu](doc/img/pop-up-1.jpg)
 
