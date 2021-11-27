@@ -59,16 +59,18 @@ function handleClick(evt) {
     if (command) {
       switch (command) {
         case 'create':
-          chrome.runtime.sendMessage(undefined, { type: 'capture' });
+          // close window only after message is delivered
+          chrome.runtime.sendMessage(undefined, { type: 'capture' }, close);
           break;
         case 'openDOC':
           openPage('article', { t: arg });
+          close();
           break;
         case 'list':
           openPage('list');
+          close();
           break;
       }
-      window.close();
     }
   }
 }
