@@ -101,12 +101,334 @@
     "message": "In the print window, make sure **Paper size** matches what’s specified above and that **Margins** are set to “Default”",
     "description": "Message in speech bubble over print button in side-bar (Markdown)"
   },
-  "name": {
-    "message": "",
-    "description": ""
+  "language_af": {
+    "message": "Afrikaans"
   },
-  "last": {
-    "message": "",
-    "description": ""
+  "language_am": {
+    "message": "Amharic"
+  },
+  "language_ar": {
+    "message": "Arabic"
+  },
+  "language_az": {
+    "message": "Azerbaijani"
+  },
+  "language_be": {
+    "message": "Belarusian"
+  },
+  "language_bg": {
+    "message": "Bulgarian"
+  },
+  "language_bn": {
+    "message": "Bengali"
+  },
+  "language_bs": {
+    "message": "Bosnian"
+  },
+  "language_ca": {
+    "message": "Catalan"
+  },
+  "language_ceb": {
+    "message": "Cebuano"
+  },
+  "language_co": {
+    "message": "Corsican"
+  },
+  "language_cs": {
+    "message": "Czech"
+  },
+  "language_cy": {
+    "message": "Welsh"
+  },
+  "language_da": {
+    "message": "Danish"
+  },
+  "language_de": {
+    "message": "German"
+  },
+  "language_el": {
+    "message": "Greek"
+  },
+  "language_en": {
+    "message": "English"
+  },
+  "language_eo": {
+    "message": "Esperanto"
+  },
+  "language_es": {
+    "message": "Spanish"
+  },
+  "language_et": {
+    "message": "Estonian"
+  },
+  "language_eu": {
+    "message": "Basque"
+  },
+  "language_fa": {
+    "message": "Persian"
+  },
+  "language_fi": {
+    "message": "Finnish"
+  },
+  "language_fr": {
+    "message": "French"
+  },
+  "language_fy": {
+    "message": "Frisian"
+  },
+  "language_ga": {
+    "message": "Irish"
+  },
+  "language_gd": {
+    "message": "Scots Gaelic"
+  },
+  "language_gl": {
+    "message": "Galician"
+  },
+  "language_gu": {
+    "message": "Gujarati"
+  },
+  "language_ha": {
+    "message": "Hausa"
+  },
+  "language_haw": {
+    "message": "Hawaiian"
+  },
+  "language_hi": {
+    "message": "Hindi"
+  },
+  "language_hmn": {
+    "message": "Hmong"
+  },
+  "language_hr": {
+    "message": "Croatian"
+  },
+  "language_ht": {
+    "message": "Haitian Creole"
+  },
+  "language_hu": {
+    "message": "Hungarian"
+  },
+  "language_hy": {
+    "message": "Armenian"
+  },
+  "language_id": {
+    "message": "Indonesian"
+  },
+  "language_ig": {
+    "message": "Igbo"
+  },
+  "language_is": {
+    "message": "Icelandic"
+  },
+  "language_it": {
+    "message": "Italian"
+  },
+  "language_iw": {
+    "message": "Hebrew"
+  },
+  "language_ja": {
+    "message": "Japanese"
+  },
+  "language_jw": {
+    "message": "Javanese"
+  },
+  "language_ka": {
+    "message": "Georgian"
+  },
+  "language_kk": {
+    "message": "Kazakh"
+  },
+  "language_km": {
+    "message": "Khmer"
+  },
+  "language_kn": {
+    "message": "Kannada"
+  },
+  "language_ko": {
+    "message": "Korean"
+  },
+  "language_ku": {
+    "message": "Kurdish (Kurmanji)"
+  },
+  "language_ky": {
+    "message": "Kyrgyz"
+  },
+  "language_la": {
+    "message": "Latin"
+  },
+  "language_lb": {
+    "message": "Luxembourgish"
+  },
+  "language_lo": {
+    "message": "Lao"
+  },
+  "language_lt": {
+    "message": "Lithuanian"
+  },
+  "language_lv": {
+    "message": "Latvian"
+  },
+  "language_mg": {
+    "message": "Malagasy"
+  },
+  "language_mi": {
+    "message": "Maori"
+  },
+  "language_mk": {
+    "message": "Macedonian"
+  },
+  "language_ml": {
+    "message": "Malayalam"
+  },
+  "language_mn": {
+    "message": "Mongolian"
+  },
+  "language_mr": {
+    "message": "Marathi"
+  },
+  "language_ms": {
+    "message": "Malay"
+  },
+  "language_mt": {
+    "message": "Maltese"
+  },
+  "language_my": {
+    "message": "Myanmar (Burmese)"
+  },
+  "language_ne": {
+    "message": "Nepali"
+  },
+  "language_nl": {
+    "message": "Dutch"
+  },
+  "language_no": {
+    "message": "Norwegian"
+  },
+  "language_ny": {
+    "message": "Chichewa"
+  },
+  "language_or": {
+    "message": "Odia (Oriya)"
+  },
+  "language_pa": {
+    "message": "Punjabi"
+  },
+  "language_pl": {
+    "message": "Polish"
+  },
+  "language_ps": {
+    "message": "Pashto"
+  },
+  "language_pt": {
+    "message": "Portuguese"
+  },
+  "language_ro": {
+    "message": "Romanian"
+  },
+  "language_ru": {
+    "message": "Russian"
+  },
+  "language_rw": {
+    "message": "Kinyarwanda"
+  },
+  "language_sd": {
+    "message": "Sindhi"
+  },
+  "language_si": {
+    "message": "Sinhala"
+  },
+  "language_sk": {
+    "message": "Slovak"
+  },
+  "language_sl": {
+    "message": "Slovenian"
+  },
+  "language_sm": {
+    "message": "Samoan"
+  },
+  "language_sn": {
+    "message": "Shona"
+  },
+  "language_so": {
+    "message": "Somali"
+  },
+  "language_sq": {
+    "message": "Albanian"
+  },
+  "language_sr": {
+    "message": "Serbian"
+  },
+  "language_st": {
+    "message": "Sesotho"
+  },
+  "language_su": {
+    "message": "Sundanese"
+  },
+  "language_sv": {
+    "message": "Swedish"
+  },
+  "language_sw": {
+    "message": "Swahili"
+  },
+  "language_ta": {
+    "message": "Tamil"
+  },
+  "language_te": {
+    "message": "Telugu"
+  },
+  "language_tg": {
+    "message": "Tajik"
+  },
+  "language_th": {
+    "message": "Thai"
+  },
+  "language_tk": {
+    "message": "Turkmen"
+  },
+  "language_tl": {
+    "message": "Filipino"
+  },
+  "language_tr": {
+    "message": "Turkish"
+  },
+  "language_tt": {
+    "message": "Tatar"
+  },
+  "language_ug": {
+    "message": "Uyghur"
+  },
+  "language_uk": {
+    "message": "Ukrainian"
+  },
+  "language_ur": {
+    "message": "Urdu"
+  },
+  "language_uz": {
+    "message": "Uzbek"
+  },
+  "language_vi": {
+    "message": "Vietnamese"
+  },
+  "language_xh": {
+    "message": "Xhosa"
+  },
+  "language_yi": {
+    "message": "Yiddish"
+  },
+  "language_yo": {
+    "message": "Yoruba"
+  },
+  "language_zh": {
+    "message": "Chinese"
+  },
+  "language_zh_cn": {
+    "message": "Chinese (Simplified)"
+  },
+  "language_zh_tw": {
+    "message": "Chinese (Traditional)"
+  },
+  "language_zu": {
+    "message": "Zulu"
   }
 }

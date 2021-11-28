@@ -34,7 +34,8 @@ export function getSourceLanguages() {
   const unknown = { value: '', label: 'Unknown' };
   const list = [ unknown ];
   for (const { code, name } of languages) {
-    list.push({ value: code, label: name });
+    const label = getLanguageName(code, 'from');
+    list.push({ value: code, label });
   }
   return list;
 }
@@ -45,13 +46,49 @@ export function getTargetLanguages() {
   for (const { code, name, variants } of languages) {
     if (variants) {
       for (const { code, name } of variants) {
-        list.push({ value: code, label: name });
+        const label = getLanguageName(code, 'to');
+        list.push({ value: code, label });
       }
     } else {
-      list.push({ value: code, label: name });
+      const label = getLanguageName(code, 'to');
+      list.push({ value: code, label });
     }
   }
   return list;
+}
+
+function getLanguageName(code, context) {
+  const f = getTransformFunction(context);
+  const key = 'language_' + code.replace('-', '_').toLowerCase();
+  const dictionaryForm = getMessage(key);
+  return f(dictionaryForm);
+}
+
+let transformFunctions = {};
+
+function getTransformFunction(context) {
+  let f = transformFunctions[context];
+  if (!f) {
+    const transformText = getMessage(`language_transform_${context}`);
+    if (transformText) {
+      const transformStrings = transformText.split(',');
+      const transforms = transformStrings.map((transformString) => {
+        const [ pattern, replacement ] = transformString.split(/\s*=>\s*/);
+        const regExp = new RegExp(pattern);
+        return { regExp, replacement };
+      });
+      f = (s) => {
+        for (const { regExp, replacement } of transforms) {
+          s = s.replace(regExp, replacement);
+        }
+        return s;
+      };
+    } else {
+      f = s => s;
+    }
+    transformFunctions[context] = f;
+  }
+  return f;
 }
 
 export async function translate(original, sourceLang, targetLang, singleWord) {
@@ -132,447 +169,447 @@ export function isCapitalized(word, lang) {
 }
 
 const languages = [
-  {
+  { // Afrikaans
     code: 'af',
-    name: 'Afrikaans',
+    script: 'Latn',
   },
-  {
+  { // Albanian
     code: 'sq',
-    name: 'Albanian',
+    script: 'Latn',
   },
-  {
+  { // Amharic
     code: 'am',
-    name: 'Amharic',
+    script: 'Ethi',
   },
-  {
+  { // Arabic
     code: 'ar',
-    name: 'Arabic',
+    script: 'Arab',
   },
-  {
+  { // Armenian
     code: 'hy',
-    name: 'Armenian',
+    script: 'Armn',
   },
-  {
+  { // Azerbaijani
     code: 'az',
-    name: 'Azerbaijani',
+    script: 'Latn',
   },
-  {
+  { // Basque
     code: 'eu',
-    name: 'Basque',
+    script: 'Latn',
   },
-  {
+  { // Belarusian
     code: 'be',
-    name: 'Belarusian',
+    script: 'Cyrl',
   },
-  {
+  { // Bengali
     code: 'bn',
-    name: 'Bengali',
+    script: 'Beng',
   },
-  {
+  { // Bosnian
     code: 'bs',
-    name: 'Bosnian',
+    script: 'Latn',
   },
-  {
+  { // Bulgarian
     code: 'bg',
-    name: 'Bulgarian',
+    script: 'Cyrl',
   },
-  {
+  { // Catalan
     code: 'ca',
-    name: 'Catalan',
+    script: 'Latn',
   },
-  {
+  { // Cebuano
     code: 'ceb',
-    name: 'Cebuano',
+    script: 'Latn',
   },
-  {
+  { // Chichewa
     code: 'ny',
-    name: 'Chichewa',
+    script: 'Latn',
   },
-  {
+  { // Chinese
     code: 'zh',
-    name: 'Chinese',
+    script: 'Hani',
     variants: [
-      {
+      { // Chinese (Simplified)
         code: 'zh-CN',
-        name: 'Chinese (Simplified)',
+        script: 'Hans'
       },
-      {
+      { // Chinese (Traditional)
         code: 'zh-TW',
-        name: 'Chinese (Traditional)',
+        script: 'Hant',
       },
     ]
   },
-  {
+  { // Corsican
     code: 'co',
-    name: 'Corsican',
+    script: 'Latn',
   },
-  {
+  { // Croatian
     code: 'hr',
-    name: 'Croatian',
+    script: 'Latn',
   },
-  {
+  { // Czech
     code: 'cs',
-    name: 'Czech',
+    script: 'Latn',
   },
-  {
+  { // Danish
     code: 'da',
-    name: 'Danish',
+    script: 'Latn',
   },
-  {
+  { // Dutch
     code: 'nl',
-    name: 'Dutch',
+    script: 'Latn',
   },
-  {
+  { // English
     code: 'en',
-    name: 'English',
+    script: 'Latn',
   },
-  {
+  { // Esperanto
     code: 'eo',
-    name: 'Esperanto',
+    script: 'Latn',
   },
-  {
+  { // Estonian
     code: 'et',
-    name: 'Estonian',
+    script: 'Latn',
   },
-  {
+  { // Filipino
     code: 'tl',
-    name: 'Filipino',
+    script: 'Latn',
   },
-  {
+  { // Finnish
     code: 'fi',
-    name: 'Finnish',
+    script: 'Latn',
   },
-  {
+  { // French
     code: 'fr',
-    name: 'French',
+    script: 'Latn',
   },
-  {
+  { // Frisian
     code: 'fy',
-    name: 'Frisian',
+    script: 'Latn',
   },
-  {
+  { // Galician
     code: 'gl',
-    name: 'Galician',
+    script: 'Latn',
   },
-  {
+  { // Georgian
     code: 'ka',
-    name: 'Georgian',
+    script: 'Geor',
   },
-  {
+  { // German
     code: 'de',
-    name: 'German',
+    script: 'Latn',
   },
-  {
+  { // Greek
     code: 'el',
-    name: 'Greek',
+    script: 'Grek',
   },
-  {
+  { // Gujarati
     code: 'gu',
-    name: 'Gujarati',
+    script: 'Gujr'
   },
-  {
+  { // Haitian Creole
     code: 'ht',
-    name: 'Haitian Creole',
+    script: 'Latn',
   },
-  {
+  { // Hausa
     code: 'ha',
-    name: 'Hausa',
+    script: 'Latn',
   },
-  {
+  { // Hawaiian
     code: 'haw',
-    name: 'Hawaiian',
+    script: 'Latn',
   },
-  {
+  { // Hebrew
     code: 'iw',
-    name: 'Hebrew',
+    script: 'Hebr',
   },
-  {
+  { // Hindi
     code: 'hi',
-    name: 'Hindi',
+    script: 'Deva',
   },
-  {
+  { // Hmong
     code: 'hmn',
-    name: 'Hmong',
+    script: 'Latn',
   },
-  {
+  { // Hungarian
     code: 'hu',
-    name: 'Hungarian',
+    script: 'Latn',
   },
-  {
+  { // Icelandic
     code: 'is',
-    name: 'Icelandic',
+    script: 'Latn',
   },
-  {
+  { // Igbo
     code: 'ig',
-    name: 'Igbo',
+    script: 'Latn',
   },
-  {
+  { // Indonesian
     code: 'id',
-    name: 'Indonesian',
+    script: 'Latn',
   },
-  {
+  { // Irish
     code: 'ga',
-    name: 'Irish',
+    script: 'Latn',
   },
-  {
+  { // Italian
     code: 'it',
-    name: 'Italian',
+    script: 'Latn',
   },
-  {
+  { // Japanese
     code: 'ja',
-    name: 'Japanese',
+    script: 'Jpan',
   },
-  {
+  { // Javanese
     code: 'jw',
-    name: 'Javanese',
+    script: 'Latn',
   },
-  {
+  { // Kannada
     code: 'kn',
-    name: 'Kannada',
+    script: 'Knda',
   },
-  {
+  { // Kazakh
     code: 'kk',
-    name: 'Kazakh',
+    script: 'Cyrl',
   },
-  {
+  { // Khmer
     code: 'km',
-    name: 'Khmer',
+    script: 'Khmr',
   },
-  {
+  { // Kinyarwanda
     code: 'rw',
-    name: 'Kinyarwanda',
+    script: 'Latn',
   },
-  {
+  { // Korean
     code: 'ko',
-    name: 'Korean',
+    script: 'Hang',
   },
-  {
+  { // Kurdish (Kurmanji)
     code: 'ku',
-    name: 'Kurdish (Kurmanji)',
+    script: 'Latn',
   },
-  {
+  { // Kyrgyz
     code: 'ky',
-    name: 'Kyrgyz',
+    script: 'Cyrl',
   },
-  {
+  { // Lao
     code: 'lo',
-    name: 'Lao',
+    script: 'Laoo',
   },
-  {
+  { // Latin
     code: 'la',
-    name: 'Latin',
+    script: 'Latn',
   },
-  {
+  { // Latvian
     code: 'lv',
-    name: 'Latvian',
+    script: 'Latn',
   },
-  {
+  { // Lithuanian
     code: 'lt',
-    name: 'Lithuanian',
+    script: 'Latn',
   },
-  {
+  { // Luxembourgish
     code: 'lb',
-    name: 'Luxembourgish',
+    script: 'Latn',
   },
-  {
+  { // Macedonian
     code: 'mk',
-    name: 'Macedonian',
+    script: 'Cyrl',
   },
-  {
+  { // Malagasy
     code: 'mg',
-    name: 'Malagasy',
+    script: 'Latn',
   },
-  {
+  { // Malay
     code: 'ms',
-    name: 'Malay',
+    script: 'Latn',
   },
-  {
+  { // Malayalam
     code: 'ml',
-    name: 'Malayalam',
+    script: 'Mlym',
   },
-  {
+  { // Maltese
     code: 'mt',
-    name: 'Maltese',
+    script: 'Latn',
   },
-  {
+  { // Maori
     code: 'mi',
-    name: 'Maori',
+    script: 'Latn',
   },
-  {
+  { // Marathi
     code: 'mr',
-    name: 'Marathi',
+    script: 'Deva',
   },
-  {
+  { // Mongolian
     code: 'mn',
-    name: 'Mongolian',
+    script: 'Cyrl',
   },
-  {
+  { // Myanmar (Burmese)
     code: 'my',
-    name: 'Myanmar (Burmese)',
+    script: 'Mymr',
   },
-  {
+  { // Nepali
     code: 'ne',
-    name: 'Nepali',
+    script: 'Deva',
   },
-  {
+  { // Norwegian
     code: 'no',
-    name: 'Norwegian',
+    script: 'Latn',
   },
-  {
+  { // Odia (Oriya)
     code: 'or',
-    name: 'Odia (Oriya)',
+    script: 'Orya',
   },
-  {
+  { // Pashto
     code: 'ps',
-    name: 'Pashto',
+    script: 'Arab',
   },
-  {
+  { // Persian
     code: 'fa',
-    name: 'Persian',
+    script: 'Arab',
   },
-  {
+  { // Polish
     code: 'pl',
-    name: 'Polish',
+    script: 'Latn',
   },
-  {
+  { // Portuguese
     code: 'pt',
-    name: 'Portuguese',
+    script: 'Latn',
   },
-  {
+  { // Punjabi
     code: 'pa',
-    name: 'Punjabi',
+    script: 'Guru',
   },
-  {
+  { // Romanian
     code: 'ro',
-    name: 'Romanian',
+    script: 'Latn',
   },
-  {
+  { // Russian
     code: 'ru',
-    name: 'Russian',
+    script: 'Cyrl',
   },
-  {
+  { // Samoan
     code: 'sm',
-    name: 'Samoan',
+    script: 'Latn',
   },
-  {
+  { // Scots Gaelic
     code: 'gd',
-    name: 'Scots Gaelic',
+    script: 'Latn',
   },
-  {
+  { // Serbian
     code: 'sr',
-    name: 'Serbian',
+    script: 'Cyrl',
   },
-  {
+  { // Sesotho
     code: 'st',
-    name: 'Sesotho',
+    script: 'Latn',
   },
-  {
+  { // Shona
     code: 'sn',
-    name: 'Shona',
+    script: 'Latn',
   },
-  {
+  { // Sindhi
     code: 'sd',
-    name: 'Sindhi',
+    script: 'Arab',
   },
-  {
+  { // Sinhala
     code: 'si',
-    name: 'Sinhala',
+    script: 'Sinh',
   },
-  {
+  { // Slovak
     code: 'sk',
-    name: 'Slovak',
+    script: 'Latn',
   },
-  {
+  { // Slovenian
     code: 'sl',
-    name: 'Slovenian',
+    script: 'Latn',
   },
-  {
+  { // Somali
     code: 'so',
-    name: 'Somali',
+    script: 'Latn',
   },
-  {
+  { // Spanish
     code: 'es',
-    name: 'Spanish',
+    script: 'Latn',
   },
-  {
+  { // Sundanese
     code: 'su',
-    name: 'Sundanese',
+    script: 'Sund',
   },
-  {
+  { // Swahili
     code: 'sw',
-    name: 'Swahili',
+    script: 'Latn',
   },
-  {
+  { // Swedish
     code: 'sv',
-    name: 'Swedish',
+    script: 'Latn',
   },
-  {
+  { // Tajik
     code: 'tg',
-    name: 'Tajik',
+    script: 'Cyrl',
   },
-  {
+  { // Tamil
     code: 'ta',
-    name: 'Tamil',
+    script: 'Taml'
   },
-  {
+  { // Tatar
     code: 'tt',
-    name: 'Tatar',
+    script: 'Cyrl',
   },
-  {
+  { // Telugu
     code: 'te',
-    name: 'Telugu',
+    script: 'Telu',
   },
-  {
+  { // Thai
     code: 'th',
-    name: 'Thai',
+    script: 'Thai',
   },
-  {
+  { // Turkish
     code: 'tr',
-    name: 'Turkish',
+    script: 'Latn',
   },
-  {
+  { // Turkmen
     code: 'tk',
-    name: 'Turkmen',
+    script: 'cyrl',
   },
-  {
+  { // Ukrainian
     code: 'uk',
-    name: 'Ukrainian',
+    script: 'cyrl',
   },
-  {
+  { // Urdu
     code: 'ur',
-    name: 'Urdu',
+    script: 'Arab',
   },
-  {
+  { // Uyghur
     code: 'ug',
-    name: 'Uyghur',
+    script: 'Arab',
   },
-  {
+  { // Uzbek
     code: 'uz',
-    name: 'Uzbek',
+    script: 'cyrl',
   },
-  {
+  { // Vietnamese
     code: 'vi',
-    name: 'Vietnamese',
+    script: 'Latn',
   },
-  {
+  { // Welsh
     code: 'cy',
-    name: 'Welsh',
+    script: 'Latn',
   },
-  {
+  { // Xhosa
     code: 'xh',
-    name: 'Xhosa',
+    script: 'Latn',
   },
-  {
+  { // Yiddish
     code: 'yi',
-    name: 'Yiddish',
+    script: 'Latn',
   },
-  {
+  { // Yoruba
     code: 'yo',
-    name: 'Yoruba',
+    script: 'Latn',
   },
-  {
+  { // Zulu
     code: 'zu',
-    name: 'Zulu',
+    script: 'Latn',
   },
 ];
 
