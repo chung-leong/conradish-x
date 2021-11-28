@@ -23,6 +23,7 @@ Conradish is a Chrome extension that lets you create print version of news artic
 * Printing only selected portions of articles
 * Removal of ads and images
 * Simplification of page layout
+* Editing of text before printing
 * Addition of footnotes
 * Integration with Google Translate
 
