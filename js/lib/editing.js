@@ -1,7 +1,7 @@
 import { e, separateWords } from './ui.js';
 import { adjustLayout, adjustFootnotes, findDeletedFootnote, annotateRange, saveDocument, setFilterMode } from './layout.js';
 import { transverseRange } from './capturing.js';
-import { translate, getSourceLanguage, getTargetLanguage } from './i18n.js';
+import { l, translate, getSourceLanguage, getTargetLanguage } from './i18n.js';
 
 const articleMenuElement = document.getElementById('article-menu');
 const articleMenuItems = {};
@@ -29,18 +29,18 @@ export function attachEditingHandlers() {
 export function createMenuItems() {
   const itemDefs = {
     addDefinition: {
-      label: 'Add definition',
-      title: 'show both term and definition in footnote',
+      label: l('add_definition'),
+      title: l('show_term_and_definition'),
       handler: handleAddDefinition,
     },
     addTranslation: {
-      label: 'Add translation',
-      title: 'show translated sentence only in footnote',
+      label: l('add_translation'),
+      title: l('show_translation_only'),
       handler: handleAddTranslation,
     },
     addExplanation: {
-      label: 'Add explanation',
-      title: 'show explanation in footnote',
+      label: l('add_explanation'),
+      title: l('show_explanation'),
       handler: handleAddTranslation,
     }
   };

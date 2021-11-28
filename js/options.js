@@ -1,12 +1,13 @@
 import { initializeStorage, getSettings, saveSettings, storageChange } from './lib/storage.js';
 import { e, attachCustomCheckboxHandlers } from './lib/ui.js';
+import { l } from './lib/i18n.js';
 
 async function start() {
   await initializeStorage();
   const binary = [ false, true ];
   const filters = [ 'none', 'automatic', 'manual' ];
-  addCheckbox('contextMenu', binary, 'Add item to browser context menu');
-  addCheckbox('filter', filters, 'Filter page content');
+  addCheckbox('contextMenu', binary, l('add_context_menu_item'));
+  addCheckbox('filter', filters, l('filter_page_content'));
   document.addEventListener('click', handleClick);
   document.addEventListener('change', handleChange);
   storageChange.addEventListener('settings', handleSettings);

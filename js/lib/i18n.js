@@ -1,6 +1,22 @@
 import { getSettings } from './settings.js';
 let sourceLanguage;
 
+export { getMessage as l };
+
+export function getMessage(name, substitutions) {
+  const { getMessage } = chrome.i18n;
+  if (getMessage) {
+    return getMessage(name, substitutions);
+  }
+}
+
+export function getUILanguage() {
+  const { getUILanguage } = chrome.i18n;
+  if (getUILanguage) {
+    return getUILanguage();
+  }
+}
+
 export function getSourceLanguage() {
   return sourceLanguage;
 }

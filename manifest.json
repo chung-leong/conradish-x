@@ -3,6 +3,7 @@
   "description": "Create print version of news articles with footnotes",
   "version": "1.0",
   "manifest_version": 3,
+  "default_locale": "en",
   "background": {
     "service_worker": "js/background.js",
     "type": "module"

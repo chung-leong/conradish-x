@@ -1,5 +1,5 @@
-import { e, attachRippleEffectHandlers } from './ui.js';
-import { setSourceLanguage, getSourceLanguage, getSourceLanguages, getTargetLanguages } from './i18n.js';
+import { e, parseMarkdown, attachRippleEffectHandlers } from './ui.js';
+import { l, setSourceLanguage, getSourceLanguage, getSourceLanguages, getTargetLanguages } from './i18n.js';
 import { getPossibleSettings, getPaperProperties, applyStyles, getSettings, saveSettings } from './settings.js';
 import { adjustLayout } from './layout.js';
 
@@ -12,46 +12,46 @@ export function createArticleNavigation() {
   const sourceLang = getSourceLanguage();
   const sourceLangSelect = createSelect(sourceLangs, sourceLang);
   sourceLangSelect.addEventListener('change', handleSourceLanguageChange);
-  addSection(top, 'From', sourceLangSelect);
+  addSection(top, l('from_language'), sourceLangSelect);
   // add target language select
   const targetLangs = getTargetLanguages();
   const targetLangSelect = createSelect(targetLangs, settings.target);
   targetLangSelect.addEventListener('change', handleTargetLanguageChange);
-  addSection(top, 'To', targetLangSelect, true);
+  addSection(top, l('to_language'), targetLangSelect, true);
   // add font family and size dropdowns for main text
   const articleFontSelect = createFontFamilySelect(possible.fontFamily, settings.article.fontFamily);
   articleFontSelect.dataset.setting = 'article.fontFamily';
   articleFontSelect.addEventListener('change', handleSettingChange);
-  addSection(top, 'Font', articleFontSelect);
+  addSection(top, l('article_font_family'), articleFontSelect);
   const articleSizeSelect = createFontSizeSelect(possible.fontSize, settings.article.fontSize);
   articleSizeSelect.dataset.setting = 'article.fontSize';
   articleSizeSelect.addEventListener('change', handleSettingChange);
-  addSection(top, 'Font size', articleSizeSelect);
+  addSection(top, l('article_font_size'), articleSizeSelect);
   const articleJustificationSelect = createSelect(possible.justification, settings.article.justification);
   articleJustificationSelect.dataset.setting = 'article.justification';
   articleJustificationSelect.addEventListener('change', handleSettingChange);
-  addSection(top, 'Justification', articleJustificationSelect);
+  addSection(top, l('article_justification'), articleJustificationSelect);
   const articleSpacingSelect = createSelect(possible.spacing, settings.article.spacing);
   articleSpacingSelect.dataset.setting = 'article.spacing';
   articleSpacingSelect.addEventListener('change', handleSettingChange);
-  addSection(top, 'Spacing', articleSpacingSelect);
+  addSection(top, l('article_spacing'), articleSpacingSelect);
   // add font family and size dropdowns for footnotes
   const footnoteFontSelect = createFontFamilySelect(possible.fontFamily, settings.footnote.fontFamily);
   footnoteFontSelect.dataset.setting = 'footnote.fontFamily';
   footnoteFontSelect.addEventListener('change', handleSettingChange);
-  addSection(top, 'Footnote font', footnoteFontSelect);
+  addSection(top, l('footnote_font_family'), footnoteFontSelect);
   const footnoteSizeSelect = createFontSizeSelect(possible.fontSize, settings.footnote.fontSize);
   footnoteSizeSelect.dataset.setting = 'footnote.fontSize';
   footnoteSizeSelect.addEventListener('change', handleSettingChange);
-  addSection(top, 'Footnote font size', footnoteSizeSelect, true);
+  addSection(top, l('footnote_font_size'), footnoteSizeSelect, true);
   // add paper size dropdown
   const paperSelect = createSelect(possible.paper, settings.paper);
   paperSelect.addEventListener('change', handlePaperChange);
-  addSection(top, 'Paper size', paperSelect);
+  addSection(top, l('paper_size'), paperSelect);
   // add margins dropdown
   const marginSelect = createSelect(possible.margins, settings.margins);
   marginSelect.addEventListener('change', handleMarginChange);
-  addSection(top, 'Margins', marginSelect);
+  addSection(top, l('margins'), marginSelect);
   // add custom margins input pane
   const customMargins = createCustomMarginInputs(settings.customMargins, settings.margins === 'default');
   const inputs = customMargins.getElementsByTagName('INPUT');
@@ -63,7 +63,7 @@ export function createArticleNavigation() {
 
   // add button to bottom pane
   const bottom = document.getElementById('side-bar-bottom');
-  const printButton = e('BUTTON', { className: 'default' }, 'Print');
+  const printButton = e('BUTTON', { className: 'default' }, l('print'));
   printButton.addEventListener('click', handlePrintClick)
   bottom.append(printButton);
 
@@ -136,13 +136,7 @@ function createCustomMarginInputs(margins, hidden) {
 
 function createSpeechBubble() {
   const icon = e('DIV', { className: 'icon' }, '\u26a0\ufe0f');
-  const paperSize = e('B', {}, 'Paper size');
-  const margins = e('B', {}, 'Margins');
-  const message = e('DIV', { className: 'message' }, [
-    'In the print window, make sure ', paperSize,
-    ' matches what’s specified above and that ', margins,
-    ' are set to “Default”'
-  ]);
+  const message = e('DIV', { className: 'message' }, parseMarkdown(l('check_paper_size')));
   return e('DIV', { className: 'speech-bubble hidden' }, [ icon, message ]);
 }
 

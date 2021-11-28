@@ -1,6 +1,7 @@
 import { e } from './lib/ui.js';
 import { initializeStorage, findObjects, loadObject } from './lib/storage.js';
 import { openPage } from './lib/navigation.js';
+import { l } from './lib/i18n.js';
 
 async function start() {
   const list = document.createElement('UL');
@@ -9,9 +10,9 @@ async function start() {
   // add menu item for creating new document
   const create = e('LI', {
     className: 'create disabled',
-    title: 'Select portion of document you wish to print first',
+    title: l('selection_portion_of_document'),
     dataset: { command: 'create' }
-  }, 'Create print version');
+  }, l('create_print_version'));
   list.appendChild(create);
   // ask service worker whether current tab has selection
   chrome.runtime.sendMessage({ type: 'query' }, (response) => {
@@ -37,7 +38,7 @@ async function start() {
       const open = e('LI', {
         className: 'document',
         dataset: { command: 'open' + type, arg: key },
-        title: `Created on ${date.toLocaleString()}`,
+        title: l('created_on', date.toLocaleString()),
       }, doc.title);
       list.appendChild(open);
     }
@@ -47,7 +48,7 @@ async function start() {
     const show = e('LI', {
       className: 'folder',
       dataset: { command: 'list' }
-    }, 'Show all documents');
+    }, l('show_all_documents'));
     list.appendChild(show);
   }
 }

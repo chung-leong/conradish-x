@@ -36,6 +36,32 @@ function appendContent(element, content) {
   }
 }
 
+export function parseMarkdown(text) {
+  const re = /(\*+)(.+?)(\*+)/g;
+  let m, startIndex = 0;
+  const arr = [];
+  while (m = re.exec(text)) {
+    if (startIndex < m.index) {
+      arr.push(text.substring(startIndex, m.index));
+    }
+    const style = {};
+    if (m[1].length === 1) {
+      style.fontStyle = 'italic';
+    } else if (m[1].length === 2) {
+      style.fontWeight = 700;
+    } else {
+      style.fontStyle = 'italic';
+      style.fontWeight = 700;
+    }
+    arr.push(createElement('SPAN', { style }, m[2]));
+    startIndex = m.index + m[0].length;
+  }
+  if (startIndex < text.length) {
+    arr.push(text.substring(startIndex));
+  }
+  return arr;
+}
+
 export function attachRippleEffectHandlers() {
   document.addEventListener('mousedown', handleRippleEffectMouseDown);
   document.addEventListener('mouseup', handleRippleEffectMouseUp);

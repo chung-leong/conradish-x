@@ -1,0 +1,112 @@
+{
+  "create_print_version": {
+    "message": "Create print version",
+    "description": "Label for menu item in browser context menu and extension pop-up menu"
+  },
+  "selection_portion_of_document": {
+    "message": "select portion of document you wish to print first",
+    "description": "Text for tooltip in pop-up menu, when there's no selection"
+  },
+  "created_on": {
+    "message": "created on $DATE$",
+    "description": "Text for tooltip of recent documents in pop-up menu",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "11/28/2021, 10:01:35 PM"
+      }
+    }
+  },
+  "show_all_documents": {
+    "message": "Show all documents",
+    "description": "Label for menu item in pop-up menu"
+  },
+  "add_definition": {
+    "message": "Add definition",
+    "description": "Label for item in annotation menu"
+  },
+  "show_term_and_definition": {
+    "message": "show both term and definition in footnote",
+    "description": "Text for tooltip of item in annotation menu"
+  },
+  "add_translation": {
+    "message": "Add translation",
+    "description": "Label for item in annotation menu"
+  },
+  "show_translation_only": {
+    "message": "show translated sentence only in footnote",
+    "description": "Text for tooltip of item in annotation menu"
+  },
+  "add_explanation": {
+    "message": "Add explanation",
+    "description": "Label for item in annotation menu"
+  },
+  "show_explanation": {
+    "message": "show explanation in footnote",
+    "description": "Text for tooltip of item in annotation menu"
+  },
+  "add_context_menu_item": {
+    "message": "Add item to browser context menu",
+    "description": "Label for checkbox in options"
+  },
+  "filter_page_content": {
+    "message": "Filter page content",
+    "description": "Label for checkbox in options"
+  },
+  "from_language": {
+    "message": "From",
+    "description": "Label for drop-down in side-bar"
+  },
+  "to_language": {
+    "message": "To",
+    "description": "Label for drop-down in side-bar"
+  },
+  "article_font_family": {
+    "message": "Font",
+    "description": "Label for drop-down in side-bar"
+  },
+  "article_font_size": {
+    "message": "Font size",
+    "description": "Label for drop-down in side-bar"
+  },
+  "article_justification": {
+    "message": "Justification",
+    "description": "Label for drop-down in side-bar"
+  },
+  "article_spacing": {
+    "message": "Spacing",
+    "description": "Label for drop-down in side-bar"
+  },
+  "footnote_font_family": {
+    "message": "Footnote font",
+    "description": "Label for drop-down in side-bar"
+  },
+  "footnote_font_size": {
+    "message": "Footnote font size",
+    "description": "Label for drop-down in side-bar"
+  },
+  "paper_size": {
+    "message": "Paper size",
+    "description": "Label for drop-down in side-bar"
+  },
+  "margins": {
+    "message": "Margins",
+    "description": "Label for drop-down in side-bar"
+  },
+  "print": {
+    "message": "Print",
+    "description": "Label for button in side-bar"
+  },
+  "check_paper_size": {
+    "message": "In the print window, make sure **Paper size** matches what’s specified above and that **Margins** are set to “Default”",
+    "description": "Message in speech bubble over print button in side-bar (Markdown)"
+  },
+  "name": {
+    "message": "",
+    "description": ""
+  },
+  "last": {
+    "message": "",
+    "description": ""
+  }
+}
