@@ -1,0 +1,588 @@
+{
+  "create_print_version": {
+    "message": "Vytvořit verzi pro tisk",
+    "description": "Label for menu item in browser context menu and extension pop-up menu"
+  },
+  "selection_portion_of_document": {
+    "message": "select portion of document you wish to print first",
+    "description": "Text for tooltip in pop-up menu, when there's no selection"
+  },
+  "created_on": {
+    "message": "Datum vzniku: $DATE$",
+    "description": "Text for tooltip of recent documents in pop-up menu",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "11/28/2021, 10:01:35 PM"
+      }
+    }
+  },
+  "show_all_documents": {
+    "message": "Zobrazit všechny dokumenty",
+    "description": "Label for menu item in pop-up menu"
+  },
+  "add_definition": {
+    "message": "Přidat definici",
+    "description": "Label for item in annotation menu"
+  },
+  "show_term_and_definition": {
+    "message": "show both term and definition in footnote",
+    "description": "Text for tooltip of item in annotation menu"
+  },
+  "add_translation": {
+    "message": "Přidat překlad",
+    "description": "Label for item in annotation menu"
+  },
+  "show_translation_only": {
+    "message": "show translated sentence only in footnote",
+    "description": "Text for tooltip of item in annotation menu"
+  },
+  "add_explanation": {
+    "message": "Přidat vysvětlení",
+    "description": "Label for item in annotation menu"
+  },
+  "show_explanation": {
+    "message": "show explanation in footnote",
+    "description": "Text for tooltip of item in annotation menu"
+  },
+  "add_context_menu_item": {
+    "message": "Add item to browser context menu",
+    "description": "Label for checkbox in options"
+  },
+  "filter_page_content": {
+    "message": "Filter page content",
+    "description": "Label for checkbox in options"
+  },
+  "from_language": {
+    "message": "Z",
+    "description": "Label for drop-down in side-bar"
+  },
+  "to_language": {
+    "message": "Do",
+    "description": "Label for drop-down in side-bar"
+  },
+  "article_font_family": {
+    "message": "Písmo",
+    "description": "Label for drop-down in side-bar"
+  },
+  "article_font_size": {
+    "message": "Velikost písma",
+    "description": "Label for drop-down in side-bar"
+  },
+  "article_justification": {
+    "message": "Justování",
+    "description": "Label for drop-down in side-bar"
+  },
+  "justification_none": {
+    "message": "Žádné",
+    "description": "Item in justification drop-down in side-bar"
+  },
+  "justification_text": {
+    "message": "Pouze textu",
+    "description": "Item in justification drop-down in side-bar"
+  },
+  "justification_text_and_headings": {
+    "message": "Textu a nadpisů",
+    "description": "Item in justification drop-down in side-bar"
+  },
+  "article_spacing": {
+    "message": "Řádkování",
+    "description": "Label for drop-down in side-bar"
+  },
+  "spacing_normal": {
+    "message": "Normální",
+    "description": "Item in line-spacing drop-down in side-bar"
+  },
+  "footnote_font_family": {
+    "message": "Písmo poznámky pod čarou",
+    "description": "Label for drop-down in side-bar"
+  },
+  "footnote_font_size": {
+    "message": "Velikost písma poznámky pod čarou",
+    "description": "Label for drop-down in side-bar"
+  },
+  "paper_size": {
+    "message": "Velikost papíru",
+    "description": "Label for drop-down in side-bar"
+  },
+  "margins": {
+    "message": "Okraje",
+    "description": "Label for drop-down in side-bar"
+  },
+  "margins_default": {
+    "message": "Výchozí",
+    "description": "Item in margins drop-down in side-bar"
+  },
+  "margins_custom": {
+    "message": "Vlastní",
+    "description": "Item in margins drop-down in side-bar"
+  },
+  "print": {
+    "message": "Tisk",
+    "description": "Label for button in side-bar"
+  },
+  "check_paper_size": {
+    "message": "In the print window, make sure **Paper size** matches what’s specified above and that **Margins** are set to “Default”",
+    "description": "Message in speech bubble over print button in side-bar (Markdown)"
+  },
+  "documents": {
+    "message": "Dokumenty",
+    "description": "Title in document list"
+  },
+  "selected_document_sg_nom": {
+    "message": "1 vybraný dokument",
+    "description": "For displaying the number of selected documents (singular)"
+  },
+  "selected_document_pl_nom": {
+    "message": "$NUMBER$ vybrané dokumenty",
+    "description": "For displaying the number of selected documents (plural)",
+    "placeholders": {
+      "number": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "selected_document_pl_gen": {
+    "message": "$NUMBER$ vybraných dokumentů",
+    "description": "For displaying the number of selected documents (plural genitive)",
+    "placeholders": {
+      "number": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "no_documents": {
+    "message": "Žádné dokumenty",
+    "description": "Message in document list when there aren't any documents"
+  },
+  "no_search_results": {
+    "message": "Nebyly nalezeny žádné výsledky",
+    "description": "Message in document list when a search yields no results"
+  },
+  "search_documents": {
+    "message": "Hledat dokumenty",
+    "description": "Placeholder of search box and icon tooltip in document list"
+  },
+  "search_result_sg_nom": {
+    "message": "1 výsledek vyhledávání",
+    "description": "For displaying the number of search results (singular)"
+  },
+  "search_result_pl_nom": {
+    "message": "$NUMBER$ výsledky vyhledávání",
+    "description": "For displaying the number of search results (plural)",
+    "placeholders": {
+      "number": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "search_result_pl_gen": {
+    "message": "$NUMBER$ výsledků vyhledávání",
+    "description": "For displaying the number of search results (plural genitive)",
+    "placeholders": {
+      "number": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "for_query": {
+    "message": "$RESULTS$ pro dotaz “$QUERY$”",
+    "description": "Text for card heading in document list",
+    "placeholders": {
+      "results": {
+        "content": "$1",
+        "example": "2 results"
+      },
+      "query": {
+        "content": "$2",
+        "example": "CNN"
+      }
+    }
+  },
+  "today_being": {
+    "message": "Dnes - $DATE$",
+    "description": "Text for card heading in document list",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "Sunday, November 13, 2001"
+      }
+    }
+  },
+  "yesterday_being": {
+    "message": "Včera - $DATE$",
+    "description": "Text for card heading in document list",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "Sunday, November 13, 2001"
+      }
+    }
+  },
+  "clear_search": {
+    "message": "Vymazat vyhledávání",
+    "description": "Tooltip of search box x button in document list"
+  },
+  "delete": {
+    "message": "Smazat",
+    "description": "Label for delete button in document list"
+  },
+  "cancel": {
+    "message": "Zrušit",
+    "description": "Label for x button used to clear selection in document list"
+  },
+  "language_transform_from": {
+    "message": "a\\b => y, á\\b => é",
+    "description": "RegExp replacements that yield the genitive case"
+  },
+  "language_transform_to": {
+    "message": "a\\b => y, á\\b => é",
+    "description": "RegExp replacements that yield the genitive case"
+  },
+  "language_none": {
+    "message": "Žádné",
+    "description": "For top item in To language dropdown in side-bar"
+  },
+  "language_unknown": {
+    "message": "Neznámý jazyk",
+    "description": "For top item in From language dropdown in side-bar"
+  },
+  "language_af": {
+    "message": "Afrikánština"
+  },
+  "language_am": {
+    "message": "Amharština"
+  },
+  "language_ar": {
+    "message": "Arabština"
+  },
+  "language_az": {
+    "message": "Ázerbájdžánština"
+  },
+  "language_be": {
+    "message": "Běloruština"
+  },
+  "language_bg": {
+    "message": "Bulharština"
+  },
+  "language_bn": {
+    "message": "Bengálština"
+  },
+  "language_bs": {
+    "message": "Bosenština"
+  },
+  "language_ca": {
+    "message": "Katalánština"
+  },
+  "language_ceb": {
+    "message": "Cebuánština"
+  },
+  "language_co": {
+    "message": "Korsičtina"
+  },
+  "language_cs": {
+    "message": "Čeština"
+  },
+  "language_cy": {
+    "message": "Velština"
+  },
+  "language_da": {
+    "message": "Dánština"
+  },
+  "language_de": {
+    "message": "Němčina"
+  },
+  "language_el": {
+    "message": "Řečtina"
+  },
+  "language_en": {
+    "message": "Angličtina"
+  },
+  "language_eo": {
+    "message": "Esperanto"
+  },
+  "language_es": {
+    "message": "Španělština"
+  },
+  "language_et": {
+    "message": "Estonština"
+  },
+  "language_eu": {
+    "message": "Baskičtina"
+  },
+  "language_fa": {
+    "message": "Perština"
+  },
+  "language_fi": {
+    "message": "Finština"
+  },
+  "language_fr": {
+    "message": "Francouzština"
+  },
+  "language_fy": {
+    "message": "Fríština"
+  },
+  "language_ga": {
+    "message": "Irština"
+  },
+  "language_gd": {
+    "message": "Skotská gaelština"
+  },
+  "language_gl": {
+    "message": "Galicijština"
+  },
+  "language_gu": {
+    "message": "Gudžarátština"
+  },
+  "language_ha": {
+    "message": "Hauština"
+  },
+  "language_haw": {
+    "message": "Havajština"
+  },
+  "language_hi": {
+    "message": "Hindština"
+  },
+  "language_hmn": {
+    "message": "Hmongština"
+  },
+  "language_hr": {
+    "message": "Chorvatština"
+  },
+  "language_ht": {
+    "message": "Haitská kreolština"
+  },
+  "language_hu": {
+    "message": "Maďarština"
+  },
+  "language_hy": {
+    "message": "Arménština"
+  },
+  "language_id": {
+    "message": "Indonéština"
+  },
+  "language_ig": {
+    "message": "Igboština"
+  },
+  "language_is": {
+    "message": "Islandština"
+  },
+  "language_it": {
+    "message": "Italština"
+  },
+  "language_iw": {
+    "message": "Hebrejština"
+  },
+  "language_ja": {
+    "message": "Japonština"
+  },
+  "language_jw": {
+    "message": "Javánština"
+  },
+  "language_ka": {
+    "message": "Gruzínština"
+  },
+  "language_kk": {
+    "message": "Kazaština"
+  },
+  "language_km": {
+    "message": "Khmerština"
+  },
+  "language_kn": {
+    "message": "Kannadština"
+  },
+  "language_ko": {
+    "message": "Korejština"
+  },
+  "language_ku": {
+    "message": "Kurdština"
+  },
+  "language_ky": {
+    "message": "Kyrgyzština"
+  },
+  "language_la": {
+    "message": "Latina"
+  },
+  "language_lb": {
+    "message": "Lucemburština"
+  },
+  "language_lo": {
+    "message": "Laoština"
+  },
+  "language_lt": {
+    "message": "Litevština"
+  },
+  "language_lv": {
+    "message": "Lotyština"
+  },
+  "language_mg": {
+    "message": "Malgaština"
+  },
+  "language_mi": {
+    "message": "Maorština"
+  },
+  "language_mk": {
+    "message": "Makedonština"
+  },
+  "language_ml": {
+    "message": "Malajálamština"
+  },
+  "language_mn": {
+    "message": "Mongolština"
+  },
+  "language_mr": {
+    "message": "Marátština"
+  },
+  "language_ms": {
+    "message": "Malajština"
+  },
+  "language_mt": {
+    "message": "Maltština"
+  },
+  "language_my": {
+    "message": "Barmština"
+  },
+  "language_ne": {
+    "message": "Nepálština"
+  },
+  "language_nl": {
+    "message": "Holandština"
+  },
+  "language_no": {
+    "message": "Norština"
+  },
+  "language_ny": {
+    "message": "Čičevština"
+  },
+  "language_or": {
+    "message": "Urijština"
+  },
+  "language_pa": {
+    "message": "Pandžábština"
+  },
+  "language_pl": {
+    "message": "Polština"
+  },
+  "language_ps": {
+    "message": "Paštština"
+  },
+  "language_pt": {
+    "message": "Portugalština"
+  },
+  "language_ro": {
+    "message": "Rumunština"
+  },
+  "language_ru": {
+    "message": "Ruština"
+  },
+  "language_rw": {
+    "message": "Rwandština"
+  },
+  "language_sd": {
+    "message": "Sindhijština"
+  },
+  "language_si": {
+    "message": "Sinhálština"
+  },
+  "language_sk": {
+    "message": "Slovenština"
+  },
+  "language_sl": {
+    "message": "Slovinština"
+  },
+  "language_sm": {
+    "message": "Samojská polynéština"
+  },
+  "language_sn": {
+    "message": "Šonština"
+  },
+  "language_so": {
+    "message": "Somálština"
+  },
+  "language_sq": {
+    "message": "Albánština"
+  },
+  "language_sr": {
+    "message": "Srbština"
+  },
+  "language_st": {
+    "message": "Sesothština"
+  },
+  "language_su": {
+    "message": "Sundánština"
+  },
+  "language_sv": {
+    "message": "Švédština"
+  },
+  "language_sw": {
+    "message": "Svahilština"
+  },
+  "language_ta": {
+    "message": "Tamilština"
+  },
+  "language_te": {
+    "message": "Telužština"
+  },
+  "language_tg": {
+    "message": "Tádžičtina"
+  },
+  "language_th": {
+    "message": "Thajština"
+  },
+  "language_tk": {
+    "message": "Turkmenština"
+  },
+  "language_tl": {
+    "message": "Filipínština"
+  },
+  "language_tr": {
+    "message": "Turečtina"
+  },
+  "language_tt": {
+    "message": "Tatarština"
+  },
+  "language_ug": {
+    "message": "Ujgurština"
+  },
+  "language_uk": {
+    "message": "Ukrajinština"
+  },
+  "language_ur": {
+    "message": "Urdština"
+  },
+  "language_uz": {
+    "message": "Uzbečtina"
+  },
+  "language_vi": {
+    "message": "Vietnamština"
+  },
+  "language_xh": {
+    "message": "Xhoština"
+  },
+  "language_yi": {
+    "message": "Jidiš"
+  },
+  "language_yo": {
+    "message": "Jorubština"
+  },
+  "language_zh": {
+    "message": "Čínština"
+  },
+  "language_zh_cn": {
+    "message": "Čínština (zjednodušená)"
+  },
+  "language_zh_tw": {
+    "message": "Čínština (tradiční)"
+  },
+  "language_zu": {
+    "message": "Zulu"
+  },
+  "cardinal_declensions": {
+    "message": "1 => sg_nom, 2-4 => pl_nom, * => pl_gen",
+    "description": "For determining what case to use when counting objects"
+  }
+}
