@@ -215,6 +215,14 @@
     "message": "Cancel",
     "description": "Label for x button used to clear selection in document list"
   },
+  "language_none": {
+    "message": "None",
+    "description": "For top item in To language dropdown in side-bar"
+  },
+  "language_unknown": {
+    "message": "Unknown",
+    "description": "For top item in From language dropdown in side-bar"
+  },
   "language_af": {
     "message": "Afrikaans"
   },
