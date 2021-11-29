@@ -3,10 +3,53 @@ let sourceLanguage;
 
 export { getMessage as l, getMessageWithCardinal as lc };
 
+let fallbackMessages;
+let fallBackLanguageCode;
+
+export async function initializeLocalization() {
+  const { getMessage } = chrome.i18n;
+  if (getMessage) {
+    return;
+  }
+  // load the [locale]/message.json and deal with ourselves
+  const manifest = await loadJSON('manifest.json');
+  fallbackMessages = await loadJSON(`_locales/${manifest.default_locale}/messages.json`);
+  try {
+    const lang = getUILanguage();
+    if (lang !== manifest.default_locale) {
+      const localeMessages = await loadJSON(`_locales/${lang}/messages.json`);
+      Object.assign(fallbackMessages, localeMessages);
+    }
+  } catch (e) {
+  }
+}
+
+async function loadJSON(path) {
+  const url = chrome.runtime.getURL(path);
+  const res = await fetch(url);
+  const json = await res.json();
+  return json;
+}
+
 export function getMessage(name, substitutions) {
   const { getMessage } = chrome.i18n;
   if (getMessage) {
     return getMessage(name, substitutions);
+  } else {
+    const entry = fallbackMessages[name];
+    if (entry) {
+      if (!(substitutions instanceof Array)) {
+        substitutions = [ substitutions ];
+      }
+      return entry.message.replace(/\$(\w+)\$/g, (m0, m1) => {
+        const key = m1.toLowerCase();
+        const placeholder = entry.placeholders[key];
+        const index = parseInt(placeholder.content.substr(1)) - 1;
+        const value = substitutions[index];
+        return (value !== undefined) ? value : '';
+      });
+    }
+    return '';
   }
 }
 
@@ -23,6 +66,27 @@ export function getUILanguage() {
   const { getUILanguage } = chrome.i18n;
   if (getUILanguage) {
     return getUILanguage();
+  } else {
+    if (!fallBackLanguageCode) {
+      // absolutely ridiculous way of detecting the current locale
+      const lang = fallBackLanguageCode = navigator.language.replace(/\-.*/g, '').toLowerCase();
+      const date = new Date('2000-01-01T00:00:00.000Z');
+      const dateOpts = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      const dateString = date.toLocaleDateString(undefined, dateOpts);
+      if (dateString !== date.toLocaleDateString(lang, dateOpts)) {
+        for (const { code } of languages) {
+          try {
+            // if the locale is unsupported, it falls back to "lang", which we know will produce a no-match
+            if (code !== lang && dateString === date.toLocaleDateString([ code, lang ], dateOpts)) {
+              fallBackLanguageCode = code;
+              break;
+            }
+          } catch (e) {
+          }
+        }
+      }
+    }
+    return fallBackLanguageCode;
   }
 }
 

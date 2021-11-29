@@ -1,10 +1,12 @@
 import { initializeStorage, getSettings, storeObject, storageChange } from './lib/storage.js';
 import { getPageURL } from './lib/navigation.js';
+import { l, initializeLocalization } from './lib/i18n.js';
 
 async function start() {
   chrome.contextMenus.onClicked.addListener(handleMenuClick);
   chrome.runtime.onMessage.addListener(handleMessage);
   await initializeStorage();
+  await initializeLocalization();
   updateContextMenu();
   storageChange.addEventListener('settings', updateContextMenu);
 }
@@ -23,12 +25,17 @@ function updateContextMenu() {
 
 function addContextMenu() {
   if (menuCreated !== true) {
-    chrome.contextMenus.create({
+    // try updating it first
+    const props = {
       contexts: [ 'selection' ],
       documentUrlPatterns: [ 'http://*/*', 'https://*/*' ],
-      title: 'Create print version',
-      id: createMenuId,
-    }, () => chrome.runtime.lastError);
+      title: l('create_print_version'),
+    };
+    chrome.contextMenus.update(createMenuId, props, () => {
+      if (chrome.runtime.lastError) {
+        chrome.contextMenus.create({ id: createMenuId, ...props }, () => chrome.runtime.lastError);
+      }
+    });
     menuCreated = true;
   }
 }
