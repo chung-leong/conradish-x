@@ -4,11 +4,11 @@
     "description": "Label for menu item in browser context menu and extension pop-up menu"
   },
   "selection_portion_of_document": {
-    "message": "select portion of document you wish to print first",
+    "message": "nejprve vyberte část dokumentu pro tisk",
     "description": "Text for tooltip in pop-up menu, when there's no selection"
   },
   "created_on": {
-    "message": "Datum vzniku: $DATE$",
+    "message": "Datum vytvoření: $DATE$",
     "description": "Text for tooltip of recent documents in pop-up menu",
     "placeholders": {
       "date": {
@@ -26,7 +26,7 @@
     "description": "Label for item in annotation menu"
   },
   "show_term_and_definition": {
-    "message": "show both term and definition in footnote",
+    "message": "termín a definice v poznámce pod čarou",
     "description": "Text for tooltip of item in annotation menu"
   },
   "add_translation": {
@@ -34,7 +34,7 @@
     "description": "Label for item in annotation menu"
   },
   "show_translation_only": {
-    "message": "show translated sentence only in footnote",
+    "message": "přeložená věta pouze v poznámce pod čarou",
     "description": "Text for tooltip of item in annotation menu"
   },
   "add_explanation": {
@@ -42,15 +42,15 @@
     "description": "Label for item in annotation menu"
   },
   "show_explanation": {
-    "message": "show explanation in footnote",
+    "message": "vaše vysvětlení v poznámce pod čarou",
     "description": "Text for tooltip of item in annotation menu"
   },
   "add_context_menu_item": {
-    "message": "Add item to browser context menu",
+    "message": "Další položka v kontextové nabídce prohlížeče",
     "description": "Label for checkbox in options"
   },
   "filter_page_content": {
-    "message": "Filter page content",
+    "message": "Filtrace obsahu stránek",
     "description": "Label for checkbox in options"
   },
   "from_language": {
@@ -122,7 +122,7 @@
     "description": "Label for button in side-bar"
   },
   "check_paper_size": {
-    "message": "In the print window, make sure **Paper size** matches what’s specified above and that **Margins** are set to “Default”",
+    "message": "V dialogovém okně Tisk se ujistěte, že **Velikost papíru** je stejná jako výše uvedená a že **Okraje** jsou nastaveny na „Výchozí”",
     "description": "Message in speech bubble over print button in side-bar (Markdown)"
   },
   "documents": {
@@ -236,11 +236,11 @@
     "description": "Label for x button used to clear selection in document list"
   },
   "language_transform_from": {
-    "message": "a\\b => y, á\\b => é",
+    "message": "a(?=\\P{L}|$$) => y, á(?=\\P{L}|$$) => é",
     "description": "RegExp replacements that yield the genitive case"
   },
   "language_transform_to": {
-    "message": "a\\b => y, á\\b => é",
+    "message": "a(?=\\P{L}|$$) => y, á(?=\\P{L}|$$) => é",
     "description": "RegExp replacements that yield the genitive case"
   },
   "language_none": {

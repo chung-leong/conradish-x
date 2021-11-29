@@ -170,7 +170,7 @@ function getTransformFunction(context) {
       const transformStrings = transformText.split(/\s*,\s*/);
       const transforms = transformStrings.map((transformString) => {
         const [ pattern, replacement ] = transformString.split(/\s*=>\s*/);
-        const regExp = new RegExp(pattern, 'g');
+        const regExp = new RegExp(pattern, 'ug');
         return { regExp, replacement };
       });
       f = (s) => {

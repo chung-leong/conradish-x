@@ -178,7 +178,7 @@ BODY.ready #article {
   margin-top: 5mm;
   /* page margin top plus margin bottom */
   margin-bottom: calc(25mm + 25mm);
-  padding-inline-start: 1.6em;
+  padding-inline-start: 1.2em;
   white-space: pre-wrap;
 }
 
