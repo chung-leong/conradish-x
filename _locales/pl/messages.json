@@ -34,7 +34,7 @@
     "description": "Label for item in annotation menu"
   },
   "show_translation_only": {
-    "message": "przetłumaczone zdanie w przypisie jedynie",
+    "message": "przetłumaczone zdanie samo w przypisie",
     "description": "Text for tooltip of item in annotation menu"
   },
   "add_explanation": {
@@ -42,11 +42,11 @@
     "description": "Label for item in annotation menu"
   },
   "show_explanation": {
-    "message": "wyjaśnienie w przypisie",
+    "message": "swoje wyjaśnienie w przypisie",
     "description": "Text for tooltip of item in annotation menu"
   },
   "add_context_menu_item": {
-    "message": "Element w menu kontekstowym przeglądarki",
+    "message": "Dodatkowy element w menu kontekstowym przeglądarki",
     "description": "Label for checkbox in options"
   },
   "filter_page_content": {
@@ -122,7 +122,7 @@
     "description": "Label for button in side-bar"
   },
   "check_paper_size": {
-    "message": "In the print window, make sure **Paper size** matches what’s specified above and that **Margins** are set to “Default”",
+    "message": "W dialogowym oknie Drukuj upewnij się, że **Rozmiar papieru** jest taki sam jak powyższy i że **Marginesy** są ustawione na „Domyślne”.",
     "description": "Message in speech bubble over print button in side-bar (Markdown)"
   },
   "documents": {
