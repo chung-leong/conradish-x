@@ -1,0 +1,435 @@
+{
+  "create_print_version": {
+    "message": "Create print version",
+    "description": "Label for menu item in browser context menu and extension pop-up menu"
+  },
+  "selection_portion_of_document": {
+    "message": "select portion of document you wish to print first",
+    "description": "Text for tooltip in pop-up menu, when there's no selection"
+  },
+  "created_on": {
+    "message": "created on $DATE$",
+    "description": "Text for tooltip of recent documents in pop-up menu",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "11/28/2021, 10:01:35 PM"
+      }
+    }
+  },
+  "show_all_documents": {
+    "message": "Show all documents",
+    "description": "Label for menu item in pop-up menu"
+  },
+  "add_definition": {
+    "message": "Add definition",
+    "description": "Label for item in annotation menu"
+  },
+  "show_term_and_definition": {
+    "message": "show both term and definition in footnote",
+    "description": "Text for tooltip of item in annotation menu"
+  },
+  "add_translation": {
+    "message": "Add translation",
+    "description": "Label for item in annotation menu"
+  },
+  "show_translation_only": {
+    "message": "show translated sentence only in footnote",
+    "description": "Text for tooltip of item in annotation menu"
+  },
+  "add_explanation": {
+    "message": "Add explanation",
+    "description": "Label for item in annotation menu"
+  },
+  "show_explanation": {
+    "message": "show explanation in footnote",
+    "description": "Text for tooltip of item in annotation menu"
+  },
+  "add_context_menu_item": {
+    "message": "Add item to browser context menu",
+    "description": "Label for checkbox in options"
+  },
+  "filter_page_content": {
+    "message": "Filter page content",
+    "description": "Label for checkbox in options"
+  },
+  "from_language": {
+    "message": "Z języka",
+    "description": "Label for drop-down in side-bar"
+  },
+  "to_language": {
+    "message": "Na język",
+    "description": "Label for drop-down in side-bar"
+  },
+  "article_font_family": {
+    "message": "Czcionka",
+    "description": "Label for drop-down in side-bar"
+  },
+  "article_font_size": {
+    "message": "Rozmiar czcionki",
+    "description": "Label for drop-down in side-bar"
+  },
+  "article_justification": {
+    "message": "Justowania",
+    "description": "Label for drop-down in side-bar"
+  },
+  "article_spacing": {
+    "message": "Odstępy między wierszami",
+    "description": "Label for drop-down in side-bar"
+  },
+  "footnote_font_family": {
+    "message": "Czcionka przypisów",
+    "description": "Label for drop-down in side-bar"
+  },
+  "footnote_font_size": {
+    "message": "Rozmiar czcionki przypisów",
+    "description": "Label for drop-down in side-bar"
+  },
+  "paper_size": {
+    "message": "Rozmiar papieru",
+    "description": "Label for drop-down in side-bar"
+  },
+  "margins": {
+    "message": "Marginesy",
+    "description": "Label for drop-down in side-bar"
+  },
+  "print": {
+    "message": "Drukuj",
+    "description": "Label for button in side-bar"
+  },
+  "check_paper_size": {
+    "message": "In the print window, make sure **Paper size** matches what’s specified above and that **Margins** are set to “Default”",
+    "description": "Message in speech bubble over print button in side-bar (Markdown)"
+  },
+  "language_transform_from": {
+    "message": "(sk|ck)i => $$1iego",
+    "description": "RegExp replacements that yield the genitive case"
+  },
+  "language_af": {
+    "message": "Afrikaans"
+  },
+  "language_am": {
+    "message": "Amharski"
+  },
+  "language_ar": {
+    "message": "Arabski"
+  },
+  "language_az": {
+    "message": "Azerski"
+  },
+  "language_be": {
+    "message": "Białoruski"
+  },
+  "language_bg": {
+    "message": "Bułgarski"
+  },
+  "language_bn": {
+    "message": "Bengalski"
+  },
+  "language_bs": {
+    "message": "Bośniacki"
+  },
+  "language_ca": {
+    "message": "Kataloński"
+  },
+  "language_ceb": {
+    "message": "Cebuański"
+  },
+  "language_co": {
+    "message": "Korsykański"
+  },
+  "language_cs": {
+    "message": "Czeski"
+  },
+  "language_cy": {
+    "message": "Walijski"
+  },
+  "language_da": {
+    "message": "Duński"
+  },
+  "language_de": {
+    "message": "Niemiecki"
+  },
+  "language_el": {
+    "message": "Grecki"
+  },
+  "language_en": {
+    "message": "Angielski"
+  },
+  "language_eo": {
+    "message": "Esperanto"
+  },
+  "language_es": {
+    "message": "Hiszpański"
+  },
+  "language_et": {
+    "message": "Estoński"
+  },
+  "language_eu": {
+    "message": "Baskijski"
+  },
+  "language_fa": {
+    "message": "Perski"
+  },
+  "language_fi": {
+    "message": "Fiński"
+  },
+  "language_fr": {
+    "message": "Francuski"
+  },
+  "language_fy": {
+    "message": "Fryzyjski"
+  },
+  "language_ga": {
+    "message": "Irlandzki"
+  },
+  "language_gd": {
+    "message": "Szkocki gaelicki"
+  },
+  "language_gl": {
+    "message": "Galicyjski"
+  },
+  "language_gu": {
+    "message": "Gudżarati"
+  },
+  "language_ha": {
+    "message": "Hausa"
+  },
+  "language_haw": {
+    "message": "Hawajski"
+  },
+  "language_hi": {
+    "message": "Hindi"
+  },
+  "language_hmn": {
+    "message": "Hmong"
+  },
+  "language_hr": {
+    "message": "Chorwacki"
+  },
+  "language_ht": {
+    "message": "Kreolski (Haiti)"
+  },
+  "language_hu": {
+    "message": "Węgierski"
+  },
+  "language_hy": {
+    "message": "Ormiański"
+  },
+  "language_id": {
+    "message": "Indonezyjski"
+  },
+  "language_ig": {
+    "message": "Igbo"
+  },
+  "language_is": {
+    "message": "Islandzki"
+  },
+  "language_it": {
+    "message": "Włoski"
+  },
+  "language_iw": {
+    "message": "Hebrajski"
+  },
+  "language_ja": {
+    "message": "Japoński"
+  },
+  "language_jw": {
+    "message": "Jawajski"
+  },
+  "language_ka": {
+    "message": "Gruziński"
+  },
+  "language_kk": {
+    "message": "Kazachski"
+  },
+  "language_km": {
+    "message": "Khmerski"
+  },
+  "language_kn": {
+    "message": "Kannada"
+  },
+  "language_ko": {
+    "message": "Koreański"
+  },
+  "language_ku": {
+    "message": "Kurdyjski"
+  },
+  "language_ky": {
+    "message": "Kirgiski"
+  },
+  "language_la": {
+    "message": "Łaciński"
+  },
+  "language_lb": {
+    "message": "Luksemburski"
+  },
+  "language_lo": {
+    "message": "Laotański"
+  },
+  "language_lt": {
+    "message": "Litewski"
+  },
+  "language_lv": {
+    "message": "Łotewski"
+  },
+  "language_mg": {
+    "message": "Malgaski"
+  },
+  "language_mi": {
+    "message": "Maori"
+  },
+  "language_mk": {
+    "message": "Macedoński"
+  },
+  "language_ml": {
+    "message": "Malajalam"
+  },
+  "language_mn": {
+    "message": "Mongolski"
+  },
+  "language_mr": {
+    "message": "Marathi"
+  },
+  "language_ms": {
+    "message": "Malajski"
+  },
+  "language_mt": {
+    "message": "Maltański"
+  },
+  "language_my": {
+    "message": "Birmański"
+  },
+  "language_ne": {
+    "message": "Nepalski"
+  },
+  "language_nl": {
+    "message": "Niderlandzki"
+  },
+  "language_no": {
+    "message": "Norweski"
+  },
+  "language_ny": {
+    "message": "Cziczewa"
+  },
+  "language_or": {
+    "message": "Orija"
+  },
+  "language_pa": {
+    "message": "Pendżabski"
+  },
+  "language_pl": {
+    "message": "Polski"
+  },
+  "language_ps": {
+    "message": "Paszto"
+  },
+  "language_pt": {
+    "message": "Portugalski"
+  },
+  "language_ro": {
+    "message": "Rumuński"
+  },
+  "language_ru": {
+    "message": "Rosyjski"
+  },
+  "language_rw": {
+    "message": "Ruanda-rundi"
+  },
+  "language_sd": {
+    "message": "Sindhi"
+  },
+  "language_si": {
+    "message": "Syngaleski"
+  },
+  "language_sk": {
+    "message": "Słowacki"
+  },
+  "language_sl": {
+    "message": "Słoweński"
+  },
+  "language_sm": {
+    "message": "Samoański"
+  },
+  "language_sn": {
+    "message": "Shona"
+  },
+  "language_so": {
+    "message": "Somalijski"
+  },
+  "language_sq": {
+    "message": "Albański"
+  },
+  "language_sr": {
+    "message": "Serbski"
+  },
+  "language_st": {
+    "message": "Sotho"
+  },
+  "language_su": {
+    "message": "Sundajski"
+  },
+  "language_sv": {
+    "message": "Szwedzki"
+  },
+  "language_sw": {
+    "message": "Suahili"
+  },
+  "language_ta": {
+    "message": "Tamilski"
+  },
+  "language_te": {
+    "message": "Telugu"
+  },
+  "language_tg": {
+    "message": "Tadżycki"
+  },
+  "language_th": {
+    "message": "Tajski"
+  },
+  "language_tk": {
+    "message": "Turkmeński"
+  },
+  "language_tl": {
+    "message": "Filipiński"
+  },
+  "language_tr": {
+    "message": "Turecki"
+  },
+  "language_tt": {
+    "message": "Tatarski"
+  },
+  "language_ug": {
+    "message": "Ujgurski"
+  },
+  "language_uk": {
+    "message": "Ukraiński"
+  },
+  "language_ur": {
+    "message": "Urdu"
+  },
+  "language_uz": {
+    "message": "Uzbecki"
+  },
+  "language_vi": {
+    "message": "Wietnamski"
+  },
+  "language_xh": {
+    "message": "Xhosa"
+  },
+  "language_yi": {
+    "message": "Jidysz"
+  },
+  "language_yo": {
+    "message": "Joruba"
+  },
+  "language_zh_cn": {
+    "message": "Chiński (uproszczony)"
+  },
+  "language_zh_tw": {
+    "message": "Chiński (tradycyjny)"
+  },
+  "language_zu": {
+    "message": "Zulu"
+  }
+}

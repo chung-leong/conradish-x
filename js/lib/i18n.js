@@ -71,7 +71,7 @@ function getTransformFunction(context) {
   if (!f) {
     const transformText = getMessage(`language_transform_${context}`);
     if (transformText) {
-      const transformStrings = transformText.split(',');
+      const transformStrings = transformText.split(/\s*,\s*/);
       const transforms = transformStrings.map((transformString) => {
         const [ pattern, replacement ] = transformString.split(/\s*=>\s*/);
         const regExp = new RegExp(pattern);
