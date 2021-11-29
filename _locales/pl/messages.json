@@ -1,14 +1,14 @@
 {
   "create_print_version": {
-    "message": "Create print version",
+    "message": "Utwórz wersję do druku",
     "description": "Label for menu item in browser context menu and extension pop-up menu"
   },
   "selection_portion_of_document": {
-    "message": "select portion of document you wish to print first",
+    "message": "najpierw wybierz tę część dokumentu przeznaczoną do druku",
     "description": "Text for tooltip in pop-up menu, when there's no selection"
   },
   "created_on": {
-    "message": "created on $DATE$",
+    "message": "data utworzenia: $DATE$",
     "description": "Text for tooltip of recent documents in pop-up menu",
     "placeholders": {
       "date": {
@@ -18,39 +18,39 @@
     }
   },
   "show_all_documents": {
-    "message": "Show all documents",
+    "message": "Pokaż wszystkie dokumenty",
     "description": "Label for menu item in pop-up menu"
   },
   "add_definition": {
-    "message": "Add definition",
+    "message": "Dodaj definicję",
     "description": "Label for item in annotation menu"
   },
   "show_term_and_definition": {
-    "message": "show both term and definition in footnote",
+    "message": "termin i definicja w przypisie",
     "description": "Text for tooltip of item in annotation menu"
   },
   "add_translation": {
-    "message": "Add translation",
+    "message": "Dodaj tłumaczenie",
     "description": "Label for item in annotation menu"
   },
   "show_translation_only": {
-    "message": "show translated sentence only in footnote",
+    "message": "przetłumaczone zdanie w przypisie jedynie",
     "description": "Text for tooltip of item in annotation menu"
   },
   "add_explanation": {
-    "message": "Add explanation",
+    "message": "Dodaj wyjaśnienie",
     "description": "Label for item in annotation menu"
   },
   "show_explanation": {
-    "message": "show explanation in footnote",
+    "message": "wyjaśnienie w przypisie",
     "description": "Text for tooltip of item in annotation menu"
   },
   "add_context_menu_item": {
-    "message": "Add item to browser context menu",
+    "message": "Element w menu kontekstowym przeglądarki",
     "description": "Label for checkbox in options"
   },
   "filter_page_content": {
-    "message": "Filter page content",
+    "message": "Filtrowanie zawartości strony",
     "description": "Label for checkbox in options"
   },
   "from_language": {
@@ -236,7 +236,7 @@
     "description": "Tooltip for x button used to clear selection in document list"
   },
   "language_transform_from": {
-    "message": "(sk|ck)i => $$1iego",
+    "message": "([csz]k)i\\b => $$1iego",
     "description": "RegExp replacements that yield the genitive case"
   },
   "language_af": {
@@ -556,6 +556,9 @@
   },
   "language_yo": {
     "message": "Joruba"
+  },
+  "language_zh_cn": {
+    "message": "Chiński"
   },
   "language_zh_cn": {
     "message": "Chiński (uproszczony)"
