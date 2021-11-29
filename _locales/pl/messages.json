@@ -239,6 +239,14 @@
     "message": "([csz]k)i\\b => $$1iego",
     "description": "RegExp replacements that yield the genitive case"
   },
+  "language_none": {
+    "message": "Żadny",
+    "description": "For top item in To language dropdown in side-bar"
+  },
+  "language_unknown": {
+    "message": "Nieznany",
+    "description": "For top item in From language dropdown in side-bar"
+  },
   "language_af": {
     "message": "Afrikaans"
   },
@@ -557,7 +565,7 @@
   "language_yo": {
     "message": "Joruba"
   },
-  "language_zh_cn": {
+  "language_zh": {
     "message": "Chiński"
   },
   "language_zh_cn": {

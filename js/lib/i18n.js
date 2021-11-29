@@ -16,7 +16,6 @@ export function getMessageWithCardinal(name, number) {
   if (declension) {
     name = `${name}_${declension}`;
   }
-  console.log({ name, number });
   return getMessage(name, [ number ]);
 }
 
@@ -41,18 +40,20 @@ export function getTargetLanguage() {
 }
 
 export function getSourceLanguages() {
-  const unknown = { value: '', label: 'Unknown' };
-  const list = [ unknown ];
+  const unknown = { value: '', label: getMessage('language_unknown') };
+  const list = [];
   for (const { code, name } of languages) {
     const label = getLanguageName(code, 'from');
     list.push({ value: code, label });
   }
+  list.sort((a, b) => a.label.localeCompare(b.label))
+  list.unshift(unknown);
   return list;
 }
 
 export function getTargetLanguages() {
-  const none = { value: '', label: 'None' };
-  const list = [ none ];
+  const none = { value: '', label: getMessage('language_none') };
+  const list = [];
   for (const { code, name, variants } of languages) {
     if (variants) {
       for (const { code, name } of variants) {
@@ -64,6 +65,8 @@ export function getTargetLanguages() {
       list.push({ value: code, label });
     }
   }
+  list.sort((a, b) => a.label.localeCompare(b.label))
+  list.unshift(none);
   return list;
 }
 
@@ -84,7 +87,7 @@ function getTransformFunction(context) {
       const transformStrings = transformText.split(/\s*,\s*/);
       const transforms = transformStrings.map((transformString) => {
         const [ pattern, replacement ] = transformString.split(/\s*=>\s*/);
-        const regExp = new RegExp(pattern);
+        const regExp = new RegExp(pattern, 'g');
         return { regExp, replacement };
       });
       f = (s) => {
