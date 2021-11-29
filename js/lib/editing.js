@@ -1,7 +1,7 @@
 import { e, separateWords } from './ui.js';
 import { adjustLayout, adjustFootnotes, findDeletedFootnote, annotateRange, saveDocument, setFilterMode } from './layout.js';
 import { transverseRange } from './capturing.js';
-import { l, translate, getSourceLanguage, getTargetLanguage } from './i18n.js';
+import { l, translate, getSourceLanguage, getTargetLanguage, getLanguageDirection } from './i18n.js';
 
 const articleMenuElement = document.getElementById('article-menu');
 const articleMenuItems = {};
@@ -56,35 +56,43 @@ export function createMenuItems() {
   articleMenuElement.appendChild(list);
 }
 
-async function addFootnote(includeTerm) {
-  // set the selection to what was last selected
-  const range = normalizeRange(lastSelectedRange.cloneRange());
-  // put placeholder text in footer initially
+function getSelectedText(range) {
   const fragment = range.cloneContents();
   const fragmentDIV = e('DIV', {}, fragment);
   for (const supElement of [ ...fragmentDIV.getElementsByClassName('footnote-number') ]) {
     supElement.remove();
   }
-  const term = fragmentDIV.innerText.trim();
+  return fragmentDIV.innerText.trim();
+}
+
+async function addFootnote(includeTerm) {
+  // set the selection to what was last selected
+  const range = normalizeRange(lastSelectedRange.cloneRange());
+  // put placeholder text in footer initially
+  let term = getSelectedText(range);
   const sourceLang = getSourceLanguage();
   const targetLang = getTargetLanguage();
   const translating = (targetLang && targetLang !== sourceLang);
   const placeholder = (translating) ? '...' : '';
   const initialText = (includeTerm) ? `${term} - ${placeholder}` : placeholder;
-  const footnote = annotateRange(range, initialText);
+  const footnote = annotateRange(range, initialText, { term, lang: `${sourceLang},${targetLang}` });
   adjustFootnotes({ updateReferences: true, updateNumbering: true });
-  adjustLayout({ updateFooterPosition: true });
+  adjustLayout({ updateFooterPosition: true, updateFooterDirection: true });
   if (translating) {
     const result = await translate(term, sourceLang, targetLang, includeTerm);
     const { itemElement } = footnote;
     if (itemElement.textContent === initialText) {
-      const { term, translation, ...extra } = result;
+      const { translation, ...extra } = result;
+      if (extra.term) {
+        // case is different
+        term = extra.term;
+      }
       const text = (includeTerm) ? `${term} - ${translation}` : translation;
       itemElement.textContent = text;
       adjustFootnotes({ updateContent: true });
       adjustLayout({ updateFooterPosition: true });
       // save additional information from Google Translate
-      footnote.extra = { term, ...extra };
+      Object.assign(footnote.extra, extra);
       autosave(100);
     }
   } else {
@@ -544,16 +552,19 @@ function getEditableContainer(node) {
 function showArticleMenu(container, range) {
   const words = separateWords(range.toString());
   if (words.length > 0) {
+    const sourceLang = getSourceLanguage();
+    const sourceLangDir = getLanguageDirection(sourceLang);
+    const targetLang = getTargetLanguage();
     const r1 = range.getBoundingClientRect();
     const r2 = articleMenuElement.parentNode.getBoundingClientRect();
-    const left = r1.left - r2.left;
-    let top = r1.bottom - r2.top + 2;
-    articleMenuElement.style.left = `${left}px`;
-    articleMenuElement.style.top = `${top}px`;
+    if (sourceLangDir === 'ltr') {
+      articleMenuElement.style.left = `${r1.left - r2.left}px`;
+    } else {
+      articleMenuElement.style.right = `${r2.right - r1.right}px`;
+    }
+    articleMenuElement.style.top = `${r1.bottom - r2.top + 2}px`;
     // show/hide menu item depending on how many words are selected
     const count = words.length;
-    const sourceLang = getSourceLanguage();
-    const targetLang = getTargetLanguage();
     const translating = (targetLang && targetLang !== sourceLang);
     toggle(articleMenuItems.addTranslation, translating && count > 1);
     toggle(articleMenuItems.addExplanation, !translating && count > 1);

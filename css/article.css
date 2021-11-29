@@ -28,7 +28,7 @@ BODY {
   display: inline-block;
   position: relative;
   margin: 5mm 5mm 5mm 5mm;
-  text-align: left;
+  text-align: start;
   /* article is hidden from view initially */
   visibility: hidden;
 }
@@ -58,19 +58,19 @@ BODY.ready #article {
 #article-text H4,
 #article-text H5,
 #article-text H6 {
-  text-align: left;
+  text-align: start;
 }
 
 #article-text TABLE {
   display: grid;
   border-collapse: collapse;
-  text-align: left;
+  text-align: start;
   font-size: 80%;
   /* page height minus top and bottom margins minus footer margin minus some extra space */
   max-height: calc(297mm - 25mm - 25mm - 5mm - 10mm);
   /* page width minus left and right margins minus some extra space */
   width: calc(210mm - 25mm - 25mm - 2mm);
-  margin-left: 1mm;
+  margin-inline-start: 1mm;
   overflow: hidden;
 }
 
@@ -91,6 +91,10 @@ BODY.ready #article {
 #article-text SUP {
   font-size: 10pt;
   font-weight: 400;
+}
+
+#article-text.rtl {
+  direction: rtl;
 }
 
 #article.filter-automatic #article-text .likely-junk {
@@ -136,8 +140,6 @@ BODY.ready #article {
 #article-menu {
   position: absolute;
   display: none;
-  left: 5px;
-  top: 5px;
   background-color: #eeeeee;
   border-radius: 4px;
   box-shadow: 1px 1px 5px black;
@@ -171,16 +173,28 @@ BODY.ready #article {
 
 .footer-content {
   float: right;
+  box-sizing: border-box;
   width: 100%;
   margin-top: 5mm;
   /* page margin top plus margin bottom */
   margin-bottom: calc(25mm + 25mm);
-  padding-left: 1.6em;
+  padding-inline-start: 1.6em;
   white-space: pre-wrap;
 }
 
 .footer-content:focus {
   outline-offset: 2px;
+}
+
+.footer-content.rtl {
+  direction: rtl;
+}
+
+.footer-content:empty {
+  /* no margin needed when it's empty */
+  margin-top: 0;
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 .footer-spacer {
@@ -190,13 +204,6 @@ BODY.ready #article {
   height: 5mm;
   line-height: 0;
   visibility: hidden;
-}
-
-.footer-content:empty {
-  /* no margin needed when it's empty */
-  margin-top: 0;
-  padding-top: 0;
-  padding-bottom: 0;
 }
 
 #article-footers *:last-child .footer-spacer {

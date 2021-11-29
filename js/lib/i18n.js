@@ -26,6 +26,25 @@ export function getUILanguage() {
   }
 }
 
+export function getLanguageScript(lang) {
+  for (const { code, script } of languages) {
+    if (code === lang) {
+      return script;
+    }
+  }
+  return 'Latn';
+}
+
+export function getLanguageDirection(lang) {
+  const script = getLanguageScript(lang);
+  return rightToLeftScripts.includes(script) ? 'rtl' : 'ltr';
+}
+
+export function canUseGenericFont(lang) {
+  const script = getLanguageScript(lang);
+  return genericFontScripts.includes(script);
+}
+
 export function getSourceLanguage() {
   return sourceLanguage;
 }
@@ -141,7 +160,7 @@ function getDeclensionFunction() {
 }
 
 export async function translate(original, sourceLang, targetLang, singleWord) {
-  const result = { term: original, lang: `${sourceLang},${targetLang}` };
+  const result = {};
   try {
     const url = new URL('https://clients5.google.com/translate_a/t');
     let lowerCaseAlt;
@@ -192,10 +211,10 @@ export async function translate(original, sourceLang, targetLang, singleWord) {
         if (Object.entries(inflections).length > 0) {
           result.inflections = inflections;
         }
-        if (result.term !== original && lowerCaseAlt) {
+        if (result.term) {
           // use inflection info to determine whether word should be capitalized
           if (inflections[original]) {
-            result.term = original;
+            delete result.term;
           }
         }
       }
@@ -663,3 +682,5 @@ const languages = [
 ];
 
 const capitalizingLangs = [ 'de', 'lb' ];
+const rightToLeftScripts = [ 'Arab', 'Hebr' ];
+const genericFontScripts = [ 'Latn', 'Cyrl' ];

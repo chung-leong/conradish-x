@@ -1,7 +1,7 @@
 import { initializeStorage, findObjects, loadObject, deleteObjects, storageChange } from './lib/storage.js';
 import { e, attachCustomCheckboxHandlers, attachRippleEffectHandlers, separateWords } from './lib/ui.js';
 import { setWindowName, openPage } from './lib/navigation.js';
-import { l, lc } from './lib/i18n.js';
+import { l, lc, getLanguageDirection } from './lib/i18n.js';
 
 const listContainer = document.getElementById('list-container');
 const toolbarContainer = document.getElementById('toolbar-container');
@@ -113,6 +113,10 @@ async function loadItem(item) {
   try {
     const doc = await loadObject(item.key);
     const { url, title, lang } = doc;
+    const direction = getLanguageDirection(lang);
+    if (direction === 'rtl') {
+      item.titleElement.classList.add('rtl');
+    }
     item.titleElement.textContent = title;
     item.titleElement.title = url;
     item.lang = lang;

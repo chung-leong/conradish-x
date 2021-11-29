@@ -1,6 +1,6 @@
 import { e } from './ui.js';
 import { applyStyles, getPageProperties, getSettings } from './settings.js';
-import { setSourceLanguage, getSourceLanguage } from './i18n.js';
+import { setSourceLanguage, getSourceLanguage, getLanguageDirection } from './i18n.js';
 import { insertContent, replaceUselessElements, removeEmptyNodes } from './capturing.js';
 import { loadObject, saveObject } from './storage.js';
 
@@ -26,13 +26,18 @@ export async function loadDocument(key) {
   const { title, content, lang } = currentDocument;
   // set the source language
   setSourceLanguage(lang);
+  // use rtl layout for Arabic and Hebrew
+  const direction = getLanguageDirection(lang);
+  if (direction === 'rtl') {
+    contentElement.classList.add('rtl');
+  }
   document.title = title;
   // alter CSS rules based on settings
   applyStyles();
   // add the article text into the DOM
   addContent(contentElement, content);
   // adjust layout, inserting footnotes into appropriate page
-  adjustLayout();
+  adjustLayout({ updateFooterDirection: true });
   //console.log(currentDocument);
 }
 
@@ -51,7 +56,7 @@ export async function saveDocument() {
 }
 
 export function adjustLayout(options = {}) {
-  const { updatePaper, updateFooterPosition } = options;
+  const { updatePaper, updateFooterPosition, updateFooterDirection } = options;
   if (updatePaper) {
     // paper size has changed, need to update the client rects
     for (const page of pages) {
@@ -126,10 +131,28 @@ export function adjustLayout(options = {}) {
   for (const page of pages) {
     // enable/disable editing of footer depending on whether there's content inside
     const { footer } = page;
-    footer.listElement.contentEditable = (footer.footnotes.length > 0);
+    const { listElement, footnotes } = footer;
+    listElement.contentEditable = (footnotes.length > 0);
     // adjust list counter
-    footer.listElement.start = start;
-    start += footer.footnotes.length;
+    listElement.start = start;
+    start += footnotes.length;
+    if (updateFooterDirection) {
+      let ltrCount = 0, rtlCount = 0;
+      for (const footnote of footnotes) {
+        const { lang } = footnote.extra || {};
+        if (lang) {
+          const targetLang = lang.split(',')[1];
+          if (targetLang) {
+            if (getLanguageDirection(targetLang) === 'ltr') {
+              ltrCount++;
+            } else {
+              rtlCount++;
+            }
+          }
+        }
+      }
+      listElement.classList.toggle('rtl', rtlCount > ltrCount);
+    }
   }
 }
 
@@ -424,7 +447,7 @@ function addElement(element, { tag, style, content, footnote, junk }) {
   element.append(child);
 }
 
-export function annotateRange(range, content) {
+export function annotateRange(range, content, extra) {
   const id = `footnote-${nextFootnoteId++}`;
   // figure out what number it should have
   let number = 1;
@@ -453,7 +476,7 @@ export function annotateRange(range, content) {
   supElement.classList.remove('pending');
   const itemElement = e('LI', { className: 'footnote-item' }, content);
   const page = null, deleted = 0, height = '';
-  const footnote = { id, number, page, deleted, supElement, itemElement, height };
+  const footnote = { id, number, page, deleted, supElement, itemElement, height, extra };
   footnotes.splice(number - 1, 0, footnote);
   return footnote;
 }

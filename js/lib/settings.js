@@ -17,10 +17,10 @@ export function applyStyles() {
           rule.style.fontFamily = settings.article.fontFamily;
           rule.style.fontSize = settings.article.fontSize;
           rule.style.lineHeight = settings.article.spacing;
-          rule.style.textAlign = (justify) ? 'justify' : 'left';
+          rule.style.textAlign = (justify) ? 'justify' : 'start';
         } else if (/#article\-text h\d/.test(selectorText)) {
           const justify = [ 'both' ].includes(settings.article.justification);
-          rule.style.textAlign = (justify) ? 'justify' : 'left';
+          rule.style.textAlign = (justify) ? 'justify' : 'start';
         } else if (selectorText === '#article-content') {
           rule.style.paddingLeft = page.margins.left;
           rule.style.paddingRight = page.margins.right;

@@ -247,6 +247,10 @@ BODY {
   background-image: url('../img/document48.png');
 }
 
+.title.rtl {
+  direction: rtl;
+}
+
 .message {
   display: flex;
   height: 100%;

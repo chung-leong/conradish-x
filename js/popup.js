@@ -1,7 +1,7 @@
 import { e } from './lib/ui.js';
 import { initializeStorage, findObjects, loadObject } from './lib/storage.js';
 import { openPage } from './lib/navigation.js';
-import { l } from './lib/i18n.js';
+import { l, getLanguageDirection } from './lib/i18n.js';
 
 async function start() {
   const list = document.createElement('UL');
@@ -35,8 +35,9 @@ async function start() {
     for (const { key, date, type } of recentDocs) {
       // add menu item for opening existing doc
       const doc = await loadObject(key);
+      const direction = getLanguageDirection(doc.lang);
       const open = e('LI', {
-        className: 'document',
+        className: `document ${direction}`,
         dataset: { command: 'open' + type, arg: key },
         title: l('created_on', date.toLocaleString()),
       }, doc.title);

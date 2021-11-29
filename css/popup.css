@@ -55,3 +55,7 @@ LI.separator {
   padding: 0;
   margin: 4px 0 4px 0;
 }
+
+LI.rtl {
+  direction: rtl;
+}
