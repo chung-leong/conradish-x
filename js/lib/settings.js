@@ -1,4 +1,5 @@
 import { getSettings, saveSettings } from './storage.js';
+import { l } from './i18n.js';
 
 export { getSettings, saveSettings };
 
@@ -80,23 +81,7 @@ export function getDefaultSettings() {
 }
 
 export function getPossibleSettings() {
-  return possibleSettings;
-}
-
-export function getPaperProperties(paper) {
-  return paperProperties[paper];
-}
-
-export function getPageProperties() {
-  const settings = getSettings();
-  const paper = getPaperProperties(settings.paper);
-  const { width, height, size, defaultMargins } = paper;
-  const margins = (settings.margins === 'custom') ? settings.customMargins : defaultMargins;
-  return { width, height, size, margins, footerGap: footerMarginTop };
-}
-
-const possibleSettings = {
-  fontFamily: [
+  const fontFamily = [
     {
       label: 'Arial',
       value: 'Arial',
@@ -129,90 +114,34 @@ const possibleSettings = {
       label: 'Verdana',
       value: 'Verdana',
     },
-  ],
-  fontSize: [
+  ];
+  const fontSize = [ 8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48 ].map((pt) => {
+    return {
+      label: `${pt}`,
+      value: `${pt}pt`
+    };
+  });
+  const justification = [
     {
-      label: '8',
-      value: '8pt',
-    },
-    {
-      label: '9',
-      value: '9pt',
-    },
-    {
-      label: '10',
-      value: '10pt',
-    },
-    {
-      label: '11',
-      value: '11pt',
-    },
-    {
-      label: '12',
-      value: '12pt',
-    },
-    {
-      label: '14',
-      value: '14pt',
-    },
-    {
-      label: '16',
-      value: '16pt',
-    },
-    {
-      label: '18',
-      value: '18pt',
-    },
-    {
-      label: '20',
-      value: '20pt',
-    },
-    {
-      label: '22',
-      value: '22pt',
-    },
-    {
-      label: '24',
-      value: '24pt',
-    },
-    {
-      label: '26',
-      value: '26pt',
-    },
-    {
-      label: '28',
-      value: '28pt',
-    },
-    {
-      label: '36',
-      value: '36pt',
-    },
-    {
-      label: '48',
-      value: '48pt',
-    },
-  ],
-  justification: [
-    {
-      label: 'None',
+      label: l('justification_none'),
       value: 'none'
     },
     {
-      label: 'Text only',
+      label: l('justification_text'),
       value: 'text'
     },
     {
-      label: 'Text and headings',
+      label: l('justification_text_and_headings'),
       value: 'both'
     },
-  ],
-  spacing: [
+  ];
+  const spacing = [
     {
       label: '1',
       value: '1',
     },
     {
-      label: 'Normal',
+      label: l('spacing_normal'),
       value: 'normal',
     },
     {
@@ -227,8 +156,8 @@ const possibleSettings = {
       label: '3',
       value: '3',
     },
-  ],
-  paper: [
+  ];
+  const paper = [
     {
       label: 'A4 210 x 297 mm',
       value: 'A4',
@@ -237,18 +166,31 @@ const possibleSettings = {
       label: 'Letter 8.5 x 11 in',
       value: 'letter',
     }
-  ],
-  margins: [
+  ];
+  const margins = [
     {
-      label: 'Default',
+      label: l('margins_default'),
       value: 'default',
     },
     {
-      label: 'Custom',
+      label: l('margins_custom'),
       value: 'custom',
     }
-  ],
-};
+  ];
+  return { fontFamily, fontSize, justification, spacing, paper, margins };
+}
+
+export function getPaperProperties(paper) {
+  return paperProperties[paper];
+}
+
+export function getPageProperties() {
+  const settings = getSettings();
+  const paper = getPaperProperties(settings.paper);
+  const { width, height, size, defaultMargins } = paper;
+  const margins = (settings.margins === 'custom') ? settings.customMargins : defaultMargins;
+  return { width, height, size, margins, footerGap: footerMarginTop };
+}
 
 const paperProperties = {
   A4: {

@@ -70,12 +70,28 @@
     "description": "Label for drop-down in side-bar"
   },
   "article_justification": {
-    "message": "Justowania",
+    "message": "Justowanie",
     "description": "Label for drop-down in side-bar"
+  },
+  "justification_none": {
+    "message": "Żadne",
+    "description": "Item in justification drop-down in side-bar"
+  },
+  "justification_text": {
+    "message": "Tylko tekstu",
+    "description": "Item in justification drop-down in side-bar"
+  },
+  "justification_text_and_headings": {
+    "message": "Tekstu i nagłowków",
+    "description": "Item in justification drop-down in side-bar"
   },
   "article_spacing": {
     "message": "Odstępy między wierszami",
     "description": "Label for drop-down in side-bar"
+  },
+  "spacing_normal": {
+    "message": "Normalne",
+    "description": "Item in line-spacing drop-down in side-bar"
   },
   "footnote_font_family": {
     "message": "Czcionka przypisów",
@@ -93,13 +109,131 @@
     "message": "Marginesy",
     "description": "Label for drop-down in side-bar"
   },
-  "print": {
+  "margins_default": {
+    "message": "Domyślne",
+    "description": "Item in margins drop-down in side-bar"
+  },
+  "margins_custom": {
+    "message": "Niestandardowe",
+    "description": "Item in margins drop-down in side-bar"
+  },
+   "print": {
     "message": "Drukuj",
     "description": "Label for button in side-bar"
   },
   "check_paper_size": {
     "message": "In the print window, make sure **Paper size** matches what’s specified above and that **Margins** are set to “Default”",
     "description": "Message in speech bubble over print button in side-bar (Markdown)"
+  },
+  "documents": {
+    "message": "Dokumenty",
+    "description": "Title in document list"
+  },
+  "selected_document_sg_nom": {
+    "message": "1 wybrany dokument",
+    "description": "For displaying the number of selected documents (singular)"
+  },
+  "selected_document_pl_nom": {
+    "message": "$NUMBER$ wybrane dokumenty",
+    "description": "For displaying the number of selected documents (plural)",
+    "placeholders": {
+      "number": {
+        "content": "$1",
+        "example": "22"
+      }
+    }
+  },
+  "selected_document_pl_gen": {
+    "message": "$NUMBER$ wybranych dokumentów",
+    "description": "For displaying the number of selected documents (plural genitive)",
+    "placeholders": {
+      "number": {
+        "content": "$1",
+        "example": "25"
+      }
+    }
+  },
+  "no_documents": {
+    "message": "Brak dokumentów",
+    "description": "Message in document list when there aren't any documents"
+  },
+  "no_search_results": {
+    "message": "Brak wyników wyszukiwania",
+    "description": "Message in document list when a search yields no results"
+  },
+  "search_documents": {
+    "message": "Przeszukaj dokumenty",
+    "description": "Placeholder of search box and icon tooltip in document list"
+  },
+  "search_result_sg_nom": {
+    "message": "1 znaleziony wynik wyszukiwania",
+    "description": "For displaying the number of search results (singular)"
+  },
+  "search_result_pl_nom": {
+    "message": "$NUMBER$ znalezione wyniki wyszukiwania",
+    "description": "For displaying the number of search results (plural)",
+    "placeholders": {
+      "number": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "search_result_pl_gen": {
+    "message": "$NUMBER$ znalezionych wyników wyszukiwania",
+    "description": "For displaying the number of search results (plural genitive)",
+    "placeholders": {
+      "number": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "for_query": {
+    "message": "$RESULTS$ dla zapytania „$QUERY$”",
+    "description": "Text for card heading in document list",
+    "placeholders": {
+      "results": {
+        "content": "$1",
+        "example": "2 results"
+      },
+      "query": {
+        "content": "$2",
+        "example": "CNN"
+      }
+    }
+  },
+  "today_being": {
+    "message": "Dzisiaj - $DATE$",
+    "description": "Text for card heading in document list",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "Sunday, November 13, 2001"
+      }
+    }
+  },
+  "yesterday_being": {
+    "message": "Wczoraj - $DATE$",
+    "description": "Text for card heading in document list",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "Sunday, November 13, 2001"
+      }
+    }
+  },
+  "clear_search": {
+    "message": "Wyczyść wyszukiwanie",
+    "description": "Tooltip of search box x button in document list"
+  },
+  "delete": {
+    "message": "Usuń",
+    "description": "Label for delete button in document list"
+  },
+  "cancel": {
+    "message": "Anuluj",
+    "description": "Tooltip for x button used to clear selection in document list"
   },
   "language_transform_from": {
     "message": "(sk|ck)i => $$1iego",
@@ -431,5 +565,9 @@
   },
   "language_zu": {
     "message": "Zulu"
+  },
+  "cardinal_declensions": {
+    "message": "1 => sg_nom, 2-4 22-24 32-34 42-44 52-54 62-64 72-74 82-84 92-94 => pl_nom, * => pl_gen",
+    "description": "For determining what case to use when counting objects"
   }
 }

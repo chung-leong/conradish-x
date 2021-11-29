@@ -73,9 +73,25 @@
     "message": "Justification",
     "description": "Label for drop-down in side-bar"
   },
+  "justification_none": {
+    "message": "None",
+    "description": "Item in justification drop-down in side-bar"
+  },
+  "justification_text": {
+    "message": "Text only",
+    "description": "Item in justification drop-down in side-bar"
+  },
+  "justification_text_and_headings": {
+    "message": "Text and headings",
+    "description": "Item in justification drop-down in side-bar"
+  },
   "article_spacing": {
     "message": "Spacing",
     "description": "Label for drop-down in side-bar"
+  },
+  "spacing_normal": {
+    "message": "Normal",
+    "description": "Item in line-spacing drop-down in side-bar"
   },
   "footnote_font_family": {
     "message": "Footnote font",
@@ -93,6 +109,14 @@
     "message": "Margins",
     "description": "Label for drop-down in side-bar"
   },
+  "margins_default": {
+    "message": "Default",
+    "description": "Item in margins drop-down in side-bar"
+  },
+  "margins_custom": {
+    "message": "Custom",
+    "description": "Item in margins drop-down in side-bar"
+  },
   "print": {
     "message": "Print",
     "description": "Label for button in side-bar"
@@ -100,6 +124,96 @@
   "check_paper_size": {
     "message": "In the print window, make sure **Paper size** matches what’s specified above and that **Margins** are set to “Default”",
     "description": "Message in speech bubble over print button in side-bar (Markdown)"
+  },
+  "documents": {
+    "message": "Documents",
+    "description": "Title in document list"
+  },
+  "selected_document_sg": {
+    "message": "1 selected",
+    "description": "For displaying the number of selected documents (singular)"
+  },
+  "selected_document_pl": {
+    "message": "$NUMBER$ selected",
+    "description": "For displaying the number of selected documents (plural)",
+    "placeholders": {
+      "number": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "no_documents": {
+    "message": "No documents",
+    "description": "Message in document list when there aren't any documents"
+  },
+  "no_search_results": {
+    "message": "No search results found",
+    "description": "Message in document list when a search yields no results"
+  },
+  "search_documents": {
+    "message": "Search documents",
+    "description": "Placeholder of search box and icon tooltip in document list"
+  },
+  "search_result_sg": {
+    "message": "1 search result",
+    "description": "For displaying the number of search results (singular)"
+  },
+  "search_result_pl": {
+    "message": "$NUMBER$ search results",
+    "description": "For displaying the number of search results (plural)",
+    "placeholders": {
+      "number": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "for_query": {
+    "message": "$RESULTS$ for “$QUERY$”",
+    "description": "Text for card heading in document list",
+    "placeholders": {
+      "results": {
+        "content": "$1",
+        "example": "2 results"
+      },
+      "query": {
+        "content": "$2",
+        "example": "CNN"
+      }
+    }
+  },
+  "today_being": {
+    "message": "Today - $DATE$",
+    "description": "Text for card heading in document list",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "Sunday, November 13, 2001"
+      }
+    }
+  },
+  "yesterday_being": {
+    "message": "Yesterday - $DATE$",
+    "description": "Text for card heading in document list",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "Sunday, November 13, 2001"
+      }
+    }
+  },
+  "clear_search": {
+    "message": "Clear search",
+    "description": "Tooltip of search box x button in document list"
+  },
+  "delete": {
+    "message": "Delete",
+    "description": "Label for delete button in document list"
+  },
+  "cancel": {
+    "message": "Cancel",
+    "description": "Label for x button used to clear selection in document list"
   },
   "language_af": {
     "message": "Afrikaans"

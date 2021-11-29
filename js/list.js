@@ -1,6 +1,7 @@
 import { initializeStorage, findObjects, loadObject, deleteObjects, storageChange } from './lib/storage.js';
 import { e, attachCustomCheckboxHandlers, attachRippleEffectHandlers, separateWords } from './lib/ui.js';
 import { setWindowName, openPage } from './lib/navigation.js';
+import { l, lc } from './lib/i18n.js';
 
 const listContainer = document.getElementById('list-container');
 const toolbarContainer = document.getElementById('toolbar-container');
@@ -10,7 +11,7 @@ let searching = false;
 
 async function start() {
   setWindowName('list');
-  document.title = 'Documents';
+  document.title = l('documents');
   await initializeStorage();
   attachRippleEffectHandlers();
   attachCustomCheckboxHandlers();
@@ -25,12 +26,12 @@ async function start() {
 }
 
 function createSearchToolbar() {
-  const leftElement = e('DIV', { className: 'toolbar-left' }, 'Documents');
-  const inputElement = e('INPUT', { type: 'text', placeholder: 'Search documents' });
-  const iconElement = e('SPAN', { className: 'magnifying-glass', title: 'Search documents' });
+  const leftElement = e('DIV', { className: 'toolbar-left' }, l('documents'));
+  const inputElement = e('INPUT', { type: 'text', placeholder: l('search_documents') });
+  const iconElement = e('SPAN', { className: 'magnifying-glass', title: l('search_documents') });
   const buttonElement = e('SPAN', {
     className: 'x-button',
-    title: 'Clear search',
+    title: l('clear_search'),
   });
   const searchElement = e('DIV', {
     id: 'search-input',
@@ -52,13 +53,13 @@ function createCommandToolbar() {
   const leftElement = e('DIV', { className: 'toolbar-left' });
   const xButtonElement = e('SPAN', {
     className: 'x-button',
-    title: 'Cancel',
+    title: l('cancel'),
   });
   const spanElement = e('SPAN', { id: 'selection-status' });
   const centerLeftElement = e('DIV', {
     id: 'toolbar-commands-left',
   }, [ xButtonElement, spanElement ]);
-  const deleteButtonElement = e('BUTTON', {}, 'Delete');
+  const deleteButtonElement = e('BUTTON', {}, l('delete'));
   const centerRightElement = e('DIV', {
     id: 'toolbar-commands-lright',
   }, [ deleteButtonElement ]);
@@ -151,17 +152,16 @@ function updateCardTitles() {
     let title;
     if (day) {
       if (isToday(day)) {
-        title = 'Today - ' + day;
+        title = l('today_being', day);
       } else if(isYesterday(day)) {
-        title = 'Yesterday - ' + day;
+        title = l('yesterday_being', day);
       } else {
         title = day;
       }
     } else {
       // search results
-      const count = items.length;
-      const results = (count === 1) ? `1 search result` : `${count} search results`;
-      title = `${results} for "${query}"`;
+      const results = lc('search_result', items.length);
+      title = l(`for_query`, [ results, query ]);
     }
     headerElement.textContent = title;
   }
@@ -179,7 +179,7 @@ function updateCards() {
     const spacerElement = e('DIV', { className: 'list-end-spacer' }, '\u00a0');
     listContainer.append(spacerElement);
   } else {
-    const message = (searching) ? 'No search results found' : 'No documents';
+    const message = l(searching ? 'no_search_results' : 'no_documents');
     const messageElement = e('DIV', { className: 'message' }, message);
     listContainer.append(messageElement);
   }
@@ -195,7 +195,7 @@ function updateToolbar() {
   const status = document.getElementById('selection-status');
   if (selection.length > 0) {
     toolbar.classList.add('active');
-    status.textContent = `${selection.length} selected`;
+    status.textContent = lc('selected_document', selection.length);
   } else {
     toolbar.classList.remove('active');
   }

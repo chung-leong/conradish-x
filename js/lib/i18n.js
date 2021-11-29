@@ -1,13 +1,23 @@
 import { getSettings } from './settings.js';
 let sourceLanguage;
 
-export { getMessage as l };
+export { getMessage as l, getMessageWithCardinal as lc };
 
 export function getMessage(name, substitutions) {
   const { getMessage } = chrome.i18n;
   if (getMessage) {
     return getMessage(name, substitutions);
   }
+}
+
+export function getMessageWithCardinal(name, number) {
+  const f = getDeclensionFunction();
+  const declension = f(number);
+  if (declension) {
+    name = `${name}_${declension}`;
+  }
+  console.log({ name, number });
+  return getMessage(name, [ number ]);
 }
 
 export function getUILanguage() {
@@ -89,6 +99,42 @@ function getTransformFunction(context) {
     transformFunctions[context] = f;
   }
   return f;
+}
+
+let declensionFunction;
+
+function getDeclensionFunction() {
+  if (!declensionFunction) {
+    const cardinalDeclensions = getMessage('cardinal_declensions');
+    if (cardinalDeclensions) {
+      const declensionRanges = [];
+      let defaultDeclension;
+      for (const entry of cardinalDeclensions.split(/\s*,\s*/)) {
+        const [ rangeString, declension ] = entry.split(/\s*=>\s*/);
+        for (const range of rangeString.split(/\s+/)) {
+          if (range === '*') {
+            defaultDeclension = declension;
+          } else {
+            const numbers = range.split(/\s*\-\s*/).map(n => parseInt(n));
+            const start = numbers[0];
+            const end = (numbers.length === 1) ? numbers[0] : numbers[1];
+            declensionRanges.push({ declension, start, end });
+          }
+        }
+      }
+      declensionFunction = (n) => {
+        for (const { declension, start, end } of declensionRanges) {
+          if (n >= start && n <= end) {
+            return declension;
+          }
+        }
+        return defaultDeclension;
+      };
+    } else {
+      declensionFunction = n => (n === 1) ? 'sg' : 'pl';
+    }
+  }
+  return declensionFunction;
 }
 
 export async function translate(original, sourceLang, targetLang, singleWord) {
