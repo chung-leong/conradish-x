@@ -259,6 +259,14 @@
     "message": "Zrušit",
     "description": "Label for x button used to clear selection in document list"
   },
+  "change_title": {
+    "message": "Změnit název",
+    "description": "Label for menu item in document list"
+  },
+  "open_original_page": {
+    "message": "Přejít na původní stránku",
+    "description": "Label for menu item in document list"
+  },
   "language_transform_from": {
     "message": "a(?=\\P{L}|$$) => y, á(?=\\P{L}|$$) => é",
     "description": "RegExp replacements that yield the genitive case"

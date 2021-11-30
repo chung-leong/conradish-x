@@ -161,6 +161,7 @@ BODY {
 }
 
 #main-container {
+  position: relative;
   display: flex;
   flex-shrink: 0;
   flex-grow: 1;
@@ -259,4 +260,51 @@ BODY {
   color: rgb(110, 110, 110);
   font-weight: 500;
   font-size: 14px;
+}
+
+.kebab {
+  width: 36px;
+  height: 36px;
+  margin: -8px -8px -8px -8px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 20px;
+  background-image: url('../img/three-dots.svg');
+  cursor: pointer;
+}
+
+.kebab:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+}
+
+#kebab-menu {
+  position: absolute;
+  display: none;
+  background-color: rgb(255, 255, 255);
+  border-radius: 2px;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+  padding: 10px 0 10px 0;
+  white-space: nowrap;
+}
+
+#kebab-menu UL {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+#kebab-menu UL LI {
+  padding: 8px 20px 8px 20px;
+  cursor: pointer;
+}
+
+#kebab-menu UL LI:hover {
+  background-color: rgb(189, 193, 198);
+}
+
+#kebab-menu A:link,
+#kebab-menu A:visited {
+  color: inherit;
+  text-decoration: none;
 }

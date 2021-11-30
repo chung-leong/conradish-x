@@ -243,6 +243,14 @@
     "message": "Cancel",
     "description": "Label for x button used to clear selection in document list"
   },
+  "change_title": {
+    "message": "Change title",
+    "description": "Label for menu item in document list"
+  },
+  "open_original_page": {
+    "message": "Go to original page",
+    "description": "Label for menu item in document list"
+  },
   "language_none": {
     "message": "None",
     "description": "For top item in To language dropdown in side-bar"

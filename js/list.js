@@ -6,6 +6,7 @@ import { l, lc, getLanguageDirection, capitalize } from './lib/i18n.js';
 const listContainer = document.getElementById('list-container');
 const toolbarContainer = document.getElementById('toolbar-container');
 const cards = [];
+let kebabMenu;
 let selection;
 let searching = false;
 
@@ -19,6 +20,7 @@ async function start() {
   document.addEventListener('change', handleChange);
   createSearchToolbar();
   createCommandToolbar();
+  createKebabMenu();
   await createCards();
   listContainer.parentNode.addEventListener('scroll', handleScroll);
   storageChange.addEventListener('create', handleCreate);
@@ -72,6 +74,53 @@ function createCommandToolbar() {
   deleteButtonElement.addEventListener('click', handleDeleteClick);
 }
 
+function createKebabMenu() {
+  const changeElement = e('LI', {}, l('change_title'));
+  changeElement.addEventListener('click', handleChangeTitleClick);
+  const linkElement = e('A', { target: '_blank'}, l('open_original_page'));
+  const openElement = e('LI', {}, linkElement);
+  openElement.addEventListener('click', hideKebabMenu);
+  const listElement = e('UL', {}, [ changeElement, openElement ]);
+  const menuElement = document.getElementById('kebab-menu');
+  menuElement.append(listElement);
+  kebabMenu = { menuElement, changeElement, openElement, linkElement };
+  document.addEventListener('mousedown', (evt) => {
+    const { target } = evt;
+    if (!menuElement.contains(target)) {
+      hideKebabMenu();
+    }
+  });
+  document.addEventListener('keydown', (evt) => {
+    if (evt.key === 'Escape') {
+      hideKebabMenu();
+    }
+  });
+}
+
+function openKebabMenu(target) {
+  const { menuElement, changeElement, openElement, linkElement } = kebabMenu;
+  const { key, type, url } = target.parentNode.dataset;
+  changeElement.dataset.key = key;
+  changeElement.dataset.type = type;
+  // set link
+  if (url) {
+    linkElement.href = url;
+    openElement.style.display = '';
+  } else {
+    openElement.style.display = 'none';
+  }
+  const r1 = target.getBoundingClientRect();
+  const r2 = menuElement.parentNode.getBoundingClientRect();
+  menuElement.style.right = (r2.right - r1.right) + 'px';
+  menuElement.style.top = (r1.top - r2.top) + 'px';
+  menuElement.style.display = 'block';
+}
+
+function hideKebabMenu() {
+  const { menuElement } = kebabMenu;
+  menuElement.style.display = 'none';
+}
+
 async function createCards() {
   const docs = await findObjects('DOC');
   const days = [], ids = [];
@@ -119,6 +168,7 @@ async function loadItem(item) {
     }
     item.titleElement.textContent = title;
     item.titleElement.title = url;
+    item.itemElement.dataset.url = url;
     item.lang = lang;
     item.searchStrings = findSearchStrings(doc);
   } catch (err) {
@@ -132,9 +182,10 @@ function createItem(key, date, type) {
   const checkboxElement = e('SPAN', { className: 'checkbox', tabIndex: 0 }, rippleElement);
   const timeElement = e('SPAN', { className: 'time' }, time);
   const titleElement = e('SPAN', { className: 'title' }, '...');
+  const buttonElement = e('SPAN', { className: 'kebab' });
   const itemElement = e('LI', {
     dataset: { key, type }
-  }, [ checkboxElement, timeElement, titleElement ]);
+  }, [ checkboxElement, timeElement, titleElement, buttonElement ]);
   return { day, time, key, date, itemElement, titleElement };
 }
 
@@ -361,6 +412,8 @@ function handleClick(evt) {
     checkbox.focus();
     const kbEvent = new KeyboardEvent('keypress', { key: ' ', bubbles: true, shiftKey });
     checkbox.dispatchEvent(kbEvent);
+  } else if (target.classList.contains('kebab')) {
+    openKebabMenu(target);
   }
 }
 
@@ -448,6 +501,12 @@ async function handleCreate(evt) {
 function handleDelete(evt) {
   const { key } = evt.detail;
   removeItems([ key ]);
+}
+
+function handleChangeTitleClick(evt) {
+  const { key } = evt.target.dataset;
+  console.log(`Rename ${key}`);
+  hideKebabMenu();
 }
 
 start();

@@ -259,6 +259,14 @@
     "message": "Zrušiť",
     "description": "Label for x button used to clear selection in document list"
   },
+  "change_title": {
+    "message": "Zmeniť titul",
+    "description": "Label for menu item in document list"
+  },
+  "open_original_page": {
+    "message": "Prejsť na pôvodnú stránku",
+    "description": "Label for menu item in document list"
+  },
   "language_none": {
     "message": "Žiadneho",
     "description": "For top item in To language dropdown in side-bar"

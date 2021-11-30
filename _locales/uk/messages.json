@@ -259,6 +259,14 @@
     "message": "Скасувати",
     "description": "Label for x button used to clear selection in document list"
   },
+  "change_title": {
+    "message": "Змінити назву",
+    "description": "Label for menu item in document list"
+  },
+  "open_original_page": {
+    "message": "Перейти на оригінальну сторінку",
+    "description": "Label for menu item in document list"
+  },
   "language_transform_from": {
     "message": "ька(?=\\P{L}|$$) => ької, на(?=\\P{L}|$$) => ної",
     "description": "RegExp replacements that yield the genitive case"

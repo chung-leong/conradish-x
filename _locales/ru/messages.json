@@ -259,6 +259,14 @@
     "message": "Отмена",
     "description": "Label for x button used to clear selection in document list"
   },
+  "change_title": {
+    "message": "Изменить название",
+    "description": "Label for menu item in document list"
+  },
+  "open_original_page": {
+    "message": "Перейти на исходную страницу",
+    "description": "Label for menu item in document list"
+  },
   "language_none": {
     "message": "Никакой",
     "description": "For top item in To language dropdown in side-bar"
