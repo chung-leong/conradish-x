@@ -166,11 +166,11 @@
     "description": "Placeholder of search box and icon tooltip in document list"
   },
   "search_result_sg_nom": {
-    "message": "1 výsledok vyhľadávania",
+    "message": "1 nájdený výsledok vyhľadávania",
     "description": "For displaying the number of search results (singular)"
   },
   "search_result_pl_nom": {
-    "message": "$NUMBER$ výsledky vyhľadávania",
+    "message": "$NUMBER$ nájdené výsledky vyhľadávania",
     "description": "For displaying the number of search results (plural)",
     "placeholders": {
       "number": {
@@ -180,7 +180,7 @@
     }
   },
   "search_result_pl_gen": {
-    "message": "$NUMBER$ výsledkov vyhľadávania",
+    "message": "$NUMBER$ nájdených výsledkov vyhľadávania",
     "description": "For displaying the number of search results (plural genitive)",
     "placeholders": {
       "number": {
@@ -240,7 +240,7 @@
     "description": "For top item in To language dropdown in side-bar"
   },
   "language_unknown": {
-    "message": "Neznámy jazyk",
+    "message": "Neznámeho jazyka",
     "description": "For top item in From language dropdown in side-bar"
   },
   "language_transform_from": {

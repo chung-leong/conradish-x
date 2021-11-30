@@ -8,7 +8,7 @@
     "description": "Text for tooltip in pop-up menu, when there's no selection"
   },
   "created_on": {
-    "message": "Datum vytvoření: $DATE$",
+    "message": "datum vytvoření: $DATE$",
     "description": "Text for tooltip of recent documents in pop-up menu",
     "placeholders": {
       "date": {
@@ -50,7 +50,7 @@
     "description": "Label for checkbox in options"
   },
   "filter_page_content": {
-    "message": "Filtrace obsahu stránek",
+    "message": "Filtrace obsahu stránky",
     "description": "Label for checkbox in options"
   },
   "from_language": {
@@ -130,11 +130,11 @@
     "description": "Title in document list"
   },
   "selected_document_sg_nom": {
-    "message": "1 vybraný dokument",
+    "message": "1 dokument vybráno",
     "description": "For displaying the number of selected documents (singular)"
   },
   "selected_document_pl_nom": {
-    "message": "$NUMBER$ vybrané dokumenty",
+    "message": "$NUMBER$ dokumenty vybráno",
     "description": "For displaying the number of selected documents (plural)",
     "placeholders": {
       "number": {
@@ -144,7 +144,7 @@
     }
   },
   "selected_document_pl_gen": {
-    "message": "$NUMBER$ vybraných dokumentů",
+    "message": "$NUMBER$ dokumentů vybráno",
     "description": "For displaying the number of selected documents (plural genitive)",
     "placeholders": {
       "number": {
@@ -166,11 +166,11 @@
     "description": "Placeholder of search box and icon tooltip in document list"
   },
   "search_result_sg_nom": {
-    "message": "1 výsledek vyhledávání",
+    "message": "1 nalezený výsledek vyhledávání",
     "description": "For displaying the number of search results (singular)"
   },
   "search_result_pl_nom": {
-    "message": "$NUMBER$ výsledky vyhledávání",
+    "message": "$NUMBER$ nalezené výsledky vyhledávání",
     "description": "For displaying the number of search results (plural)",
     "placeholders": {
       "number": {
@@ -180,7 +180,7 @@
     }
   },
   "search_result_pl_gen": {
-    "message": "$NUMBER$ výsledků vyhledávání",
+    "message": "$NUMBER$ nalezených výsledků vyhledávání",
     "description": "For displaying the number of search results (plural genitive)",
     "placeholders": {
       "number": {
@@ -244,11 +244,11 @@
     "description": "RegExp replacements that yield the genitive case"
   },
   "language_none": {
-    "message": "Žádné",
+    "message": "Žádného",
     "description": "For top item in To language dropdown in side-bar"
   },
   "language_unknown": {
-    "message": "Neznámý jazyk",
+    "message": "Neznámého jazyka",
     "description": "For top item in From language dropdown in side-bar"
   },
   "language_af": {

@@ -34,7 +34,7 @@
     "description": "Label for item in annotation menu"
   },
   "show_translation_only": {
-    "message": "przetłumaczone zdanie samo w przypisie",
+    "message": "samo przetłumaczone zdanie w przypisie",
     "description": "Text for tooltip of item in annotation menu"
   },
   "add_explanation": {
@@ -130,11 +130,11 @@
     "description": "Title in document list"
   },
   "selected_document_sg_nom": {
-    "message": "1 wybrany dokument",
+    "message": "1 dokument wybrano",
     "description": "For displaying the number of selected documents (singular)"
   },
   "selected_document_pl_nom": {
-    "message": "$NUMBER$ wybrane dokumenty",
+    "message": "$NUMBER$ dokumenty wybrano",
     "description": "For displaying the number of selected documents (plural)",
     "placeholders": {
       "number": {
@@ -144,7 +144,7 @@
     }
   },
   "selected_document_pl_gen": {
-    "message": "$NUMBER$ wybranych dokumentów",
+    "message": "$NUMBER$ dokumentów wybrano",
     "description": "For displaying the number of selected documents (plural genitive)",
     "placeholders": {
       "number": {
@@ -244,7 +244,7 @@
     "description": "For top item in To language dropdown in side-bar"
   },
   "language_unknown": {
-    "message": "Nieznany",
+    "message": "Nieznanego",
     "description": "For top item in From language dropdown in side-bar"
   },
   "language_af": {

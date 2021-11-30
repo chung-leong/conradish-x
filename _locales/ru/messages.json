@@ -130,11 +130,11 @@
     "description": "Title in document list"
   },
   "selected_document_sg_nom": {
-    "message": "1 выбранный документ",
+    "message": "1 документ выбрано",
     "description": "For displaying the number of selected documents (singular)"
   },
   "selected_document_sg_gen": {
-    "message": "$NUMBER$ выбранных документа",
+    "message": "$NUMBER$ документа выбрано",
     "description": "For displaying the number of selected documents (singular genitive)",
     "placeholders": {
       "number": {
@@ -144,7 +144,7 @@
     }
   },
   "selected_document_pl_gen": {
-    "message": "$NUMBER$ выбранных документов",
+    "message": "$NUMBER$ документов выбрано",
     "description": "For displaying the number of selected documents (plural genitive)",
     "placeholders": {
       "number": {
