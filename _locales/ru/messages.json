@@ -4,7 +4,7 @@
     "description": "Label for menu item in browser context menu and extension pop-up menu"
   },
   "selection_portion_of_document": {
-    "message": "select portion of document you wish to print first",
+    "message": "выберите сначала часть документа для печати",
     "description": "Text for tooltip in pop-up menu, when there's no selection"
   },
   "created_on": {
@@ -26,7 +26,7 @@
     "description": "Label for item in annotation menu"
   },
   "show_term_and_definition": {
-    "message": "show both term and definition in footnote",
+    "message": "термин и определение в сноске",
     "description": "Text for tooltip of item in annotation menu"
   },
   "add_translation": {
@@ -34,7 +34,7 @@
     "description": "Label for item in annotation menu"
   },
   "show_translation_only": {
-    "message": "show translated sentence only in footnote",
+    "message": "только переведенное предложение в сноске",
     "description": "Text for tooltip of item in annotation menu"
   },
   "add_explanation": {
@@ -42,15 +42,15 @@
     "description": "Label for item in annotation menu"
   },
   "show_explanation": {
-    "message": "show explanation in footnote",
+    "message": "ваше объяснение в сноске",
     "description": "Text for tooltip of item in annotation menu"
   },
   "add_context_menu_item": {
-    "message": "Add item to browser context menu",
+    "message": "Дополнительный пункт в контекстном меню браузера",
     "description": "Label for checkbox in options"
   },
   "filter_page_content": {
-    "message": "Filter page content",
+    "message": "Фильтрация содержимого страницы",
     "description": "Label for checkbox in options"
   },
   "from_language": {
@@ -122,7 +122,7 @@
     "description": "Label for button in side-bar"
   },
   "check_paper_size": {
-    "message": "In the print window, make sure **Paper size** matches what’s specified above and that **Margins** are set to “Default”",
+    "message": "В диалоговом окне Печать убедитесь, что **Размер бумаги** такой же, как указано выше, и что **Поля** установлены на «По умолчанию».",
     "description": "Message in speech bubble over print button in side-bar (Markdown)"
   },
   "documents": {
@@ -190,7 +190,7 @@
     }
   },
   "for_query": {
-    "message": "$RESULTS$ по запросу “$QUERY$”",
+    "message": "$RESULTS$ по запросу \"$QUERY$\"",
     "description": "Text for card heading in document list",
     "placeholders": {
       "results": {
@@ -240,7 +240,7 @@
     "description": "For top item in To language dropdown in side-bar"
   },
   "language_unknown": {
-    "message": "Неизвестный",
+    "message": "Неизвестного",
     "description": "For top item in From language dropdown in side-bar"
   },
   "language_transform_from": {

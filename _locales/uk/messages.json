@@ -4,7 +4,7 @@
     "description": "Label for menu item in browser context menu and extension pop-up menu"
   },
   "selection_portion_of_document": {
-    "message": "select portion of document you wish to print first",
+    "message": "виберіте спочатку частину документа для друку",
     "description": "Text for tooltip in pop-up menu, when there's no selection"
   },
   "created_on": {
@@ -22,35 +22,35 @@
     "description": "Label for menu item in pop-up menu"
   },
   "add_definition": {
-    "message": "Add definition",
+    "message": "Додати визначення",
     "description": "Label for item in annotation menu"
   },
   "show_term_and_definition": {
-    "message": "show both term and definition in footnote",
+    "message": "термін і визначення у виносці",
     "description": "Text for tooltip of item in annotation menu"
   },
   "add_translation": {
-    "message": "Add translation",
+    "message": "Додати переклад",
     "description": "Label for item in annotation menu"
   },
   "show_translation_only": {
-    "message": "show translated sentence only in footnote",
+    "message": "перекладене речення лише у виносці",
     "description": "Text for tooltip of item in annotation menu"
   },
   "add_explanation": {
-    "message": "Add explanation",
+    "message": "Додати пояснення",
     "description": "Label for item in annotation menu"
   },
   "show_explanation": {
-    "message": "show explanation in footnote",
+    "message": "ваше пояснення у виносці",
     "description": "Text for tooltip of item in annotation menu"
   },
   "add_context_menu_item": {
-    "message": "Add item to browser context menu",
+    "message": "Додатковий пункт у контекстному меню браузера",
     "description": "Label for checkbox in options"
   },
   "filter_page_content": {
-    "message": "Filter page content",
+    "message": "Фільтрація вмісту сторінки",
     "description": "Label for checkbox in options"
   },
   "from_language": {
@@ -122,7 +122,7 @@
     "description": "Label for button in side-bar"
   },
   "check_paper_size": {
-    "message": "In the print window, make sure **Paper size** matches what’s specified above and that **Margins** are set to “Default”",
+    "message": "У діалоговому вікні Друк переконайтеся, що **Розмір паперу** є такий самий, як і вище, а **Поля** встановлено на «За замовчуванням».",
     "description": "Message in speech bubble over print button in side-bar (Markdown)"
   },
   "documents": {
@@ -248,7 +248,7 @@
     "description": "For top item in To language dropdown in side-bar"
   },
   "language_unknown": {
-    "message": "Невідомої мови",
+    "message": "Невідомої",
     "description": "For top item in From language dropdown in side-bar"
   },
   "language_af": {
