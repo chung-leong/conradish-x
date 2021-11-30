@@ -1,4 +1,4 @@
-import { initializeStorage, findObjects, loadObject, deleteObjects, storageChange } from './lib/storage.js';
+import { initializeStorage, findObjects, loadObject, saveObject, deleteObjects, storageChange } from './lib/storage.js';
 import { e, attachCustomCheckboxHandlers, attachRippleEffectHandlers, separateWords } from './lib/ui.js';
 import { setWindowName, openPage } from './lib/navigation.js';
 import { l, lc, getLanguageDirection, capitalize } from './lib/i18n.js';
@@ -8,6 +8,7 @@ const toolbarContainer = document.getElementById('toolbar-container');
 const cards = [];
 let kebabMenu;
 let selection;
+let selectedItem;
 let searching = false;
 
 async function start() {
@@ -97,19 +98,12 @@ function createKebabMenu() {
   });
 }
 
-function openKebabMenu(target) {
+function openKebabMenu() {
+  const { buttonElement, url } = selectedItem;
   const { menuElement, changeElement, openElement, linkElement } = kebabMenu;
-  const { key, type, url } = target.parentNode.dataset;
-  changeElement.dataset.key = key;
-  changeElement.dataset.type = type;
   // set link
-  if (url) {
-    linkElement.href = url;
-    openElement.style.display = '';
-  } else {
-    openElement.style.display = 'none';
-  }
-  const r1 = target.getBoundingClientRect();
+  linkElement.href = url;
+  const r1 = buttonElement.getBoundingClientRect();
   const r2 = menuElement.parentNode.getBoundingClientRect();
   menuElement.style.right = (r2.right - r1.right) + 'px';
   menuElement.style.top = (r1.top - r2.top) + 'px';
@@ -168,8 +162,9 @@ async function loadItem(item) {
     }
     item.titleElement.textContent = title;
     item.titleElement.title = url;
-    item.itemElement.dataset.url = url;
     item.lang = lang;
+    item.url = url;
+    item.title = title;
     item.searchStrings = findSearchStrings(doc);
   } catch (err) {
   }
@@ -186,7 +181,7 @@ function createItem(key, date, type) {
   const itemElement = e('LI', {
     dataset: { key, type }
   }, [ checkboxElement, timeElement, titleElement, buttonElement ]);
-  return { day, time, key, date, itemElement, titleElement };
+  return { day, time, key, date, itemElement, titleElement, buttonElement };
 }
 
 function createCard(id, day, items) {
@@ -413,7 +408,14 @@ function handleClick(evt) {
     const kbEvent = new KeyboardEvent('keypress', { key: ' ', bubbles: true, shiftKey });
     checkbox.dispatchEvent(kbEvent);
   } else if (target.classList.contains('kebab')) {
-    openKebabMenu(target);
+    for (const card of cards) {
+      for (const item of card.items) {
+        if (item.buttonElement === target) {
+          selectedItem = item;
+          openKebabMenu();
+        }
+      }
+    }
   }
 }
 
@@ -504,9 +506,63 @@ function handleDelete(evt) {
 }
 
 function handleChangeTitleClick(evt) {
-  const { key } = evt.target.dataset;
-  console.log(`Rename ${key}`);
+  const { key, titleElement } = selectedItem;
+  const { parentNode, textContent } = titleElement;
+  const inputElement = e('INPUT', { type: 'text', className: 'title-input', value: textContent });
+  // need the DIV as INPUT doesn't position correctly using just left/right
+  const containerElement = e('DIV', { className: 'title-input-container' }, inputElement);
+  parentNode.append(containerElement);
+  // position the text box over the title, accounting for padding
+  const r1 = titleElement.getBoundingClientRect();
+  const r2 = parentNode.getBoundingClientRect();
+  const s1 = getComputedStyle(titleElement);
+  const s2 = getComputedStyle(inputElement);
+  const pTop1 = parseFloat(s1.paddingTop), pTop2 = parseFloat(s2.paddingTop);
+  const pLeft1 = parseFloat(s1.paddingLeft), pLeft2 = parseFloat(s2.paddingLeft);
+  const pRight1 = parseFloat(s1.paddingRight), pRight2 = parseFloat(s2.paddingRight);
+  containerElement.style.top = (r1.top - r2.top - pTop1 + pTop2) + 'px';
+  containerElement.style.left = (r1.left - r2.left + pLeft1 - pLeft2) + 'px';
+  containerElement.style.right = (r2.right - r1.right - pRight1 + pRight2) + 'px';
+  // use right-to-left layout if title uses it
+  if (titleElement.classList.contains('rtl')) {
+    inputElement.classList.add('rtl');
+  }
+  selectedItem.inputElement = inputElement;
+  inputElement.addEventListener('blur', handleTitleInputBlur);
+  inputElement.addEventListener('keydown', handleTitleInputKeyDown);
+  inputElement.focus();
   hideKebabMenu();
+}
+
+async function handleTitleInputBlur(evt) {
+  if (selectedItem) {
+    const { key, inputElement, titleElement } = selectedItem;
+    const newTitle = inputElement.value;
+    const oldTitle = titleElement.textContent;
+    selectedItem = selectedItem.inputElement = null;
+    inputElement.parentNode.remove();
+    if (newTitle !== oldTitle) {
+      titleElement.textContent = newTitle;
+      try {
+        const doc = await loadObject(key);
+        doc.title = newTitle;
+        await saveObject(key, doc);
+      } catch (e) {
+        // put in the old title if saving failed
+        titleElement.textContent = oldTitle;
+      }
+    }
+  }
+}
+
+function handleTitleInputKeyDown(evt) {
+  const { inputElement } = selectedItem;
+  if (evt.key === 'Escape') {
+    selectedItem = null;
+    inputElement.parentNode.remove();
+  } else if (evt.key === 'Enter') {
+    inputElement.blur();
+  }
 }
 
 start();

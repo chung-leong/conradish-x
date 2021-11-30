@@ -3,6 +3,7 @@ button, select, input[type="text"] {
   font-weight: 500;
   border-radius: 4px;
   user-select: none;
+  font-family: Roboto, Segoe UI, Tahoma, sans-serif;
 }
 
 button {

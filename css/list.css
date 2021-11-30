@@ -211,6 +211,7 @@ BODY {
 }
 
 .card-list LI {
+  position: relative;
   display: flex;
   margin: 16px 0 16px 0;
   align-items: center;
@@ -307,4 +308,17 @@ BODY {
 #kebab-menu A:visited {
   color: inherit;
   text-decoration: none;
+}
+
+.title-input-container {
+  position: absolute;
+}
+
+.title-input {
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.title-input.rtl {
+  direction: rtl;
 }

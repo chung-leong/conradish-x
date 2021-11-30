@@ -2,7 +2,7 @@ import { e } from './ui.js';
 import { applyStyles, getPageProperties } from './settings.js';
 import { setSourceLanguage, getSourceLanguage, getLanguageDirection } from './i18n.js';
 import { insertContent, replaceUselessElements, removeEmptyNodes } from './capturing.js';
-import { loadObject, saveObject } from './storage.js';
+import { loadObject, saveObject, storageChange } from './storage.js';
 
 const articleElement = document.getElementById('article');
 const contentElement = document.getElementById('article-text');
@@ -36,6 +36,14 @@ export async function loadDocument(key) {
   addContent(contentElement, content);
   // adjust layout, inserting footnotes into appropriate page
   adjustLayout({ updateFooterDirection: true });
+  // watch for change of title (which could be performed in list.html)
+  storageChange.addEventListener('update', async (evt) => {
+    if (!evt.detail.self && evt.detail.key === currentDocumentKey) {
+      const { title } = await loadObject(currentDocumentKey);
+      document.title = title;
+      currentDocument.title = title;
+    }
+  });
   //console.log(currentDocument);
 }
 
