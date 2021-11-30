@@ -53,6 +53,30 @@
     "message": "Filtrace obsahu stránky",
     "description": "Label for checkbox in options"
   },
+  "filter_automatic": {
+    "message": "Automatické",
+    "description": "Label for filter drop-down in options"
+  },
+  "filter_manual": {
+    "message": "Ruční",
+    "description": "Label for filter drop-down in options"
+  },
+  "action": {
+    "message": "Akce",
+    "description": "Label for drop-down in side-bar"
+  },
+  "editing": {
+    "message": "Editace",
+    "description": "Item in action drop-down"
+  },
+  "annotating": {
+    "message": "Anotace",
+    "description": "Item in action drop-down"
+  },
+  "scrubbing": {
+    "message": "Čištění",
+    "description": "Item in action drop-down"
+  },
   "from_language": {
     "message": "Z",
     "description": "Label for drop-down in side-bar"

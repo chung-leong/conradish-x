@@ -3,7 +3,10 @@ import { adjustLayout, adjustFootnotes, findDeletedFootnote, annotateRange, save
 import { transverseRange } from './capturing.js';
 import { l, translate, getSourceLanguage, getTargetLanguage, getLanguageDirection } from './i18n.js';
 
+export const modeChange = new EventTarget;
+
 const articleMenuElement = document.getElementById('article-menu');
+const articleElement = document.getElementById('article');
 const articleMenuItems = {};
 let lastSelectedRange = null;
 let articleMenuClicked = false;
@@ -608,6 +611,10 @@ function checkArticleSelection() {
   }
 }
 
+export function getEditMode(mode) {
+  return editMode;
+}
+
 export function setEditMode(mode) {
   if (editMode === 'annotate') {
     hideArticleMenu();
@@ -622,6 +629,7 @@ export function setEditMode(mode) {
   if (editMode === 'annotate') {
     checkArticleSelection();
   }
+  modeChange.dispatchEvent(new CustomEvent('change'));
 }
 
 function toggleMode() {
@@ -679,42 +687,42 @@ function handleDrop(evt) {
 }
 
 function handleSelectionChange(evt) {
-  if (editMode !== 'annotate') {
-    return;
+  if (editMode === 'annotate') {
+    checkArticleSelection();
   }
-  checkArticleSelection();
 }
 
 function handleClick(evt) {
-  if (editMode !== 'clean') {
-    return;
-  }
   const { target } = evt;
-  for (let n = target; n && n.parentNode; n = n.parentNode) {
-    if (n.parentNode.id === 'article-text') {
-      const { classList } = n;
-      if (classList.contains('possibly-junk')) {
-        classList.remove('possibly-junk');
-        classList.add('likely-junk');
-      } else if (classList.contains('likely-junk')) {
-        classList.remove('likely-junk');
-      } else {
-        classList.add('likely-junk');
+  if (editMode === 'clean') {
+    for (let n = target; n && n.parentNode; n = n.parentNode) {
+      if (n.parentNode.id === 'article-text') {
+        const { classList } = n;
+        if (classList.contains('possibly-junk')) {
+          classList.remove('possibly-junk');
+          classList.add('likely-junk');
+        } else if (classList.contains('likely-junk')) {
+          classList.remove('likely-junk');
+        } else {
+          classList.add('likely-junk');
+        }
+        cleaned = true;
+        break;
       }
-      cleaned = true;
-      break;
     }
+    evt.preventDefault();
+    evt.stopPropagation();
   }
-  evt.preventDefault();
-  evt.stopPropagation();
 }
 
 function handleMouseDown(evt) {
-  if (editMode !== 'clean') {
-    return;
+  const { target } = evt;
+  if (editMode === 'clean') {
+    if (articleElement.contains(target)) {
+      evt.preventDefault();
+      evt.stopPropagation();
+    }
   }
-  evt.preventDefault();
-  evt.stopPropagation();
 }
 
 function handleMenuMouseDown(evt) {

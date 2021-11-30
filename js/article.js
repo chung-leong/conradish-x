@@ -1,6 +1,6 @@
-import { loadDocument } from './lib/layout.js';
-import { createMenuItems, attachEditingHandlers } from './lib/editing.js';
-import { initializeStorage, storageChange } from './lib/storage.js';
+import { initializeStorage, storageChange, getSettings } from './lib/storage.js';
+import { loadDocument, setFilterMode } from './lib/layout.js';
+import { setEditMode, createMenuItems, attachEditingHandlers } from './lib/editing.js';
 import { createArticleNavigation } from './lib/side-bar.js';
 import { setWindowName } from './lib/navigation.js';
 
@@ -11,6 +11,10 @@ async function start() {
     const { searchParams } = new URL(location);
     const key = searchParams.get('t');
     setWindowName('article', [ key ]);
+    // set filter and edit mode
+    const { filter } = getSettings();
+    setFilterMode(filter);
+    setEditMode(filter === 'manual' ? 'clean' : 'annotate');
     // load the document
     await loadDocument(key);
     // create menu items

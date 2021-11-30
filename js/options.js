@@ -4,50 +4,70 @@ import { l } from './lib/i18n.js';
 
 async function start() {
   await initializeStorage();
-  const binary = [ false, true ];
-  const filters = [ 'none', 'automatic', 'manual' ];
-  addCheckbox('contextMenu', binary, l('add_context_menu_item'));
-  addCheckbox('filter', filters, l('filter_page_content'));
+  const { contextMenu, filter } = getSettings();
+  const value = [name];
+  // add checkbox for controlling the presence of Conradish item in context menu
+  const contextMenuCheckbox = addCheckbox(l('add_context_menu_item'), contextMenu);
+  contextMenuCheckbox.addEventListener('change', (evt) => {
+    const checked = evt.target.classList.contains('checked');
+    changeSettings((settings) => {
+      settings.contextMenu = checked;
+    });
+  });
+  // add checkbox and drop-down for controlling content filtering
+  const filterTypes = [ 'automatic', 'manual' ];
+  const filtering = filterTypes.includes(filter);
+  const filterSelect = e('SELECT', {}, filterTypes.map((value) => {
+    const selected = (value === filter);
+    return e('OPTION', { value, selected }, l(`filter_${value}`));
+  }));
+  filterSelect.style.visibility = (filtering) ? 'visible' : 'hidden';
+  filterSelect.addEventListener('change', (evt) => {
+    changeSettings((settings) => {
+      console.log(settings);
+      settings.filter = filterSelect.value;
+    });
+  });
+  const filterCheckbox = addCheckbox([ l('filter_page_content'), ' ', filterSelect ], filtering);
+  filterCheckbox.addEventListener('change', (evt) => {
+    const checked = evt.target.classList.contains('checked');
+    changeSettings((settings) => {
+      settings.filter = (checked) ? filterSelect.value :' none';
+      filterSelect.style.visibility = (checked) ? 'visible' : 'hidden';
+    });
+  });
+  storageChange.addEventListener('settings', (evt) => {
+    if (!evt.detail.self) {
+      const { contextMenu, filter } = getSettings();
+      const filtering = filterTypes.includes(filter);
+      contextMenuCheckbox.classList.toggle('checked', contextMenu);
+      filterCheckbox.classList.toggle('checked', filtering);
+      filterSelect.style.visibility = (filtering) ? 'visible' : 'hidden';
+    }
+  });
   document.addEventListener('click', handleClick);
-  document.addEventListener('change', handleChange);
-  storageChange.addEventListener('settings', handleSettings);
   attachCustomCheckboxHandlers();
 }
 
-const checkPossibileValueLists = {};
-
-function addCheckbox(name, possible, label) {
-  checkPossibileValueLists[name] = possible;
+function addCheckbox(label, checked) {
   const rippleElement = e('SPAN', { className: 'ripple' });
   const checkboxElement = e('SPAN', {
      className: 'checkbox',
-     dataset: { name },
      tabIndex: 0
    }, rippleElement);
   const labelElement = e('LABEL', {}, label);
   const sectionElement = e('SECTION', {}, [ checkboxElement, labelElement ]);
-  if (isSet(name)) {
+  if (checked) {
     checkboxElement.classList.add('checked');
   }
   document.body.append(sectionElement);
   return checkboxElement;
 }
 
-function isSet(name) {
-  const possible = checkPossibileValueLists[name];
+async function changeSettings(cb) {
   const settings = getSettings();
-  const value = settings[name];
-  return possible.indexOf(value) > 0;
-}
-
-function handleSettings(evt) {
-  if (!evt.detail.self) {
-    const checkboxes = document.getElementsByClassName('checkbox');
-    for (const checkbox of checkboxes) {
-      const { name } = checkbox.dataset;
-      checkbox.classList.toggle('checked', isSet(name));
-    }
-  }
+  cb(settings);
+  await saveSettings();
 }
 
 function handleClick(evt) {
@@ -59,18 +79,6 @@ function handleClick(evt) {
     const kbEvent = new KeyboardEvent('keypress', { key: ' ', bubbles: true });
     checkbox.dispatchEvent(kbEvent);
   }
-}
-
-async function handleChange(evt) {
-  const { target } = evt;
-  const { name } = target.dataset;
-  const checked = target.classList.contains('checked');
-  const possible = checkPossibileValueLists[name];
-  const index = (checked) ? 1 : 0;
-  const value = possible[index];
-  const settings = getSettings();
-  settings[name] = value;
-  await saveSettings();
 }
 
 start();

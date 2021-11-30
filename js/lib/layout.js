@@ -1,5 +1,5 @@
 import { e } from './ui.js';
-import { applyStyles, getPageProperties, getSettings } from './settings.js';
+import { applyStyles, getPageProperties } from './settings.js';
 import { setSourceLanguage, getSourceLanguage, getLanguageDirection } from './i18n.js';
 import { insertContent, replaceUselessElements, removeEmptyNodes } from './capturing.js';
 import { loadObject, saveObject } from './storage.js';
@@ -19,8 +19,6 @@ let deletionCount = 1;
 let filterMode = 'automatic';
 
 export async function loadDocument(key) {
-  const { filter } = getSettings();
-  setFilterMode(filter);
   currentDocument = await loadObject(key);
   currentDocumentKey = key;
   const { title, content, lang } = currentDocument;

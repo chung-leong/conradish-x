@@ -2,11 +2,35 @@ import { e, parseMarkdown, attachRippleEffectHandlers } from './ui.js';
 import { l, setSourceLanguage, getSourceLanguage, getSourceLanguages, getTargetLanguages } from './i18n.js';
 import { getPossibleSettings, getPaperProperties, applyStyles, getSettings, saveSettings } from './settings.js';
 import { adjustLayout } from './layout.js';
+import { modeChange, setEditMode, getEditMode } from './editing.js';
 
 export function createArticleNavigation() {
   const settings = getSettings();
   const possible = getPossibleSettings();
   const top = document.getElementById('side-bar-top');
+  const sideBar = document.getElementById('side-bar');
+  const currentMode = sideBar.className = getEditMode();
+  // add mode selector
+  const modes = [
+    {
+      label: l('editing'),
+      value: 'edit'
+    },
+    {
+      label: l('annotating'),
+      value: 'annotate'
+    },
+    {
+      label: l('scrubbing'),
+      value: 'clean'
+    }
+  ];
+  const modeSelect = createSelect(modes, currentMode);
+  addSection(top, l('action'), modeSelect, true);
+  modeChange.addEventListener('change', () => {
+    sideBar.className = modeSelect.value = getEditMode();
+  });
+  modeSelect.addEventListener('change', handleModeChange);
   // add source language select
   const sourceLangs = getSourceLanguages();
   const sourceLang = getSourceLanguage();
@@ -61,11 +85,13 @@ export function createArticleNavigation() {
   }
   addSection(top, '', customMargins);
 
-  // add button to bottom pane
+  // add buttons to bottom pane
   const bottom = document.getElementById('side-bar-bottom');
-  const printButton = e('BUTTON', { className: 'default' }, l('print'));
+  const finishButton = e('BUTTON', { id: 'finish-button' }, l('finish'));
+  finishButton.addEventListener('click', handleFinishClick);
+  const printButton = e('BUTTON', { id: 'print-button', className: 'default' }, l('print'));
   printButton.addEventListener('click', handlePrintClick)
-  bottom.append(printButton);
+  bottom.append(finishButton, printButton);
 
   // add message about paper size and margin
   const sidebar = bottom.parentNode;
@@ -138,6 +164,14 @@ function createSpeechBubble() {
   const icon = e('DIV', { className: 'icon' }, '\u26a0\ufe0f');
   const message = e('DIV', { className: 'message' }, parseMarkdown(l('check_paper_size')));
   return e('DIV', { className: 'speech-bubble hidden' }, [ icon, message ]);
+}
+
+function changeSettings(callback) {
+  const settings = getSettings();
+  callback(settings);
+  applyStyles();
+  adjustLayout({ updatePaper: true });
+  saveSettings();
 }
 
 function handleSettingChange(evt) {
@@ -228,10 +262,11 @@ function handlePrintClick(evt) {
   print();
 }
 
-function changeSettings(callback) {
-  const settings = getSettings();
-  callback(settings);
-  applyStyles();
-  adjustLayout({ updatePaper: true });
-  saveSettings();
+function handleFinishClick(evt) {
+  setEditMode('annotate');
+}
+
+function handleModeChange(evt) {
+  const { target } = evt;
+  setEditMode(target.value);
 }

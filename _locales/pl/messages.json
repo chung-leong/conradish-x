@@ -53,6 +53,30 @@
     "message": "Filtrowanie zawartości strony",
     "description": "Label for checkbox in options"
   },
+  "filter_automatic": {
+    "message": "automatyczne",
+    "description": "Label for filter drop-down in options"
+  },
+  "filter_manual": {
+    "message": "ręczne",
+    "description": "Label for filter drop-down in options"
+  },
+  "action": {
+    "message": "Działanie",
+    "description": "Label for drop-down in side-bar"
+  },
+  "editing": {
+    "message": "Redagowanie",
+    "description": "Item in action drop-down"
+  },
+  "annotating": {
+    "message": "Adnotacje",
+    "description": "Item in action drop-down"
+  },
+  "scrubbing": {
+    "message": "Szorowanie",
+    "description": "Item in action drop-down"
+  },
   "from_language": {
     "message": "Z języka",
     "description": "Label for drop-down in side-bar"

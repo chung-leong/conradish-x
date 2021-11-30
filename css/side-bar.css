@@ -49,8 +49,19 @@
   flex-grow: 0;
   flex-shrink: 0;
   flex-basis: auto;
-  text-align: right;
   padding: 16px 16px 16px 16px;
+}
+
+#side-bar-bottom BUTTON.default {
+  float: right;
+}
+
+#side-bar #finish-button {
+  display: none;
+}
+
+#side-bar.clean #finish-button {
+  display: inline;
 }
 
 .custom-margins {

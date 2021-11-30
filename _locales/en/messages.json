@@ -53,6 +53,30 @@
     "message": "Filter page content",
     "description": "Label for checkbox in options"
   },
+  "filter_automatic": {
+    "message": "Automatically",
+    "description": "Label for filter drop-down in options"
+  },
+  "filter_manual": {
+    "message": "Manually",
+    "description": "Label for filter drop-down in options"
+  },
+  "action": {
+    "message": "Action",
+    "description": "Label for drop-down in side-bar"
+  },
+  "editing": {
+    "message": "Editng",
+    "description": "Item in action drop-down"
+  },
+  "annotating": {
+    "message": "Annotating",
+    "description": "Item in action drop-down"
+  },
+  "scrubbing": {
+    "message": "Scrubbing",
+    "description": "Item in action drop-down"
+  },
   "from_language": {
     "message": "From",
     "description": "Label for drop-down in side-bar"
@@ -119,6 +143,10 @@
   },
   "print": {
     "message": "Print",
+    "description": "Label for button in side-bar"
+  },
+  "finish": {
+    "message": "Finish",
     "description": "Label for button in side-bar"
   },
   "check_paper_size": {

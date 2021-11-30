@@ -8,7 +8,7 @@ BODY {
   font-size: 13px;
   font-family: Roboto, Segoe UI, Tahoma, sans-serif;
   user-select: none;
-  min-height: 85px;
+  min-height: 90px;
 }
 
 SECTION {
@@ -20,4 +20,10 @@ SECTION {
 
 .checkbox {
   margin-right: 12px;
+}
+
+LABEL SELECT {
+  margin-top: -12px;
+  margin-bottom: -12px;
+  margin-left: 4px;
 }

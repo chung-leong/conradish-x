@@ -53,6 +53,30 @@
     "message": "Фільтрація вмісту сторінки",
     "description": "Label for checkbox in options"
   },
+  "filter_automatic": {
+    "message": "Автоматична",
+    "description": "Label for filter drop-down in options"
+  },
+  "filter_manual": {
+    "message": "Ручна",
+    "description": "Label for filter drop-down in options"
+  },
+  "action": {
+    "message": "Дія",
+    "description": "Label for drop-down in side-bar"
+  },
+  "editing": {
+    "message": "Редагування",
+    "description": "Item in action drop-down"
+  },
+  "annotating": {
+    "message": "Анотація",
+    "description": "Item in action drop-down"
+  },
+  "scrubbing": {
+    "message": "Скрабування",
+    "description": "Item in action drop-down"
+  },
   "from_language": {
     "message": "З мови",
     "description": "Label for drop-down in side-bar"

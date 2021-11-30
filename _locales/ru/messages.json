@@ -53,6 +53,30 @@
     "message": "Фильтрация содержимого страницы",
     "description": "Label for checkbox in options"
   },
+  "filter_automatic": {
+    "message": "Автоматическая",
+    "description": "Label for filter drop-down in options"
+  },
+  "filter_manual": {
+    "message": "Ручная",
+    "description": "Label for filter drop-down in options"
+  },
+  "action": {
+    "message": "Действия",
+    "description": "Label for drop-down in side-bar"
+  },
+  "editing": {
+    "message": "Редактирование",
+    "description": "Item in action drop-down"
+  },
+  "annotating": {
+    "message": "Аннотирование",
+    "description": "Item in action drop-down"
+  },
+  "scrubbing": {
+    "message": "Чистка",
+    "description": "Item in action drop-down"
+  },
   "from_language": {
     "message": "С языка",
     "description": "Label for drop-down in side-bar"

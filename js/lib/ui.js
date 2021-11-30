@@ -151,12 +151,13 @@ function toggleCheckbox(checkbox, shiftKey) {
     const allChecked = range.every((c) => c.classList.contains('checked'));
     for (const checkbox of range) {
       checkbox.classList.toggle('checked', !allChecked);
+      triggerChangeEvent(checkbox);
     }
   } else {
     checkbox.classList.toggle('checked');
+    triggerChangeEvent(checkbox);
   }
   lastCheckbox = checkbox;
-  triggerChangeEvent(checkbox);
 }
 
 function handleCustomCheckboxClick(evt) {
