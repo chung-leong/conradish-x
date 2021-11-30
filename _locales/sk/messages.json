@@ -1,14 +1,14 @@
 {
   "create_print_version": {
-    "message": "Create print version",
+    "message": "Vytvorte verziu pre tlač",
     "description": "Label for menu item in browser context menu and extension pop-up menu"
   },
   "selection_portion_of_document": {
-    "message": "select portion of document you wish to print first",
+    "message": "najprv vyberte časť dokumentu na tlač",
     "description": "Text for tooltip in pop-up menu, when there's no selection"
   },
   "created_on": {
-    "message": "created on $DATE$",
+    "message": "dátum vytvorenia: $DATE$",
     "description": "Text for tooltip of recent documents in pop-up menu",
     "placeholders": {
       "date": {
@@ -18,39 +18,39 @@
     }
   },
   "show_all_documents": {
-    "message": "Show all documents",
+    "message": "Zobraziť všetky dokumenty",
     "description": "Label for menu item in pop-up menu"
   },
   "add_definition": {
-    "message": "Add definition",
+    "message": "Pridajte definíciu",
     "description": "Label for item in annotation menu"
   },
   "show_term_and_definition": {
-    "message": "show both term and definition in footnote",
+    "message": "termín a definícia v poznámke pod čiarou",
     "description": "Text for tooltip of item in annotation menu"
   },
   "add_translation": {
-    "message": "Add translation",
+    "message": "Pridať preklad",
     "description": "Label for item in annotation menu"
   },
   "show_translation_only": {
-    "message": "show translated sentence only in footnote",
+    "message": "preložená veta len v poznámke pod čiarou",
     "description": "Text for tooltip of item in annotation menu"
   },
   "add_explanation": {
-    "message": "Add explanation",
+    "message": "Pridajte vysvetlenie",
     "description": "Label for item in annotation menu"
   },
   "show_explanation": {
-    "message": "show explanation in footnote",
+    "message": "vaše vysvetlenie v poznámke pod čiarou",
     "description": "Text for tooltip of item in annotation menu"
   },
   "add_context_menu_item": {
-    "message": "Add item to browser context menu",
+    "message": "Ďalšia položka do kontextovej ponuky prehliadača",
     "description": "Label for checkbox in options"
   },
   "filter_page_content": {
-    "message": "Filter page content",
+    "message": "Filtrovanie obsahu stránky",
     "description": "Label for checkbox in options"
   },
   "from_language": {
@@ -70,27 +70,27 @@
     "description": "Label for drop-down in side-bar"
   },
   "article_justification": {
-    "message": "Justification",
+    "message": "Justovanie",
     "description": "Label for drop-down in side-bar"
   },
   "justification_none": {
-    "message": "None",
+    "message": "Žiadne",
     "description": "Item in justification drop-down in side-bar"
   },
   "justification_text": {
-    "message": "Text only",
+    "message": "Len textu",
     "description": "Item in justification drop-down in side-bar"
   },
   "justification_text_and_headings": {
-    "message": "Text and headings",
+    "message": "Textu a nadpisov",
     "description": "Item in justification drop-down in side-bar"
   },
   "article_spacing": {
-    "message": "Spacing",
+    "message": "Riadkovanie",
     "description": "Label for drop-down in side-bar"
   },
   "spacing_normal": {
-    "message": "Normal",
+    "message": "Normálne",
     "description": "Item in line-spacing drop-down in side-bar"
   },
   "footnote_font_family": {
@@ -98,7 +98,7 @@
     "description": "Label for drop-down in side-bar"
   },
   "footnote_font_size": {
-    "message": "Veľkosť písma poznámky pod čiarou",
+    "message": "Veľkosť písma poznámky",
     "description": "Label for drop-down in side-bar"
   },
   "paper_size": {
@@ -122,20 +122,30 @@
     "description": "Label for button in side-bar"
   },
   "check_paper_size": {
-    "message": "In the print window, make sure **Paper size** matches what’s specified above and that **Margins** are set to “Default”",
+    "message": "V dialógovom okne Tlačiť sa uistite, že **Veľkosť papiera** je rovnaká, ako je špecifikovaná vyššie, a že **Okraje** sú nastavené na „Predvolené“",
     "description": "Message in speech bubble over print button in side-bar (Markdown)"
   },
   "documents": {
     "message": "Dokumenty",
     "description": "Title in document list"
   },
-  "selected_document_sg": {
-    "message": "1 selected",
+  "selected_document_sg_nom": {
+    "message": "1 vybratý dokument",
     "description": "For displaying the number of selected documents (singular)"
   },
-  "selected_document_pl": {
-    "message": "$NUMBER$ selected",
+  "selected_document_pl_nom": {
+    "message": "$NUMBER$ vybrané dokumenty",
     "description": "For displaying the number of selected documents (plural)",
+    "placeholders": {
+      "number": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "selected_document_pl_gen": {
+    "message": "$NUMBER$ vybraných dokumentov",
+    "description": "For displaying the number of selected documents (plural genitive)",
     "placeholders": {
       "number": {
         "content": "$1",
@@ -155,13 +165,23 @@
     "message": "Hľadať dokumenty",
     "description": "Placeholder of search box and icon tooltip in document list"
   },
-  "search_result_sg": {
-    "message": "1 search result",
+  "search_result_sg_nom": {
+    "message": "1 výsledok vyhľadávania",
     "description": "For displaying the number of search results (singular)"
   },
-  "search_result_pl": {
-    "message": "$NUMBER$ search results",
+  "search_result_pl_nom": {
+    "message": "$NUMBER$ výsledky vyhľadávania",
     "description": "For displaying the number of search results (plural)",
+    "placeholders": {
+      "number": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "search_result_pl_gen": {
+    "message": "$NUMBER$ výsledkov vyhľadávania",
+    "description": "For displaying the number of search results (plural genitive)",
     "placeholders": {
       "number": {
         "content": "$1",
@@ -170,7 +190,7 @@
     }
   },
   "for_query": {
-    "message": "$RESULTS$ for “$QUERY$”",
+    "message": "$RESULTS$ pre dopyt „$QUERY$“",
     "description": "Text for card heading in document list",
     "placeholders": {
       "results": {
@@ -224,11 +244,11 @@
     "description": "For top item in From language dropdown in side-bar"
   },
   "language_transform_from": {
-    "message": "ska\\b => skej, a\\b => y, á => ej",
+    "message": "ina(?=\\P{L}|$$) => iny, á(?=\\P{L}|$$) => ej",
     "description": "RegExp replacements that yield the genitive case"
   },
   "language_transform_to": {
-    "message": "ska\\b => skej, a\\b => y, á => ej",
+    "message": "ina(?=\\P{L}|$$) => iny, á(?=\\P{L}|$$) => ej",
     "description": "RegExp replacements that yield the genitive case"
   },
   "language_af": {
@@ -560,5 +580,9 @@
   },
   "language_zu": {
     "message": "Zuluština"
+  },
+  "cardinal_declensions": {
+    "message": "1 => sg_nom, 2-4 => pl_nom, * => pl_gen",
+    "description": "For determining what case to use when counting objects"
   }
 }
