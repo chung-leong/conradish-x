@@ -520,7 +520,8 @@ function handleChangeTitleClick(evt) {
   const pTop1 = parseFloat(s1.paddingTop), pTop2 = parseFloat(s2.paddingTop);
   const pLeft1 = parseFloat(s1.paddingLeft), pLeft2 = parseFloat(s2.paddingLeft);
   const pRight1 = parseFloat(s1.paddingRight), pRight2 = parseFloat(s2.paddingRight);
-  containerElement.style.top = (r1.top - r2.top - pTop1 + pTop2) + 'px';
+  // not sure why the 1px adjustment is neccessary
+  containerElement.style.top = (r1.top - r2.top - pTop1 + pTop2 - 1) + 'px';
   containerElement.style.left = (r1.left - r2.left + pLeft1 - pLeft2) + 'px';
   containerElement.style.right = (r2.right - r1.right - pRight1 + pRight2) + 'px';
   // use right-to-left layout if title uses it
