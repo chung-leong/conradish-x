@@ -289,6 +289,10 @@ export async function translate(original, sourceLang, targetLang, singleWord) {
   return result;
 }
 
+export function capitalize(word, lang) {
+  return word.charAt(0).toLocaleUpperCase(lang) + word.substr(1);
+}
+
 export function isCapitalized(word, lang) {
   const c = word.charAt(0);
   if (c.toLocaleLowerCase(lang) !== c) {

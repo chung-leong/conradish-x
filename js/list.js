@@ -1,7 +1,7 @@
 import { initializeStorage, findObjects, loadObject, deleteObjects, storageChange } from './lib/storage.js';
 import { e, attachCustomCheckboxHandlers, attachRippleEffectHandlers, separateWords } from './lib/ui.js';
 import { setWindowName, openPage } from './lib/navigation.js';
-import { l, lc, getLanguageDirection } from './lib/i18n.js';
+import { l, lc, getLanguageDirection, capitalize } from './lib/i18n.js';
 
 const listContainer = document.getElementById('list-container');
 const toolbarContainer = document.getElementById('toolbar-container');
@@ -160,7 +160,7 @@ function updateCardTitles() {
       } else if(isYesterday(day)) {
         title = l('yesterday_being', day);
       } else {
-        title = day;
+        title = capitalize(day);
       }
     } else {
       // search results

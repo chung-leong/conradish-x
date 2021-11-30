@@ -1,0 +1,588 @@
+{
+  "create_print_version": {
+    "message": "Створити версію для друку",
+    "description": "Label for menu item in browser context menu and extension pop-up menu"
+  },
+  "selection_portion_of_document": {
+    "message": "select portion of document you wish to print first",
+    "description": "Text for tooltip in pop-up menu, when there's no selection"
+  },
+  "created_on": {
+    "message": "дата створення: $DATE$",
+    "description": "Text for tooltip of recent documents in pop-up menu",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "11/28/2021, 10:01:35 PM"
+      }
+    }
+  },
+  "show_all_documents": {
+    "message": "Показати всі документи",
+    "description": "Label for menu item in pop-up menu"
+  },
+  "add_definition": {
+    "message": "Add definition",
+    "description": "Label for item in annotation menu"
+  },
+  "show_term_and_definition": {
+    "message": "show both term and definition in footnote",
+    "description": "Text for tooltip of item in annotation menu"
+  },
+  "add_translation": {
+    "message": "Add translation",
+    "description": "Label for item in annotation menu"
+  },
+  "show_translation_only": {
+    "message": "show translated sentence only in footnote",
+    "description": "Text for tooltip of item in annotation menu"
+  },
+  "add_explanation": {
+    "message": "Add explanation",
+    "description": "Label for item in annotation menu"
+  },
+  "show_explanation": {
+    "message": "show explanation in footnote",
+    "description": "Text for tooltip of item in annotation menu"
+  },
+  "add_context_menu_item": {
+    "message": "Add item to browser context menu",
+    "description": "Label for checkbox in options"
+  },
+  "filter_page_content": {
+    "message": "Filter page content",
+    "description": "Label for checkbox in options"
+  },
+  "from_language": {
+    "message": "З мови",
+    "description": "Label for drop-down in side-bar"
+  },
+  "to_language": {
+    "message": "На мову",
+    "description": "Label for drop-down in side-bar"
+  },
+  "article_font_family": {
+    "message": "Шрифт",
+    "description": "Label for drop-down in side-bar"
+  },
+  "article_font_size": {
+    "message": "Розмір шрифту",
+    "description": "Label for drop-down in side-bar"
+  },
+  "article_justification": {
+    "message": "Вирівнювання",
+    "description": "Label for drop-down in side-bar"
+  },
+  "justification_none": {
+    "message": "Без",
+    "description": "Item in justification drop-down in side-bar"
+  },
+  "justification_text": {
+    "message": "Тільки тексту",
+    "description": "Item in justification drop-down in side-bar"
+  },
+  "justification_text_and_headings": {
+    "message": "Тексту та заголовків",
+    "description": "Item in justification drop-down in side-bar"
+  },
+  "article_spacing": {
+    "message": "Міжрядковий інтервал",
+    "description": "Label for drop-down in side-bar"
+  },
+  "spacing_normal": {
+    "message": "Звичайний",
+    "description": "Item in line-spacing drop-down in side-bar"
+  },
+  "footnote_font_family": {
+    "message": "Шрифт виносок",
+    "description": "Label for drop-down in side-bar"
+  },
+  "footnote_font_size": {
+    "message": "Розмір шрифту виносок",
+    "description": "Label for drop-down in side-bar"
+  },
+  "paper_size": {
+    "message": "Розмір паперу",
+    "description": "Label for drop-down in side-bar"
+  },
+  "margins": {
+    "message": "Поля",
+    "description": "Label for drop-down in side-bar"
+  },
+  "margins_default": {
+    "message": "За замовчуванням",
+    "description": "Item in margins drop-down in side-bar"
+  },
+  "margins_custom": {
+    "message": "Власні",
+    "description": "Item in margins drop-down in side-bar"
+  },
+  "print": {
+    "message": "Друк",
+    "description": "Label for button in side-bar"
+  },
+  "check_paper_size": {
+    "message": "In the print window, make sure **Paper size** matches what’s specified above and that **Margins** are set to “Default”",
+    "description": "Message in speech bubble over print button in side-bar (Markdown)"
+  },
+  "documents": {
+    "message": "Документи",
+    "description": "Title in document list"
+  },
+  "selected_document_sg_nom": {
+    "message": "1 вибраний документ",
+    "description": "For displaying the number of selected documents (singular)"
+  },
+  "selected_document_pl_nom": {
+    "message": "$NUMBER$ вибрані документи",
+    "description": "For displaying the number of selected documents (plural)",
+    "placeholders": {
+      "number": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "selected_document_pl_gen": {
+    "message": "$NUMBER$ вибраних документів",
+    "description": "For displaying the number of selected documents (plural genitive)",
+    "placeholders": {
+      "number": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "no_documents": {
+    "message": "Немає документів",
+    "description": "Message in document list when there aren't any documents"
+  },
+  "no_search_results": {
+    "message": "Немає результатів",
+    "description": "Message in document list when a search yields no results"
+  },
+  "search_documents": {
+    "message": "Пошук документів",
+    "description": "Placeholder of search box and icon tooltip in document list"
+  },
+  "search_result_sg_nom": {
+    "message": "1 результат пошуку",
+    "description": "For displaying the number of search results (singular)"
+  },
+  "search_result_pl_nom": {
+    "message": "$NUMBER$ результати пошуку",
+    "description": "For displaying the number of search results (plural)",
+    "placeholders": {
+      "number": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "search_result_pl_gen": {
+    "message": "$NUMBER$ результатів пошуку",
+    "description": "For displaying the number of search results (plural genitive)",
+    "placeholders": {
+      "number": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "for_query": {
+    "message": "$RESULTS$ за запитом \"$QUERY$\"",
+    "description": "Text for card heading in document list",
+    "placeholders": {
+      "results": {
+        "content": "$1",
+        "example": "2 results"
+      },
+      "query": {
+        "content": "$2",
+        "example": "CNN"
+      }
+    }
+  },
+  "today_being": {
+    "message": "Сьогодні - $DATE$",
+    "description": "Text for card heading in document list",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "Sunday, November 13, 2001"
+      }
+    }
+  },
+  "yesterday_being": {
+    "message": "Вчора - $DATE$",
+    "description": "Text for card heading in document list",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "Sunday, November 13, 2001"
+      }
+    }
+  },
+  "clear_search": {
+    "message": "Очистити поле пошуку",
+    "description": "Tooltip of search box x button in document list"
+  },
+  "delete": {
+    "message": "Видалити",
+    "description": "Label for delete button in document list"
+  },
+  "cancel": {
+    "message": "Скасувати",
+    "description": "Label for x button used to clear selection in document list"
+  },
+  "language_transform_from": {
+    "message": "ька(?=\\P{L}|$$) => ької, на(?=\\P{L}|$$) => ної",
+    "description": "RegExp replacements that yield the genitive case"
+  },
+  "language_transform_to": {
+    "message": "ька(?=\\P{L}|$$) => ьку, на(?=\\P{L}|$$) => ну",
+    "description": "RegExp replacements that yield the accusative case"
+  },
+  "language_none": {
+    "message": "Жодну",
+    "description": "For top item in To language dropdown in side-bar"
+  },
+  "language_unknown": {
+    "message": "Невідомої мови",
+    "description": "For top item in From language dropdown in side-bar"
+  },
+  "language_af": {
+    "message": "Африкаанс"
+  },
+  "language_am": {
+    "message": "Амхарська"
+  },
+  "language_ar": {
+    "message": "Арабська"
+  },
+  "language_az": {
+    "message": "Азербайджанська"
+  },
+  "language_be": {
+    "message": "Білоруська"
+  },
+  "language_bg": {
+    "message": "Болгарська"
+  },
+  "language_bn": {
+    "message": "Бенгальська"
+  },
+  "language_bs": {
+    "message": "Боснійська"
+  },
+  "language_ca": {
+    "message": "Каталанська"
+  },
+  "language_ceb": {
+    "message": "Себуано"
+  },
+  "language_co": {
+    "message": "Корсиканська"
+  },
+  "language_cs": {
+    "message": "Чеська"
+  },
+  "language_cy": {
+    "message": "Валлійська"
+  },
+  "language_da": {
+    "message": "Данська"
+  },
+  "language_de": {
+    "message": "Німецька"
+  },
+  "language_el": {
+    "message": "Грецька"
+  },
+  "language_en": {
+    "message": "Англійська"
+  },
+  "language_eo": {
+    "message": "Есперанто"
+  },
+  "language_es": {
+    "message": "Іспанська"
+  },
+  "language_et": {
+    "message": "Естонська"
+  },
+  "language_eu": {
+    "message": "Баскська"
+  },
+  "language_fa": {
+    "message": "Перська"
+  },
+  "language_fi": {
+    "message": "Фінська"
+  },
+  "language_fr": {
+    "message": "Французька"
+  },
+  "language_fy": {
+    "message": "Фризька"
+  },
+  "language_ga": {
+    "message": "Ірландська"
+  },
+  "language_gd": {
+    "message": "Шотландська (ґельська)"
+  },
+  "language_gl": {
+    "message": "Ґалісійська"
+  },
+  "language_gu": {
+    "message": "Ґуджаратська"
+  },
+  "language_ha": {
+    "message": "Хауса"
+  },
+  "language_haw": {
+    "message": "Гавайська"
+  },
+  "language_hi": {
+    "message": "Гінді"
+  },
+  "language_hmn": {
+    "message": "Хмонг"
+  },
+  "language_hr": {
+    "message": "Хорватська"
+  },
+  "language_ht": {
+    "message": "Гаїтянська креольська"
+  },
+  "language_hu": {
+    "message": "Угорська"
+  },
+  "language_hy": {
+    "message": "Вірменська"
+  },
+  "language_id": {
+    "message": "Індонезійська"
+  },
+  "language_ig": {
+    "message": "Ігбо (ібо)"
+  },
+  "language_is": {
+    "message": "Ісландська"
+  },
+  "language_it": {
+    "message": "Італійська"
+  },
+  "language_iw": {
+    "message": "Іврит"
+  },
+  "language_ja": {
+    "message": "Японська"
+  },
+  "language_jw": {
+    "message": "Яванська"
+  },
+  "language_ka": {
+    "message": "Грузинська"
+  },
+  "language_kk": {
+    "message": "Казахська"
+  },
+  "language_km": {
+    "message": "Камбоджійська"
+  },
+  "language_kn": {
+    "message": "Каннада"
+  },
+  "language_ko": {
+    "message": "Корейська"
+  },
+  "language_ku": {
+    "message": "Курдська"
+  },
+  "language_ky": {
+    "message": "Киргизька"
+  },
+  "language_la": {
+    "message": "Латинська"
+  },
+  "language_lb": {
+    "message": "Люксембурзька"
+  },
+  "language_lo": {
+    "message": "Лаоська"
+  },
+  "language_lt": {
+    "message": "Литовська"
+  },
+  "language_lv": {
+    "message": "Латиська"
+  },
+  "language_mg": {
+    "message": "Малагасійська"
+  },
+  "language_mi": {
+    "message": "Маорі"
+  },
+  "language_mk": {
+    "message": "Македонська"
+  },
+  "language_ml": {
+    "message": "Малаялам"
+  },
+  "language_mn": {
+    "message": "Монгольська"
+  },
+  "language_mr": {
+    "message": "Маратхі"
+  },
+  "language_ms": {
+    "message": "Малайська"
+  },
+  "language_mt": {
+    "message": "Мальтійська"
+  },
+  "language_my": {
+    "message": "Бірманська"
+  },
+  "language_ne": {
+    "message": "Непальська"
+  },
+  "language_nl": {
+    "message": "Нідерландська"
+  },
+  "language_no": {
+    "message": "Норвезька"
+  },
+  "language_ny": {
+    "message": "Чичева"
+  },
+  "language_or": {
+    "message": "Орія"
+  },
+  "language_pa": {
+    "message": "Панджабська"
+  },
+  "language_pl": {
+    "message": "Польська"
+  },
+  "language_ps": {
+    "message": "Пушту"
+  },
+  "language_pt": {
+    "message": "Португальська"
+  },
+  "language_ro": {
+    "message": "Румунська"
+  },
+  "language_ru": {
+    "message": "Російська"
+  },
+  "language_rw": {
+    "message": "Руандійська"
+  },
+  "language_sd": {
+    "message": "Сіндхі"
+  },
+  "language_si": {
+    "message": "Сингальська"
+  },
+  "language_sk": {
+    "message": "Словацька"
+  },
+  "language_sl": {
+    "message": "Словенська"
+  },
+  "language_sm": {
+    "message": "Самоанська"
+  },
+  "language_sn": {
+    "message": "Шона"
+  },
+  "language_so": {
+    "message": "Сомалі"
+  },
+  "language_sq": {
+    "message": "Албанська"
+  },
+  "language_sr": {
+    "message": "Сербська"
+  },
+  "language_st": {
+    "message": "Сесото"
+  },
+  "language_su": {
+    "message": "Сунданська"
+  },
+  "language_sv": {
+    "message": "Шведська"
+  },
+  "language_sw": {
+    "message": "Суахілі"
+  },
+  "language_ta": {
+    "message": "Тамільська"
+  },
+  "language_te": {
+    "message": "Телуґу"
+  },
+  "language_tg": {
+    "message": "Таджицька"
+  },
+  "language_th": {
+    "message": "Тайська"
+  },
+  "language_tk": {
+    "message": "Туркменська"
+  },
+  "language_tl": {
+    "message": "Філіппінська"
+  },
+  "language_tr": {
+    "message": "Турецька"
+  },
+  "language_tt": {
+    "message": "Татарська"
+  },
+  "language_ug": {
+    "message": "Уйгурська"
+  },
+  "language_uk": {
+    "message": "Українська"
+  },
+  "language_ur": {
+    "message": "Урду"
+  },
+  "language_uz": {
+    "message": "Узбецька"
+  },
+  "language_vi": {
+    "message": "В’єтнамська"
+  },
+  "language_xh": {
+    "message": "Кхоса"
+  },
+  "language_yi": {
+    "message": "Ідиш"
+  },
+  "language_yo": {
+    "message": "Йоруба"
+  },
+  "language_zh": {
+    "message": "Китайська"
+  },
+  "language_zh_cn": {
+    "message": "Китайська (спрощена)"
+  },
+  "language_zh_tw": {
+    "message": "Китайська (традиційна)"
+  },
+  "language_zu": {
+    "message": "Зулу"
+  },
+  "cardinal_declensions": {
+    "message": "1 => sg_nom, 2-4 22-24 32-34 42-44 52-54 62-64 72-74 82-84 92-94 => pl_nom, * => pl_gen",
+    "description": "For determining what case to use when counting objects"
+  }
+}
