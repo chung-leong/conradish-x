@@ -104,6 +104,25 @@ export function getLanguageDirection(lang) {
   return rightToLeftScripts.includes(script) ? 'rtl' : 'ltr';
 }
 
+export async function detectLanguage(text) {
+  return new Promise((resolve) => {
+    chrome.i18n.detectLanguage(text, (result) => {
+      let lang;
+      for (const { language, percentage } of result.languages) {
+        if (percentage >= 50) {
+          lang = language;
+        }
+      }
+      resolve(lang);
+    });
+  });
+}
+
+export async function detectDirection(text) {
+  const lang = await detectLanguage(text);
+  return getLanguageDirection(lang);
+}
+
 export function canUseGenericFont(lang) {
   const script = getLanguageScript(lang);
   return genericFontScripts.includes(script);

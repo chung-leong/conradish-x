@@ -1,7 +1,7 @@
 import { initializeStorage, findObjects, loadObject, saveObject, deleteObjects, storageChange } from './lib/storage.js';
 import { e, attachCustomCheckboxHandlers, attachRippleEffectHandlers, separateWords } from './lib/ui.js';
 import { setWindowName, openPage } from './lib/navigation.js';
-import { l, lc, getLanguageDirection, capitalize } from './lib/i18n.js';
+import { l, lc, detectDirection, capitalize } from './lib/i18n.js';
 
 const listContainer = document.getElementById('list-container');
 const toolbarContainer = document.getElementById('toolbar-container');
@@ -21,7 +21,6 @@ async function start() {
   document.addEventListener('change', handleChange);
   createSearchToolbar();
   createCommandToolbar();
-  createKebabMenu();
   await createCards();
   listContainer.parentNode.addEventListener('scroll', handleScroll);
   storageChange.addEventListener('create', handleCreate);
@@ -76,44 +75,37 @@ function createCommandToolbar() {
   deleteButtonElement.addEventListener('click', handleDeleteClick);
 }
 
-function createKebabMenu() {
+function openKebabMenu() {
+  const { buttonElement, url } = selectedItem;
   const changeElement = e('LI', {}, l('change_title'));
   changeElement.addEventListener('click', handleChangeTitleClick);
-  const linkElement = e('A', { target: '_blank'}, l('open_original_page'));
+  const linkElement = e('A', { href: url, target: '_blank' }, l('open_original_page'));
   const openElement = e('LI', {}, linkElement);
-  openElement.addEventListener('click', hideKebabMenu);
   const listElement = e('UL', {}, [ changeElement, openElement ]);
-  const menuElement = document.getElementById('kebab-menu');
+  const menuElement = e('DIV', { id: 'kebab-menu' }, listElement);
   menuElement.append(listElement);
-  kebabMenu = { menuElement, changeElement, openElement, linkElement };
+  const r1 = buttonElement.getBoundingClientRect();
+  const r2 = buttonElement.parentNode.getBoundingClientRect();
+  menuElement.style.right = (r2.right - r1.right) + 'px';
+  menuElement.style.top = (r1.top - r2.top) + 'px';
+  buttonElement.parentNode.append(menuElement);
+  menuElement.addEventListener('click', (evt) => {
+    const { target } = evt;
+    if (target !== menuElement) {
+      menuElement.remove();
+    }
+  });
   document.addEventListener('mousedown', (evt) => {
     const { target } = evt;
     if (!menuElement.contains(target)) {
-      hideKebabMenu();
+      menuElement.remove();
     }
   });
   document.addEventListener('keydown', (evt) => {
     if (evt.key === 'Escape') {
-      hideKebabMenu();
+      menuElement.remove();
     }
   });
-}
-
-function openKebabMenu() {
-  const { buttonElement, url } = selectedItem;
-  const { menuElement, changeElement, openElement, linkElement } = kebabMenu;
-  // set link
-  linkElement.href = url;
-  const r1 = buttonElement.getBoundingClientRect();
-  const r2 = menuElement.parentNode.getBoundingClientRect();
-  menuElement.style.right = (r2.right - r1.right) + 'px';
-  menuElement.style.top = (r1.top - r2.top) + 'px';
-  menuElement.style.display = 'block';
-}
-
-function hideKebabMenu() {
-  const { menuElement } = kebabMenu;
-  menuElement.style.display = 'none';
 }
 
 async function createCards() {
@@ -157,12 +149,7 @@ async function loadItem(item) {
   try {
     const doc = await loadObject(item.key);
     const { url, title, lang } = doc;
-    const direction = getLanguageDirection(lang);
-    if (direction === 'rtl') {
-      item.titleElement.classList.add('rtl');
-    } else {
-      item.titleElement.classList.remove('rtl');
-    }
+    await adjustTextDirection(item.titleElement, title);
     item.titleElement.textContent = title;
     item.titleElement.title = url;
     item.lang = lang;
@@ -170,6 +157,15 @@ async function loadItem(item) {
     item.title = title;
     item.searchStrings = findSearchStrings(doc);
   } catch (err) {
+  }
+}
+
+async function adjustTextDirection(element, text) {
+  const direction = await detectDirection(text);
+  if (direction === 'rtl') {
+    element.classList.add('rtl');
+  } else {
+    element.classList.remove('rtl');
   }
 }
 
@@ -545,8 +541,8 @@ function handleChangeTitleClick(evt) {
   selectedItem.inputElement = inputElement;
   inputElement.addEventListener('blur', handleTitleInputBlur);
   inputElement.addEventListener('keydown', handleTitleInputKeyDown);
+  inputElement.addEventListener('input', handleTitleInputChange);
   inputElement.focus();
-  hideKebabMenu();
 }
 
 async function handleTitleInputBlur(evt) {
@@ -578,6 +574,11 @@ function handleTitleInputKeyDown(evt) {
   } else if (evt.key === 'Enter') {
     inputElement.blur();
   }
+}
+
+function handleTitleInputChange(evt) {
+  const { inputElement } = selectedItem;
+  adjustTextDirection(inputElement, inputElement.value);
 }
 
 start();
