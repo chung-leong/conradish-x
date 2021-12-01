@@ -667,10 +667,15 @@ function rateContentBySimiliarity(root, objectStyles, objectRects) {
   const maxLeft = getMaxKey(leftCounts);
   const maxRight = getMaxKey(rightCounts);
   const maxRect = { left: maxLeft, right: maxRight };
-  const calculatePositionScore = (rect1, rect2) => {
+  const calculatePositionScore = (rect1, rect2, direction) => {
     const leftDiff = Math.abs(rect1.left - rect2.left);
     const rightDiff = Math.abs(rect1.right - rect2.right);
-    return leftDiff + (rightDiff / 5);
+    console.log(direction);
+    if (direction === 'rtl') {
+      return rightDiff + (leftDiff / 5);
+    } else {
+      return leftDiff + (rightDiff / 5);
+    }
   };
   const parseRGB = (color) => {
     const m = color.replace(/[rgba\(\)\s]/g, '').split(',');
@@ -698,7 +703,7 @@ function rateContentBySimiliarity(root, objectStyles, objectRects) {
       const color = style.color;
       // calculate the "junk" scores
       const scoreColor = calculateColorScore(color, maxColor);
-      const scorePos = calculatePositionScore(rect, maxRect);
+      const scorePos = calculatePositionScore(rect, maxRect, style.direction);
       const isHeading = /^H[123]$/.test(object.tag);
       // greater tolerance for heading
       const limitPos = (isHeading) ? 20 : 10;
