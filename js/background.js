@@ -11,39 +11,42 @@ async function start() {
   storageChange.addEventListener('settings', updateContextMenu);
 }
 
-const createMenuId = 'create';
-let menuCreated = undefined;
-
-function updateContextMenu() {
-  const { contextMenu } = getSettings();
-  if (contextMenu) {
-    addContextMenu();
-  } else {
-    removeContextMenu();
-  }
-}
-
-function addContextMenu() {
-  if (menuCreated !== true) {
-    // try updating it first
-    const props = {
+function getContextMenuItems() {
+  const settings = getSettings();
+  return {
+    create: {
       contexts: [ 'selection' ],
       documentUrlPatterns: [ 'http://*/*', 'https://*/*' ],
       title: l('create_print_version'),
-    };
-    chrome.contextMenus.update(createMenuId, props, () => {
-      if (chrome.runtime.lastError) {
-        chrome.contextMenus.create({ id: createMenuId, ...props }, () => chrome.runtime.lastError);
-      }
-    });
-    menuCreated = true;
-  }
+      condition: () => settings.contextMenu,
+    },
+    rename: {
+      contexts: [ 'page' ],
+      documentUrlPatterns: [ chrome.runtime.getURL('article.html') + '*' ],
+      title: l('change_title'),
+    },
+  };
 }
 
-function removeContextMenu() {
-  if (menuCreated !== false) {
-    chrome.contextMenus.remove(createMenuId, () => chrome.runtime.lastError);
-    menuCreated = false;
+const contextMenuItemCreated = {};
+
+function updateContextMenu() {
+  const contextMenuItems = getContextMenuItems();
+  for (const [ id, item ] of Object.entries(contextMenuItems)) {
+    const { condition, ...props } = item;
+    const creating = !condition || condition();
+    if (contextMenuItemCreated[id] !== creating) {
+      if (creating) {
+        chrome.contextMenus.update(id, props, () => {
+          if (chrome.runtime.lastError) {
+            chrome.contextMenus.create({ id, ...props }, () => chrome.runtime.lastError);
+          }
+        });
+      } else {
+        chrome.contextMenus.remove(id, () => chrome.runtime.lastError);
+      }
+      contextMenuItemCreated[id] = creating;
+    }
   }
 }
 
@@ -139,7 +142,11 @@ function handleSelectionResponse(state) {
 async function handleMenuClick(info, tab) {
   switch (info.menuItemId) {
     case 'create':
-      return createDocument(tab);
+      createDocument(tab);
+      break;
+    case 'rename':
+      chrome.runtime.sendMessage({ type: 'rename' });
+      break;
   }
 }
 

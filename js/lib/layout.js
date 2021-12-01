@@ -40,8 +40,7 @@ export async function loadDocument(key) {
   storageChange.addEventListener('update', async (evt) => {
     if (!evt.detail.self && evt.detail.key === currentDocumentKey) {
       const { title } = await loadObject(currentDocumentKey);
-      document.title = title;
-      currentDocument.title = title;
+      setTitle(title);
     }
   });
   //console.log(currentDocument);
@@ -60,6 +59,15 @@ export async function saveDocument() {
     return;
   }
   saveObject(currentDocumentKey, doc);
+}
+
+export function getTitle() {
+  return currentDocument.title;
+}
+
+export function setTitle(title) {
+  document.title = title;
+  currentDocument.title = title;
 }
 
 export function adjustLayout(options = {}) {

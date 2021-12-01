@@ -1,5 +1,6 @@
 import { e, separateWords } from './ui.js';
-import { adjustLayout, adjustFootnotes, findDeletedFootnote, annotateRange, saveDocument, setFilterMode } from './layout.js';
+import { adjustLayout, adjustFootnotes, findDeletedFootnote, annotateRange, saveDocument, setFilterMode,
+  getTitle, setTitle } from './layout.js';
 import { transverseRange } from './capturing.js';
 import { l, translate, getSourceLanguage, getTargetLanguage, getLanguageDirection } from './i18n.js';
 
@@ -12,6 +13,7 @@ let lastSelectedRange = null;
 let articleMenuClicked = false;
 let editMode = 'annotate';
 let cleaned = false;
+let topDrawer = null;
 
 export function attachEditingHandlers() {
   document.addEventListener('keydown', handleKeyDown);
@@ -27,6 +29,11 @@ export function attachEditingHandlers() {
   document.addEventListener('mousedown', handleMouseDown);
   document.execCommand('styleWithCSS', false, true);
   document.execCommand('insertBrOnReturn', false, false);
+  chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.type === 'rename') {
+      startEditingTitle();
+    }
+  });
 }
 
 export function createMenuItems() {
@@ -96,7 +103,7 @@ async function addFootnote(includeTerm) {
       adjustLayout({ updateFooterPosition: true });
       // save additional information from Google Translate
       Object.assign(footnote.extra, extra);
-      autosave(100);
+      autosave(0);
     }
   } else {
     const { footer } = footnote.page;
@@ -621,7 +628,7 @@ export function setEditMode(mode) {
     cleaned = false;
   } else {
     if (cleaned) {
-      autosave(100);
+      autosave(0);
     }
   }
   editMode = mode;
@@ -636,15 +643,66 @@ function toggleMode() {
   setEditMode(editMode === 'annotate' ? 'clean' : 'annotate');
 }
 
+async function startEditingTitle() {
+  if (topDrawer) {
+    return;
+  }
+  const originalTitle = getTitle();
+  // create top drawer DIV
+  const container = document.getElementById('article-container');
+  const inputElement = e('INPUT', { type: 'text', value: originalTitle });
+  const buttonElement = e('BUTTON', {}, 'Save');
+  const drawerElement = e('DIV', { id: 'top-drawer' }, [ inputElement, buttonElement ]);
+  container.append(drawerElement);
+  // position it, putting it a few pixels above the container so the shadow looks right
+  const verticalOffset = 8;
+  drawerElement.style.top = `${-drawerElement.offsetHeight - verticalOffset}px`;
+  await new Promise(resolve => setTimeout(resolve, 0));
+  // start transition
+  drawerElement.style.top = `${-verticalOffset}px`;
+  drawerElement.addEventListener('transitionend', () => {
+    inputElement.focus();
+  }, { once: true });
+  buttonElement.addEventListener('click', () => {
+    stopEditingTitle();
+  });
+  inputElement.addEventListener('keydown', (evt) => {
+    switch (evt.key) {
+      case 'Escape':
+        inputElement.value = originalTitle;
+      case 'Enter':
+        stopEditingTitle();
+        break;
+    }
+  });
+  topDrawer = { drawerElement, inputElement, originalTitle, verticalOffset };
+}
+
+async function stopEditingTitle() {
+  const { drawerElement, inputElement, originalTitle, verticalOffset } = topDrawer;
+  const newTitle = inputElement.value;
+  if (newTitle !== originalTitle) {
+    setTitle(newTitle);
+    autosave(0);
+  }
+  drawerElement.style.top = `${-drawerElement.offsetHeight - verticalOffset}px`;
+  drawerElement.addEventListener('transitionend', () => {
+    drawerElement.remove();
+  }, { once: true });
+  topDrawer = null;
+}
+
 function handlePaste(evt) {
   const { target, clipboardData } = evt;
-  const range = getSelectionRange();
-  const number = isArticleEditor(target) ? getFootnoteNumber(range) : null;
-  if (!number || number.position === 'after') {
-    insertData(target, clipboardData);
+  if (isArticleEditor(target) || isFootnoteEditor(target)) {
+    const range = getSelectionRange();
+    const number = isArticleEditor(target) ? getFootnoteNumber(range) : null;
+    if (!number || number.position === 'after') {
+      insertData(target, clipboardData);
+    }
+    evt.preventDefault();
+    evt.stopPropagation();
   }
-  evt.preventDefault();
-  evt.stopPropagation();
 }
 
 let dropSource = null;

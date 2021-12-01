@@ -226,6 +226,33 @@ BODY.ready #article {
   margin-top: 0;
 }
 
+#top-drawer {
+  display: flex;
+  position: absolute;
+  box-sizing: border-box;
+  background-color: rgb(255, 255, 255);
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 2px;
+  border-top-width: 0;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.8);
+  padding: 10px 0 10px 0;
+  top: -100px;
+  left: 0;
+  right: 0;
+  width: 80%;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 16px 8px 8px 8px;
+  transition: top 0.5s ease-out;
+}
+
+#top-drawer INPUT {
+  flex-grow: 1;
+  flex-shrink: 1;
+  margin-right: 8px;
+}
+
 #status-container {
   display: flex;
   position: absolute;
