@@ -26,6 +26,7 @@ async function start() {
   listContainer.parentNode.addEventListener('scroll', handleScroll);
   storageChange.addEventListener('create', handleCreate);
   storageChange.addEventListener('delete', handleDelete);
+  storageChange.addEventListener('update', handleUpdate);
 }
 
 function createSearchToolbar() {
@@ -159,6 +160,8 @@ async function loadItem(item) {
     const direction = getLanguageDirection(lang);
     if (direction === 'rtl') {
       item.titleElement.classList.add('rtl');
+    } else {
+      item.titleElement.classList.remove('rtl');
     }
     item.titleElement.textContent = title;
     item.titleElement.title = url;
@@ -503,6 +506,17 @@ async function handleCreate(evt) {
 function handleDelete(evt) {
   const { key } = evt.detail;
   removeItems([ key ]);
+}
+
+function handleUpdate(evt) {
+  const { key } = evt.detail;
+  for (const card of cards) {
+    for (const item of card.items) {
+      if (item.key === key) {
+        loadItem(item);
+      }
+    }
+  }
 }
 
 function handleChangeTitleClick(evt) {
