@@ -1,7 +1,7 @@
 import { initializeStorage, storageChange, getSettings } from './lib/storage.js';
 import { loadDocument, setFilterMode } from './lib/layout.js';
 import { setEditMode, createMenuItems, attachEditingHandlers } from './lib/editing.js';
-import { createArticleNavigation } from './lib/side-bar.js';
+import { createArticleNavigation, initializeAutoCollapse } from './lib/side-bar.js';
 import { setWindowName } from './lib/navigation.js';
 
 async function start() {
@@ -11,12 +11,13 @@ async function start() {
     const { searchParams } = new URL(location);
     const key = searchParams.get('t');
     setWindowName('article', [ key ]);
+    // load the document
+    const existing = await loadDocument(key);
     // set filter and edit mode
     const { filter } = getSettings();
+    const mode = (filter === 'manual' && !existing) ? 'clean' : 'annotate';
     setFilterMode(filter);
-    setEditMode(filter === 'manual' ? 'clean' : 'annotate');
-    // load the document
-    await loadDocument(key);
+    setEditMode(mode);
     // create menu items
     createMenuItems();
     // create side navigation
@@ -24,6 +25,10 @@ async function start() {
     // attach handlers to elements for editing contents
     attachEditingHandlers();
     setStatus('ready');
+    // collapse the side-bar if browser is narrow (unless we're scrubbing)
+    if (mode !== 'clean') {
+      initializeAutoCollapse();
+    }
     // close the window if the document is deleted
     storageChange.addEventListener('delete', (evt) => {
       if (evt.detail.key === key) {

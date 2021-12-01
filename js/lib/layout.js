@@ -21,7 +21,7 @@ let filterMode = 'automatic';
 export async function loadDocument(key) {
   currentDocument = await loadObject(key);
   currentDocumentKey = key;
-  const { title, content, lang } = currentDocument;
+  const { title, content, lang, raw } = currentDocument;
   // set the source language
   setSourceLanguage(lang);
   // use rtl layout for Arabic and Hebrew
@@ -45,6 +45,7 @@ export async function loadDocument(key) {
     }
   });
   //console.log(currentDocument);
+  return !raw;
 }
 
 export async function saveDocument() {

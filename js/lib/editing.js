@@ -621,7 +621,7 @@ export function setEditMode(mode) {
     cleaned = false;
   } else {
     if (cleaned) {
-      autosave();
+      autosave(100);
     }
   }
   editMode = mode;

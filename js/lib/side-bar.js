@@ -4,6 +4,10 @@ import { getPossibleSettings, getPaperProperties, applyStyles, getSettings, save
 import { adjustLayout } from './layout.js';
 import { modeChange, setEditMode, getEditMode } from './editing.js';
 
+let collapsed = undefined;
+let reopenedManually = false;
+let sideBarWidth = undefined;
+
 export function createArticleNavigation() {
   const settings = getSettings();
   const possible = getPossibleSettings();
@@ -107,6 +111,8 @@ export function createArticleNavigation() {
 
   // add ripple effect to buttons
   attachRippleEffectHandlers();
+  // add handler for collapse button
+  addCollapseButtonHandlers();
 }
 
 function addSection(container, label, control, last = false) {
@@ -172,6 +178,56 @@ function changeSettings(callback) {
   applyStyles();
   adjustLayout({ updatePaper: true });
   saveSettings();
+}
+
+export function initializeAutoCollapse() {
+  // the button won't have an offsetParent if it's not displayed
+  const button = document.getElementById('side-bar-button');
+  if (!collapsed && !reopenedManually && button.offsetParent) {
+    collapseSideBar();
+  } else if (collapsed && !button.offsetParent) {
+    reopenSideBar();
+    reopenedManually = false;
+  }
+}
+
+function addCollapseButtonHandlers() {
+  const button = document.getElementById('side-bar-button');
+  button.addEventListener('click', handleCollapseButtonClick);
+  window.addEventListener('resize', initializeAutoCollapse);
+}
+
+async function collapseSideBar() {
+  const container = document.getElementById('side-bar-container');
+  const button = document.getElementById('side-bar-button');
+  if (sideBarWidth === undefined) {
+    sideBarWidth = container.offsetWidth;
+    container.style.width = sideBarWidth + 'px';
+    await new Promise(resolve => setTimeout(resolve, 0));
+  }
+  container.style.width = 0;
+  if (collapsed === undefined) {
+    button.classList.add('initial');
+  }
+  button.classList.add('reverse');
+  collapsed = true;
+}
+
+function reopenSideBar() {
+  const container = document.getElementById('side-bar-container');
+  const button = document.getElementById('side-bar-button');
+  container.style.width = sideBarWidth + 'px';
+  button.classList.remove('reverse', 'initial');
+  collapsed = false;
+}
+
+function handleCollapseButtonClick() {
+  if (collapsed) {
+    reopenSideBar();
+    reopenedManually = true;
+  } else {
+    collapseSideBar();
+  }
 }
 
 function handleSettingChange(evt) {

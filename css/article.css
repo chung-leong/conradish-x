@@ -9,11 +9,14 @@ BODY {
   right: 0;
   top: 0;
   bottom: 0;
+  font-family: Roboto, Segoe UI, Tahoma, sans-serif;
+  font-size: 13px;
   position: absolute;
   user-select: none;
 }
 
 #article-container {
+  position: relative;
   flex-grow: 1;
   flex-shrink: 1;
   flex-basis: auto;
@@ -148,7 +151,7 @@ BODY.ready #article {
 }
 
 #article-menu UL {
-  font-size: 1.5em;
+  font-size: 1.4em;
   list-style-type: none;
   padding: 0;
   margin: 0;
@@ -261,8 +264,12 @@ BODY.ready #status-container {
 }
 
 @media print {
-  #side-bar {
+  #side-bar-container {
     /* hide navigation */
+    display: none;
+  }
+
+  #side-bar-button {
     display: none;
   }
 

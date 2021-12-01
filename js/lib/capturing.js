@@ -42,7 +42,7 @@ export async function captureSelection(selection) {
   const image = getImage();
   const lang = await getLanguage(range);
   const content = captureRangeContent(range);
-  const doc = { url, title, image, lang, content };
+  const doc = { url, title, image, lang, content, raw: true };
   return doc;
 }
 
