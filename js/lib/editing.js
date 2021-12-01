@@ -144,10 +144,6 @@ function getSelectionRange() {
   }
 }
 
-function toggle(element, shown) {
-  element.style.display = (shown) ? 'block' : 'none';
-}
-
 function isMultiparagraph(range) {
   let count = 0;
   transverseRange(range, (node, startIndex, endIndex, endTag) => {
@@ -600,6 +596,10 @@ function hideArticleMenu() {
   } else {
     clear();
   }
+}
+
+function toggle(element, shown) {
+  element.classList.toggle('hidden', !shown);
 }
 
 function checkArticleSelection() {

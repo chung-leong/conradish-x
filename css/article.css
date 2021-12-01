@@ -142,12 +142,15 @@ BODY.ready #article {
 
 #article-menu {
   position: absolute;
-  display: none;
   background-color: #eeeeee;
   border-radius: 4px;
   box-shadow: 1px 1px 5px black;
   padding: 2px 2px 2px 2px;
   white-space: nowrap;
+}
+
+#article-menu.hidden {
+  display: none;
 }
 
 #article-menu UL {
@@ -160,6 +163,10 @@ BODY.ready #article {
 #article-menu UL LI {
   padding: 0.2em 0.4em 0.2em 0.4em;
   cursor: pointer;
+}
+
+#article-menu UL LI.hidden {
+  display: none;
 }
 
 #article-menu UL LI:hover {
@@ -291,12 +298,12 @@ BODY.ready #status-container {
 }
 
 @media print {
-  #side-bar-container {
-    /* hide navigation */
-    display: none;
-  }
-
-  #side-bar-button {
+  #side-bar-container,
+  #side-bar-button-container,
+  #article-menu,
+  #status-container,
+  #top-drawer {
+    /* hide UI elements */
     display: none;
   }
 
