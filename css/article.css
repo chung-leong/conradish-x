@@ -105,7 +105,7 @@ BODY.ready #article {
 }
 
 #article.filter-manual #article-text .likely-junk {
-  background-color: rgb(255, 102, 102);
+  background-color: rgba(255, 102, 102, 0.9);
 }
 
 #article.filter-manual #article-text .possibly-junk {

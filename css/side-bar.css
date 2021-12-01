@@ -67,13 +67,17 @@
   display: inline;
 }
 
+#side-bar-button-container {
+  position: relative;
+}
+
 #side-bar-button {
   position: absolute;
   display: flex;
   align-items: center;
   top: 50px;
   bottom: 50px;
-  right: 0px;
+  left: -55px;
 }
 
 #side-bar-button .left-arrow {
