@@ -20,7 +20,7 @@ BODY {
   flex-grow: 1;
   flex-shrink: 1;
   flex-basis: auto;
-  flex-direction: row;
+  /* using text-align to center #article since we want its left margin to be respected */
   text-align: center;
   background-color: darkgray;
   height: 100%;
@@ -307,6 +307,10 @@ BODY.ready #status-container {
   }
 
   #article {
+    /* inline-block is only used in screen-display for proper scroll-bar behavior
+       it causes extra space at the top when printing for some reason */
+    display: block;
+    width: fit-content;
     /* remove margin around article */
     margin: 0;
   }
