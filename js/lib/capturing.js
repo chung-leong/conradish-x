@@ -326,8 +326,11 @@ export function captureRangeContent(range) {
     let parentObject, tag;
     switch (style.display) {
       case 'inline':
-        parentObject = getObject(parentNode);
-        if (tagName === 'BR') {
+        if (tagName === 'H1' || tagName === 'H2') {
+          // sometimes designers might make heading tag inline
+          parentObject = getRootObject(parentNode);
+          tag = 'H2';
+        } else if (tagName === 'BR') {
           if (!isInsideCell(node) && isConsecutativeBreaks(node)) {
             // just force subsequent contents to go into a new paragraph
             if (parentNode !== rootNode) {
@@ -335,9 +338,11 @@ export function captureRangeContent(range) {
               return;
             }
           }
+          parentObject = getObject(parentNode);
           tag = 'BR';
         } else {
           // all other inline elements become span
+          parentObject = getObject(parentNode);
           tag = 'SPAN';
         }
         break;
@@ -670,7 +675,6 @@ function rateContentBySimiliarity(root, objectStyles, objectRects) {
   const calculatePositionScore = (rect1, rect2, direction) => {
     const leftDiff = Math.abs(rect1.left - rect2.left);
     const rightDiff = Math.abs(rect1.right - rect2.right);
-    console.log(direction);
     if (direction === 'rtl') {
       return rightDiff + (leftDiff / 5);
     } else {
