@@ -38,16 +38,15 @@ LI.disabled:hover {
 }
 
 LI.create {
-  background-image: url('../img/conradish48.png');
+  background-image: url('../img/conradish.svg');
 }
 
 LI.document {
-  background-image: url('../img/document48.png');
-  background-position-x: 15px;
+  background-image: url('../img/document.svg');
 }
 
 LI.folder {
-  background-image: url('../img/folder48.png');
+  background-image: url('../img/folder.svg');
 }
 
 LI.separator {
