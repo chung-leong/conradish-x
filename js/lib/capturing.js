@@ -331,7 +331,7 @@ export function captureRangeContent(range) {
         if (tagName === 'H1' || tagName === 'H2') {
           // sometimes designers might make heading tag inline
           parentObject = getRootObject(parentNode);
-          tag = 'H2';
+          tag = tagName;
         } else if (tagName === 'BR') {
           if (!isInsideCell(node) && isConsecutativeBreaks(node)) {
             // just force subsequent contents to go into a new paragraph
@@ -359,11 +359,7 @@ export function captureRangeContent(range) {
           parentObject = getRootObject(parentNode);
         }
         switch (tagName) {
-          case 'H1':
-            // H1 is generally too large for printing
-            tag = 'H2';
-            break;
-          case 'H2': case 'H3': case 'H4': case 'H5': case 'H6':
+          case 'H1': case 'H2': case 'H3': case 'H4': case 'H5': case 'H6':
           case 'UL': case 'OL':
           case 'BLOCKQUOTE':
           case 'HR':
@@ -556,6 +552,8 @@ export function captureRangeContent(range) {
   rateContentByLinks(root, objectLinks);
   // add junk rating based on positions and colors
   rateContentBySimiliarity(root, objectStyles, objectRects);
+  // H1 is generally too large for printing--shrink them down
+  shrinkHeadings(root);
   return root.content;
 }
 
@@ -714,29 +712,45 @@ function rateContentBySimiliarity(root, objectStyles, objectRects) {
     const diffA = Math.abs(a1 - a2) * 255;
     return diffR + diffG + diffB + diffA;
   };
+  const calculateNormalizer = (object) => {
+    const charCount = objectCounts.get(object);
+    switch(object.tag) {
+      case 'TABLE':
+        return charCount * 0.5;
+      case 'H1':
+        return charCount * 4;
+      case 'H2':
+        return charCount * 2;
+      case 'H3':
+        return charCount * 1.5;
+      default:
+        return charCount;
+    }
+  };
   // remove paragraphs that are way off
   for (const object of root.content) {
     if (object instanceof Object) {
       const rect = objectRects.get(object);
       const style = objectStyles.get(object);
-      const charCount = objectCounts.get(object);
       const color = style.color;
       // calculate the "junk" scores
       const scoreColor = calculateColorScore(color, maxColor);
       const scorePos = calculatePositionScore(rect, maxRect, style.direction);
-      const isHeading = /^H[123]$/.test(object.tag);
+      const normalizer = calculateNormalizer(object);
+      // normalize the score against a factor that sort of represents the amount of content
+      const scoreColorNorm = scoreColor / normalizer;
+      const scorePosNorm = scorePos / normalizer;
       // greater tolerance for heading
-      const limitPos = (isHeading) ? 20 : 10;
-      const limitColor = (isHeading) ? 40 : 20;
+      const limitPos = 10, limitColor = 20;
       let junkFactor = 0;
-      if (scoreColor / charCount > limitColor || scorePos / charCount > limitPos) {
+      if (scoreColorNorm > limitColor || scorePosNorm > limitPos) {
         // probably junk
         junkFactor = 1;
-      } else if (scoreColor > (limitColor * 5) || scorePos > (limitPos * 5)) {
+      } else if (scoreColorNorm > limitColor * 0.25 || scorePosNorm > limitPos * 0.25) {
         // might be junk
         junkFactor = 0.5;
       }
-      //object.score = { charCount, color: scoreColor, position: scorePos };
+      //object.score = { normalizer, color: scoreColor, position: scorePos };
       if (junkFactor > 0 && !(object.junk > junkFactor)) {
         object.junk = junkFactor;
       }
@@ -947,6 +961,21 @@ export function removeEmptyNodes(root) {
     return item;
   };
   clean(root);
+}
+
+function shrinkHeadings(root) {
+  if (!(root.content instanceof Array)) {
+    return;
+  }
+  const headings1 = getChildrenByTag(root, 'H1');
+  if (headings1.length > 0) {
+    for (const object of root.content) {
+      const m = /^H([12345])$/.exec(object.tag);
+      if (m) {
+        object.tag = `H${parseInt(m[1]) + 1}`;
+      }
+    }
+  }
 }
 
 function getTitle() {
