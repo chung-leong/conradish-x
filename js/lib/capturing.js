@@ -101,7 +101,6 @@ export function captureRangeContent(range) {
     }
   }
   const root = { tag: 'DIV', content: undefined };
-  const outsideRoot = { tag: '#INVALID' };
   const nodeObjects = new WeakMap([ [ rootNode, root ] ]);
   const objectParents = new WeakMap;
   const objectStyles = new WeakMap([ [ root, getNodeStyle(rootNode) ] ]);
@@ -164,10 +163,13 @@ export function captureRangeContent(range) {
     }
     return false;
   }
+  const isUsingDisplay = (node, modes) => {
+    const { display } = getNodeStyle(node);
+    return modes.includes(display);
+  };
   const isInsideCell = (node) => {
     for (let n = node.parentNode; n && n !== rootNode; n = n.parentNode) {
-      const { display } = getNodeStyle(n.parentNode);
-      if (display === 'table-cell' || display === 'list-item') {
+      if (isUsingDisplay(n, [ 'table-cell', 'list-item' ])) {
         return true;
       }
     }
@@ -261,6 +263,14 @@ export function captureRangeContent(range) {
     }
     return false;
   };
+  const isRealTable = (node) => {
+    for (const child of node.children) {
+      if (isUsingDisplay(child, [ 'table-row-group', 'table-header-group', 'table-footer-group' ])) {
+        return true;
+      }
+    }
+    return false;
+  };
   const getObject = (node) => {
     // see if there's an object for this node already
     let object = nodeObjects.get(node);
@@ -268,14 +278,9 @@ export function captureRangeContent(range) {
       return object;
     }
     // create it
-    object = createObject(node);
-    if (object && object !== outsideRoot) {
-      nodeObjects.set(node, object);
-      return object;
-    } else {
-      nodeObjects.set(node, null);
-      return null;
-    }
+    object = createObject(node) || null;
+    nodeObjects.set(node, object);
+    return object;
   };
   const getRootObject = (node) => {
     // if we're going to put stuff into the root instead, we need to make
@@ -302,9 +307,6 @@ export function captureRangeContent(range) {
   };
   const createObject = (node) => {
     const { parentNode, tagName } = node;
-    if (!rootNode.contains(node)) {
-      return outsideRoot;
-    }
     if (isHidden(node)) {
       return;
     }
@@ -372,107 +374,121 @@ export function captureRangeContent(range) {
         }
         break;
       case 'list-item':
-        parentObject = getObject(parentNode);
-        tag = 'LI';
-        // make sure is a list
-        if (parentObject.tag !== 'OL' && parentObject.tag !== 'UL') {
-          parentObject.tag = (style.listStyleType === 'decimal') ? 'OL' : 'UL';
+        if (!rootNode.contains(parentNode)) {
+          // capturing just the contents of a list item
+          parentObject = getRootObject(parentNode);
+          tag = 'P';
+        } else {
+          parentObject = getObject(parentNode);
+          tag = 'LI';
+          // make sure parent is a list
+          if (parentObject && parentObject.tag !== 'OL' && parentObject.tag !== 'UL') {
+            parentObject.tag = (style.listStyleType === 'decimal') ? 'OL' : 'UL';
+          }
         }
         break;
       case 'table':
-        parentObject = getRootObject(parentNode);
-        tag = 'TABLE';
+        if (!isRealTable(node)) {
+          // display: table is being used for layout reason
+          parentObject = getRootObject(parentNode);
+          tag = 'P';
+        } else {
+          parentObject = getRootObject(parentNode);
+          tag = 'TABLE';
+        }
         break;
       case 'table-row-group':
-        parentObject = getObject(parentNode);
-        tag = 'TBODY';
+        if (isUsingDisplay(parentNode, [ 'table' ])) {
+          parentObject = getObject(parentNode);
+          tag = 'TBODY';
+        }
         break;
       case 'table-header-group':
-        parentObject = getObject(parentNode);
-        tag = 'THEAD';
+        if (isUsingDisplay(parentNode, [ 'table' ])) {
+          parentObject = getObject(parentNode);
+          tag = 'THEAD';
+        }
         break;
       case 'table-footer-group':
-        parentObject = getObject(parentNode);
-        tag = 'TFOOT';
+        if (isUsingDisplay(parentNode, [ 'table' ])) {
+          parentObject = getObject(parentNode);
+          tag = 'TFOOT';
+        }
         break;
       case 'table-row':
-        parentObject = getObject(parentNode);
-        tag = 'TR';
+        if (isUsingDisplay(parentNode, [ 'table-row-group', 'table-header-group', 'table-footer-group' ])) {
+          parentObject = getObject(parentNode);
+          tag = 'TR';
+        }
         break;
       case 'table-cell':
-        parentObject = getObject(parentNode);
-        tag = (style.fontWeight > 400) ? 'TH' : 'TD';
-        break;
-      case 'table-column-group':
-        parentObject = getObject(parentNode);
-        tag = 'COLGROUP';
-        break;
-      case 'table-column':
-        parentObject = getObject(parentNode);
-        tag = 'COL';
+        if (!rootNode.contains(parentNode) || !isUsingDisplay(parentNode, [ 'table-row' ])) {
+          // display: table-cell is being used for layout reason
+          // or we're capturing the content of a single cell
+          parentObject = getRootObject(parentNode);
+          tag = 'P';
+        } else {
+          parentObject = getObject(parentNode);
+          tag = (style.fontWeight > 400) ? 'TH' : 'TD';
+        }
         break;
       case 'table-caption':
-        parentObject = getObject(parentNode);
-        tag = 'CAPTION';
+        if (isUsingDisplay(parentNode, [ 'table' ])) {
+          parentObject = getObject(parentNode);
+          tag = 'CAPTION';
+        }
         break;
     }
-    if (parentObject === outsideRoot) {
-      // deal with situation where a table or a list is used for layout purpose
-      if (tag === 'TD' || tag === 'LI') {
-        parentObject = rootNode;
-        tag = 'P';
-      }
-      return outsideRoot;
+    if (!parentObject || !tag) {
+      return;
     }
-    if (parentObject && tag) {
-      const object = { tag, content: undefined };
-      const newStyle = {};
-      const parentStyle = getTextStyle(parentObject);
-      const defaultStyle = getDefaultStyle(object);
-      // don't copy styling info meant for hyperlinks
-      if (!isStylingLink(node)) {
-        for (const name of styleNames) {
-          const parentValue = parentStyle[name];
-          const defaultValue = defaultStyle[name];
-          let value = style[name];
-          if (name === 'fontWeight') {
-            // stick with standard values
-            value = (value >= 600) ? '700' : '400';
-          }
-          if (value !== parentValue && value !== defaultValue) {
-            if (name === 'verticalAlign') {
-              if (value === 'super' || value === 'sub') {
-                // set the font size as well
-                newStyle.fontSize = 'smaller';
-              } else {
-                // skip it
-                continue;
-              }
+    const object = { tag, content: undefined };
+    const newStyle = {};
+    const parentStyle = getTextStyle(parentObject);
+    const defaultStyle = getDefaultStyle(object);
+    // don't copy styling info meant for hyperlinks
+    if (!isStylingLink(node)) {
+      for (const name of styleNames) {
+        const parentValue = parentStyle[name];
+        const defaultValue = defaultStyle[name];
+        let value = style[name];
+        if (name === 'fontWeight') {
+          // stick with standard values
+          value = (value >= 600) ? '700' : '400';
+        }
+        if (value !== parentValue && value !== defaultValue) {
+          if (name === 'verticalAlign') {
+            if (value === 'super' || value === 'sub') {
+              // set the font size as well
+              newStyle.fontSize = 'smaller';
+            } else {
+              // skip it
+              continue;
             }
-            newStyle[name] = value;
           }
+          newStyle[name] = value;
         }
       }
-      if (Object.entries(newStyle).length > 0) {
-        object.style = newStyle;
-      }
-      insertContent(parentObject, object);
-      objectParents.set(object, parentObject);
-      // remember the object's position and style, which will be used for the
-      // purpose of detecting junk content
-      objectRects.set(object, rect);
-      objectStyles.set(object, style);
-      if (tagName === 'A') {
-        // let associate the parent with the link
-        for (let obj = parentObject; obj; obj = objectParents.get(obj)) {
-          if (obj.tag !== 'SPAN') {
-            objectLinks.set(obj, node);
-            break;
-          }
-        }
-      }
-      return object;
     }
+    if (Object.entries(newStyle).length > 0) {
+      object.style = newStyle;
+    }
+    insertContent(parentObject, object);
+    objectParents.set(object, parentObject);
+    // remember the object's position and style, which will be used for the
+    // purpose of detecting junk content
+    objectRects.set(object, rect);
+    objectStyles.set(object, style);
+    if (tagName === 'A') {
+      // associate the parent with the link
+      for (let obj = parentObject; obj; obj = objectParents.get(obj)) {
+        if (obj.tag !== 'SPAN') {
+          objectLinks.set(obj, node);
+          break;
+        }
+      }
+    }
+    return object;
   };
   const privateCharacters = /\p{Private_Use}/ug;
   const parseCSSContent = (content) => {
