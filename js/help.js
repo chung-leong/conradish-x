@@ -28,11 +28,6 @@ async function loadUserGuide() {
   const html = await res.text();
   const div = e('DIV', { className: 'user-guide'});
   div.innerHTML = html;
-  // fix paths of images
-  const basePath = path.substr(0, path.lastIndexOf('/') + 1);
-  for (const imgElement of div.getElementsByTagName('IMG')) {
-    imgElement.src = `${basePath}/${imgElement.getAttribute('src')}`;
-  }
   // add anchors to headings
   const headingElements = div.querySelectorAll('H1, H2, H3, H4, H5, H6');
   for (const headingElement of headingElements) {

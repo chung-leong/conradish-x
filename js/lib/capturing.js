@@ -538,6 +538,83 @@ export function captureRangeContent(range) {
       }
     }
   });
+  const semanticTags = [ 'P', 'BLOCKQUOTE', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'UL', 'OL', 'LI', 'TD' ];
+  const findSemanticParent = (node) => {
+    for (const n = node.parentNode; n && n !== rootNode; n = node.parentNode) {
+      if (semanticTags.includes(n.tagName)) {
+        return n;
+      }
+    }
+  };
+  const findSemanticParentByStyle = (node) => {
+    for (const n = node.parentNode; n && n !== rootNode; n = node.parentNode) {
+      const { display } = getNodeStyle(n);
+      switch (display) {
+
+      }
+    }
+  };
+  const createObject = (node) => {
+    const { parentNode, tagName } = node;
+    if (isHidden(node)) {
+      return;
+    }
+    const rect = getRect(node);
+    if (rect.width === 0 || rect.height === 0) {
+      if (!canBeEmpty(tagName)) {
+        return;
+      }
+    }
+    // remove <button>, <figcaption>, and such
+    if (isDisallowedTag(node)) {
+      return;
+    }
+    // remove sup tags that are links
+    if (isSuperscriptLink(node)) {
+      return;
+    }
+    const style = getNodeStyle(node);
+  };
+  const addText = (node, startOffset, endOffset) => {
+    const parentObject = getObject(node.parentNode);
+    if (parentObject) {
+      insertContent()
+    }
+  };
+  const addPseudoElement = (node, id)  => {
+    if (!isHidden(node, id)) {
+      const style = getComputedStyle(node, id);
+      const { display, position, content } = style;
+      if (display !== 'none' && position === 'inline') {
+        const text = parseCSSContent(content);
+        if (text) {
+          const object = { tag: 'SPAN', content: text };
+          objectStyles.set(object, style);
+          const parentObject = getObject(node);
+          if (parentObject.tag === 'LI' && id === '::before') {
+            return;
+          }
+          insertContent(parentObject, object);
+        }
+      }
+    }
+  };
+  transverseRange(range, (node, startOffset, endOffset, endTag) => {
+    const { nodeType } = node;
+    if (nodeType === Node.TEXT_NODE) {
+      addText(node, startOffset, endOffset);
+    } else if (nodeType === Node.ELEMENT_NODE) {
+      if (!endTag) {
+        addPseudoElement(node, '::before');
+        if (canBeEmpty(node.tagName)) {
+          // create these tags even when they don't contain any text
+          getObject(node);
+        }
+      } else {
+        addPseudoElement(node, '::after');
+      }
+    }
+  });
   // apply white-space rules
   collapseWhitespaces(root, objectStyles);
   // add spaces when spans are separated by margin
