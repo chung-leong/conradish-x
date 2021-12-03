@@ -1,4 +1,12 @@
 {
+  "user_guide": {
+    "message": "User Guide",
+    "description": "Title of help page"
+  },
+  "user_guide_path": {
+    "message": "_locales/en/user-guide.html",
+    "description": "Path to user guide HTML file"
+  },
   "create_print_version": {
     "message": "Create print version",
     "description": "Label for menu item in browser context menu and extension pop-up menu"

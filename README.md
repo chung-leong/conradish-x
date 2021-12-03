@@ -33,15 +33,15 @@ Conradish is a Chrome extension that lets you create print version of news artic
 
 To create a print version of the article you're viewing, first select the portion that you wish to print. Then right click (or press the menu key on your keyboard) and choose **Create print version**:
 
-![Context menu](doc/img/capture-1.jpg)
+![Context menu](_locales/en/img/capture-1.jpg)
 
 You can trigger the same action in the extension's menu, if you elect to not add an extra item to the browser's context menu:
 
-![Pop-up menu](doc/img/capture-2.jpg)
+![Pop-up menu](_locales/en/img/capture-2.jpg)
 
 The print version will open up in a new browser tab:
 
-![Print version](doc/img/document-1.jpg)
+![Print version](_locales/en/img/document-1.jpg)
 
 ## Annotating article
 
@@ -49,15 +49,15 @@ The print version will open up in a new browser tab:
 
 Select the term for which the definition is desired. A pop-up menu will appear underneath. Choose "Add definition":
 
-![Annotation menu](doc/img/annotate-1.jpg)
+![Annotation menu](_locales/en/img/annotate-1.jpg)
 
 If the **To** language specified in the side-bar differs from the **From** language, Conradish will look up the definition at Google Translate and insert it automatically as a footnote:
 
-![Footnote](doc/img/footnote-1.jpg)
+![Footnote](_locales/en/img/footnote-1.jpg)
 
 If the **To** language matches the **From** language or if "None" is selected, then you'll need to enter the definition yourself.
 
-![Footnote](doc/img/footnote-2.jpg)
+![Footnote](_locales/en/img/footnote-2.jpg)
 
 You can undo the result by pressing **Ctrl-Z** on your keyboard.
 
@@ -65,11 +65,11 @@ You can undo the result by pressing **Ctrl-Z** on your keyboard.
 
 Select the sentence you wish translated. A pop-up menu will appear underneath. Choose **Add translation**:
 
-![Annotation menu](doc/img/annotate-2.jpg)
+![Annotation menu](_locales/en/img/annotate-2.jpg)
 
 The translated sentence will then appear in the page's footer:
 
-![Footnote](doc/img/footnote-3.jpg)
+![Footnote](_locales/en/img/footnote-3.jpg)
 
 **Add translation** function only differs from **Add definition** in that the original text is omitted from the footnote.
 
@@ -79,11 +79,11 @@ The translated sentence will then appear in the page's footer:
 
 To remove a footnote, simply delete the associated footnote number:
 
-![Footnote number](doc/img/footnote-number-1.jpg)
+![Footnote number](_locales/en/img/footnote-number-1.jpg)
 
 Or delete the footnote entry:
 
-![Footnote](doc/img/footnote-4.jpg)
+![Footnote](_locales/en/img/footnote-4.jpg)
 
 ### Applying text style
 
@@ -112,11 +112,11 @@ By default, Conradish will automatically filter out contents it deems irrelevant
 
 Initial view:
 
-![Initial view](doc/img/filter-1.jpg)
+![Initial view](_locales/en/img/filter-1.jpg)
 
 With hidden contents shown:
 
-![Complete view](doc/img/filter-2.jpg)
+![Complete view](_locales/en/img/filter-2.jpg)
 
 Filtered contents will appear in red. Contents that Conradish deemed questionable will pulsate in yellow. Click on a section to restore or hide it. When you're done, press **Ctrl-Shift-H** again.
 
@@ -126,17 +126,17 @@ This feature is available even when **Filter page content** is disabled in the o
 
 To print, click the **Print** button. Chrome's print window will appear. Double-check that **Paper size** matches what is set in Conradish and that **Margins** is set to "Default". The document will not print correctly if either one of these is off.
 
-![Print window](doc/img/print-1.jpg)
+![Print window](_locales/en/img/print-1.jpg)
 
 ## Finding documents
 
 To find a document you had created earlier, activate the extension's pop-up menu and choose **Show all documents**:
 
-![Pop-up menu](doc/img/pop-up-1.jpg)
+![Pop-up menu](_locales/en/img/pop-up-1.jpg)
 
 Documents are arranged by date. If you remember particular keywords, you can narrow the search by entering them into the search box.
 
-![Search results](doc/img/search-1.jpg)
+![Search results](_locales/en/img/search-1.jpg)
 
 Note that older documents would get automatically deleted if you hadn't granted unlimited storage to the extension.
 

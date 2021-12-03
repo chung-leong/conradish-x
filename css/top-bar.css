@@ -1,0 +1,274 @@
+* {
+  box-sizing: border-box;
+}
+
+BODY {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  height: 100vh;
+  min-width: 600px;
+  overflow-y: hidden;
+  font-size: 13px;
+  font-family: Roboto, Segoe UI, Tahoma, sans-serif;
+  user-select: none;
+}
+
+#toolbar-container {
+  position: relative;
+  flex-shrink: 0;
+  flex-grow: 0;
+  flex-basis: 54px;
+}
+
+#toolbar-container.shadow {
+  box-shadow: rgba(60, 64, 67, 0.5) 0 3px 8px 1px;
+}
+
+.toolbar {
+  display: flex;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 100ms linear;
+}
+
+.toolbar.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.toolbar-left, .toolbar-right {
+  flex-grow: 1;
+  flex-shrink: 0;
+  flex-basis: 100px;
+  padding: 18px 24px 10px 24px;
+  font-size: 16px;
+  letter-spacing: 0.25px;
+  font-weight: 400;
+}
+
+.toolbar-center {
+  flex-grow: 0;
+  flex-shrink: 1;
+  flex-basis: 960px;
+  padding: 10px 10px 10px 10px;
+  text-align: center;
+}
+
+#toolbar-search {
+  color: rgb(255, 255, 255);
+  background-color: rgb(51, 103, 214);
+}
+
+#search-input {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  max-width: 680px;
+}
+
+#search-input INPUT[type="text"] {
+  display: block;
+  color: rgb(255, 255, 255);
+  width: 100%;
+  line-height: 24.05px;
+  border: 0;
+  border-radius: 0;
+  background-color: rgba(0, 0, 0, 0.22);
+  padding: 7px 5px 5px 48px;
+  outline: none;
+}
+
+#search-input INPUT[type="text"]::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+#search-input .magnifying-glass {
+  position: absolute;
+  left: 10px;
+  top: 8px;
+  width: 20px;
+  height: 20px;
+  background-image: url('../img/magnifying_glass.svg');
+  background-repeat: no-repeat;
+  background-size: 20px;
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+#search-input .magnifying-glass:hover {
+  opacity: 1;
+}
+
+#search-input.focus .magnifying-glass {
+  opacity: 1;
+}
+
+#search-input .x-button {
+  display: none;
+  position: absolute;
+  color: rgb(55, 55, 55);
+  background-color: rgb(255, 255, 255);
+  font-size: 20px;
+  right: 9px;
+  top: 9px;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  line-height: 18px;
+}
+
+#search-input.active .x-button {
+  display: block;
+}
+
+#toolbar-commands {
+  background-color: rgb(255, 255, 255);
+  border-bottom: 1px solid rgb(219, 219, 219) ;
+}
+
+#toolbar-commands .toolbar-center {
+  display: flex;
+}
+
+#toolbar-commands-left {
+  flex-grow: 1;
+  flex-shrink: 1;
+  text-align: left;
+}
+
+#toolbar-commands-left SPAN {
+  vertical-align: middle;
+}
+
+#selection-status {
+  margin-left: 18px;
+}
+
+#toolbar-commands-right  {
+  flex-grow: 1;
+  flex-shrink: 1;
+  text-align: right;
+}
+
+#toolbar-commands-right BUTTON {
+  margin-left: 10px;
+}
+
+#main-container {
+  display: flex;
+  flex-shrink: 0;
+  flex-grow: 1;
+  flex-basis: 0;
+  background-color: rgb(248, 249, 250);
+  overflow-y: auto;
+}
+
+#right-side-bar, #left-side-bar {
+  flex-grow: 1;
+  flex-shrink: 0;
+  flex-basis: 100px;
+  position: sticky;
+  top: 0;
+}
+
+#list-container {
+  flex-grow: 0;
+  flex-shrink: 1;
+  flex-basis: 960px;
+  padding: 10px 10px 0px 10px;
+  /* need to set min width so the list item can use text-overflow */
+  min-width: 0;
+}
+
+#list-end-spacer {
+  height: 2px;
+}
+
+.card {
+  background-color: rgb(255, 255, 255);
+  border-radius: 3px;
+  box-shadow: rgba(60, 64, 67, 0.3) -1px 1px 2px 0px, rgba(60, 64, 67, 0.3) 1px 1px 2px 0px;
+  margin-top: 16px;
+  margin-bottom: 24px;
+  min-width: 0;
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: 400;
+  padding: 24px 24px 20px 24px;
+  border-bottom: 1px solid rgb(219, 219, 219) ;
+}
+
+.card-list {
+  list-style-type: none;
+  padding: 0px 12px 2px 24px;
+  min-width: 0;
+}
+
+.card-list > LI {
+  position: relative;
+  display: flex;
+  margin: 16px 0 16px 0;
+  align-items: center;
+  min-width: 0;
+}
+
+.checkbox {
+  flex-shrink: 0;
+  flex-grow: 0;
+}
+
+.kebab {
+  width: 36px;
+  height: 36px;
+  margin: -8px -8px -8px -8px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 20px;
+  background-image: url('../img/three-dots.svg');
+  cursor: pointer;
+}
+
+.kebab:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+}
+
+#kebab-menu {
+  position: absolute;
+  display: block;
+  background-color: rgb(255, 255, 255);
+  border-radius: 2px;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+  padding: 10px 0 10px 0;
+  white-space: nowrap;
+  z-index: 100;
+}
+
+#kebab-menu UL {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+#kebab-menu UL LI {
+  padding: 8px 20px 8px 20px;
+  cursor: pointer;
+}
+
+#kebab-menu UL LI:hover {
+  background-color: rgb(189, 193, 198);
+}
+
+#kebab-menu A:link,
+#kebab-menu A:visited {
+  color: inherit;
+  text-decoration: none;
+}
