@@ -272,6 +272,23 @@ BODY.ready #article {
   align-items: center;
 }
 
+#help-button {
+  position: sticky;
+  top: calc(100% - 32px - 8px);
+  left: 8px;
+  width: 32px;
+  height: 32px;
+  background-image: url('../img/question.svg');
+  background-repeat: no-repeat;
+  background-size: 32px;
+  opacity: 0.25;
+  cursor: pointer;
+}
+
+#help-button:hover {
+  opacity: 1;
+}
+
 .loader {
   opacity: 0;
   transition: opacity 0.5s ease-in;

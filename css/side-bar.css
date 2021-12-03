@@ -76,8 +76,7 @@
   position: absolute;
   display: flex;
   align-items: center;
-  top: 50px;
-  bottom: 50px;
+  top: calc(50% - 40px / 2);
   left: -55px;
 }
 

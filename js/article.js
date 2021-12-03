@@ -2,7 +2,8 @@ import { initializeStorage, storageChange, getSettings } from './lib/storage.js'
 import { loadDocument, setFilterMode } from './lib/layout.js';
 import { setEditMode, createMenuItems, attachEditingHandlers } from './lib/editing.js';
 import { createArticleNavigation, initializeAutoCollapse } from './lib/side-bar.js';
-import { setWindowName } from './lib/navigation.js';
+import { setWindowName, openPage } from './lib/navigation.js';
+import { l } from './lib/i18n.js';
 
 async function start() {
   const setStatus = (status) => document.body.className = status;
@@ -24,6 +25,7 @@ async function start() {
     createArticleNavigation();
     // attach handlers to elements for editing contents
     attachEditingHandlers();
+    attachHelpButtonHandler();
     setStatus('ready');
     // collapse the side-bar if browser is narrow (unless we're scrubbing)
     if (mode !== 'clean') {
@@ -43,4 +45,10 @@ async function start() {
   }
 }
 
-addEventListener('load', start);
+function attachHelpButtonHandler() {
+  const buttonElement = document.getElementById('help-button');
+  buttonElement.addEventListener('click', evt => openPage('help'));
+  buttonElement.title = l('user_guide');
+}
+
+start();
