@@ -15,6 +15,16 @@ BODY {
   user-select: none;
 }
 
+#background {
+  /* background is in its own div so text copied to clipboard don't pick up a background color */
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgb(169, 169, 169);
+}
+
 #article-container {
   position: relative;
   flex-grow: 1;
@@ -22,7 +32,6 @@ BODY {
   flex-basis: auto;
   /* using text-align to center #article since we want its left margin to be respected */
   text-align: center;
-  background-color: darkgray;
   height: 100%;
   overflow: auto;
 }
@@ -273,7 +282,7 @@ BODY.ready #article {
 }
 
 #help-button {
-  position: sticky;
+  position: absolute;
   top: calc(100% - 32px - 8px);
   left: 8px;
   width: 32px;
@@ -315,6 +324,7 @@ BODY.ready #status-container {
 }
 
 @media print {
+  #background,
   #side-bar-container,
   #side-bar-button-container,
   #article-menu,
