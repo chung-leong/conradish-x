@@ -102,17 +102,14 @@ export function captureRangeContent(range) {
   }
   const root = { tag: 'DIV', content: undefined };
   const nodeObjects = new WeakMap([ [ rootNode, root ] ]);
-  const objectParents = new WeakMap;
-  const objectStyles = new WeakMap([ [ root, getNodeStyle(rootNode) ] ]);
-  const objectRects = new WeakMap;
-  const objectLinks = new WeakMap;
-  const rootClientRect = rootNode.getBoundingClientRect();
+  const objectDossiers = new WeakMap([ [ root, { style: getNodeStyle(rootNode) } ] ]);
+  const docClientRect = document.documentElement.getBoundingClientRect();
   const getRect = (node) => {
     const clientRect = node.getBoundingClientRect();
-    const top = clientRect.top - rootClientRect.top;
-    const left = clientRect.left - rootClientRect.left;
-    const bottom = clientRect.bottom - rootClientRect.top;
-    const right = clientRect.right - rootClientRect.left;
+    const top = clientRect.top - docClientRect.top;
+    const left = clientRect.left - docClientRect.left;
+    const bottom = clientRect.bottom - docClientRect.top;
+    const right = clientRect.right - docClientRect.left;
     const width = right - left;
     const height = bottom - top;
     return { top, left, bottom, right, width, height };
@@ -139,6 +136,35 @@ export function captureRangeContent(range) {
     const defaultStyle = getDefaultStyle(object);
     return (object.style) ? { ...defaultStyle, ...object.style } : defaultStyle;
   };
+  const extractStyle = (style, object, parentObject) => {
+    const newStyle = {};
+    const parentStyle = getTextStyle(parentObject);
+    const defaultStyle = getDefaultStyle(object);
+    for (const name of styleNames) {
+      const parentValue = parentStyle[name];
+      const defaultValue = defaultStyle[name];
+      let value = style[name];
+      if (name === 'fontWeight') {
+        // stick with standard values
+        value = (value >= 600) ? '700' : '400';
+      }
+      if (value !== parentValue && value !== defaultValue) {
+        if (name === 'verticalAlign') {
+          if (value === 'super' || value === 'sub') {
+            // set the font size as well
+            newStyle.fontSize = 'smaller';
+          } else {
+            // skip it
+            continue;
+          }
+        }
+        newStyle[name] = value;
+      }
+    }
+    if (Object.entries(newStyle).length > 0) {
+      return newStyle;
+    }
+  };
   const isHidden = (node) => {
     if (nodeHiddenStates.get(node)) {
       return true;
@@ -151,29 +177,9 @@ export function captureRangeContent(range) {
     }
     return false;
   };
-  const isDisallowedTag = (node) => {
-    for (let n = node; n && n !== rootNode; n = n.parentNode) {
-      switch (n.tagName) {
-        // skip these
-        case 'BUTTON':
-        case 'FIGCAPTION':
-        case 'NOSCRIPT':
-          return true;
-      }
-    }
-    return false;
-  }
-  const isUsingDisplay = (node, modes) => {
-    const { display } = getNodeStyle(node);
-    return modes.includes(display);
-  };
-  const isInsideCell = (node) => {
-    for (let n = node.parentNode; n && n !== rootNode; n = n.parentNode) {
-      if (isUsingDisplay(n, [ 'table-cell', 'list-item' ])) {
-        return true;
-      }
-    }
-    return false;
+  const disallowedTags = [ 'BUTTON', 'TEXTAREA', 'INPUT', 'SELECT', 'FIGCAPTION', 'NOSCRIPT' ];
+  const isDisallowed = (node) => {
+    return disallowedTags.includes(node.tagName);
   };
   const isSuperscriptLink = (node) => {
     const { verticalAlign } = getNodeStyle(node);
@@ -264,8 +270,10 @@ export function captureRangeContent(range) {
     return false;
   };
   const isRealTable = (node) => {
+    const modes = [ 'table-row-group', 'table-header-group', 'table-footer-group' ];
     for (const child of node.children) {
-      if (isUsingDisplay(child, [ 'table-row-group', 'table-header-group', 'table-footer-group' ])) {
+      const { display } = getNodeStyle(node);
+      if (modes.includes(display)) {
         return true;
       }
     }
@@ -282,16 +290,39 @@ export function captureRangeContent(range) {
     nodeObjects.set(node, object);
     return object;
   };
-  const getRootObject = (node) => {
-    // if we're going to put stuff into the root instead, we need to make
-    // sure that things don't get placed into the parentNode's object
-    // (if there's one created earlier)
+  const getBlockObject = (object) => {
+    if (object.tag !== 'SPAN' && object.tag !== 'BR') {
+      return object;
+    } else {
+      const { parent } = objectDossiers.get(object);
+      return getBlockObject(parent);
+    }
+  };
+  const getTopLevelObject = (object) => {
+    const { parent } = objectDossiers.get(object);
+    if (parent === root) {
+      return object;
+    } else {
+      return getTopLevelObject(parent);
+    }
+  };
+  const closeObject = (node) => {
     if (node !== rootNode) {
       nodeObjects.delete(node);
     }
+  };
+  const getContainerObject = (node) => {
     for (let n = node; n; n = n.parentNode) {
-      if (n === rootNode) {
+      const object = nodeObjects.get(n);
+      if (object === root) {
+        // if we're going to put stuff into the root instead of this node, we need to make
+        // sure that things no longer get placed into the node's object if there's one created earlier
+        closeObject(node);
         return root;
+      } else if (object) {
+        if (object.tag === 'TD' || object.tag === 'LI') {
+          return object;
+        }
       }
       // make sure the node isn't hidden
       if (isHidden(node)) {
@@ -305,280 +336,143 @@ export function captureRangeContent(range) {
       }
     }
   };
-  const createObject = (node) => {
-    const { parentNode, tagName } = node;
-    if (isHidden(node)) {
-      return;
+  const topLevelTags = [ 'P', 'BLOCKQUOTE', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'UL', 'OL', 'TABLE' ];
+  const tableComponentsTags = [ 'THEAD', 'TBODY', 'TFOOTER' ];
+  const recognizedTags = [ ...topLevelTags, 'LI', 'TABLE', ...tableComponentsTags, 'TR', 'TD', 'TH' ];
+  const getNewTagName = (node) => {
+    if (node === rootNode) {
+      return '';
     }
-    const rect = getRect(node);
-    if (!canBeEmpty(tagName)) {
-      if (rect.width === 0 || rect.height === 0) {
-        return;
-      }
+    const { tagName, parentNode } = node;
+    if (recognizedTags.includes(tagName)) {
+      return tagName;
     }
-    // remove <button>, <figcaption>, and such
-    if (isDisallowedTag(node)) {
-      return;
-    }
-    // remove sup tags that are links
-    if (isSuperscriptLink(node)) {
-      return;
-    }
-    const style = getNodeStyle(node);
-    let parentObject, tag;
-    switch (style.display) {
-      case 'inline':
-        if (tagName === 'H1' || tagName === 'H2') {
-          // sometimes designers might make heading tag inline
-          parentObject = getRootObject(parentNode);
-          tag = tagName;
-        } else if (tagName === 'BR') {
-          if (!isInsideCell(node) && isConsecutativeBreaks(node)) {
-            // just force subsequent contents to go into a new paragraph
-            if (parentNode !== rootNode) {
-              nodeObjects.delete(parentNode);
-              return;
-            }
-          }
-          parentObject = getObject(parentNode);
-          tag = 'BR';
-        } else {
-          // all other inline elements become span
-          parentObject = getObject(parentNode);
-          tag = 'SPAN';
-        }
-        break;
-      case 'block': case 'inline-block':
-      case 'flex': case 'inline-flex':
-      case 'grid': case 'inline-grid':
-        // block elements all go into the root, unless they're inside
-        // a table cell or list item
-        if (isInsideCell(node)) {
-          parentObject = getObject(parentNode);
-        } else {
-          parentObject = getRootObject(parentNode);
-        }
-        switch (tagName) {
-          case 'H1': case 'H2': case 'H3': case 'H4': case 'H5': case 'H6':
-          case 'UL': case 'OL':
-          case 'BLOCKQUOTE':
-          case 'HR':
-            tag = tagName;
-            break;
-          default:
-            tag = 'P';
-        }
-        break;
-      case 'list-item':
-        if (!rootNode.contains(parentNode)) {
-          // capturing just the contents of a list item
-          parentObject = getRootObject(parentNode);
-          tag = 'P';
-        } else {
-          parentObject = getObject(parentNode);
-          tag = 'LI';
-          // make sure parent is a list
-          if (parentObject && parentObject.tag !== 'OL' && parentObject.tag !== 'UL') {
-            parentObject.tag = (style.listStyleType === 'decimal') ? 'OL' : 'UL';
-          }
-        }
-        break;
-      case 'table':
-        if (!isRealTable(node)) {
-          // display: table is being used for layout reason
-          parentObject = getRootObject(parentNode);
-          tag = 'P';
-        } else {
-          parentObject = getRootObject(parentNode);
-          tag = 'TABLE';
-        }
-        break;
-      case 'table-row-group':
-        if (isUsingDisplay(parentNode, [ 'table' ])) {
-          parentObject = getObject(parentNode);
-          tag = 'TBODY';
-        }
-        break;
-      case 'table-header-group':
-        if (isUsingDisplay(parentNode, [ 'table' ])) {
-          parentObject = getObject(parentNode);
-          tag = 'THEAD';
-        }
-        break;
-      case 'table-footer-group':
-        if (isUsingDisplay(parentNode, [ 'table' ])) {
-          parentObject = getObject(parentNode);
-          tag = 'TFOOT';
-        }
-        break;
-      case 'table-row':
-        if (isUsingDisplay(parentNode, [ 'table-row-group', 'table-header-group', 'table-footer-group' ])) {
-          parentObject = getObject(parentNode);
-          tag = 'TR';
-        }
-        break;
-      case 'table-cell':
-        if (!rootNode.contains(parentNode) || !isUsingDisplay(parentNode, [ 'table-row' ])) {
-          // display: table-cell is being used for layout reason
-          // or we're capturing the content of a single cell
-          parentObject = getRootObject(parentNode);
-          tag = 'P';
-        } else {
-          parentObject = getObject(parentNode);
-          tag = (style.fontWeight > 400) ? 'TH' : 'TD';
-        }
-        break;
-      case 'table-caption':
-        if (isUsingDisplay(parentNode, [ 'table' ])) {
-          parentObject = getObject(parentNode);
-          tag = 'CAPTION';
-        }
-        break;
-    }
-    if (!parentObject || !tag) {
-      return;
-    }
-    const object = { tag, content: undefined };
-    const newStyle = {};
-    const parentStyle = getTextStyle(parentObject);
-    const defaultStyle = getDefaultStyle(object);
-    // don't copy styling info meant for hyperlinks
-    if (!isStylingLink(node)) {
-      for (const name of styleNames) {
-        const parentValue = parentStyle[name];
-        const defaultValue = defaultStyle[name];
-        let value = style[name];
-        if (name === 'fontWeight') {
-          // stick with standard values
-          value = (value >= 600) ? '700' : '400';
-        }
-        if (value !== parentValue && value !== defaultValue) {
-          if (name === 'verticalAlign') {
-            if (value === 'super' || value === 'sub') {
-              // set the font size as well
-              newStyle.fontSize = 'smaller';
-            } else {
-              // skip it
-              continue;
-            }
-          }
-          newStyle[name] = value;
-        }
-      }
-    }
-    if (Object.entries(newStyle).length > 0) {
-      object.style = newStyle;
-    }
-    insertContent(parentObject, object);
-    objectParents.set(object, parentObject);
-    // remember the object's position and style, which will be used for the
-    // purpose of detecting junk content
-    objectRects.set(object, rect);
-    objectStyles.set(object, style);
-    if (tagName === 'A') {
-      // associate the parent with the link
-      for (let obj = parentObject; obj; obj = objectParents.get(obj)) {
-        if (obj.tag !== 'SPAN') {
-          objectLinks.set(obj, node);
-          break;
-        }
-      }
-    }
-    return object;
-  };
-  const privateCharacters = /\p{Private_Use}/ug;
-  const parseCSSContent = (content) => {
-    if (content.charAt(0) === '"') {
-      const s = content.substr(1, content.length - 2);
-      return s.replace(/\\(["\\])/g, '$1').replace(privateCharacters, '');
-    }
-  };
-  const getPseudoElement = (node, id) => {
-    if (!isHidden(node)) {
-      const style = getComputedStyle(node, id);
-      const content = parseCSSContent(style.content);
-      if (content) {
-        const object = { tag: 'SPAN', content };
-        objectStyles.set(object, style);
-        return object;
-      }
-    }
-  };
-  // walk through the range and build the object tree
-  transverseRange(range, (node, startOffset, endOffset, endTag) => {
-    const { nodeType, nodeValue, parentNode } = node;
-    if (nodeType === Node.TEXT_NODE) {
-      const parentObject = getObject(parentNode);
-      // don't insert text into the root object
-      if (parentObject && parentObject !== root) {
-        const text = nodeValue.substring(startOffset, endOffset).replace(privateCharacters, '');
-        insertContent(parentObject, text);
-      }
-    } else if (nodeType === Node.ELEMENT_NODE) {
-      if (!endTag) {
-        const pseudo = getPseudoElement(node, '::before');
-        if (pseudo) {
-          const object = getObject(node);
-          // don't add ::before element to list item
-          if (object && object.tag !== 'LI' && object !== root) {
-            insertContent(object, pseudo);
-          }
-        } else if (canBeEmpty(node.tagName)) {
-          // create these tags even when they don't contain any text
-          getObject(node);
-        }
+    // derive tag name from style
+    const { display, fontSize, fontWeight } = getNodeStyle(node);
+    if (display === 'inline') {
+      if (tagName === 'BR') {
+        return 'BR';
       } else {
-        const pseudo = getPseudoElement(node, '::after');
-        if (pseudo) {
-          const object = getObject(node);
-          if (object && object !== root) {
-            insertContent(object, pseudo);
-          }
-        }
+        return 'SPAN';
       }
-    }
-  });
-  const semanticTags = [ 'P', 'BLOCKQUOTE', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'UL', 'OL', 'LI', 'TD' ];
-  const findSemanticParent = (node) => {
-    for (const n = node.parentNode; n && n !== rootNode; n = node.parentNode) {
-      if (semanticTags.includes(n.tagName)) {
-        return n;
-      }
-    }
-  };
-  const findSemanticParentByStyle = (node) => {
-    for (const n = node.parentNode; n && n !== rootNode; n = node.parentNode) {
-      const { display } = getNodeStyle(n);
-      switch (display) {
-
+    } else {
+      if (display === 'list-item') {
+        return 'LI';
+      } else if (display === 'table' && isRealTable(node)) {
+        // make sure display: table isn't being used for layout reason
+        return 'TABLE';
+      } if (display === 'table-row-group' && getNewTagName(parentNode) === 'TABLE') {
+        return 'TBODY';
+      } else if (display === 'table-header-group' && getNewTagName(parentNode) === 'TABLE') {
+        return 'THEAD';
+      } else if (display === 'table-footer-group' && getNewTagName(parentNode) === 'TABLE') {
+        return 'TFOOT';
+      } else if (display === 'table-row' && tableComponentsTags.includes(getNewTagName(parentNode) )) {
+        return 'TR';
+      } else if (display === 'table-cell' && getNewTagName(parentNode)  === 'TR') {
+        return (fontWeight > 400) ? 'TH' : 'TD';
+      } else if (display === 'table-caption') {
+        return 'CAPTION';
+      } else if (fontWeight > 500 && parseInt(fontSize) >= 32) {
+        return 'H1';
+      } else if (fontWeight > 500 && parseInt(fontSize) >= 24) {
+        return 'H2';
+      } else if (fontWeight > 500 && parseInt(fontSize) >= 18) {
+        return 'H3';
+      } else {
+        return 'P';
       }
     }
   };
   const createObject = (node) => {
-    const { parentNode, tagName } = node;
     if (isHidden(node)) {
       return;
     }
     const rect = getRect(node);
     if (rect.width === 0 || rect.height === 0) {
-      if (!canBeEmpty(tagName)) {
+      if (!canBeEmpty(node.tagName)) {
         return;
       }
     }
     // remove <button>, <figcaption>, and such
-    if (isDisallowedTag(node)) {
+    if (isDisallowed(node)) {
       return;
     }
     // remove sup tags that are links
     if (isSuperscriptLink(node)) {
       return;
     }
+    const { parentNode } = node;
     const style = getNodeStyle(node);
+    let tag = getNewTagName(node);
+    let parentObject;
+    if (tag === 'SPAN') {
+      parentObject = getObject(parentNode);
+    } else if (tag === 'BR') {
+      parentObject = getObject(parentNode);
+      if (parentObject && isConsecutativeBreaks(node)) {
+        // when there're two <br>'s in a row, start a new paragraph instead
+        const blockObject = getBlockObject(parentObject);
+        if (blockObject.tag === 'P') {
+          closeObject(blockObject);
+          parentObject = null;
+        }
+      }
+    } else if (tag === 'LI') {
+      parentObject = getObject(parentNode);
+      if (parentObject === root) {
+        tag = 'P';
+      } else if (parentObject && parentObject.tag !== 'OL' && parentObject.tag !== 'UL') {
+        // make sure parent is a list
+        parentObject.tag = (style.listStyleType === 'decimal') ? 'OL' : 'UL';
+      }
+    } else if (topLevelTags.includes(tag)) {
+      // insert either at the root level or into a <LI> or <TD>
+      parentObject = getContainerObject(parentNode);
+      if (tag === 'P' && parentObject && parentObject !== root) {
+        // <P> can't go into a <LI> or a <TD>--add a newline and make it a <SPAN>
+        if (parentObject.content) {
+          insertContent(parentObject, '\n');
+        }
+        tag = 'SPAN';
+      }
+    } else {
+      parentObject = getObject(parentNode);
+    }
+    if (!tag || !parentObject) {
+      return;
+    }
+    const object = { tag, content: undefined };
+    // don't copy styling info meant for hyperlinks
+    if (!isStylingLink(node)) {
+      const newStyle = extractStyle(style, object, parentObject);
+      if (newStyle) {
+        object.style = newStyle;
+      }
+    }
+    insertContent(parentObject, object);
+    const dossier = { node, style, rect, parent: parentObject, links: [] };
+    objectDossiers.set(object, dossier);
+    if (node.tagName === 'A') {
+      // associate the top-level parent with the link
+      const topLevelObject = getTopLevelObject(parentObject);
+      const topLevelDossier = objectDossiers.get(topLevelObject);
+      topLevelDossier.links.push(object);
+    }
+    return object;
   };
+  const privateCharacters = /\p{Private_Use}/ug;
   const addText = (node, startOffset, endOffset) => {
     const parentObject = getObject(node.parentNode);
     if (parentObject) {
-      insertContent()
+      const text = node.nodeValue.substring(startOffset, endOffset).replace(privateCharacters, '');
+      insertContent(parentObject, text);
+    }
+  };
+  const parseCSSContent = (content) => {
+    if (content.charAt(0) === '"') {
+      const s = content.substr(1, content.length - 2);
+      return s.replace(/\\(["\\])/g, '$1').replace(privateCharacters, '');
     }
   };
   const addPseudoElement = (node, id)  => {
@@ -588,17 +482,19 @@ export function captureRangeContent(range) {
       if (display !== 'none' && position === 'inline') {
         const text = parseCSSContent(content);
         if (text) {
-          const object = { tag: 'SPAN', content: text };
-          objectStyles.set(object, style);
           const parentObject = getObject(node);
-          if (parentObject.tag === 'LI' && id === '::before') {
+          // don't add ::before pseudo elements to li items
+          if (!parentObject || (parentObject.tag === 'LI' && id === '::before')) {
             return;
           }
+          const object = { tag: 'SPAN', content: text };
+          objectDossiers.set(object, { style });
           insertContent(parentObject, object);
         }
       }
     }
   };
+  // scan through the range and add the text encountered
   transverseRange(range, (node, startOffset, endOffset, endTag) => {
     const { nodeType } = node;
     if (nodeType === Node.TEXT_NODE) {
@@ -616,9 +512,9 @@ export function captureRangeContent(range) {
     }
   });
   // apply white-space rules
-  collapseWhitespaces(root, objectStyles);
+  collapseWhitespaces(root, objectDossiers);
   // add spaces when spans are separated by margin
-  addSpacers(root, objectStyles);
+  addSpacers(root, objectDossiers);
   // replace spans that don't have any styling information with just its
   // content; couldn't do it earlier since the inline element could in theory
   // employ a different white-space rule
@@ -626,9 +522,9 @@ export function captureRangeContent(range) {
   // remove empty nodes
   removeEmptyNodes(root);
   // add junk rating based on presence of links
-  rateContentByLinks(root, objectLinks);
+  rateContentByLinks(root, objectDossiers);
   // add junk rating based on positions and colors
-  rateContentBySimiliarity(root, objectStyles, objectRects);
+  rateContentBySimiliarity(root, objectDossiers);
   // H1 is generally too large for printing--shrink them down
   shrinkHeadings(root);
   return root.content;
@@ -678,15 +574,15 @@ export function insertContent(object, content, atBeginning = false) {
   }
 }
 
-function rateContentByLinks(root, objectLinks) {
+function rateContentByLinks(root, objectDossiers) {
   if (!(root.content instanceof Array)) {
     return;
   }
   const calculateLinkScore = (object) => {
-    const link = objectLinks.get(object);
-    if (link) {
+    const { links } = objectDossiers.get(object);
+    if (links) {
       const objectText = getPlainText(object).trim();
-      const linkText = link.innerText.trim();
+      const linkText = getPlainText(links).trim();
       if (objectText === linkText) {
         return 1;
       } else if (linkText.length / objectText.length >= 0.6) {
@@ -725,7 +621,7 @@ function rateContentByLinks(root, objectLinks) {
   }
 }
 
-function rateContentBySimiliarity(root, objectStyles, objectRects) {
+function rateContentBySimiliarity(root, objectDossiers) {
   if (!(root.content instanceof Array)) {
     return;
   }
@@ -738,11 +634,10 @@ function rateContentBySimiliarity(root, objectStyles, objectRects) {
   const colorCounts = new Map;
   for (const object of root.content) {
     if (object instanceof Object) {
-      const rect = objectRects.get(object);
-      const style = objectStyles.get(object);
-      const charCount = getCharacterCount(object);
+      const { rect, style } = objectDossiers.get(object);
       const { color } = style;
       const { left, right } = rect;
+      const charCount = getCharacterCount(object);
       objectCounts.set(object, charCount);
       colorCounts.set(color, charCount + (colorCounts.get(color) || 0)) ;
       leftCounts.set(left, charCount + (leftCounts.get(left) || 0)) ;
@@ -804,12 +699,10 @@ function rateContentBySimiliarity(root, objectStyles, objectRects) {
         return charCount;
     }
   };
-  // remove paragraphs that are way off
   for (const object of root.content) {
     if (object instanceof Object) {
-      const rect = objectRects.get(object);
-      const style = objectStyles.get(object);
-      const color = style.color;
+      const { style, rect } = objectDossiers.get(object);
+      const { color } = style;
       // calculate the "junk" scores
       const scoreColor = calculateColorScore(color, maxColor);
       const scorePos = calculatePositionScore(rect, maxRect, style.direction);
@@ -877,7 +770,7 @@ function getChildrenByTag(object, tag) {
   return list;
 }
 
-function collapseWhitespaces(root, styleMap) {
+function collapseWhitespaces(root, objectDossiers) {
   const trim = (text, whiteSpace, trimLeft, trimRight) => {
     if (whiteSpace === 'normal' || whiteSpace === 'nowrap') {
       text = text.replace(/\r?\n/g, ' ');
@@ -898,7 +791,7 @@ function collapseWhitespaces(root, styleMap) {
     return text;
   };
   const collapse = (object, trimLeft, trimRight) => {
-    const style = styleMap.get(object);
+    const { style } = objectDossiers.get(object);
     const { whiteSpace } = style;
     const inline = (object.tag === 'SPAN');
     let trimItemLeft = (inline) ? trimLeft : true;
@@ -929,14 +822,14 @@ function collapseWhitespaces(root, styleMap) {
   collapse(root);
 }
 
-function addSpacers(root, styleMap) {
+function addSpacers(root, objectDossiers) {
   const scan = (item) => {
     if (item instanceof Array) {
       item.forEach(scan);
       item.forEach((item, i, arr) => {
         if (item.tag === 'SPAN') {
+          const { style } = objectDossiers.get(item);
           const text = getPlainText(item);
-          const style = styleMap.get(item);
           const height = parseInt(style.fontSize);
           const left = parseInt(style.marginLeft) + parseInt(style.paddingLeft);
           const right = parseInt(style.marginRight) + parseInt(style.paddingRight);
