@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="google" />
+    <link rel="stylesheet" href="capture-test.css">
+    <script type="module" src="capture-test.js"></script>
+    <title></title>
+  </head>
+  <body>
+    <section>
+      <title>Basic</title>
+      <content>
+        <h2>Hello world</h2>
+        <p>This is a test</p>
+      </content>
+      <expected>
+        [
+          {
+            "tag": "H2",
+            "content": "Hello world"
+          },
+          {
+            "tag": "P",
+            "content": "This is a test"
+          }
+        ]
+      </expected>
+    </section>
+
+    <section>
+      <title>Heading demotion</title>
+      <content>
+        <h1>Hello world</h1>
+        <h2>Dingo ate my baby!</h2>
+        <p>This is a test</p>
+      </content>
+      <expected>
+        [
+          {
+            "tag": "H2",
+            "content": "Hello world"
+          },
+          {
+            "tag": "H3",
+            "content": "Dingo ate my baby!"
+          },
+          {
+            "tag": "P",
+            "content": "This is a test"
+          }
+        ]
+      </expected>
+    </section>
+
+    <section>
+      <title>Hyperlink omission</title>
+      <content>
+        <h2>Hello world</h2>
+        <p>This <a href="google.com">is</a> a test</p>
+      </content>
+      <expected>
+        [
+          {
+            "tag": "H2",
+            "content": "Hello world"
+          },
+          {
+            "tag": "P",
+            "content": "This is a test"
+          }
+        ]
+      </expected>
+    </section>
+
+    <section>
+      <title>Superscript hyperlink removal (1)</title>
+      <content>
+        <h2>Hello world</h2>
+        <p>This is<sup><a href="google.com">1</a></sup> a test</p>
+      </content>
+      <expected>
+        [
+          {
+            "tag": "H2",
+            "content": "Hello world"
+          },
+          {
+            "tag": "P",
+            "content": "This is a test"
+          }
+        ]
+      </expected>
+    </section>
+
+    <section>
+      <title>Superscript hyperlink removal (2)</title>
+      <content>
+        <h2>Hello world</h2>
+        <p>This is<a href="google.com"><sup>1</sup></a> a test</p>
+      </content>
+      <expected>
+        [
+          {
+            "tag": "H2",
+            "content": "Hello world"
+          },
+          {
+            "tag": "P",
+            "content": "This is a test"
+          }
+        ]
+      </expected>
+    </section>
+
+    <section>
+      <title>Superscript hyperlink removal (3)</title>
+      <content>
+        <h2>Hello world</h2>
+        <p>This is<a href="google.com"><sup>[1]</sup></a> a test</p>
+      </content>
+      <expected>
+        [
+          {
+            "tag": "H2",
+            "content": "Hello world"
+          },
+          {
+            "tag": "P",
+            "content": "This is a test"
+          }
+        ]
+      </expected>
+    </section>
+
+    <section>
+      <title>Selection in list item</title>
+      <content>
+        <h2>Hello world</h2>
+        <ul>
+          <li>This is a <span class="selected">test</span></li>
+          <li>Something else</li>
+        </ul>
+      </content>
+      <expected>
+        {
+          "tag": "P",
+          "content": "test"
+        }
+      </expected>
+    </section>
+
+  </body>
+</html>

@@ -1,0 +1,52 @@
+.test {
+  margin-bottom: 1em;
+}
+
+.test.failed {
+  background-color: rgb(255, 128, 128);
+}
+
+.test .selected {
+  background-color: rgb(255, 255, 102);
+}
+
+.results {
+  display: flex;
+  padding: 0.5em 0 1em 0;
+}
+
+.content,
+.expected,
+.output {
+  position: relative;
+  flex: 1 1 0px;
+  border: 1px dotted black;
+  padding: 4px 4px 4px 4px;
+}
+
+.content::before,
+.expected::before,
+.output::before {
+  position: absolute;
+  left: 0px;
+  bottom: calc(100%);
+}
+
+.expected,
+.output {
+  white-space: pre;
+  border-left: none;
+}
+
+.content::before {
+  content: "Content:";
+}
+
+.expected::before {
+  content: "Expected:";
+}
+
+.output::before {
+  content: "Actual:";
+  background-color: rgb()
+}
