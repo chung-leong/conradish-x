@@ -177,7 +177,7 @@ export function captureRangeContent(range) {
     }
     return false;
   };
-  const disallowedTags = [ 'BUTTON', 'TEXTAREA', 'INPUT', 'SELECT', 'FIGCAPTION', 'NOSCRIPT' ];
+  const disallowedTags = [ 'BUTTON', 'TEXTAREA', 'INPUT', 'SELECT', 'FIGURE', 'FIGCAPTION', 'NOSCRIPT' ];
   const isDisallowed = (node) => {
     return disallowedTags.includes(node.tagName);
   };
@@ -325,7 +325,7 @@ export function captureRangeContent(range) {
         }
       }
       // make sure the node isn't hidden
-      if (isHidden(node)) {
+      if (isHidden(node) || isDisallowed(node)) {
         return;
       }
       if (!canBeEmpty(node.tagName)) {
