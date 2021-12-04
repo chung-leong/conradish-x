@@ -86,6 +86,10 @@ BODY.ready #article {
   overflow: hidden;
 }
 
+#article-text TABLE CAPTION {
+  text-align: left;
+}
+
 #article-text TD,
 #article-text TH {
   border: 0.5pt solid rgb(0, 0, 0);
