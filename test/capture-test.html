@@ -89,6 +89,89 @@
     </section>
 
     <section>
+      <title>BR tag substitution</title>
+      <content>
+        <h2>Hello world</h2>
+        <p>This <br>is a <br>test<br></p>
+      </content>
+      <expected>
+        [
+          {
+            "tag": "H2",
+            "content": "Hello world"
+          },
+          {
+            "tag": "P",
+            "content": "This \nis a \ntest\n"
+          }
+        ]
+      </expected>
+    </section>
+
+    <section>
+      <title>Hidden content (1)</title>
+      <content>
+        <h2>Hello world</h2>
+        <h1 style="display: none">You don't see me!</h1>
+        <p>This is a test</p>
+      </content>
+      <expected>
+        [
+          {
+            "tag": "H2",
+            "content": "Hello world"
+          },
+          {
+            "tag": "P",
+            "content": "This is a test"
+          }
+        ]
+      </expected>
+    </section>
+
+    <section>
+      <title>Hidden content (2)</title>
+      <content>
+        <h2>Hello world</h2>
+        <h1 style="visibility: hidden">You don't see me!</h1>
+        <p>This is a test</p>
+      </content>
+      <expected>
+        [
+          {
+            "tag": "H2",
+            "content": "Hello world"
+          },
+          {
+            "tag": "P",
+            "content": "This is a test"
+          }
+        ]
+      </expected>
+    </section>
+
+    <section>
+      <title>Hidden content (3)</title>
+      <content>
+        <h2>Hello world</h2>
+        <h1 style="width: 0; height: 0; overflow: hidden">You don't see me!</h1>
+        <p>This is a test</p>
+      </content>
+      <expected>
+        [
+          {
+            "tag": "H2",
+            "content": "Hello world"
+          },
+          {
+            "tag": "P",
+            "content": "This is a test"
+          }
+        ]
+      </expected>
+    </section>
+
+    <section>
       <title>Pseudo element: before</title>
       <content>
         <h2>Hello world</h2>
@@ -516,6 +599,119 @@ a   test
     </section>
 
     <section>
+      <title>List</title>
+      <content>
+        <ul>
+          <li>This is a test</li>
+          <li>Something else</li>
+        </ul>
+      </content>
+      <expected>
+        {
+          "tag": "UL",
+          "content": [
+            {
+              "tag": "LI",
+              "content": "This is a test"
+            },
+            {
+              "tag": "LI",
+              "content": "Something else"
+            }
+          ]
+        }
+      </expected>
+    </section>
+
+    <section>
+      <title>List within list</title>
+      <content>
+        <ul>
+          <li>This is a test</li>
+          <li>
+            <ul>
+              <li>Something else</li>
+            </ul>
+          </li>
+        </ul>
+      </content>
+      <expected>
+        {
+          "tag": "UL",
+          "content": [
+            {
+              "tag": "LI",
+              "content": "This is a test"
+            },
+            {
+              "tag": "LI",
+              "content": {
+                "tag": "UL",
+                "content": {
+                  "tag": "LI",
+                  "content": "Something else"
+                }
+              }
+            }
+          ]
+        }
+      </expected>
+    </section>
+
+    <section>
+      <title>DIV inside list</title>
+      <content>
+        <ul>
+          <li>This is a test</li>
+          <li><div>Something else</div></li>
+        </ul>
+      </content>
+      <expected>
+        {
+          "tag": "UL",
+          "content": [
+            {
+              "tag": "LI",
+              "content": "This is a test"
+            },
+            {
+              "tag": "LI",
+              "content": "Something else"
+            }
+          ]
+        }
+      </expected>
+    </section>
+
+    <section>
+      <title>Multiple DIVs inside list</title>
+      <content>
+        <ul>
+          <li>This is a test</li>
+          <li>
+            <div>Something else</div>
+            <div>and then some!</div>
+          </li>
+        </ul>
+      </content>
+      <expected>
+        {
+          "tag": "UL",
+          "content": [
+            {
+              "tag": "LI",
+              "content": "This is a test"
+            },
+            {
+              "tag": "LI",
+              "content": "Something else\nand then some!"
+            }
+          ]
+        }
+      </expected>
+    </section>
+
+    <section>
       <title>List items in DIV tag (1)</title>
       <content>
         <div>
@@ -762,6 +958,21 @@ a   test
               }
             }
           ]
+        }
+      </expected>
+    </section>
+
+    <section>
+      <title>Bogus use of display: table</title>
+      <content>
+        <div style="display: table">
+          <div>This is not a table</div>
+        </div>
+      </content>
+      <expected>
+        {
+          "tag": "P",
+          "content": "This is not a table"
         }
       </expected>
     </section>

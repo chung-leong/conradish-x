@@ -56,7 +56,7 @@ export function captureRangeContent(range) {
     }
     return style;
   };
-  // figure out when the root node ought to be
+  // figure out where the root node ought to be
   let rootNode;
   for (let n = range.commonAncestorContainer; n; n = n.parentNode) {
     if (n.nodeType === Node.ELEMENT_NODE) {
@@ -345,6 +345,12 @@ export function captureRangeContent(range) {
         if (object.tag === 'TD' || object.tag === 'LI') {
           return object;
         }
+      } else {
+        // create it if it's going to be a TD or LI
+        const tag = getNewTagName(n);
+        if (tag === 'TD' || tag === 'LI') {
+          return getObject(n);
+        }
       }
       // make sure the node isn't hidden
       if (isHidden(node) || isDisallowed(node)) {
@@ -465,11 +471,8 @@ export function captureRangeContent(range) {
       // insert either at the root level or into a <LI> or <TD>
       parentObject = getContainerObject(parentNode);
       if (tag === 'P' && parentObject && parentObject !== root) {
-        // <P> can't go into a <LI> or a <TD>--add a newline and make it a <SPAN>
-        if (parentObject.content) {
-          insertContent(parentObject, '\n');
-        }
-        tag = 'SPAN';
+        // <P> can't go into a <LI> or a <TD>--make it a <DIV> (which will get changed to a SPAN later)
+        tag = 'DIV';
       }
     } else {
       parentObject = getObject(parentNode);
@@ -550,6 +553,8 @@ export function captureRangeContent(range) {
   collapseWhitespaces(root, objectDossiers);
   // add spaces when spans are separated by margin
   addSpacers(root, objectDossiers);
+  // replace DIVs with SPANs
+  replaceDivsWithSpans(root);
   // replace spans that don't have any styling information with just its
   // content; couldn't do it earlier since the inline element could in theory
   // employ a different white-space rule
@@ -893,6 +898,21 @@ function addSpacers(root, objectDossiers) {
     }
   };
   scan(root);
+}
+
+function replaceDivsWithSpans(object) {
+  if (object.content instanceof Array) {
+    for (const [ index, item ] of object.content.entries()) {
+      replaceDivsWithSpans(item);
+      if (item.tag === 'DIV') {
+        item.tag = 'SPAN';
+        const after = object.content.slice(index + 1);
+        if (getCharacterCount(after) > 0) {
+          insertContent(item, '\n');
+        }
+      }
+    }
+  }
 }
 
 export function replaceUselessElements(object) {
