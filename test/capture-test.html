@@ -28,6 +28,67 @@
     </section>
 
     <section>
+      <title>Basic styling</title>
+      <content>
+        <h2>Hello world</h2>
+        <p>This <b>is <u>a</u> <i>test</i></b>!</p>
+      </content>
+      <expected>
+        [
+          {
+            "tag": "H2",
+            "content": "Hello world"
+          },
+          {
+            "tag": "P",
+            "content": [
+              "This ",
+              {
+                "tag": "SPAN",
+                "content": [
+                  "is ",
+                  {
+                    "tag": "SPAN",
+                    "content": "a",
+                    "style": { "textDecorationLine": "underline" }
+                  },
+                  " ",
+                  {
+                    "tag": "SPAN",
+                    "content": "test",
+                    "style": { "fontStyle": "italic" }
+                  }
+                ],
+                "style": { "fontWeight": "700" }
+              },
+              "!"
+            ]
+          }
+        ]
+      </expected>
+    </section>
+
+    <section>
+      <title>Span collapsing</title>
+      <content>
+        <h2>Hello world</h2>
+        <p>This is a <span style="font-size: 32pt">test</span></p>
+      </content>
+      <expected>
+        [
+          {
+            "tag": "H2",
+            "content": "Hello world"
+          },
+          {
+            "tag": "P",
+            "content": "This is a test"
+          }
+        ]
+      </expected>
+    </section>
+
+    <section>
       <title>Heading demotion</title>
       <content>
         <h1>Hello world</h1>
@@ -146,6 +207,67 @@
           "tag": "P",
           "content": "test"
         }
+      </expected>
+    </section>
+
+    <section>
+      <title>Selection in table cell</title>
+      <content>
+        <h2>Hello world</h2>
+        <table>
+          <tr>
+            <td>This is a <span class="selected">test</span></td>
+            <td>Something else</td>
+          </tr>
+        </table>
+      </content>
+      <expected>
+        {
+          "tag": "P",
+          "content": "test"
+        }
+      </expected>
+    </section>
+
+    <section>
+      <title>Table</title>
+      <content>
+        <h2>Hello world</h2>
+        <table>
+          <tr>
+            <td>This is a test</td>
+            <td>Something else</td>
+          </tr>
+        </table>
+      </content>
+      <expected>
+        [
+          {
+            "tag": "H2",
+            "content": "Hello world"
+          },
+          {
+            "tag": "TABLE",
+            "content": {
+              "tag": "TBODY",
+              "content": [
+                {
+                  "tag": "TR",
+                  "content": [
+                    {
+                      "tag": "TD",
+                      "content": "This is a test"
+                    },
+                    {
+                      "tag": "TD",
+                      "content": "Something else"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
       </expected>
     </section>
 
