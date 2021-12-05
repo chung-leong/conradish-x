@@ -89,6 +89,114 @@
     </section>
 
     <section>
+      <title>White space handling: normal</title>
+      <content>
+        <h2>Hello world</h2>
+        <p style="white-space: normal">
+
+
+This is
+a   test
+
+
+</p>
+      </content>
+      <expected>
+        [
+          {
+            "tag": "H2",
+            "content": "Hello world"
+          },
+          {
+            "tag": "P",
+            "content": "This is a test"
+          }
+        ]
+      </expected>
+    </section>
+
+    <section>
+      <title>White space handling: pre</title>
+      <content>
+        <h2>Hello world</h2>
+        <p style="white-space: pre">
+
+
+This is
+a   test
+
+
+</p>
+      </content>
+      <expected>
+        [
+          {
+            "tag": "H2",
+            "content": "Hello world"
+          },
+          {
+            "tag": "P",
+            "content": "\n\n\nThis is\na   test\n\n\n"
+          }
+        ]
+      </expected>
+    </section>
+
+    <section>
+      <title>White space handling: pre-line</title>
+      <content>
+        <h2>Hello world</h2>
+        <p style="white-space: pre-line">
+
+
+This is
+a   test
+
+
+</p>
+      </content>
+      <expected>
+        [
+          {
+            "tag": "H2",
+            "content": "Hello world"
+          },
+          {
+            "tag": "P",
+            "content": "\n\n\nThis is\na test\n\n\n"
+          }
+        ]
+      </expected>
+    </section>
+
+    <section>
+      <title>White space handling: pre-wrap</title>
+      <content>
+        <h2>Hello world</h2>
+        <p style="white-space: pre-wrap">
+
+
+This is
+a   test
+
+
+</p>
+      </content>
+      <expected>
+        [
+          {
+            "tag": "H2",
+            "content": "Hello world"
+          },
+          {
+            "tag": "P",
+            "content": "\n\n\nThis is\na   test\n\n\n"
+          }
+        ]
+      </expected>
+    </section>
+
+    <section>
       <title>Heading demotion</title>
       <content>
         <h1>Hello world</h1>

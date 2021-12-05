@@ -777,10 +777,12 @@ function collapseWhitespaces(root, objectDossiers) {
     } else {
       text = text.replace(/\r\n/g, '\n');
     }
-    if (whiteSpace === 'normal' || whiteSpace === 'nowrap' || whiteSpace === 'pre-line') {
+    if (whiteSpace === 'normal' || whiteSpace === 'nowrap') {
       text = text.replace(/\s+/g, ' ');
+    } else if (whiteSpace === 'pre-line') {
+      text = text.replace(/\s+/g, (m0) => m0.replace(/[^\n]/g, '') || ' ');
     }
-    if (whiteSpace === 'normal'  || whiteSpace === 'nowrap' || whiteSpace === 'pre-line') {
+    if (whiteSpace === 'normal'  || whiteSpace === 'nowrap') {
       if (trimLeft) {
         text = text.trimLeft();
       }
