@@ -302,6 +302,20 @@
     </section>
 
     <section>
+      <title>@media press</title>
+      <content>
+        <h2>Hello world</h2>
+        <p class="no-print">This is a <span style="font-size: 32pt">test</span></p>
+      </content>
+      <expected>
+        {
+          "tag": "H2",
+          "content": "Hello world"
+        }
+      </expected>
+    </section>
+
+    <section>
       <title>White space handling: normal</title>
       <content>
         <h2>Hello world</h2>
@@ -846,7 +860,6 @@ a   test
     <section>
       <title>Table</title>
       <content>
-        <h2>Hello world</h2>
         <table>
           <tr>
             <td>This is a test</td>
@@ -855,33 +868,25 @@ a   test
         </table>
       </content>
       <expected>
-        [
-          {
-            "tag": "H2",
-            "content": "Hello world"
-          },
-          {
-            "tag": "TABLE",
+        {
+          "tag": "TABLE",
+          "content": {
+            "tag": "TBODY",
             "content": {
-              "tag": "TBODY",
+              "tag": "TR",
               "content": [
                 {
-                  "tag": "TR",
-                  "content": [
-                    {
-                      "tag": "TD",
-                      "content": "This is a test"
-                    },
-                    {
-                      "tag": "TD",
-                      "content": "Something else"
-                    }
-                  ]
+                  "tag": "TD",
+                  "content": "This is a test"
+                },
+                {
+                  "tag": "TD",
+                  "content": "Something else"
                 }
               ]
             }
           }
-        ]
+        }
       </expected>
     </section>
 
@@ -974,6 +979,232 @@ a   test
           "tag": "P",
           "content": "This is not a table"
         }
+      </expected>
+    </section>
+
+    <section>
+      <title>Junk detection: Hyperlinked paragraph (1)</title>
+      <content>
+        <h2>Hello world</h2>
+        <div><a href="https://google.com">Go to Google!</a></div>
+      </content>
+      <expected>
+        [
+          {
+            "tag": "H2",
+            "content": "Hello world"
+          },
+          {
+            "tag": "P",
+            "content": "Go to Google!",
+            "junk": 1
+          }
+        ]
+      </expected>
+    </section>
+
+    <section>
+      <title>Junk detection: Hyperlinked paragraph (2)</title>
+      <content>
+        <h2>Hello world</h2>
+        <div><a href="https://google.com">Go to Google</a>!</div>
+      </content>
+      <expected>
+        [
+          {
+            "tag": "H2",
+            "content": "Hello world"
+          },
+          {
+            "tag": "P",
+            "content": "Go to Google!",
+            "junk": 0.5
+          }
+        ]
+      </expected>
+    </section>
+
+    <section>
+      <title>Junk detection: Hyperlinked paragraph (3)</title>
+      <content>
+        <h2>Hello world</h2>
+        <div><a href="https://google.com">Go to Google</a><a href="https://google.com">!</a></div>
+      </content>
+      <expected>
+        [
+          {
+            "tag": "H2",
+            "content": "Hello world"
+          },
+          {
+            "tag": "P",
+            "content": "Go to Google!",
+            "junk": 1
+          }
+        ]
+      </expected>
+    </section>
+
+    <section>
+      <title>Junk detection: List of links (1)</title>
+      <content>
+        <h2>Hello world</h2>
+        <ul>
+          <li><a href="https://google.com">Google</a></li>
+          <li><a href="https://bing.com">Bing</a></li>
+        </ul>
+      </content>
+      <expected>
+        [
+          {
+            "tag": "H2",
+            "content": "Hello world"
+          },
+          {
+            "tag": "UL",
+            "content": [
+              {
+                "tag": "LI",
+                "content": "Google"
+              },
+              {
+                "tag": "LI",
+                "content": "Bing"
+              }
+            ],
+            "junk": 1
+          }
+        ]
+      </expected>
+    </section>
+
+    <section>
+      <title>Junk detection: List of links (2)</title>
+      <content>
+        <h2>Hello world</h2>
+        <ul>
+          <li>Visit <a href="https://google.com">Google Homepage</a></li>
+          <li>Visit <a href="https://bing.com">Bing Homepage</a></li>
+        </ul>
+      </content>
+      <expected>
+        [
+          {
+            "tag": "H2",
+            "content": "Hello world"
+          },
+          {
+            "tag": "UL",
+            "content": [
+              {
+                "tag": "LI",
+                "content": "Visit Google Homepage"
+              },
+              {
+                "tag": "LI",
+                "content": "Visit Bing Homepage"
+              }
+            ],
+            "junk": 0.5
+          }
+        ]
+      </expected>
+    </section>
+
+    <section>
+      <title>Junk detection: Table of links</title>
+      <content>
+        <h2>Hello world</h2>
+        <table>
+          <tr>
+            <td><a href="https://google.com">Google</a></td>
+          </tr>
+          <tr>
+            <td><a href="https://bing.com">Bing</a></td>
+          </tr>
+        </table>
+      </content>
+      <expected>
+        [
+          {
+            "tag": "H2",
+            "content": "Hello world"
+          },
+          {
+            "tag": "TABLE",
+            "content": {
+              "tag": "TBODY",
+              "content": [
+                {
+                  "tag": "TR",
+                  "content": {
+                    "tag": "TD",
+                    "content": "Google"
+                  }
+                },
+                {
+                  "tag": "TR",
+                  "content": {
+                    "tag": "TD",
+                    "content": "Bing"
+                  }
+                }
+              ]
+            },
+            "junk": 1
+          }
+        ]
+      </expected>
+    </section>
+
+    <section>
+      <title>Junk detection: By color</title>
+      <content>
+        <h2>Hello world</h2>
+        <p>This is a test</p>
+        <div style="color: white; background-color: black;">Something</div>
+      </content>
+      <expected>
+        [
+          {
+            "tag": "H2",
+            "content": "Hello world"
+          },
+          {
+            "tag": "P",
+            "content": "This is a test"
+          },
+          {
+            "tag": "P",
+            "content": "Something",
+            "junk": 1
+          }
+        ]
+      </expected>
+    </section>
+
+    <section>
+      <title>Junk detection: Float block</title>
+      <content>
+        <h2>Hello world</h2>
+        <p><div style="width: 50px; float: right; border: 1px solid black">This is a test!</div>This is a test and this is only a test</p>
+      </content>
+      <expected>
+        [
+          {
+            "tag": "H2",
+            "content": "Hello world"
+          },
+          {
+            "tag": "P",
+            "content": "This is a test!",
+            "junk": 1
+          },
+          {
+            "tag": "P",
+            "content": "This is a test and this is only a test"
+          }
+        ]
       </expected>
     </section>
 

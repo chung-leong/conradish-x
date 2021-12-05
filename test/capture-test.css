@@ -76,3 +76,9 @@ TITLE, EXPECTED, CONTENT {
   content: "SUCKERS!";
   color: orange;
 }
+
+@media print {
+  .no-print {
+    display: none;
+  }
+}

@@ -349,15 +349,19 @@ export function captureRangeContent(range) {
         // create it if it's going to be a TD or LI
         const tag = getNewTagName(n);
         if (tag === 'TD' || tag === 'LI') {
-          return getObject(n);
+          // make sure it really did turn out to be one
+          const object = getObject(n);
+          if (object && (object.tag === 'TD' || object.tag === 'LI')) {
+            return object;
+          }
         }
       }
       // make sure the node isn't hidden
-      if (isHidden(node) || isDisallowed(node)) {
+      if (isHidden(n) || isDisallowed(n)) {
         return;
       }
-      if (!canBeEmpty(node.tagName)) {
-        const rect = getRect(node);
+      if (!canBeEmpty(n.tagName)) {
+        const rect = getRect(n);
         if (rect.width === 0 || rect.height === 0) {
           return;
         }
@@ -493,9 +497,9 @@ export function captureRangeContent(range) {
     objectDossiers.set(object, dossier);
     if (node.tagName === 'A') {
       // associate the top-level parent with the link
-      const topLevelObject = getTopLevelObject(parentObject);
-      const topLevelDossier = objectDossiers.get(topLevelObject);
-      topLevelDossier.links.push(object);
+      const topLevelObject = getTopLevelObject(object);
+      const { links } = objectDossiers.get(topLevelObject);
+      links.push(object);
     }
     return object;
   };
@@ -561,10 +565,8 @@ export function captureRangeContent(range) {
   replaceUselessElements(root);
   // remove empty nodes
   removeEmptyNodes(root);
-  // add junk rating based on presence of links
-  rateContentByLinks(root, objectDossiers);
-  // add junk rating based on positions and colors
-  rateContentBySimiliarity(root, objectDossiers);
+  // add junk rating based on presence of links, positions, and colors
+  rateContent(root, objectDossiers);
   // H1 is generally too large for printing--shrink them down
   shrinkHeadings(root);
   return root.content;
@@ -614,10 +616,15 @@ export function insertContent(object, content, atBeginning = false) {
   }
 }
 
-function rateContentByLinks(root, objectDossiers) {
+function rateContent(root, objectDossiers) {
   if (!(root.content instanceof Array)) {
     return;
   }
+  const applyRating = (object, junkFactor) => {
+    if (junkFactor) {
+      object.junk = Math.min(1, (object.junk || 0) + junkFactor);
+    }
+  };
   const calculateLinkScore = (object) => {
     const { links } = objectDossiers.get(object);
     if (links) {
@@ -631,40 +638,13 @@ function rateContentByLinks(root, objectDossiers) {
     }
     return 0;
   };
-  const calculateCollectiveScore = (object, tag, tough) => {
-    const items = getChildrenByTag(object, tag);
-    // see if the items are nothing but links
-    const scores = items.map(calculateLinkScore);
-    // if every item is mostly link, then it's probably junk
-    if (scores.every(s => s === 1)) {
-      return 1;
-    } else if (scores.every(s => s >= 0.5)) {
-      return (tough) ? 1 : 0.5;
-    } else {
-      return 0;
-    }
-  };
   for (const object of root.content) {
     if (object instanceof Object) {
-      let junkFactor = 0;
-      if (object.tag === 'UL' || object.tag === 'OL') {
-        junkFactor = calculateCollectiveScore(object, 'LI', false);
-      } else if (object.tag === 'TABLE') {
-        junkFactor = calculateCollectiveScore(object, 'TD', true);
-      } else {
-        junkFactor = calculateLinkScore(object);
-      }
-      if (junkFactor > 0 && !(object.junk > junkFactor)) {
-        object.junk = junkFactor;
-      }
+      const junkFactor = calculateLinkScore(object);
+      applyRating(object, junkFactor);
     }
   }
-}
 
-function rateContentBySimiliarity(root, objectDossiers) {
-  if (!(root.content instanceof Array)) {
-    return;
-  }
   // figure out the dominant color and position of the content
   // most of the text we want should have the same color and similar
   // left and right boundaries
@@ -761,9 +741,7 @@ function rateContentBySimiliarity(root, objectDossiers) {
         junkFactor = 0.5;
       }
       //object.score = { normalizer, color: scoreColor, position: scorePos };
-      if (junkFactor > 0 && !(object.junk > junkFactor)) {
-        object.junk = junkFactor;
-      }
+      applyRating(object, junkFactor);
     }
   }
 }
@@ -994,8 +972,9 @@ function shrinkHeadings(root) {
   if (!(root.content instanceof Array)) {
     return;
   }
-  const headings1 = getChildrenByTag(root, 'H1');
-  if (headings1.length > 0) {
+
+  const h1 = root.content.find(o => o.tag === 'H1');
+  if (h1) {
     for (const object of root.content) {
       const m = /^H([12345])$/.exec(object.tag);
       if (m) {
