@@ -89,6 +89,76 @@
     </section>
 
     <section>
+      <title>Figure caption omission</title>
+      <content>
+        <h2>Hello world</h2>
+        <figure>
+          <img src="https://interactive-examples.mdn.mozilla.net/media/cc0-images/elephant-660-480.jpg">
+          <figcaption>This is a picture</figcaption>
+        </figure>
+        <p>This is a test</p>
+      </content>
+      <expected>
+        [
+          {
+            "tag": "H2",
+            "content": "Hello world"
+          },
+          {
+            "tag": "P",
+            "content": "This is a test"
+          }
+        ]
+      </expected>
+    </section>
+
+    <section>
+      <title>Input label omission (1)</title>
+      <content>
+        <h2>Hello world</h2>
+        <div>
+          <label><input type="checkbox"> Good luck</label>
+        </div>
+        <p>This is a test</p>
+      </content>
+      <expected>
+        [
+          {
+            "tag": "H2",
+            "content": "Hello world"
+          },
+          {
+            "tag": "P",
+            "content": "This is a test"
+          }
+        ]
+      </expected>
+    </section>
+
+    <section>
+      <title>Input label omission (2)</title>
+      <content>
+        <h2>Hello world</h2>
+        <div>
+          <input id="good-luck" type="checkbox"> <label for="good-luck">Good luck</label>
+        </div>
+        <p>This is a test</p>
+      </content>
+      <expected>
+        [
+          {
+            "tag": "H2",
+            "content": "Hello world"
+          },
+          {
+            "tag": "P",
+            "content": "This is a test"
+          }
+        ]
+      </expected>
+    </section>
+
+    <section>
       <title>White space handling: normal</title>
       <content>
         <h2>Hello world</h2>

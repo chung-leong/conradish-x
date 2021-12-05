@@ -202,6 +202,19 @@ export function captureRangeContent(range) {
     }
     return false;
   };
+  const isInputLabel = (node) => {
+    if (node.tagName === 'LABEL') {
+      const { htmlFor } = node;
+      if (htmlFor) {
+        return true;
+      }
+      const inputs = node.querySelectorAll('INPUT,SELECT,TEXTAREA');
+      if (inputs.length > 0) {
+        return true;
+      }
+    }
+    return false;
+  };
   const isStylingLink = (node) => {
     if (node.tagName === 'A') {
       return true;
@@ -400,6 +413,10 @@ export function captureRangeContent(range) {
     }
     // remove sup tags that are links
     if (isSuperscriptLink(node)) {
+      return;
+    }
+    // remove input labels
+    if (isInputLabel(node)) {
       return;
     }
     const { parentNode } = node;
