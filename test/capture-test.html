@@ -89,6 +89,66 @@
     </section>
 
     <section>
+      <title>Pseudo element: before</title>
+      <content>
+        <h2>Hello world</h2>
+        <p>This is a <span class="with-pseudo-element-before">test</span></p>
+      </content>
+      <expected>
+        [
+          {
+            "tag": "H2",
+            "content": "Hello world"
+          },
+          {
+            "tag": "P",
+            "content": "This is a totally bogus test"
+          }
+        ]
+      </expected>
+    </section>
+
+    <section>
+      <title>Pseudo element: after</title>
+      <content>
+        <h2>Hello world</h2>
+        <p>This is a <span class="with-pseudo-element-after">test</span></p>
+      </content>
+      <expected>
+        [
+          {
+            "tag": "H2",
+            "content": "Hello world"
+          },
+          {
+            "tag": "P",
+            "content": "This is a test, suckers!"
+          }
+        ]
+      </expected>
+    </section>
+
+    <section>
+      <title>Pseudo element: absolutely positioned</title>
+      <content>
+        <h2>Hello world</h2>
+        <p>This is a <span class="with-pseudo-element-absolute">test</span></p>
+      </content>
+      <expected>
+        [
+          {
+            "tag": "H2",
+            "content": "Hello world"
+          },
+          {
+            "tag": "P",
+            "content": "This is a test"
+          }
+        ]
+      </expected>
+    </section>
+
+    <section>
       <title>Figure caption omission</title>
       <content>
         <h2>Hello world</h2>
@@ -372,6 +432,186 @@ a   test
     </section>
 
     <section>
+      <title>Consecutative BR tags (1)</title>
+      <content>
+        <p>Hello world<br><br>This is a test</p>
+      </content>
+      <expected>
+        [
+          {
+            "tag": "P",
+            "content": "Hello world"
+          },
+          {
+            "tag": "P",
+            "content": "This is a test"
+          }
+        ]
+      </expected>
+    </section>
+
+    <section>
+      <title>Consecutative BR tags (2)</title>
+      <content>
+        <p>Hello world<br><br><br>This is a test</p>
+      </content>
+      <expected>
+        [
+          {
+            "tag": "P",
+            "content": "Hello world"
+          },
+          {
+            "tag": "P",
+            "content": "This is a test"
+          }
+        ]
+      </expected>
+    </section>
+
+    <section>
+      <title>Consecutative BR tags (3)</title>
+      <content>
+        <div>Hello world<br><h2>Headline!</h2><br>This is a test</div>
+      </content>
+      <expected>
+        [
+          {
+            "tag": "P",
+            "content": "Hello world"
+          },
+          {
+            "tag": "H2",
+            "content": "Headline!"
+          },
+          {
+            "tag": "P",
+            "content": "This is a test"
+          }
+        ]
+      </expected>
+    </section>
+
+    <section>
+      <title>Heading in P tag</title>
+      <content>
+        <p>Hello world<h2>Headline!</h2>This is a test</p>
+      </content>
+      <expected>
+        [
+          {
+            "tag": "P",
+            "content": "Hello world"
+          },
+          {
+            "tag": "H2",
+            "content": "Headline!"
+          },
+          {
+            "tag": "P",
+            "content": "This is a test"
+          }
+        ]
+      </expected>
+    </section>
+
+    <section>
+      <title>List items in DIV tag (1)</title>
+      <content>
+        <div>
+          <li>This is a test</li>
+          <li>Something else</li>
+        </div>
+      </content>
+      <expected>
+        {
+          "tag": "UL",
+          "content": [
+            {
+              "tag": "LI",
+              "content": "This is a test"
+            },
+            {
+              "tag": "LI",
+              "content": "Something else"
+            }
+          ]
+        }
+      </expected>
+    </section>
+
+    <section>
+      <title>List items in DIV tag (2)</title>
+      <content>
+        <div style="list-style-type: decimal">
+          <li>This is a test</li>
+          <li>Something else</li>
+        </div>
+      </content>
+      <expected>
+        {
+          "tag": "OL",
+          "content": [
+            {
+              "tag": "LI",
+              "content": "This is a test"
+            },
+            {
+              "tag": "LI",
+              "content": "Something else"
+            }
+          ]
+        }
+      </expected>
+    </section>
+
+    <section>
+      <title>List by style</title>
+      <content>
+        <div style="list-style-type: decimal">
+          <div style="display: list-item">This is a test</div>
+          <div style="display: list-item">Something else</div>
+        </div>
+      </content>
+      <expected>
+        {
+          "tag": "OL",
+          "content": [
+            {
+              "tag": "LI",
+              "content": "This is a test"
+            },
+            {
+              "tag": "LI",
+              "content": "Something else"
+            }
+          ]
+        }
+      </expected>
+    </section>
+
+    <section>
+      <title>Naked list items</title>
+      <content>
+        <li>This is a test</li>
+        <li>Something else</li>
+      </content>
+      <expected>
+        [
+          {
+            "tag": "P",
+            "content": "This is a test"
+          },
+          {
+            "tag": "P",
+            "content": "Something else"
+          }
+        ]
+      </expected>
+    </section>
+
+
+    <section>
       <title>Selection in list item</title>
       <content>
         <h2>Hello world</h2>
@@ -446,6 +686,83 @@ a   test
             }
           }
         ]
+      </expected>
+    </section>
+
+    <section>
+      <title>Table by style (1)</title>
+      <content>
+        <div style="display: table">
+          <div style="display: table-row-group">
+            <div style="display: table-row">
+              <div style="display: table-cell">This is a test</div>
+              <div style="display: table-cell">Something else</div>
+            </div>
+          </div>
+        </div>
+      </content>
+      <expected>
+        {
+          "tag": "TABLE",
+          "content": {
+            "tag": "TBODY",
+            "content": {
+              "tag": "TR",
+              "content": [
+                {
+                  "tag": "TD",
+                  "content": "This is a test"
+                },
+                {
+                  "tag": "TD",
+                  "content": "Something else"
+                }
+              ]
+            }
+          }
+        }
+      </expected>
+    </section>
+
+    <section>
+      <title>Table by style (2)</title>
+      <content>
+        <div style="display: table">
+          <div style="display: table-caption">This is a table</div>
+          <div style="display: table-header-group">
+            <div style="display: table-row">
+              <div style="display: table-cell; font-weight: 700">This is a test</div>
+              <div style="display: table-cell; font-weight: 700">Something else</div>
+            </div>
+          </div>
+        </div>
+      </content>
+      <expected>
+        {
+          "tag": "TABLE",
+          "content": [
+            {
+              "tag": "CAPTION",
+              "content": "This is a table"
+            },
+            {
+              "tag": "THEAD",
+              "content": {
+                "tag": "TR",
+                "content": [
+                  {
+                    "tag": "TH",
+                    "content": "This is a test"
+                  },
+                  {
+                    "tag": "TH",
+                    "content": "Something else"
+                  }
+                ]
+              }
+            }
+          ]
+        }
       </expected>
     </section>
 

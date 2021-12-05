@@ -1,3 +1,7 @@
+TITLE, EXPECTED, CONTENT {
+  display: block;
+}
+
 .test {
   margin-bottom: 1em;
 }
@@ -49,4 +53,26 @@
 .output::before {
   content: "Actual:";
   background-color: rgb()
+}
+
+.with-pseudo-element-before::before {
+  content: "totally bogus ";
+  color: blue;
+}
+
+.with-pseudo-element-after::after {
+  content: ", suckers!";
+  color: green;
+}
+
+.with-pseudo-element-absolute {
+  position: relative;
+}
+
+.with-pseudo-element-absolute::after {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  content: "SUCKERS!";
+  color: orange;
 }

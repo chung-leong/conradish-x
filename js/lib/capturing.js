@@ -285,7 +285,7 @@ export function captureRangeContent(range) {
   const isRealTable = (node) => {
     const modes = [ 'table-row-group', 'table-header-group', 'table-footer-group' ];
     for (const child of node.children) {
-      const { display } = getNodeStyle(node);
+      const { display } = getNodeStyle(child);
       if (modes.includes(display)) {
         return true;
       }
@@ -319,9 +319,15 @@ export function captureRangeContent(range) {
       return getTopLevelObject(parent);
     }
   };
-  const closeObject = (node) => {
+  const closeObject = (object) => {
+    // remove the mapping to the source node
+    const { node, parent } = objectDossiers.get(object);
     if (node !== rootNode) {
       nodeObjects.delete(node);
+    }
+    if (object.tag === 'SPAN') {
+      // deal with oddball situations where we have block elements inside an inline parent
+      closeObject(parent);
     }
   };
   const getContainerObject = (node) => {
@@ -330,7 +336,10 @@ export function captureRangeContent(range) {
       if (object === root) {
         // if we're going to put stuff into the root instead of this node, we need to make
         // sure that things no longer get placed into the node's object if there's one created earlier
-        closeObject(node);
+        const parentObject = nodeObjects.get(node);
+        if (parentObject) {
+          closeObject(parentObject);
+        }
         return root;
       } else if (object) {
         if (object.tag === 'TD' || object.tag === 'LI') {
@@ -437,11 +446,20 @@ export function captureRangeContent(range) {
       }
     } else if (tag === 'LI') {
       parentObject = getObject(parentNode);
-      if (parentObject === root) {
+      if (parentObject.tag === 'SPAN') {
+        // insert at root level
+        parentObject = getContainerObject(parentNode);
+        tag = 'P';
+      } else if (parentObject === root) {
         tag = 'P';
       } else if (parentObject && parentObject.tag !== 'OL' && parentObject.tag !== 'UL') {
         // make sure parent is a list
         parentObject.tag = (style.listStyleType === 'decimal') ? 'OL' : 'UL';
+      }
+    } else if (tag === 'TD') {
+      parentObject = getObject(parentNode);
+      if (parentObject === root) {
+        tag = 'P';
       }
     } else if (topLevelTags.includes(tag)) {
       // insert either at the root level or into a <LI> or <TD>
@@ -496,7 +514,7 @@ export function captureRangeContent(range) {
     if (!isHidden(node, id)) {
       const style = getComputedStyle(node, id);
       const { display, position, content } = style;
-      if (display !== 'none' && position === 'inline') {
+      if (content !== 'none' && display !== 'none' && position === 'static') {
         const text = parseCSSContent(content);
         if (text) {
           const parentObject = getObject(node);

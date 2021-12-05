@@ -2,10 +2,22 @@ import { captureSelection } from '../js/lib/capturing.js';
 import { e } from '../js/lib/ui.js';
 
 async function start() {
+  const selectedSection = document.getElementById('selected');
+  if (selectedSection) {
+    try {
+      await processSection(selectedSection);
+    } catch (err) {
+      console.error(err);
+    }
+  }
   const sectionElements = document.getElementsByTagName('SECTION');
   for (const sectionElement of [ ...sectionElements ]) {
     try {
-      await processSection(sectionElement);
+      if (!selectedSection) {
+        await processSection(sectionElement);
+      } else {
+        sectionElement.remove();
+      }
     } catch (err) {
       console.error(err);
     }
