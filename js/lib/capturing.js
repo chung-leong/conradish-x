@@ -894,34 +894,88 @@ function collapseWhitespaces(root, objectDossiers) {
 }
 
 function addSpacers(root, objectDossiers) {
+  const getSeparation = (object) => {
+    let text = '', marginStart = -Infinity, marginEnd = -Infinity;
+    if (object instanceof Object) {
+      if (object.tag === 'SPAN') {
+        const { style } = objectDossiers.get(object);
+        const height = parseInt(style.fontSize);
+        const left = parseInt(style.marginLeft) + parseInt(style.paddingLeft);
+        const right = parseInt(style.marginRight) + parseInt(style.paddingRight);
+        text = getPlainText(object);
+        marginStart = left / height;
+        marginEnd = right / height;
+      }
+    } else if (typeof(object) === 'string') {
+      text = object;
+      marginStart = 0;
+      marginEnd = 0;
+    }
+    const whiteStartStart = !!text && /^\s/.test(text);
+    const whiteSpaceEnd = !!text && /\s$/.test(text);
+    return { marginStart, marginEnd, whiteStartStart, whiteSpaceEnd };
+    return { marginStart, marginEnd, whiteStartStart, whiteSpaceEnd };
+  };
+  const getPreviousObject = (object) => {
+    let prevObject;
+    const { parent } = objectDossiers.get(object);
+    if (parent) {
+      if (parent.content instanceof Array) {
+        const index = parent.content.indexOf(object);
+        prevObject = parent.content[index - 1];
+      }
+      if (!prevObject) {
+        prevObject = getPreviousObject(parent);
+      }
+    }
+    return prevObject;
+  };
+  const getNextObject = (object) => {
+    let nextObject;
+    const { parent } = objectDossiers.get(object);
+    if (parent) {
+      if (parent.content instanceof Array) {
+        const index = parent.content.indexOf(object);
+        nextObject = parent.content[index + 1];
+      }
+      if (!nextObject) {
+        nextObject = getNextObject(parent);
+      }
+    }
+    return nextObject;
+  };
   const scan = (item) => {
     if (item instanceof Array) {
-      item.forEach(scan);
-      item.forEach((item, i, arr) => {
-        if (item.tag === 'SPAN') {
-          const { style } = objectDossiers.get(item);
-          const text = getPlainText(item);
-          const height = parseInt(style.fontSize);
-          const left = parseInt(style.marginLeft) + parseInt(style.paddingLeft);
-          const right = parseInt(style.marginRight) + parseInt(style.paddingRight);
-          if (left / height > 0.25) {
-            if (i > 0) {
-              const leftText = getPlainText(arr[i - 1]);
-              if (!/\s$/.test(leftText) && !/^\s/.test(text)) {
-                insertContent(item, ' ', true);
+      const arr = item;
+      for (const object of arr) {
+        scan(object);
+        if (object.tag === 'SPAN') {
+          const sep = getSeparation(object);
+          if (sep.marginStart && !sep.whiteSpaceStart) {
+            // has margin before but no whitespace, see if the previous item has spacing
+            const prevObject = getPreviousObject(object);
+            const sepBefore = getSeparation(prevObject);
+            if (!sepBefore.whiteSpaceEnd && (sep.marginStart + sepBefore.marginEnd >= 0.25)) {
+              // add a space at the beginning if this margin is bigger than the other,
+              // otherwise add it to the other one
+              if (sep.marginStart > sepBefore.marginEnd) {
+                insertContent(object, ' ', true);
               }
             }
           }
-          if (right / height > 0.25) {
-            if (i < arr.length - 1) {
-              const rightText = getPlainText(arr[i + 1]);
-              if (!/\s$/.test(text) && !/^\s/.test(rightText)) {
-                insertContent(item, ' ');
+          if (sep.marginEnd && !sep.whiteSpaceEnd) {
+            // has margin after but no whitespace, see if the next item has spacing
+            const nextObject = getNextObject(object);
+            const sepAfter = getSeparation(nextObject);
+            if (!sepAfter.whiteSpaceStart && (sep.marginEnd + sepAfter.marginStart >= 0.25)) {
+              // add a space at the end
+              if (sep.marginEnd >= sepAfter.marginStart) {
+                insertContent(object, ' ');
               }
             }
           }
         }
-      });
+      }
     } else if (item instanceof Object) {
       scan(item.content);
     }

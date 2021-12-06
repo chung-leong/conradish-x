@@ -256,6 +256,124 @@
     </section>
 
     <section>
+      <title>Spacing with margin (1)</title>
+      <content>
+        <h2>Hello world</h2>
+        <p>This<span style="margin: 4px 4px 4px 4px">is</span>a test</p>
+      </content>
+      <expected>
+        [
+          {
+            "tag": "H2",
+            "content": "Hello world"
+          },
+          {
+            "tag": "P",
+            "content": "This is a test"
+          }
+        ]
+      </expected>
+    </section>
+
+    <section>
+      <title>Spacing with margin (2)</title>
+      <content>
+        <h2>Hello world</h2>
+        <p><span>This<span style="margin: 4px 4px 4px 4px">is</span></span>a test</p>
+      </content>
+      <expected>
+        [
+          {
+            "tag": "H2",
+            "content": "Hello world"
+          },
+          {
+            "tag": "P",
+            "content": "This is a test"
+          }
+        ]
+      </expected>
+    </section>
+
+    <section>
+      <title>Spacing with margin (3)</title>
+      <content>
+        <h2>Hello world</h2>
+        <p><span>This<span style="margin: 4px 4px 4px 4px">is</span></span><span style="margin: 3px 3px 3px 3px; text-decoration: underline">a test</span></p>
+      </content>
+      <expected>
+        [
+          {
+            "tag": "H2",
+            "content": "Hello world"
+          },
+          {
+            "tag": "P",
+            "content": [
+              "This is ",
+              {
+                "tag": "SPAN",
+                "content": "a test",
+                "style": {
+                  "textDecorationLine": "underline"
+                }
+              }
+            ]
+          }
+        ]
+      </expected>
+    </section>
+
+    <section>
+      <title>Spacing with margin (4)</title>
+      <content>
+        <h2>Hello world</h2>
+        <p><span>This<span style="margin: 4px 4px 4px 4px">is</span></span><span style="margin: 6px 6px 6px 6px; text-decoration: underline">a test</span></p>
+      </content>
+      <expected>
+        [
+          {
+            "tag": "H2",
+            "content": "Hello world"
+          },
+          {
+            "tag": "P",
+            "content": [
+              "This is",
+              {
+                "tag": "SPAN",
+                "content": " a test",
+                "style": {
+                  "textDecorationLine": "underline"
+                }
+              }
+            ]
+          }
+        ]
+      </expected>
+    </section>
+
+    <section>
+      <title>Spacing with padding</title>
+      <content>
+        <h2>Hello world</h2>
+        <p>This<span style="padding: 4px 4px 4px 4px">is</span>a test</p>
+      </content>
+      <expected>
+        [
+          {
+            "tag": "H2",
+            "content": "Hello world"
+          },
+          {
+            "tag": "P",
+            "content": "This is a test"
+          }
+        ]
+      </expected>
+    </section>
+
+    <section>
       <title>Input label omission (1)</title>
       <content>
         <h2>Hello world</h2>
