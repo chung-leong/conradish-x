@@ -102,7 +102,7 @@ export function captureRangeContent(range) {
   }
   const root = { tag: 'DIV', content: undefined };
   const nodeObjects = new WeakMap([ [ rootNode, root ] ]);
-  const objectDossiers = new WeakMap([ [ root, { style: getNodeStyle(rootNode) } ] ]);
+  const objectDossiers = new WeakMap([ [ root, { node: rootNode, style: getNodeStyle(rootNode) } ] ]);
   const docClientRect = document.documentElement.getBoundingClientRect();
   const getRect = (node) => {
     const clientRect = node.getBoundingClientRect();
@@ -565,6 +565,9 @@ export function captureRangeContent(range) {
   replaceUselessElements(root);
   // remove empty nodes
   removeEmptyNodes(root);
+  // remove top-level elements that contain only whitespaces
+  // (not part of removeEmptyNodes() since that's used when we save editted article);
+  removeBlankParagraphs(root);
   // add junk rating based on presence of links, positions, and colors
   rateContent(root, objectDossiers);
   // H1 is generally too large for printing--shrink them down
@@ -645,23 +648,38 @@ function rateContent(root, objectDossiers) {
     }
   }
 
-  // figure out the dominant color and position of the content
-  // most of the text we want should have the same color and similar
-  // left and right boundaries
-  const objectCounts = new WeakMap;
-  const leftCounts = new Map;
-  const rightCounts = new Map;
-  const colorCounts = new Map;
+  // determine the dominant DOM path of source nodes of top-level objects
+  const rootNode = objectDossiers.get(root).node;
+  const nodePaths = new Map([ [ rootNode, { name: '#ROOT', parent: null } ] ]);
+  const getNodePath = (node) => {
+    let path = nodePaths.get(node);
+    if (!path) {
+      const { tagName, className, parentNode } = node;
+      const name = (className) ? `${tagName}.${className}` : tagName;
+      const parent = getNodePath(parentNode);
+      // see if there's an existing path object
+      for (const [ prevNode, existingPath ] of nodePaths) {
+        if (existingPath.parent === parent && existingPath.name === name) {
+          path = existingPath;
+          break;
+        }
+      }
+      if (!path) {
+        path = { name, parent };
+      }
+      nodePaths.set(node, path);
+    }
+    return path;
+  };
+  const parentPathCounts = new Map
+  const objectCharCounts = new WeakMap;
   for (const object of root.content) {
     if (object instanceof Object) {
-      const { rect, style } = objectDossiers.get(object);
-      const { color } = style;
-      const { left, right } = rect;
+      const { node } = objectDossiers.get(object);
+      const parentPath = getNodePath(node.parentNode);
       const charCount = getCharacterCount(object);
-      objectCounts.set(object, charCount);
-      colorCounts.set(color, charCount + (colorCounts.get(color) || 0)) ;
-      leftCounts.set(left, charCount + (leftCounts.get(left) || 0)) ;
-      rightCounts.set(right, charCount + (rightCounts.get(right) || 0)) ;
+      objectCharCounts.set(object, charCount);
+      parentPathCounts.set(parentPath, charCount + (parentPathCounts.get(parentPath) || 0)) ;
     }
   }
   const getMaxKey = (map) => {
@@ -674,6 +692,39 @@ function rateContent(root, objectDossiers) {
     }
     return maxKey;
   };
+  const maxParentPath = getMaxKey(parentPathCounts);
+  for (const object of root.content) {
+    if (object instanceof Object) {
+      if (object.tag === 'H1' || object.tag === 'H2') {
+        // the main heading (i.e. article title) can often be outside of the flow of the article text
+        continue;
+      }
+      const { node } = objectDossiers.get(object);
+      const parentPath = getNodePath(node.parentNode);
+      if (parentPath !== maxParentPath) {
+        // parent is different--it's dodgy
+        applyRating(object, 0.5);
+      }
+    }
+  }
+
+  // figure out the dominant color and position of the content
+  // most of the text we want should have the same color and similar
+  // left and right boundaries
+  const leftCounts = new Map;
+  const rightCounts = new Map;
+  const colorCounts = new Map;
+  for (const object of root.content) {
+    if (object instanceof Object) {
+      const { rect, style } = objectDossiers.get(object);
+      const { color } = style;
+      const { left, right } = rect;
+      const charCount = objectCharCounts.get(object);
+      colorCounts.set(color, charCount + (colorCounts.get(color) || 0)) ;
+      leftCounts.set(left, charCount + (leftCounts.get(left) || 0)) ;
+      rightCounts.set(right, charCount + (rightCounts.get(right) || 0)) ;
+    }
+  }
   const maxColor = getMaxKey(colorCounts);
   const maxLeft = getMaxKey(leftCounts);
   const maxRight = getMaxKey(rightCounts);
@@ -705,7 +756,7 @@ function rateContent(root, objectDossiers) {
     return diffR + diffG + diffB + diffA;
   };
   const calculateNormalizer = (object) => {
-    const charCount = objectCounts.get(object);
+    const charCount = objectCharCounts.get(object);
     switch(object.tag) {
       case 'TABLE':
         return charCount * 0.5;
@@ -966,6 +1017,16 @@ export function removeEmptyNodes(root) {
     return item;
   };
   clean(root);
+}
+
+function removeBlankParagraphs(root) {
+  // toss out paragraphs that are just blank
+  if (root.content instanceof Array) {
+    alter(root.content, (item) => {
+      const plainText = getPlainText(item.content);
+      return !plainText.trim() ? undefined : item;
+    });
+  }
 }
 
 function shrinkHeadings(root) {
