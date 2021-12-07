@@ -286,7 +286,7 @@ BODY.ready #article {
 }
 
 #help-button {
-  position: absolute;
+  position: sticky;
   top: calc(100% - 32px - 8px);
   left: 8px;
   width: 32px;

@@ -181,7 +181,8 @@ function getFootnoteNumber(range, ignoreWhitespaceBefore = false) {
   }
   const isFootnoteNumber = (node) => {
     if (node && node.nodeType === Node.ELEMENT_NODE) {
-      return node.classList.contains('footnote-number');
+      const { classList } = node;
+      return classList.contains('footnote-number') && !classList.contains('hidden');
     }
     return false;
   };

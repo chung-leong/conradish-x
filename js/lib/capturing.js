@@ -456,7 +456,7 @@ export function captureRangeContent(range) {
       }
     } else if (tag === 'LI') {
       parentObject = getObject(parentNode);
-      if (parentObject.tag === 'SPAN') {
+      if (parentObject && parentObject.tag === 'SPAN') {
         // insert at root level
         parentObject = getContainerObject(parentNode);
         tag = 'P';

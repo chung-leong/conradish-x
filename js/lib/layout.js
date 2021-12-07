@@ -259,6 +259,9 @@ export function adjustFootnotes(options = {}) {
   if (updateReferences) {
     const supElements = contentElement.getElementsByClassName('footnote-number');
     for (const [ index, supElement ] of [ ...supElements ].entries()) {
+      if (supElement.classList.contains('hidden')) {
+        continue;
+      }
       let footnote = footnotes.find(f => f.supElement === supElement);
       if (!footnote) {
         const { id } = supElement;
@@ -507,6 +510,9 @@ function extractContent(node) {
       if (filterMode === 'automatic' && classList.contains('likely-junk')) {
         return;
       }
+      if (classList.contains('hidden')) {
+        return;
+      }
       const object = { tag: tagName, content: undefined };
       for (const child of childNodes) {
         const content = extractFromNode(child);
@@ -526,7 +532,7 @@ function extractContent(node) {
       if (includeFootnotes) {
         if (classList.contains('footnote-number')) {
           const footnote = footnotes.find((f) => f.supElement === node);
-          if (footnote) {
+          if (footnote && !footnote.deleted) {
             const { content, extra } = footnote;
             object.footnote = { content };
             Object.assign(object.footnote, extra)
