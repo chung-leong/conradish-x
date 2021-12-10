@@ -1,6 +1,5 @@
 import { e, separateWords } from './ui.js';
-import { adjustLayout, adjustFootnotes, findDeletedFootnote, annotateRange, saveDocument, setFilterMode,
-  getTitle, setTitle } from './layout.js';
+import { findDeletedFootnote, annotateRange, setFilterMode, getTitle, setTitle } from './layout.js';
 import { transverseRange } from './capturing.js';
 import { l, translate, getSourceLanguage, getTargetLanguage, getLanguageDirection } from './i18n.js';
 
@@ -12,7 +11,6 @@ const articleMenuItems = {};
 let lastSelectedRange = null;
 let articleMenuClicked = false;
 let editMode = 'annotate';
-let cleaned = false;
 let topDrawer = null;
 
 export function attachEditingHandlers() {
@@ -86,8 +84,6 @@ async function addFootnote(includeTerm) {
   const placeholder = (translating) ? '...' : '';
   const initialText = (includeTerm) ? `${term} - ${placeholder}` : placeholder;
   const footnote = annotateRange(range, initialText, { term, lang: `${sourceLang},${targetLang}` });
-  adjustFootnotes({ updateReferences: true, updateNumbering: true });
-  adjustLayout({ updateFooterPosition: true, updateFooterDirection: true });
   if (translating) {
     const result = await translate(term, sourceLang, targetLang, includeTerm);
     const { itemElement } = footnote;
@@ -99,11 +95,8 @@ async function addFootnote(includeTerm) {
       }
       const text = (includeTerm) ? `${term} - ${translation}` : translation;
       itemElement.textContent = text;
-      adjustFootnotes({ updateContent: true });
-      adjustLayout({ updateFooterPosition: true });
       // save additional information from Google Translate
       Object.assign(footnote.extra, extra);
-      autosave(0);
     }
   } else {
     const { footer } = footnote.page;
@@ -114,7 +107,6 @@ async function addFootnote(includeTerm) {
     range.selectNode(footnote.itemElement.lastChild);
     range.collapse();
     sel.addRange(range);
-    autosave();
   }
 }
 
@@ -243,13 +235,6 @@ function normalizeRange(range) {
   return range;
 }
 
-let autosaveTimeout = 0;
-
-function autosave(delay = 2000) {
-  clearTimeout(autosaveTimeout);
-  autosaveTimeout = setTimeout(async() => await saveDocument(), delay);
-}
-
 function isArticleEditor(node) {
   if (node) {
     if (node.id === 'article-text') {
@@ -359,29 +344,16 @@ function restoreCursorPosition(cursor) {
 function handleInput(evt) {
   const { target } = evt;
   if (isArticleEditor(target)) {
-    // see if any footnote number has been deleted
-    const updateFooterPosition = adjustFootnotes({ updateReferences: true });
-    // adjust the layout
-    adjustLayout({ updateFooterPosition });
     // clean up the tags, making sure they all have the "conradish" class
     adjustAttributes(target, true);
-    // save changes
-    autosave();
   } else if (isFootnoteEditor(target)) {
     // remember which item has the cursor
     const cursor = preserveCursorPosition();
-    // see if any item has gone missing or resurfaced, hiding and restoring
-    // the referencing sup elements accordingly
-    adjustFootnotes({ updateItems: true, updateContent: true });
-    // adjust the adjust the page layout in case the height is different
-    adjustLayout({ updateFooterPosition: true });
     // clean up the tags
     adjustAttributes(target);
     // put the cursor back onto the correct item, in the event it got moved
     // to another footer
     restoreCursorPosition(cursor);
-    // save changes
-    autosave();
   }
 }
 
@@ -626,11 +598,6 @@ export function getEditMode(mode) {
 export function setEditMode(mode) {
   if (editMode === 'annotate') {
     hideArticleMenu();
-    cleaned = false;
-  } else {
-    if (cleaned) {
-      autosave(0);
-    }
   }
   editMode = mode;
   setFilterMode(editMode === 'clean' ? 'manual' : 'automatic');
@@ -765,7 +732,6 @@ function handleClick(evt) {
         } else {
           classList.add('likely-junk');
         }
-        cleaned = true;
         break;
       }
     }

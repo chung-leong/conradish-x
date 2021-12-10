@@ -188,10 +188,18 @@ BODY.ready #article {
   border-radius: 4px;
 }
 
+#footnote-backstage {
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+}
+
 .footer-pusher {
   float: right;
   line-height: 0;
   visibility: hidden;
+  width: 0px;
+  margin-left: 1px;
 }
 
 .footer-content {
@@ -320,6 +328,21 @@ BODY.ready #status-container {
 }
 
 #error-text {
+}
+
+#overlays {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  pointer-events: none;
+}
+
+.overlay {
+  position: absolute;
+  box-sizing: border-box;
+  border: 3px solid rgba(255, 0, 255, 0.25);
 }
 
 @page {
