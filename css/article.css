@@ -42,7 +42,7 @@ BODY {
   margin: 5mm 5mm 5mm 5mm;
   text-align: start;
   /* article is hidden from view initially */
-  visibility: hidden;
+  /* visibility: hidden; */
 }
 
 BODY.ready #article {

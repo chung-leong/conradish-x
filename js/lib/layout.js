@@ -211,29 +211,83 @@ function hasExcessPages() {
 */
 
 export function adjustLayout() {
-  const contentAreas = pages.map(p => getContentArea(p));
-  const isCrossingMultiple = (rect) => {
-    for (const { top, bottom } of contentAreas) {
-      if (rect.top >= top && rect.top <= bottom) {
-        if (rect.bottom > bottom) {
-          return true;
-        }
+  // get the height of each footnote now, since we might detach some of them temporarily from the DOM
+  const footnoteHeightMap = new WeakMap;
+  for (const footnote of footnotes) {
+    footnoteHeightMap.set(footnote, footnote.itemElement.offsetHeight);
+  }
+  let pageIndex = -1;
+  let page = null;
+  let availableArea = null;
+  let contentArea = null;
+  const addPage = () => {
+    if (pages.length === 0) {
+      // remove the placeholder
+      while (backgroundElement.firstChild) {
+        backgroundElement.firstChild.remove();
       }
     }
+    // add paper to background
+    const paperElement = e('DIV', { className: 'paper' });
+    backgroundElement.append(paperElement);
+    const paperRect = getRect(paperElement);
+    // add footer
+    const footer = addFooter();
+    const page = { paperElement, paperRect, footer };
+    pages.push(page);
+    return page;
   };
-  const getFootnoteHeight = (footnotes) => {
-    let height = 0;
-    for (const { itemElement } of footnotes) {
-      height += itemElement.offsetHeight;
+  const startNewPage = () => {
+    pageIndex++;
+    if (pageIndex < pages.length) {
+      page = pages[pageIndex];
+    } else {
+      page = addPage();
     }
-    return height;
+    availableArea = getContentArea(page, true);
+    contentArea = getContentArea(page);
   };
-  const sum = (arr) => {
-    let total = 0;
-    for (const n of arr) {
-      total += n;
+  let totalFootnoteCount = 0;
+  const attachFootnotes = (newList) => {
+    if (!page) {
+      return;
     }
-    return total;
+    const { listElement, footnotes } = page.footer;
+    listElement.start = totalFootnoteCount + 1;
+    let changed = false;
+    // first, take out the ones that's aren't supposed to be in this page anymore
+    alter(footnotes, (footnote) => {
+      if (!newList.includes(footnote)) {
+        footnote.itemElement.remove();
+        changed = true;
+      } else {
+        return footnote;
+      }
+    });
+    for (const [ index, footnote ] of newList.entries()) {
+      // see if it's attached to the page already
+      const currentIndex = footnotes.indexOf(footnote);
+      if (index !== currentIndex) {
+        if (currentIndex !== -1) {
+          // in the wrong position
+          footnotes.splice(currentIndex, 1);
+        }
+        footnotes.splice(index, 0, footnote);
+        if (index === 0) {
+          // put it at the beginning
+          listElement.prepend(footnote.itemElement);
+        } else {
+          // insert after the previous footnote
+          const prevElement = newList[index - 1].itemElement;
+          listElement.insertBefore(footnote.itemElement, prevElement.nextSibling);
+        }
+        changed = true;
+      }
+      totalFootnoteCount++;
+    }
+    if (changed) {
+      adjustFooterPosition(page.footer);
+    }
   };
   const mapFootnotesToLines = (element, footnotes, lines) => {
     if (footnotes.length > 0) {
@@ -259,12 +313,16 @@ export function adjustLayout() {
   const analyseContent = (element) => {
     const style = getComputedStyle(element);
     const rect = getRect(element);
-    const height = isCrossingMultiple(rect) ? Infinity : rect.bottom - rect.top;
+    // if the element spills into the next page, then its bounding rect wouldn't give us
+    // the actual height of its contents
+    const height = (rect.bottom > contentArea.bottom) ? Infinity : rect.bottom - rect.top;
+    // find footnotes for this chunk of text
     const footnotesInElement = footnotes.filter(f => element.contains(f.supElement));
-    const footnoteHeight = getFootnoteHeight(footnotesInElement);
+    const footnoteHeight = footnotesInElement.reduce((total, f) => total + footnoteHeightMap.get(f), 0);
     return {
       element,
       height,
+      domHeight: height,
       footnoteHeight,
       marginTop: parseFloat(style.marginTop),
       marginBottom: parseFloat(style.marginBottom),
@@ -298,7 +356,7 @@ export function adjustLayout() {
       // figure out the numbers of actual lines in the element
       content.lines = getElementLines(content.element);
       content.footnoteLineMap = mapFootnotesToLines(content.element, content.footnotes, content.lines);
-      content.height = sum(content.lines);
+      content.height = content.lines.reduce((total, n) => total + n, 0);
       content.skippedLines = [];
       content.skippedFootnotes = [];
       spaceRequired = getSpaceRequired(content, footerEmpty);
@@ -315,7 +373,7 @@ export function adjustLayout() {
         if (lineIndex === content.lines.length - 1) {
           // the footnote is referenced by the last line--leave it to the next page
           content.footnotes.pop();
-          const footnoteHeight = lastFootnote.itemElement.offsetHeight;
+          const footnoteHeight = footnoteHeightMap.get(lastFootnote);
           content.footnoteHeight -= footnoteHeight;
           content.skippedFootnotes.unshift(lastFootnote);
           content.skippedFootnoteHeight += footnoteHeight;
@@ -331,13 +389,19 @@ export function adjustLayout() {
       }
       spaceRequired = getSpaceRequired(content, footerEmpty);
     }
-    return true;
+    return spaceRequired;
   };
   const useSkippedContent = (content) => {
     // adjust the indices in the footnote-to-line map
     const used = content.lines.length;
-    for (const footnote of content.footnotes) {
-      content.footnoteLineMap[footnote] -= used;
+    if (used > 0) {
+      for (const footnote of content.footnotes) {
+        content.footnoteLineMap[footnote] -= used;
+      }
+    } else {
+      // is none of the lines ended up in the previous page, then restore the height obtain
+      // from getBoundingClientRect() since that's more accurate than the line-height calculation
+      content.height = content.domHeight;
     }
     content.lines = content.skippedLines;
     content.skippedLines = [];
@@ -346,9 +410,16 @@ export function adjustLayout() {
     content.footnotes = content.skippedFootnotes;
     content.skippedFootnotes = [];
   };
+  let cleared = false;
   const addContentOverlay = (top, content) => {
+    if (!cleared) {
+      while (overlayContainerElement.firstChild) {
+        overlayContainerElement.firstChild.remove();
+      }
+      cleared = true;
+    }
     if (content.lines) {
-      const { left, right } = pageArea;
+      const { left, right } = availableArea;
       for (const line of content.lines) {
         const bottom = top + line;
         const overlayElement = e('DIV', {
@@ -365,116 +436,79 @@ export function adjustLayout() {
       }
     }
   };
-  const pageToFootnoteMap = new Map;
-  const attachFootnotes = (page, footnotes) => {
-    let list = pageToFootnoteMap.get(page);
-    if (!list) {
-      list = [];
-      pageToFootnoteMap.set(page, list);
-    }
-    for (const footnote of footnotes) {
-      list.push(footnote);
-    }
-  };
-  let pageIndex = -1;
-  let page = null;
-  let pageArea = null;
-  let footnoteCount = 0;
+  let pageFootnotes = null;
   let spaceRemaining = 0;
   let position = 0;
   let previousMarginBottom = 0;
   let leftover = null;
-  const nextPage = () => {
-    pageIndex++;
-    if (pageIndex < pages.length) {
-      page = pages[pageIndex];
-    } else {
-      page = addPage();
-      contentAreas.push(getContentArea(page));
-    }
-    pageArea = getContentArea(page, true);
-    footnoteCount = 0;
-    spaceRemaining = pageArea.bottom - pageArea.top;
-    position = pageArea.top;
+  const initiatePageBreak = () => {
+    // add footnote assigned to the current page to its footer
+    attachFootnotes(pageFootnotes);
+    // go to the next page
+    startNewPage();
+    pageFootnotes = [];
+    spaceRemaining = availableArea.bottom - availableArea.top;
+    position = availableArea.top;
     previousMarginBottom = 0;
     if (leftover) {
+      // the previous page ends with an element spilling into this one
       useSkippedContent(leftover);
-      const spaceRequired = cropContent(leftover, spaceRemaining, !footnoteCount);
+      const spaceRequired = cropContent(leftover, spaceRemaining, !pageFootnotes.length);
       if (spaceRequired > 0) {
-        const { footnotes, marginBottom, height } = leftover;
+        const { footnotes, marginBottom, height, element } = leftover;
         addContentOverlay(position, leftover);
-        attachFootnotes(page, footnotes);
-        footnoteCount += footnotes.length;
+        pageFootnotes.push(...footnotes);
         spaceRemaining -= spaceRequired;
         previousMarginBottom = marginBottom;
         position += height;
+        // our prediction of where lines will go isn't always accurate
+        // see how much we're off by
+        const domPosition = getRect(element).bottom;
+        const diff = domPosition - position;
+        console.log(`Diff: ${diff}`);
+        spaceRemaining -= diff;
+        position = domPosition;
       }
       if (leftover.skippedHeight > 0) {
-        nextPage();
+        // didn't fit completely into this either--need to start another page
+        initiatePageBreak();
       } else {
         leftover = null;
       }
     }
   };
-  nextPage();
-  const positionMap = new WeakMap;
+  // create the first page
+  initiatePageBreak();
+  // determine where each paragraph (list or table) will land
   for (const child of contentElement.children) {
-    const content = analyseContent(child, contentAreas);
+    // get info about this element
+    const content = analyseContent(child);
+    // calculate the top margin
     const margin = Math.max(previousMarginBottom, content.marginTop);
-    const spaceRequired = cropContent(content, spaceRemaining - margin, !footnoteCount);
+    // trim the amount of content to fit space available in this page
+    const spaceRequired = cropContent(content, spaceRemaining - margin, !pageFootnotes.length);
     if (spaceRequired) {
       const { footnotes, marginBottom, height } = content;
       position += margin;
-      positionMap.set(child, position);
       addContentOverlay(position, content);
-      attachFootnotes(page, footnotes);
-      footnoteCount += footnotes.length;
+      pageFootnotes.push(...footnotes);
       spaceRemaining -= margin + spaceRequired;
       previousMarginBottom = marginBottom;
       position += height;
     }
     if (content.skippedHeight > 0 || spaceRemaining < previousMarginBottom) {
       leftover = (content.skippedHeight > 0) ? content : null;
-      nextPage();
+      initiatePageBreak();
     }
   }
-  for (const page of pages) {
-    const footnotes = pageToFootnoteMap.get(page);
-    if (footnotes) {
-      const { footer } = page;
-      const { listElement } = footer;
-      for (const footnote of footnotes) {
-        listElement.append(footnote.itemElement);
-      }
-      footer.footnotes = footnotes;
-      adjustFooterPosition(footer);
-    }
+  // remove excess pages
+  const pageCount = pageIndex + 1;
+  while (pages.length > pageCount) {
+    const lastPage = pages.pop();
+    const { paperElement, footer } = lastPage;
+    paperElement.remove();
+    footer.containerElement.remove();
   }
-}
-
-function addPage() {
-  if (pages.length === 0) {
-    // remove the placeholder
-    while (backgroundElement.firstChild) {
-      backgroundElement.firstChild.remove();
-    }
-  }
-  // add paper to background
-  const paperElement = e('DIV', { className: 'paper' });
-  backgroundElement.append(paperElement);
-  const paperRect = getRect(paperElement);
-  // add footer
-  const footer = addFooter();
-  const page = { paperElement, paperRect, footer };
-  pages.push(page);
-  return page;
-}
-
-function removePage() {
-  const lastPage = pages.pop();
-  const { paperElement, footer } = lastPage;
-  paperElement.remove();
-  footer.containerElement.remove();
 }
 
 export function addFooter() {
