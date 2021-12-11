@@ -345,6 +345,10 @@ BODY.ready #status-container {
   border: 3px solid rgba(255, 0, 255, 0.25);
 }
 
+.overlay:nth-child(even) {
+  border-color: rgba(0, 255, 255, 0.25);
+}
+
 @page {
   size: A4 portrait;
   margin: 0;

@@ -51,7 +51,7 @@ export async function loadDocument(key) {
   // adjust layout, inserting footnotes into appropriate page
   adjustLayout({ updateFooterDirection: true });
   // watch for changes to article
-  articleObserver.observe(contentElement, observerConfig);
+  //articleObserver.observe(contentElement, observerConfig);
   // watch for change of title (which could be performed in list.html)
   storageChange.addEventListener('update', async (evt) => {
     if (!evt.detail.self && evt.detail.key === currentDocumentKey) {
@@ -310,12 +310,15 @@ export function adjustLayout() {
       return map;
     }
   };
+  const isSpilling = (rect) => {
+    return rect.bottom > contentArea.bottom || rect.top < contentArea.top;
+  };
   const analyseContent = (element) => {
     const style = getComputedStyle(element);
     const rect = getRect(element);
     // if the element spills into the next page, then its bounding rect wouldn't give us
     // the actual height of its contents
-    const height = (rect.bottom > contentArea.bottom) ? Infinity : rect.bottom - rect.top;
+    const height = isSpilling(rect) ? Infinity : rect.bottom - rect.top;
     // find footnotes for this chunk of text
     const footnotesInElement = footnotes.filter(f => element.contains(f.supElement));
     const footnoteHeight = footnotesInElement.reduce((total, f) => total + footnoteHeightMap.get(f), 0);
@@ -441,6 +444,7 @@ export function adjustLayout() {
   let position = 0;
   let previousMarginBottom = 0;
   let leftover = null;
+  let atPageTop = true;
   const initiatePageBreak = () => {
     // add footnote assigned to the current page to its footer
     attachFootnotes(pageFootnotes);
@@ -450,6 +454,7 @@ export function adjustLayout() {
     spaceRemaining = availableArea.bottom - availableArea.top;
     position = availableArea.top;
     previousMarginBottom = 0;
+    atPageTop = true;
     if (leftover) {
       // the previous page ends with an element spilling into this one
       useSkippedContent(leftover);
@@ -465,9 +470,10 @@ export function adjustLayout() {
         // see how much we're off by
         const domPosition = getRect(element).bottom;
         const diff = domPosition - position;
-        console.log(`Diff: ${diff}`);
+        console.log(`Diff: ${diff}, text: ${element.innerText.substr(0, 10)}`);
         spaceRemaining -= diff;
         position = domPosition;
+        atPageTop = false;
       }
       if (leftover.skippedHeight > 0) {
         // didn't fit completely into this either--need to start another page
@@ -484,17 +490,21 @@ export function adjustLayout() {
     // get info about this element
     const content = analyseContent(child);
     // calculate the top margin
-    const margin = Math.max(previousMarginBottom, content.marginTop);
+    const margin = (atPageTop) ? 0 : Math.max(previousMarginBottom, content.marginTop);
     // trim the amount of content to fit space available in this page
     const spaceRequired = cropContent(content, spaceRemaining - margin, !pageFootnotes.length);
     if (spaceRequired) {
       const { footnotes, marginBottom, height } = content;
       position += margin;
-      addContentOverlay(position, content);
+      if (content.skippedHeight > 0) {
+        //console.log({ position, spaceRemaining });
+        addContentOverlay(position, content);
+      }
       pageFootnotes.push(...footnotes);
       spaceRemaining -= margin + spaceRequired;
       previousMarginBottom = marginBottom;
       position += height;
+      atPageTop = false;
     }
     if (content.skippedHeight > 0 || spaceRemaining < previousMarginBottom) {
       leftover = (content.skippedHeight > 0) ? content : null;
@@ -523,7 +533,7 @@ export function addFooter() {
   footerRootElement.append(containerElement);
   const footer = { pusherElement, listElement, containerElement, footnotes: [] };
   adjustFooterPosition(footer);
-  footnoteObserver.observe(listElement, observerConfig);
+  //footnoteObserver.observe(listElement, observerConfig);
   return footer;
 }
 
