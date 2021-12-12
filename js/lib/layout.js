@@ -19,6 +19,8 @@ const footnotes = [];
 const articleObserver = new MutationObserver(handleArticleChanges);
 const footnoteObserver = new MutationObserver(handleFootnoteChanges);
 const observerConfig = { attributes: true, childList: true, subtree: true, characterData: true };
+let observing = false;
+let adjustingLayout = false;
 
 let currentDocumentKey;
 let currentDocument;
@@ -51,7 +53,7 @@ export async function loadDocument(key) {
   // adjust layout, inserting footnotes into appropriate page
   adjustLayout({ updateFooterDirection: true });
   // watch for changes to article
-  //articleObserver.observe(contentElement, observerConfig);
+  observeChanges();
   // watch for change of title (which could be performed in list.html)
   storageChange.addEventListener('update', async (evt) => {
     if (!evt.detail.self && evt.detail.key === currentDocumentKey) {
@@ -87,105 +89,29 @@ export function setTitle(title) {
 }
 
 function observeChanges() {
-  const config = { attributes: true, childList: true, subtree: true, characterData: true };
-  observer.observe(container, config);
-
+  if (!observing) {
+    articleObserver.observe(contentElement, observerConfig);
+    for (const { footer } of pages) {
+      footnoteObserver.observe(footer.listElement, observerConfig);
+    }
+    observing = true;
+  }
 }
 
-/*
-export function adjustLayout(options = {}) {
-  const { updatePaper, updateFooterPosition, updateFooterDirection } = options;
-  if (updatePaper) {
-    // paper size has changed, need to update the client rects
-    for (const page of pages) {
-      page.paperRect = getRect(page.paperElement);
-    }
-  }
-  if (pages.length === 0) {
-    addPage();
-  }
-  if (updateFooterPosition || updatePaper) {
-    for (const page of pages) {
-      adjustFooterPosition(page.footer);
-    }
-  }
-  let reflow, reflowCount = 0;
-  do {
-    reflow = false;
-    reflowCount++;
-    // add enough pages for the content
-    while (hasExcessContent()) {
-      addPage();
-    }
-    // assign footnotes to footers based on location of
-    // <sup> element
-    let prevFootnote;
-    for (const footnote of footnotes.filter(f => !f.deleted)) {
-      const supElementRect = getRect(footnote.supElement);
-      for (const [ pageIndex, page ] of pages.entries()) {
-        if (isBetween(supElementRect, page.paperRect)) {
-          const { listElement, footnotes } = page.footer;
-          if (!footnotes.includes(footnote)) {
-            const prevPage = footnote.page;
-            if (prevPage) {
-              // don't move footnote to the previous page after a couple attempts
-              // to get everything to fit
-              const prevPageIndex = pages.indexOf(prevPage);
-              if (reflowCount > 2 && pageIndex < prevPageIndex) {
-                continue;
-              }
-              // remove it from the previous page
-              remove(footnote.page.footer.footnotes, footnote);
-            }
-            const prevIndex = footnotes.indexOf(prevFootnote);
-            if (prevIndex !== -1) {
-              // insert after the previous footnote
-              listElement.insertBefore(footnote.itemElement, prevFootnote.itemElement.nextSibling);
-              footnotes.splice(prevIndex + 1, 0, footnote);
-            } else {
-              // put it at the beginning
-              listElement.prepend(footnote.itemElement);
-              footnotes.unshift(footnote);
-            }
-            footnote.page = page;
-            adjustFooterPosition(page.footer);
-            if (prevPage) {
-              adjustFooterPosition(prevPage.footer);
-            }
-            // run the loop again since the layout is affected
-            reflow = true;
-          }
-          break;
-        }
-      }
-      prevFootnote = footnote;
-    }
-    // remove excess pages
-    while(hasExcessPages()) {
-      removePage();
-    }
-  } while(reflow && reflowCount <= 5);
-  let start = 1;
+function adjustFooterDirection() {
   for (const page of pages) {
-    // enable/disable editing of footer depending on whether there's content inside
     const { footer } = page;
     const { listElement, footnotes } = footer;
-    listElement.contentEditable = (footnotes.length > 0);
-    // adjust list counter
-    listElement.start = start;
-    start += footnotes.length;
-    if (updateFooterDirection) {
-      let ltrCount = 0, rtlCount = 0;
-      for (const footnote of footnotes) {
-        const { lang } = footnote.extra || {};
-        if (lang) {
-          const targetLang = lang.split(',')[1];
-          if (targetLang) {
-            if (getLanguageDirection(targetLang) === 'ltr') {
-              ltrCount++;
-            } else {
-              rtlCount++;
-            }
+    let ltrCount = 0, rtlCount = 0;
+    for (const footnote of footnotes) {
+      const { lang } = footnote.extra || {};
+      if (lang) {
+        const targetLang = lang.split(',')[1];
+        if (targetLang) {
+          if (getLanguageDirection(targetLang) === 'ltr') {
+            ltrCount++;
+          } else {
+            rtlCount++;
           }
         }
       }
@@ -193,7 +119,6 @@ export function adjustLayout(options = {}) {
     }
   }
 }
-*/
 
 export function adjustLayout() {
   // get the height of each footnote now, since we might detach some of them temporarily from the DOM
@@ -238,12 +163,23 @@ export function adjustLayout() {
       return;
     }
     const { listElement, footnotes } = page.footer;
-    listElement.start = totalFootnoteCount + 1;
+    // adjust starting number
+    const startCounter = totalFootnoteCount + 1;
+    if (listElement.start !== startCounter) {
+      listElement.start = startCounter;
+    }
+    // enable/disable editing of footer depending on whether there's content inside
+    const editable = (newList.length > 0) ? 'true' : 'false';
+    if (listElement.contentEditable !== editable) {
+      listElement.contentEditable = editable;
+    }
     let changed = false;
     // first, take out the ones that's aren't supposed to be in this page anymore
     alter(footnotes, (footnote) => {
       if (!newList.includes(footnote)) {
-        footnote.itemElement.remove();
+        if (footnote.itemElement.parentNode === listElement) {
+          footnote.itemElement.remove();
+        }
         changed = true;
       } else {
         return footnote;
@@ -402,14 +338,10 @@ export function adjustLayout() {
     content.footnoteHeight = content.skippedFootnoteHeight;
     content.skippedFootnoteHeight = 0;
   };
-  let cleared = false;
+  while (overlayContainerElement.firstChild) {
+    overlayContainerElement.firstChild.remove();
+  }
   const addContentOverlay = (top, content) => {
-    if (!cleared) {
-      while (overlayContainerElement.firstChild) {
-        overlayContainerElement.firstChild.remove();
-      }
-      cleared = true;
-    }
     if (content.lines) {
       const { left, right } = availableArea;
       for (const line of content.lines) {
@@ -448,10 +380,14 @@ export function adjustLayout() {
       // the previous page ends with an element spilling into this one
       useSkippedContent(leftover);
       const spaceRequired = cropContent(leftover, spaceRemaining, !pageFootnotes.length);
-      if (spaceRequired > 0) {
-        const { footnotes, marginBottom, height, element } = leftover;
-        addContentOverlay(position, leftover);
-        pageFootnotes.push(...footnotes);
+      const { footnotes, marginBottom, height, skippedHeight, element } = leftover;
+      addContentOverlay(position, leftover);
+      pageFootnotes.push(...footnotes);
+      if (skippedHeight > 0) {
+        // didn't fit completely into this either--need to start another page
+        initiatePageBreak();
+      } else {
+        leftover = null;
         spaceRemaining -= spaceRequired;
         previousMarginBottom = marginBottom;
         position += height;
@@ -459,16 +395,10 @@ export function adjustLayout() {
         // see how much we're off by
         const domPosition = getRect(element).bottom;
         const diff = domPosition - position;
-        console.log(`Diff: ${diff}, text: ${element.innerText.substr(0, 20)}`);
+        console.log(`Diff: ${diff}, text: ${element.textContent.substr(0, 20)} (${childIndex})`);
         spaceRemaining -= diff;
         position = domPosition;
         atPageTop = false;
-      }
-      if (leftover.skippedHeight > 0) {
-        // didn't fit completely into this either--need to start another page
-        initiatePageBreak();
-      } else {
-        leftover = null;
       }
     }
   };
@@ -483,6 +413,8 @@ export function adjustLayout() {
     const margin = (atPageTop) ? 0 : Math.max(previousMarginBottom, content.marginTop);
     // trim the amount of content to fit space available in this page
     const spaceRequired = cropContent(content, spaceRemaining - margin, !pageFootnotes.length);
+    //console.log(`${childIndex}: ${spaceRemaining - margin} ${pageFootnotes.length} ${spaceRequired}`)
+    //console.log(`${childIndex}: spaceRequired: ${spaceRequired}, text: ${child.innerText.substr(0, 20)}`, content);
     if (spaceRequired) {
       const { footnotes, marginBottom, height } = content;
       position += margin;
@@ -501,7 +433,11 @@ export function adjustLayout() {
     }
     childIndex++;
   }
+  attachFootnotes(pageFootnotes);
   // remove excess pages
+  if (position <= availableArea.top) {
+    pageIndex--;
+  }
   const pageCount = pageIndex + 1;
   while (pages.length > pageCount) {
     const lastPage = pages.pop();
@@ -523,7 +459,9 @@ export function addFooter() {
   footerRootElement.append(containerElement);
   const footer = { pusherElement, listElement, containerElement, footnotes: [] };
   adjustFooterPosition(footer);
-  //footnoteObserver.observe(listElement, observerConfig);
+  if (observing) {
+    footnoteObserver.observe(listElement, observerConfig);
+  }
   return footer;
 }
 
@@ -973,9 +911,9 @@ function remove(arr, cb) {
 }
 
 function handleArticleChanges(mutationsList) {
-  console.log(mutationsList);
+  //console.log(mutationsList);
 }
 
 function handleFootnoteChanges(mutationsList) {
-  console.log(mutationsList);
+  //console.log(mutationsList);
 }
