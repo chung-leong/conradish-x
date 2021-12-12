@@ -248,8 +248,8 @@ export function adjustLayout() {
       height,
       domHeight: height,
       footnoteHeight,
-      marginTop: parseFloat(style.marginTop),
-      marginBottom: parseFloat(style.marginBottom),
+      marginTop: parseFixed(style.marginTop),
+      marginBottom: parseFixed(style.marginBottom),
       lines: null,
       footnotes: footnotesInElement,
       footnoteLineMap: null,
@@ -259,7 +259,7 @@ export function adjustLayout() {
       skippedFootnoteHeight: 0,
     };
   };
-  const footerMargin = parseFloat(getComputedStyle(backstageElement).marginTop);
+  const footerMargin = parseFixed(getComputedStyle(backstageElement).marginTop);
   const getSpaceRequired = (content, footerEmpty) => {
     let height = content.height;
     if (content.footnotes.length > 0) {
@@ -383,24 +383,27 @@ export function adjustLayout() {
       const { footnotes, marginBottom, height, skippedHeight, element } = leftover;
       addContentOverlay(position, leftover);
       pageFootnotes.push(...footnotes);
-      if (skippedHeight > 0) {
-        // didn't fit completely into this either--need to start another page
-        initiatePageBreak();
-      } else {
+      if (skippedHeight === 0) {
         leftover = null;
         spaceRemaining -= spaceRequired;
         previousMarginBottom = marginBottom;
         position += height;
-        // our prediction of where lines will go isn't always accurate
-        // see how much we're off by
-        const domPosition = getRect(element).bottom;
-        const diff = domPosition - position;
-        console.log(`Diff: ${diff}, text: ${element.textContent.substr(0, 20)} (${childIndex})`);
-        spaceRemaining -= diff;
-        position = domPosition;
         atPageTop = false;
+        adjustPosition(element);
+      } else {
+        // didn't fit completely into this either--need to start another page
+        initiatePageBreak();
       }
     }
+  };
+  const adjustPosition = (element) => {
+    // our prediction of where lines will go isn't always accurate
+    // see how much we're off by
+    const domPosition = getRect(element).bottom;
+    const diff = domPosition - position;
+    console.log(`Diff: ${diff}, text: ${element.textContent.substr(0, 20)} (${childIndex})`);
+    spaceRemaining -= diff;
+    position = domPosition;
   };
   // create the first page
   initiatePageBreak();
@@ -413,23 +416,26 @@ export function adjustLayout() {
     const margin = (atPageTop) ? 0 : Math.max(previousMarginBottom, content.marginTop);
     // trim the amount of content to fit space available in this page
     const spaceRequired = cropContent(content, spaceRemaining - margin, !pageFootnotes.length);
-    //console.log(`${childIndex}: ${spaceRemaining - margin} ${pageFootnotes.length} ${spaceRequired}`)
-    //console.log(`${childIndex}: spaceRequired: ${spaceRequired}, text: ${child.innerText.substr(0, 20)}`, content);
     if (spaceRequired) {
-      const { footnotes, marginBottom, height } = content;
+      const { footnotes, marginBottom, height, skippedHeight } = content;
       position += margin;
       if (content.skippedHeight > 0) {
         addContentOverlay(position, content);
       }
       pageFootnotes.push(...footnotes);
-      spaceRemaining -= margin + spaceRequired;
-      previousMarginBottom = marginBottom;
-      position += height;
-      atPageTop = false;
-    }
-    if (content.skippedHeight > 0 || spaceRemaining < previousMarginBottom) {
-      leftover = (content.skippedHeight > 0) ? content : null;
-      initiatePageBreak();
+      if (skippedHeight === 0) {
+        spaceRemaining -= margin + spaceRequired;
+        previousMarginBottom = marginBottom;
+        position += height;
+        atPageTop = false;
+        adjustPosition(child);
+        if (spaceRemaining < previousMarginBottom) {
+          initiatePageBreak();
+        }
+      } else {
+        leftover = (skippedHeight > 0) ? content : null;
+        initiatePageBreak();
+      }
     }
     childIndex++;
   }
@@ -653,10 +659,10 @@ function getContentArea(page, potential = false) {
   return { top, left, bottom, right };
 }
 
-function parseFloatFixed(s) {
+function parseFixed(s) {
   // chrome seems to be using fixed-point numbers internally (6 bits for decimals?)
   const num = parseFloat(s);
-  return Math.ceil(num * 64) / 64;
+  return Math.floor(num * 64) / 64;
 }
 
 function detectLines(blockElement) {
@@ -670,7 +676,7 @@ function detectLines(blockElement) {
       const fragment = { lineTop: top, lineBottom: bottom, top, bottom, right, left };
       fragments.push(fragment);
     } else {
-      const lineHeight = parseFloatFixed(style.lineHeight) || Math.floor(parseFloat(style.fontSize) * (1 + 1 / 6));
+      const lineHeight = parseFixed(style.lineHeight) || Math.floor(parseFixed(style.fontSize) * (1 + 1 / 6));
       for (let node = element.firstChild; node; node = node.nextSibling) {
         if (node.nodeType === Node.ELEMENT_NODE) {
           scan(node);
