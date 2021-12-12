@@ -193,21 +193,6 @@ export function adjustLayout(options = {}) {
     }
   }
 }
-
-function hasExcessPages() {
-  if (pages.length > 0) {
-    const lastPage = pages[pages.length - 1];
-    const contentRect = getRect(contentElement)
-    if (contentRect.bottom < lastPage.paperRect.top) {
-      // the page is needed if there's a footnote there
-      const { footer } = lastPage;
-      if (footer.footnotes.length === 0) {
-        return true;
-      }
-    }
-  }
-  return false;
-}
 */
 
 export function adjustLayout() {
@@ -305,7 +290,7 @@ export function adjustLayout() {
             return false;
           }
         });
-        map[footnote] = lineIndex;
+        map.set(footnote, lineIndex);
       }
       return map;
     }
@@ -357,7 +342,7 @@ export function adjustLayout() {
     }
     if (!content.lines) {
       // figure out the numbers of actual lines in the element
-      content.lines = getElementLines(content.element);
+      content.lines = detectLines(content.element);
       content.footnoteLineMap = mapFootnotesToLines(content.element, content.footnotes, content.lines);
       content.height = content.lines.reduce((total, n) => total + n, 0);
       content.skippedLines = [];
@@ -370,11 +355,13 @@ export function adjustLayout() {
       }
       // see if we can omit a footnote in the present page
       const lastFootnote = content.footnotes[content.footnotes.length - 1];
+      const lastLineIndex = content.lines.length - 1;
       let removedFootnote = false;
       if (lastFootnote) {
-        const lineIndex = content.footnoteLineMap[lastFootnote];
-        if (lineIndex === content.lines.length - 1) {
-          // the footnote is referenced by the last line--leave it to the next page
+        const lineIndex = content.footnoteLineMap.get(lastFootnote);
+        if (lineIndex === lastLineIndex) {
+          // the footnote is referenced by the last line, we don't want to push that
+          // to the next page ahead of the note itself, so we move the note
           content.footnotes.pop();
           const footnoteHeight = footnoteHeightMap.get(lastFootnote);
           content.footnoteHeight -= footnoteHeight;
@@ -725,102 +712,63 @@ function getContentArea(page, potential = false) {
   return { top, left, bottom, right };
 }
 
-function getElementLines(blockElement) {
-  const rootRect = blockElement.getBoundingClientRect();
+function parseFloatFixed(s) {
+  // chrome seems to be using fixed-point numbers internally (6 bits for decimals?)
+  const num = parseFloat(s);
+  return Math.ceil(num * 64) / 64;
+}
+
+function detectLines(blockElement) {
   const range = document.createRange();
-  const get = (textNode, offset) => {
-    // get the cursor of the bottom
-    range.setStart(textNode, offset);
-    range.setEnd(textNode, offset);
-    return range.getBoundingClientRect();
-  };
-  const add = (bottoms, bottom) => {
-    if (!bottoms.includes(bottom)) {
-      bottoms.push(bottom);
-    }
-  };
-  const check = (textNode, startOffset, endOffset, startBottom, endBottom, bottoms) => {
-    if (startBottom !== endBottom) {
-      const length = endOffset - startOffset;
-      if (length > 1) {
-        // check the middle
-        const midOffset = startOffset + (length >> 1);
-        const { bottom: midBottom } = get(textNode, midOffset);
-        check(textNode, startOffset, midOffset, startBottom, midBottom, bottoms);
-        check(textNode, midOffset, endOffset, midBottom, endBottom, bottoms);
-      } else {
-        add(bottoms, startBottom);
-        add(bottoms, endBottom);
-      }
-    } else {
-      add(bottoms, startBottom);
-    }
-  };
-  const test = (textNode, startOffset, endOffset) => {
-    const bottoms = [];
-    const start = get(textNode, startOffset);
-    const end = get(textNode, endOffset);
-    check(textNode, startOffset, endOffset, start.bottom, end.bottom, bottoms);
-    const wrap = (start.height !== 0 && end.height === 0);
-    if (end.height === 0) {
-      bottoms.pop();
-    }
-    return { start, end, lineCount: bottoms.length, wrap };
-  };
-  let currentLineHeight = 0;
-  let currentLineTop = 0;
-  const lines = [];
+  // look for fragments and their positions
+  let fragments = [];
   const scan = (element) => {
     const style = getComputedStyle(element);
-    switch (style.display) {
-      case 'inline':
-      case 'block':
-      case 'list-item':
-        break;
-      case 'flex':
-        lines.push(element.offsetHeight + parseInt(style.marginTop) + parseInt(style.marginBottom));
-        return;
-      case 'inline-flex':
-      case 'inline-block':
-        currentLineHeight = element.offsetHeight + parseInt(style.marginTop) + parseInt(style.marginBottom);
-        return;
-      default:
-        return;
-    }
-    const lineHeight = parseFloat(style.lineHeight) || Math.round(parseFloat(style.fontSize) * (1 + 1 / 6));
-    for (let node = element.firstChild; node; node = node.nextSibling) {
-      if (node.nodeType === Node.ELEMENT_NODE) {
-        if (node.tagName === 'BR') {
-          lines.push(currentLineHeight);
-        } else {
+    if (style.display === 'inline-block' || style.display === 'inline-flex') {
+      const { top, bottom, left, right } = element.getBoundingClientRect();
+      const fragment = { lineTop: top, lineBottom: bottom, top, bottom, right, left };
+      fragments.push(fragment);
+    } else {
+      const lineHeight = parseFloatFixed(style.lineHeight) || Math.floor(parseFloat(style.fontSize) * (1 + 1 / 6));
+      for (let node = element.firstChild; node; node = node.nextSibling) {
+        if (node.nodeType === Node.ELEMENT_NODE) {
           scan(node);
-        }
-      } else if (node.nodeType === Node.TEXT_NODE) {
-        const { lineCount, wrap } = test(node, 0, node.nodeValue.length);
-        if (lineCount) {
-          if (lineHeight > currentLineHeight) {
-            currentLineHeight = lineHeight;
-          }
-          for (let i = 1; i < lineCount; i++) {
-            lines.push(currentLineHeight);
-            currentLineHeight = lineHeight;
-          }
-          if (wrap) {
-            lines.push(currentLineHeight);
-            currentLineHeight = 0;
+        } else if (node.nodeType === Node.TEXT_NODE) {
+          range.selectNode(node);
+          const rects = range.getClientRects();
+          for (const { top, bottom, left, right, height } of rects) {
+            // adjust rect based on the line height
+            const offsetTop = Math.floor((lineHeight - height) / 2);
+            const offsetBottom = (lineHeight - height) - offsetTop;
+            const fragment = { lineTop: top - offsetTop, lineBottom: bottom + offsetBottom, top, bottom, right, left };
+            fragments.push(fragment);
           }
         }
-      }
-    }
-    if (style.display === 'block' || style.display === 'list-item') {
-      // add the last line if there's one
-      if (currentLineHeight) {
-        lines.push(currentLineHeight);
-        currentLineHeight = 0;
       }
     }
   };
   scan(blockElement);
+  const lines = [];
+  let highest = null, lowest = null;
+  const wrap = () => {
+    const height = lowest.lineBottom - highest.lineTop;
+    lines.push(height);
+    highest = lowest = null;
+  };
+  for (const fragment of fragments) {
+    if (lowest && fragment.top >= lowest.bottom) {
+      wrap();
+    }
+    if (!highest || fragment.top < highest.top) {
+      highest = fragment;
+    }
+    if (!lowest || fragment.bottom > lowest.bottom) {
+      lowest = fragment;
+    }
+  }
+  if (highest && lowest) {
+    wrap();
+  }
   return lines;
 }
 

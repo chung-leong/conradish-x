@@ -96,6 +96,42 @@ BODY.ready #article {
   padding: 1pt 1pt 0 1pt;
 }
 
+#article-text TABLE.freeflowing {
+  display: block;
+  width: fit-content;
+  border-collapse: collapse;
+  max-width: calc(100% - 1px);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#article-text TABLE.freeflowing TBODY {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+}
+
+#article-text TABLE.freeflowing TR {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: -1px;
+  min-width: 10px;
+  max-width: 100%;
+}
+
+#article-text TABLE.freeflowing TD {
+  display: inline-block;
+  border: 1px solid black;
+  margin-left: -1px;
+  width: 200px;
+}
+
+#article-text TABLE.freeflowing CAPTION {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
 #article-text:focus {
   outline: none;
 }
