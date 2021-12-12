@@ -399,6 +399,8 @@ export function adjustLayout() {
     content.skippedHeight = 0;
     content.footnotes = content.skippedFootnotes;
     content.skippedFootnotes = [];
+    content.footnoteHeight = content.skippedFootnoteHeight;
+    content.skippedFootnoteHeight = 0;
   };
   let cleared = false;
   const addContentOverlay = (top, content) => {
@@ -457,7 +459,7 @@ export function adjustLayout() {
         // see how much we're off by
         const domPosition = getRect(element).bottom;
         const diff = domPosition - position;
-        console.log(`Diff: ${diff}, text: ${element.innerText.substr(0, 10)}`);
+        console.log(`Diff: ${diff}, text: ${element.innerText.substr(0, 20)}`);
         spaceRemaining -= diff;
         position = domPosition;
         atPageTop = false;
@@ -473,6 +475,7 @@ export function adjustLayout() {
   // create the first page
   initiatePageBreak();
   // determine where each paragraph (list or table) will land
+  let childIndex = 0;
   for (const child of contentElement.children) {
     // get info about this element
     const content = analyseContent(child);
@@ -484,7 +487,6 @@ export function adjustLayout() {
       const { footnotes, marginBottom, height } = content;
       position += margin;
       if (content.skippedHeight > 0) {
-        //console.log({ position, spaceRemaining });
         addContentOverlay(position, content);
       }
       pageFootnotes.push(...footnotes);
@@ -497,6 +499,7 @@ export function adjustLayout() {
       leftover = (content.skippedHeight > 0) ? content : null;
       initiatePageBreak();
     }
+    childIndex++;
   }
   // remove excess pages
   const pageCount = pageIndex + 1;
