@@ -121,6 +121,7 @@ function adjustFooterDirection() {
 }
 
 export function adjustLayout() {
+  console.time('adjustLayout');
   // get the height of each footnote now, since we might detach some of them temporarily from the DOM
   const footnoteHeightMap = new WeakMap;
   for (const footnote of footnotes) {
@@ -206,9 +207,7 @@ export function adjustLayout() {
       }
       totalFootnoteCount++;
     }
-    if (changed) {
-      adjustFooterPosition(page.footer);
-    }
+    adjustFooterPosition(page.footer);
   };
   const mapFootnotesToLines = (element, footnotes, lines) => {
     if (footnotes.length > 0) {
@@ -360,6 +359,7 @@ export function adjustLayout() {
       }
     }
   };
+  const positionMap = new Map, positionAfterMap = new Map;
   let pageFootnotes = null;
   let spaceRemaining = 0;
   let position = 0;
@@ -388,56 +388,60 @@ export function adjustLayout() {
         spaceRemaining -= spaceRequired;
         previousMarginBottom = marginBottom;
         position += height;
+        positionAfterMap.set(element, position);
         atPageTop = false;
-        adjustPosition(element);
+        // our prediction of where lines will go isn't always accurate
+        // see how much we're off by
+        const domPosition = getRect(element).bottom;
+        const diff = domPosition - position;
+        if (diff > 0) {
+          //console.log(`Diff: ${diff}, text: ${element.textContent.substr(0, 20)} (${elementIndex})`);
+          spaceRemaining -= diff;
+          position = domPosition;
+        }
       } else {
         // didn't fit completely into this either--need to start another page
         initiatePageBreak();
       }
     }
   };
-  const adjustPosition = (element) => {
-    // our prediction of where lines will go isn't always accurate
-    // see how much we're off by
-    const domPosition = getRect(element).bottom;
-    const diff = domPosition - position;
-    console.log(`Diff: ${diff}, text: ${element.textContent.substr(0, 20)} (${childIndex})`);
-    spaceRemaining -= diff;
-    position = domPosition;
-  };
   // create the first page
   initiatePageBreak();
   // determine where each paragraph (list or table) will land
-  let childIndex = 0;
-  for (const child of contentElement.children) {
+  let elementIndex = 0;
+  for (const element of contentElement.children) {
     // get info about this element
-    const content = analyseContent(child);
+    const content = analyseContent(element);
     // calculate the top margin
     const margin = (atPageTop) ? 0 : Math.max(previousMarginBottom, content.marginTop);
     // trim the amount of content to fit space available in this page
     const spaceRequired = cropContent(content, spaceRemaining - margin, !pageFootnotes.length);
+    //console.log(`${elementIndex}: ${spaceRequired}`);
+    const { footnotes, marginBottom, height, skippedHeight } = content;
     if (spaceRequired) {
-      const { footnotes, marginBottom, height, skippedHeight } = content;
       position += margin;
-      if (content.skippedHeight > 0) {
+      positionMap.set(element, position);
+      if (skippedHeight > 0) {
         addContentOverlay(position, content);
       }
       pageFootnotes.push(...footnotes);
-      if (skippedHeight === 0) {
+    }
+    if (skippedHeight === 0) {
+      // continue on this page if there's enough space for the bottom margin
+      if (spaceRemaining > marginBottom) {
         spaceRemaining -= margin + spaceRequired;
         previousMarginBottom = marginBottom;
         position += height;
+        positionAfterMap.set(element, position);
         atPageTop = false;
-        adjustPosition(child);
-        if (spaceRemaining < previousMarginBottom) {
-          initiatePageBreak();
-        }
       } else {
-        leftover = (skippedHeight > 0) ? content : null;
         initiatePageBreak();
       }
+    } else {
+      leftover = content;
+      initiatePageBreak();
     }
-    childIndex++;
+    elementIndex++;
   }
   attachFootnotes(pageFootnotes);
   // remove excess pages
@@ -450,6 +454,14 @@ export function adjustLayout() {
     const { paperElement, footer } = lastPage;
     paperElement.remove();
     footer.containerElement.remove();
+  }
+  console.timeEnd('adjustLayout');
+  for (const [ element, position ] of positionMap) {
+    const { top, bottom } = getRect(element);
+    const positionAfter = positionAfterMap.get(element);
+    if (top != position) {
+      console.log(`Diff: ${top - position}, diffAfter: ${bottom - positionAfter}, text: ${element.textContent.substr(0, 20)}`);
+    }
   }
 }
 
@@ -659,6 +671,28 @@ function getContentArea(page, potential = false) {
   return { top, left, bottom, right };
 }
 
+const lineHeightDetectionElement = document.getElementById('line-height-detection');
+const lineHeightDetectionMap = new Map;
+const lineHeightAffectingStyles = [ 'font-family', 'font-style', 'font-weight', 'font-size', 'line-height' ];
+
+function getLineHeight(styleMap) {
+  const style = {};
+  for (const name of lineHeightAffectingStyles) {
+    style[name] = styleMap.get(name).toString();
+  }
+  const key = Object.values(style).join(';');
+  let height = lineHeightDetectionMap.get(key);
+  if (height === undefined) {
+    const { firstChild } = lineHeightDetectionElement;
+    for (const name of lineHeightAffectingStyles) {
+      firstChild.style.setProperty(name, style[name]);
+    }
+    height = firstChild.getBoundingClientRect().height;
+    lineHeightDetectionMap.set(key, height);
+  }
+  return height;
+}
+
 function parseFixed(s) {
   // chrome seems to be using fixed-point numbers internally (6 bits for decimals?)
   const num = parseFloat(s);
@@ -670,13 +704,14 @@ function detectLines(blockElement) {
   // look for fragments and their positions
   let fragments = [];
   const scan = (element) => {
-    const style = getComputedStyle(element);
-    if (style.display === 'inline-block' || style.display === 'inline-flex') {
+    const styleMap = element.computedStyleMap();
+    const display = styleMap.get('display');
+    if (display === 'inline-block' || display === 'inline-flex') {
       const { top, bottom, left, right } = element.getBoundingClientRect();
       const fragment = { lineTop: top, lineBottom: bottom, top, bottom, right, left };
       fragments.push(fragment);
     } else {
-      const lineHeight = parseFixed(style.lineHeight) || Math.floor(parseFixed(style.fontSize) * (1 + 1 / 6));
+      const lineHeight = getLineHeight(styleMap);
       for (let node = element.firstChild; node; node = node.nextSibling) {
         if (node.nodeType === Node.ELEMENT_NODE) {
           scan(node);

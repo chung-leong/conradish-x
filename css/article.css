@@ -230,6 +230,12 @@ BODY.ready #article {
   visibility: hidden;
 }
 
+#line-height-detection {
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+}
+
 .footer-pusher {
   float: right;
   line-height: 0;
