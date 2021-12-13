@@ -9,7 +9,6 @@ const contentElement = document.getElementById('article-text');
 const backgroundElement = document.getElementById('article-background');
 const footerRootElement = document.getElementById('article-footers');
 const scrollElement = document.getElementById('article-container');
-const scrollElementRect = scrollElement.getBoundingClientRect();
 const backstageElement = document.getElementById('footnote-backstage');
 const overlayContainerElement = document.getElementById('overlays');
 
@@ -141,10 +140,10 @@ export function adjustLayout() {
     // add paper to background
     const paperElement = e('DIV', { className: 'paper' });
     backgroundElement.append(paperElement);
-    const paperRect = getRect(paperElement);
     // add footer
     const footer = addFooter();
-    const page = { paperElement, paperRect, footer };
+    const page = { paperElement, footer, availableArea: null, contentArea: null };
+    adjustFooterPosition(page);
     pages.push(page);
     return page;
   };
@@ -155,8 +154,8 @@ export function adjustLayout() {
     } else {
       page = addPage();
     }
-    availableArea = getContentArea(page, true);
-    contentArea = getContentArea(page);
+    availableArea = page.availableArea;
+    contentArea = page.contentArea;
   };
   let totalFootnoteCount = 0;
   const attachFootnotes = (newList) => {
@@ -207,7 +206,7 @@ export function adjustLayout() {
       }
       totalFootnoteCount++;
     }
-    adjustFooterPosition(page.footer);
+    adjustFooterPosition(page);
   };
   const mapFootnotesToLines = (element, footnotes, lines) => {
     if (footnotes.length > 0) {
@@ -319,14 +318,8 @@ export function adjustLayout() {
   const useSkippedContent = (content) => {
     // adjust the indices in the footnote-to-line map
     const used = content.lines.length;
-    if (used > 0) {
-      for (const footnote of content.footnotes) {
-        content.footnoteLineMap[footnote] -= used;
-      }
-    } else {
-      // is none of the lines ended up in the previous page, then restore the height obtain
-      // from getBoundingClientRect() since that's more accurate than the line-height calculation
-      content.height = content.domHeight;
+    for (const footnote of content.footnotes) {
+      content.footnoteLineMap[footnote] -= used;
     }
     content.lines = content.skippedLines;
     content.skippedLines = [];
@@ -381,7 +374,7 @@ export function adjustLayout() {
       useSkippedContent(leftover);
       const spaceRequired = cropContent(leftover, spaceRemaining, !pageFootnotes.length);
       const { footnotes, marginBottom, height, skippedHeight, element } = leftover;
-      addContentOverlay(position, leftover);
+      //addContentOverlay(position, leftover);
       pageFootnotes.push(...footnotes);
       if (skippedHeight === 0) {
         leftover = null;
@@ -416,13 +409,13 @@ export function adjustLayout() {
     const margin = (atPageTop) ? 0 : Math.max(previousMarginBottom, content.marginTop);
     // trim the amount of content to fit space available in this page
     const spaceRequired = cropContent(content, spaceRemaining - margin, !pageFootnotes.length);
-    //console.log(`${elementIndex}: ${spaceRequired}`);
     const { footnotes, marginBottom, height, skippedHeight } = content;
     if (spaceRequired) {
+      //console.log(`${elementIndex}: ${spaceRequired} at ${position}`);
       position += margin;
       positionMap.set(element, position);
       if (skippedHeight > 0) {
-        addContentOverlay(position, content);
+        //addContentOverlay(position, content);
       }
       pageFootnotes.push(...footnotes);
     }
@@ -460,7 +453,7 @@ export function adjustLayout() {
     const { top, bottom } = getRect(element);
     const positionAfter = positionAfterMap.get(element);
     if (top != position) {
-      console.log(`Diff: ${top - position}, diffAfter: ${bottom - positionAfter}, text: ${element.textContent.substr(0, 20)}`);
+      //console.log(`Diff: ${top - position}, diffAfter: ${bottom - positionAfter}, text: ${element.textContent.substr(0, 20)}`);
     }
   }
 }
@@ -476,27 +469,35 @@ export function addFooter() {
   const containerElement = e('DIV', {}, [ pusherElement, listElement, spacerElement ]);
   footerRootElement.append(containerElement);
   const footer = { pusherElement, listElement, containerElement, footnotes: [] };
-  adjustFooterPosition(footer);
   if (observing) {
     footnoteObserver.observe(listElement, observerConfig);
   }
   return footer;
 }
 
-export function adjustFooterPosition(footer) {
+export function adjustFooterPosition(page) {
+  const { footer } = page;
   const { pusherElement, listElement } = footer;
-  const page = getPageProperties();
+  const { height, margins, footerGap } = getPageProperties();
   // substract top and bottom margin from height of page
-  const dims = [ page.height, page.margins.top, page.margins.bottom ];
+  const dims = [ height, margins.top, margins.bottom ];
   if (footer.footnotes.length > 0) {
     // substract height of foooter and the margin between it and the text
-    dims.push(`${listElement.offsetHeight}px`, page.footerGap);
+    dims.push(`${listElement.offsetHeight}px`, footerGap);
   }
   // use CSS to do the final calculation
-  const height = `calc(${dims.join(' - ')})`;
-  if (footer.height !== height) {
-    footer.height = height;
-    pusherElement.style.height = height;
+  const heightCSS = `calc(${dims.join(' - ')})`;
+  if (footer.heightCSS !== heightCSS) {
+    footer.heightCSS = heightCSS;
+    pusherElement.style.height = heightCSS;
+    // set the content area of the page
+    const pusherRect = getRect(footer.pusherElement);
+    const listRect = getRect(footer.listElement)
+    const top = pusherRect.top;
+    const left = listRect.left;
+    const right = pusherRect.left;
+    page.contentArea = { top, left, bottom: pusherRect.bottom, right };
+    page.availableArea = { top, left, bottom: listRect.bottom, right };
   }
 }
 
@@ -658,17 +659,6 @@ export function adjustFootnotes(options = {}) {
     }
   }
   return changed;
-}
-
-function getContentArea(page, potential = false) {
-  const { footer } = page;
-  const pusherRect = getRect(footer.pusherElement);
-  const listRect = getRect(footer.listElement)
-  const top = pusherRect.top;
-  const left = listRect.left;
-  const right = pusherRect.left;
-  const bottom = (potential) ? listRect.bottom : pusherRect.bottom;
-  return { top, left, bottom, right };
 }
 
 const lineHeightDetectionElement = document.getElementById('line-height-detection');
@@ -896,11 +886,12 @@ function isBetween(a, b) {
 }
 
 function getRect(element) {
+  const articleElementRect = articleElement.getBoundingClientRect();
   const rect = element.getBoundingClientRect();
-  const top = rect.top - scrollElementRect.top;
-  const bottom = rect.bottom - scrollElementRect.top;
-  const left = rect.left - scrollElementRect.left;
-  const right = rect.right - scrollElementRect.left;
+  const top = rect.top - articleElementRect.top;
+  const bottom = rect.bottom - articleElementRect.top;
+  const left = rect.left - articleElementRect.left;
+  const right = rect.right - articleElementRect.left;
   return { top, left, bottom, right };
 }
 
@@ -952,9 +943,9 @@ function remove(arr, cb) {
 }
 
 function handleArticleChanges(mutationsList) {
-  //console.log(mutationsList);
+  console.log(mutationsList);
 }
 
 function handleFootnoteChanges(mutationsList) {
-  //console.log(mutationsList);
+  console.log(mutationsList);
 }
