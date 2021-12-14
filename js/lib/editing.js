@@ -646,7 +646,6 @@ async function stopEditingTitle() {
   const newTitle = inputElement.value;
   if (newTitle !== originalTitle) {
     setTitle(newTitle);
-    autosave(0);
   }
   drawerElement.style.top = `${-drawerElement.offsetHeight - verticalOffset}px`;
   drawerElement.addEventListener('transitionend', () => {

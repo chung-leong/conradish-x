@@ -27,9 +27,17 @@ let filterMode = 'automatic';
 
 let autosaveTimeout = 0;
 
-function autosave(delay = 2000) {
+function autosave(delay = 5000) {
+  const save = async() => {
+    autosaveTimeout = 0
+    await saveDocument();
+  };
   clearTimeout(autosaveTimeout);
-  autosaveTimeout = setTimeout(async() => await saveDocument(), delay);
+  if (delay > 0) {
+    autosaveTimeout = setTimeout(save, delay);
+  } else {
+    save();
+  }
 }
 
 export async function loadDocument(key) {
@@ -56,7 +64,14 @@ export async function loadDocument(key) {
   storageChange.addEventListener('update', async (evt) => {
     if (!evt.detail.self && evt.detail.key === currentDocumentKey) {
       const { title } = await loadObject(currentDocumentKey);
-      setTitle(title);
+      document.title = title;
+      currentDocument.title = title;
+    }
+  });
+  window.addEventListener('beforeunload', (evt) => {
+    // perform autosave now
+    if (autosaveTimeout) {
+      autosave(0);
     }
   });
   //console.log(currentDocument);
@@ -84,6 +99,7 @@ export function getTitle() {
 export function setTitle(title) {
   document.title = title;
   currentDocument.title = title;
+  autosave(0);
 }
 
 export function updateLayout() {
@@ -1010,6 +1026,9 @@ function handleArticleChanges(mutationsList) {
   if (articleTextChanged) {
     adjustLayout();
   }
+  if (footnoteNumbersChanged || articleTextChanged) {
+    autosave();
+  }
 }
 
 function handleFootnoteChanges(mutationsList) {
@@ -1050,5 +1069,8 @@ function handleFootnoteChanges(mutationsList) {
         }
       }
     }
+  }
+  if (footnotesChanged.length > 0 || footnoteTextChanged.length > 0) {
+    autosave();
   }
 }
