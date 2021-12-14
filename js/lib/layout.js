@@ -194,6 +194,7 @@ export function adjustLayout() {
           footnotes.splice(currentIndex, 1);
         }
         footnotes.splice(index, 0, footnote);
+        footnote.page = page;
         if (index === 0) {
           // put it at the beginning
           listElement.prepend(footnote.itemElement);
@@ -207,27 +208,6 @@ export function adjustLayout() {
       totalFootnoteCount++;
     }
     adjustFooterPosition(page);
-  };
-  const mapFootnotesToLines = (element, footnotes, lines) => {
-    if (footnotes.length > 0) {
-      const map = new Map;
-      const baseRect = getRect(element);
-      for (const footnote of footnotes) {
-        const supRect = getRect(footnote.supElement);
-        let { top } = baseRect;
-        const lineIndex = lines.findIndex((lineHeight) => {
-          const bottom = top + lineHeight;
-          if (supRect.top >= top && supRect.bottom <= bottom) {
-            return true;
-          } else {
-            top += lineHeight;
-            return false;
-          }
-        });
-        map.set(footnote, lineIndex);
-      }
-      return map;
-    }
   };
   const isSpilling = (rect) => {
     return rect.bottom > contentArea.bottom || rect.top < contentArea.top;
@@ -250,7 +230,6 @@ export function adjustLayout() {
       marginBottom: parseFixed(style.marginBottom),
       lines: null,
       footnotes: footnotesInElement,
-      footnoteLineMap: null,
       skippedHeight: 0,
       skippedLines: null,
       skippedFootnotes: null,
@@ -277,8 +256,7 @@ export function adjustLayout() {
     if (!content.lines) {
       // figure out the numbers of actual lines in the element
       content.lines = detectLines(content.element);
-      content.footnoteLineMap = mapFootnotesToLines(content.element, content.footnotes, content.lines);
-      content.height = content.lines.reduce((total, n) => total + n, 0);
+      content.height = content.lines.reduce((total, l) => total + l.height, 0);
       content.skippedLines = [];
       content.skippedFootnotes = [];
       spaceRequired = getSpaceRequired(content, footerEmpty);
@@ -289,11 +267,11 @@ export function adjustLayout() {
       }
       // see if we can omit a footnote in the present page
       const lastFootnote = content.footnotes[content.footnotes.length - 1];
-      const lastLineIndex = content.lines.length - 1;
+      const lastLineIndex = content.lines[content.lines.length - 1];
       let removedFootnote = false;
       if (lastFootnote) {
-        const lineIndex = content.footnoteLineMap.get(lastFootnote);
-        if (lineIndex === lastLineIndex) {
+        const line = content.lines.find(l => l.elements.includes(lastFootnote.supElement));
+        if (!line || line === lastLineIndex) {
           // the footnote is referenced by the last line, we don't want to push that
           // to the next page ahead of the note itself, so we move the note
           content.footnotes.pop();
@@ -306,21 +284,16 @@ export function adjustLayout() {
       }
       if (!removedFootnote) {
         // remove a line from the paragraph if we can't shrink by shifting footnotes to the next page
-        const lineHeight = content.lines.pop();
-        content.height -= lineHeight;
-        content.skippedHeight += lineHeight;
-        content.skippedLines.unshift(lineHeight);
+        const line = content.lines.pop();
+        content.height -= line.height;
+        content.skippedHeight += line.height;
+        content.skippedLines.unshift(line.height);
       }
       spaceRequired = getSpaceRequired(content, footerEmpty);
     }
     return spaceRequired;
   };
   const useSkippedContent = (content) => {
-    // adjust the indices in the footnote-to-line map
-    const used = content.lines.length;
-    for (const footnote of content.footnotes) {
-      content.footnoteLineMap[footnote] -= used;
-    }
     content.lines = content.skippedLines;
     content.skippedLines = [];
     content.height = content.skippedHeight;
@@ -501,53 +474,67 @@ export function adjustFooterPosition(page) {
   }
 }
 
+function adjustFootnoteNumbers() {
+  const supElements = contentElement.getElementsByClassName('footnote-number');
+  let changed = false;
+  for (const [ index, supElement ] of [ ...supElements ].entries()) {
+    if (supElement.classList.contains('hidden')) {
+      continue;
+    }
+    let footnote = footnotes.find(f => f.supElement === supElement);
+    if (!footnote) {
+      const { id } = supElement;
+      footnote = footnotes.find(f => f.id === id);
+    }
+    if (footnote) {
+      if (footnote.deleted) {
+        // mark it as not deleted
+        // itemElement will get added back by adjustLayout()
+        footnote.deleted = 0;
+        changed = true;
+      }
+      // the sup element could be different if it reappears thanks to
+      // a copy-and-paste operation or it's got overwritten during a
+      // execCommand('insertHTML')
+      footnote.supElement = supElement;
+      const currentIndex = footnotes.indexOf(footnote);
+      if (currentIndex !== index) {
+        // put it in the correct position
+        footnotes.splice(currentIndex, 1);
+        footnotes.splice(index, 0, footnote);
+      }
+    }
+  }
+  // any extra ones must have been deleted by the user
+  const extraFootnotes = footnotes.slice(supElements.length);
+  for (const footnote of extraFootnotes) {
+    const { supElement, itemElement } = footnote;
+    if (!footnote.deleted) {
+      // mark it as not deleted
+      footnote.deleted = deletionCount++;
+      itemElement.remove();
+      // take it out the page where it's attached
+      remove(footnote.page.footer.footnotes, footnote);
+      footnote.page = null;
+      changed = true;
+    }
+  }
+  let number = 0;
+  for (const footnote of footnotes) {
+    if (!footnote.deleted) {
+      number++;
+      if (footnote.number !== number) {
+        footnote.supElement.textContent = footnote.number = number;
+      }
+    }
+  }
+  return changed;
+}
+
 export function adjustFootnotes(options = {}) {
   const { updateReferences, updateItems, updateNumbering, updateContent } = options;
   let changed = false;
   if (updateReferences) {
-    const supElements = contentElement.getElementsByClassName('footnote-number');
-    for (const [ index, supElement ] of [ ...supElements ].entries()) {
-      if (supElement.classList.contains('hidden')) {
-        continue;
-      }
-      let footnote = footnotes.find(f => f.supElement === supElement);
-      if (!footnote) {
-        const { id } = supElement;
-        footnote = footnotes.find(f => f.id === id);
-      }
-      if (footnote) {
-        if (footnote.deleted) {
-          // mark it as not deleted
-          // itemElement will get added back by adjustLayout()
-          footnote.deleted = 0;
-          changed = true;
-        }
-        // the sup element could be different if it reappears thanks to
-        // a copy-and-paste operation or it's got overwritten during a
-        // execCommand('insertHTML')
-        footnote.supElement = supElement;
-        const currentIndex = footnotes.indexOf(footnote);
-        if (currentIndex !== index) {
-          // put it in the correct position
-          footnotes.splice(currentIndex, 1);
-          footnotes.splice(index, 0, footnote);
-        }
-      }
-    }
-    // any extra ones must have been deleted by the user
-    const extraFootnotes = footnotes.slice(supElements.length);
-    for (const footnote of extraFootnotes) {
-      const { supElement, itemElement } = footnote;
-      if (!footnote.deleted) {
-        // mark it as not deleted
-        footnote.deleted = deletionCount++;
-        itemElement.remove();
-        // take it out the page where it's attached
-        remove(footnote.page.footer.footnotes, footnote);
-        footnote.page = null;
-        changed = true;
-      }
-    }
   }
   const newContents = new Map;
   if (updateItems || updateContent) {
@@ -650,14 +637,6 @@ export function adjustFootnotes(options = {}) {
       }
     }
   }
-  if (changed || updateNumbering) {
-    let number = 1;
-    for (const footnote of footnotes) {
-      if (!footnote.deleted) {
-        footnote.supElement.textContent = footnote.number = number++;
-      }
-    }
-  }
   return changed;
 }
 
@@ -698,7 +677,10 @@ function detectLines(blockElement) {
     const display = styleMap.get('display');
     if (display === 'inline-block' || display === 'inline-flex') {
       const { top, bottom, left, right } = element.getBoundingClientRect();
-      const fragment = { lineTop: top, lineBottom: bottom, top, bottom, right, left };
+      const fragment = {
+        lineTop: top,
+        lineBottom: bottom,
+        top, bottom, right, left, element };
       fragments.push(fragment);
     } else {
       const lineHeight = getLineHeight(styleMap);
@@ -712,7 +694,10 @@ function detectLines(blockElement) {
             // adjust rect based on the line height
             const offsetTop = Math.floor((lineHeight - height) / 2);
             const offsetBottom = (lineHeight - height) - offsetTop;
-            const fragment = { lineTop: top - offsetTop, lineBottom: bottom + offsetBottom, top, bottom, right, left };
+            const fragment = {
+              lineTop: top - offsetTop,
+              lineBottom: bottom + offsetBottom,
+              top, bottom, right, left, element };
             fragments.push(fragment);
           }
         }
@@ -722,10 +707,12 @@ function detectLines(blockElement) {
   scan(blockElement);
   const lines = [];
   let highest = null, lowest = null;
+  let elements = [];
   const wrap = () => {
     const height = lowest.lineBottom - highest.lineTop;
-    lines.push(height);
+    lines.push({ height, elements });
     highest = lowest = null;
+    elements = [];
   };
   for (const fragment of fragments) {
     if (lowest && fragment.top >= lowest.bottom) {
@@ -736,6 +723,9 @@ function detectLines(blockElement) {
     }
     if (!lowest || fragment.bottom > lowest.bottom) {
       lowest = fragment;
+    }
+    if (fragment.element !== blockElement) {
+      elements.push(fragment.element);
     }
   }
   if (highest && lowest) {
@@ -942,10 +932,45 @@ function remove(arr, cb) {
   alter(arr, e => cb(e) ? undefined : e);
 }
 
+function includesFootnoteNumberElements(nodes) {
+  for (const node of nodes) {
+    if (node.nodeType === Node.ELEMENT_NODE && node.classList.contains('footnote-number')) {
+      return true;
+    }
+  }
+  return false;
+}
+
 function handleArticleChanges(mutationsList) {
-  console.log(mutationsList);
+  if (adjustingLayout) {
+    return;
+  }
+  const changes = {};
+  for (const { type, target, addedNodes, removedNodes } of mutationsList) {
+    if (type === 'childList') {
+      if (!target.classList.contains('footnote-number')) {
+        if (includesFootnoteNumberElements(addedNodes) || includesFootnoteNumberElements(removedNodes)) {
+          changes.footnoteNumbers = true;
+        }
+        changes.articleText = true;
+      }
+    } else if (type === 'characterData') {
+      changes.articleText = true;
+    }
+  }
+  if (changes.footnoteNumbers) {
+    adjustFootnoteNumbers();
+    adjustLayout();
+  } else if (changes.articleText) {
+    adjustLayout();
+  }
+  console.log(changes);
 }
 
 function handleFootnoteChanges(mutationsList) {
-  console.log(mutationsList);
+  const changes = {};
+  for (const { type, target, addedNodes, removedNodes } of mutationsList) {
+    
+  }
+  console.log(changes);
 }
