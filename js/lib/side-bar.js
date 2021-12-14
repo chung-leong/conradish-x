@@ -1,7 +1,7 @@
 import { e, parseMarkdown, attachRippleEffectHandlers } from './ui.js';
 import { l, setSourceLanguage, getSourceLanguage, getSourceLanguages, getTargetLanguages } from './i18n.js';
 import { getPossibleSettings, getPaperProperties, applyStyles, getSettings, saveSettings } from './settings.js';
-import { adjustLayout } from './layout.js';
+import { updateLayout } from './layout.js';
 import { modeChange, setEditMode, getEditMode } from './editing.js';
 
 let collapsed = undefined;
@@ -176,7 +176,7 @@ function changeSettings(callback) {
   const settings = getSettings();
   callback(settings);
   applyStyles();
-  adjustLayout({ updatePaper: true });
+  updateLayout();
   saveSettings();
 }
 

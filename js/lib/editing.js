@@ -347,13 +347,8 @@ function handleInput(evt) {
     // clean up the tags, making sure they all have the "conradish" class
     adjustAttributes(target, true);
   } else if (isFootnoteEditor(target)) {
-    // remember which item has the cursor
-    const cursor = preserveCursorPosition();
     // clean up the tags
     adjustAttributes(target);
-    // put the cursor back onto the correct item, in the event it got moved
-    // to another footer
-    restoreCursorPosition(cursor);
   }
 }
 
