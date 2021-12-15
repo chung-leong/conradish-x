@@ -127,14 +127,15 @@ function adjustLayout() {
       endContainer = endContainer.childNodes[endOffset];
     }
     if (startContainer && endContainer) {
-      return { startContainer, endContainer, startOffset, endOffset };
+      const { bottom } = range.getBoundingClientRect();
+      return { startContainer, endContainer, startOffset, endOffset, bottom };
     }
   };
   const restoreCursor = () => {
     if (!cursor) {
       return;
     }
-    let { startContainer, endContainer, startOffset, endOffset } = cursor;
+    let { startContainer, endContainer, startOffset, endOffset, bottom } = cursor;
     // find the list element where the cursor is suppose to be
     let listElement;
     for (let n = endContainer; n; n = n.parentNode) {
@@ -143,10 +144,12 @@ function adjustLayout() {
         break;
       }
     }
-    // give the list focus if it isn't focused and scroll it into view
-    if (listElement && document.activeElement !== listElement) {
+    if (!listElement) {
+      return;
+    }
+    // give the list focus if it isn't focused
+    if (document.activeElement !== listElement) {
       listElement.focus();
-      listElement.scrollIntoView({ behavior: 'auto', block: 'nearest' });
     }
     // restore the cursor
     const selection = getSelection();
@@ -161,6 +164,12 @@ function adjustLayout() {
     }
     selection.removeAllRanges();
     selection.addRange(range);
+    // keep the cursor at the same viewport position
+    const rect = range.getBoundingClientRect();
+    const diff = rect.bottom - bottom;
+    if (diff !== 0) {
+      scrollElement.scrollTop += diff;
+    }
   };
   const editingFootnote = document.activeElement.classList.contains('footer-content');
   const cursor = (editingFootnote) ? preserveCursor() : null;
@@ -268,6 +277,7 @@ function adjustLayout() {
       marginBottom: parseFixed(style.marginBottom),
       lines: null,
       footnotes: footnotesInElement,
+      skippedContent: false,
       skippedHeight: 0,
       skippedLines: null,
       skippedFootnotes: null,
@@ -305,11 +315,11 @@ function adjustLayout() {
       }
       // see if we can omit a footnote in the present page
       const lastFootnote = content.footnotes[content.footnotes.length - 1];
-      const lastLineIndex = content.lines[content.lines.length - 1];
+      const lastLineIndex = content.lines.length - 1;
       let removedFootnote = false;
       if (lastFootnote) {
-        const line = content.lines.find(l => l.elements.includes(lastFootnote.supElement));
-        if (!line || line === lastLineIndex) {
+        const lineIndex = content.lines.findIndex(l => l.elements.includes(lastFootnote.supElement));
+        if (lineIndex === -1 || lineIndex === lastLineIndex) {
           // the footnote is referenced by the last line, we don't want to push that
           // to the next page ahead of the note itself, so we move the note
           content.footnotes.pop();
@@ -317,6 +327,7 @@ function adjustLayout() {
           content.footnoteHeight -= footnoteHeight;
           content.skippedFootnotes.unshift(lastFootnote);
           content.skippedFootnoteHeight += footnoteHeight;
+          content.skippedContent = true;
           removedFootnote = true;
         }
       }
@@ -326,6 +337,7 @@ function adjustLayout() {
         content.height -= line.height;
         content.skippedHeight += line.height;
         content.skippedLines.unshift(line.height);
+        content.skippedContent = true;
       }
       spaceRequired = getSpaceRequired(content, footerEmpty);
     }
@@ -340,6 +352,7 @@ function adjustLayout() {
     content.skippedFootnotes = [];
     content.footnoteHeight = content.skippedFootnoteHeight;
     content.skippedFootnoteHeight = 0;
+    content.skippedContent = false;
   };
   while (overlayContainerElement.firstChild) {
     overlayContainerElement.firstChild.remove();
@@ -384,10 +397,10 @@ function adjustLayout() {
       // the previous page ends with an element spilling into this one
       useSkippedContent(leftover);
       const spaceRequired = cropContent(leftover, spaceRemaining, !pageFootnotes.length);
-      const { footnotes, marginBottom, height, skippedHeight, element } = leftover;
+      const { footnotes, marginBottom, height, skippedContent, element } = leftover;
       //addContentOverlay(position, leftover);
       pageFootnotes.push(...footnotes);
-      if (skippedHeight === 0) {
+      if (!skippedContent) {
         leftover = null;
         spaceRemaining -= spaceRequired;
         previousMarginBottom = marginBottom;
@@ -420,17 +433,17 @@ function adjustLayout() {
     const margin = (atPageTop) ? 0 : Math.max(previousMarginBottom, content.marginTop);
     // trim the amount of content to fit space available in this page
     const spaceRequired = cropContent(content, spaceRemaining - margin, !pageFootnotes.length);
-    const { footnotes, marginBottom, height, skippedHeight } = content;
+    const { footnotes, marginBottom, height, skippedContent } = content;
     if (spaceRequired) {
       //console.log(`${elementIndex}: ${spaceRequired} at ${position}`);
       position += margin;
       positionMap.set(element, position);
-      if (skippedHeight > 0) {
+      if (skippedContent) {
         //addContentOverlay(position, content);
       }
       pageFootnotes.push(...footnotes);
     }
-    if (skippedHeight === 0) {
+    if (!skippedContent) {
       // continue on this page if there's enough space for the bottom margin
       if (spaceRemaining > marginBottom) {
         spaceRemaining -= margin + spaceRequired;
@@ -844,6 +857,7 @@ export function annotateRange(range, content, extra) {
   const supElement = contentElement.querySelectorAll('.footnote-number.pending')[0];
   supElement.classList.remove('pending');
   const itemElement = e('LI', { className: 'footnote-item' }, content);
+  backstageElement.append(itemElement);
   const page = null, height = '';
   const footnote = { id, number, page, supElement, itemElement, height, extra };
   footnotes.splice(number - 1, 0, footnote);
