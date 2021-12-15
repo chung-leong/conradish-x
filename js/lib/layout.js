@@ -114,28 +114,7 @@ function adjustLayout() {
   for (const footnote of footnotes) {
     footnoteHeightMap.set(footnote, footnote.itemElement.offsetHeight);
   }
-  let pageIndex = -1;
-  let page = null;
-  let availableArea = null;
-  let contentArea = null;
-  const addPage = () => {
-    if (pages.length === 0) {
-      // remove the placeholder
-      while (backgroundElement.firstChild) {
-        backgroundElement.firstChild.remove();
-      }
-    }
-    // add paper to background
-    const paperElement = e('DIV', { className: 'paper' });
-    backgroundElement.append(paperElement);
-    // add footer
-    const footer = addFooter();
-    const page = { paperElement, footer, availableArea: null, contentArea: null };
-    adjustFooterPosition(page);
-    pages.push(page);
-    return page;
-  };
-  let cursor = null;
+  // remember cursor position when editing footnotes
   const preserveCursor = () => {
     const range = getSelection().getRangeAt(0);
     let { startContainer, endContainer, startOffset, endOffset } = range;
@@ -148,10 +127,13 @@ function adjustLayout() {
       endContainer = endContainer.childNodes[endOffset];
     }
     if (startContainer && endContainer) {
-      cursor = { startContainer, endContainer, startOffset, endOffset };
+      return { startContainer, endContainer, startOffset, endOffset };
     }
   };
   const restoreCursor = () => {
+    if (!cursor) {
+      return;
+    }
     let { startContainer, endContainer, startOffset, endOffset } = cursor;
     // find the list element where the cursor is suppose to be
     let listElement;
@@ -180,7 +162,29 @@ function adjustLayout() {
     selection.removeAllRanges();
     selection.addRange(range);
   };
-  const { activeElement } = document;
+  const editingFootnote = document.activeElement.classList.contains('footer-content');
+  const cursor = (editingFootnote) ? preserveCursor() : null;
+  let pageIndex = -1;
+  let page = null;
+  let availableArea = null;
+  let contentArea = null;
+  const addPage = () => {
+    if (pages.length === 0) {
+      // remove the placeholder
+      while (backgroundElement.firstChild) {
+        backgroundElement.firstChild.remove();
+      }
+    }
+    // add paper to background
+    const paperElement = e('DIV', { className: 'paper' });
+    backgroundElement.append(paperElement);
+    // add footer
+    const footer = addFooter();
+    const page = { paperElement, footer, availableArea: null, contentArea: null };
+    adjustFooterPosition(page);
+    pages.push(page);
+    return page;
+  };
   const startNewPage = () => {
     pageIndex++;
     if (pageIndex < pages.length) {
@@ -190,10 +194,6 @@ function adjustLayout() {
     }
     availableArea = page.availableArea;
     contentArea = page.contentArea;
-    if (page.footer.listElement === activeElement) {
-      // remember the cursor position
-      preserveCursor();
-    }
   };
   let totalFootnoteCount = 0;
   const attachFootnotes = (newList) => {
@@ -469,9 +469,7 @@ function adjustLayout() {
   }
   // removed any events caused by layout changes
   footnoteObserver.takeRecords();
-  if (cursor) {
-    restoreCursor();
-  }
+  restoreCursor();
 }
 
 export function addFooter() {
@@ -1071,7 +1069,7 @@ function handleFootnoteChanges(mutationsList) {
       }
     }
   }
-  if (footnotesChanged.length > 0 || footnoteTextChanged.length > 0) {
+  if (footnotesChanged.size > 0 || footnoteTextChanged.size > 0) {
     autosave();
   }
 }
