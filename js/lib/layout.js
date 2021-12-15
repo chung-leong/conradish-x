@@ -58,7 +58,10 @@ export async function loadDocument(key) {
   // add the article text into the DOM
   addContent(contentElement, content);
   // adjust layout, inserting footnotes into appropriate page
-  adjustLayout({ updateFooterDirection: true });
+  adjustLayout({ breakAfterPage: 1 });
+  // give browser a chance to render the first page, then finish the rest
+  await new Promise(r => setTimeout(r, 0));
+  adjustLayout();
   // watch for changes to article
   observeChanges();
   // watch for change of title (which could be performed in list.html)
@@ -107,7 +110,8 @@ export function updateLayout() {
   adjustLayout();
 }
 
-function adjustLayout() {
+function adjustLayout(options) {
+  const { breakAfterPage } = options || {};
   console.time('adjustLayout');
   // get the height of each footnote now, since we might detach some of them temporarily from the DOM
   const footnoteHeightMap = new WeakMap;
@@ -427,6 +431,9 @@ function adjustLayout() {
   // determine where each paragraph (list or table) will land
   let elementIndex = 0;
   for (const element of contentElement.children) {
+    if (pageIndex >= breakAfterPage) {
+      break;
+    }
     // get info about this element
     const content = analyseContent(element);
     // calculate the top margin
