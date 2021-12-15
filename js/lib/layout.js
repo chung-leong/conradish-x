@@ -14,6 +14,7 @@ const overlayContainerElement = document.getElementById('overlays');
 
 const pages = [];
 const footnotes = [];
+const footnoteRecylclingBin = [];
 
 const articleObserver = new MutationObserver(handleArticleChanges);
 const footnoteObserver = new MutationObserver(handleFootnoteChanges);
@@ -491,155 +492,129 @@ export function addFooter() {
 }
 
 function adjustFootnoteNumbers() {
-  const supElements = contentElement.getElementsByClassName('footnote-number');
   let changed = false;
-  for (const [ index, supElement ] of [ ...supElements ].entries()) {
-    if (supElement.classList.contains('hidden')) {
-      continue;
-    }
-    let footnote = footnotes.find(f => f.supElement === supElement);
-    if (!footnote) {
-      const { id } = supElement;
-      footnote = footnotes.find(f => f.id === id);
-    }
-    if (footnote) {
-      if (footnote.deleted) {
-        // mark it as not deleted
-        // itemElement will get added back by adjustLayout()
-        footnote.deleted = 0;
-        changed = true;
+  const supElements = [ ...contentElement.getElementsByClassName('footnote-number') ].filter((supElement) => {
+    return !supElement.classList.contains('hidden');
+  });
+  const elementToFootnoteMap = new Map;
+  const remainingElements = [ ...supElements ];
+  const availableFootnotes = [ ...footnotes ];
+  const matchMethod = (footnote, supElement) => footnote.id === supElement.id;
+  const matchFrom = (list, method) => {
+    remove(remainingElements, (supElement) => {
+      const footnote = retrieve(list, f => method(f, supElement));
+      if (footnote) {
+        elementToFootnoteMap.set(supElement, footnote);
+        return true;
       }
-      // the sup element could be different if it reappears thanks to
-      // a copy-and-paste operation or it's got overwritten during a
-      // execCommand('insertHTML')
-      footnote.supElement = supElement;
-      const currentIndex = footnotes.indexOf(footnote);
-      if (currentIndex !== index) {
-        // put it in the correct position
-        footnotes.splice(currentIndex, 1);
-        footnotes.splice(index, 0, footnote);
-      }
-    }
+    });
+  };
+  matchFrom(availableFootnotes, matchMethod);
+  if (remainingElements.length > 0) {
+    // look in recycling bin
+    matchFrom(footnoteRecylclingBin, matchMethod);
   }
-  // any extra ones must have been deleted by the user
-  const extraFootnotes = footnotes.slice(supElements.length);
-  for (const footnote of extraFootnotes) {
-    const { supElement, itemElement } = footnote;
-    if (!footnote.deleted) {
-      // mark it as not deleted
-      footnote.deleted = deletionCount++;
-      itemElement.remove();
-      // take it out the page where it's attached
-      remove(footnote.page.footer.footnotes, footnote);
-      footnote.page = null;
+  for (const [ index, supElement ] of supElements.entries()) {
+    const footnote = elementToFootnoteMap.get(supElement);
+    footnote.supElement = supElement;
+    const number = index + 1;
+    if (footnote.number !== number) {
+      footnote.supElement.textContent = footnote.number = number;
+    }
+    if (insertAt(footnotes, index, footnote)) {
       changed = true;
     }
   }
-  let number = 0;
-  for (const footnote of footnotes) {
-    if (!footnote.deleted) {
-      number++;
-      if (footnote.number !== number) {
-        footnote.supElement.textContent = footnote.number = number;
-      }
-    }
+  // any extra ones must have been deleted by the user
+  const extraFootnotes = footnotes.splice(supElements.length);
+  for (const footnote of extraFootnotes) {
+    // stick it into the recycling bin
+    footnoteRecylclingBin.unshift(footnote);
+    footnote.itemElement.remove();
+    footnote.supElement = null;
+    // take it out the page where it's attached
+    remove(footnote.page.footer.footnotes, footnote);
+    footnote.page = null;
+    changed = true;
+  }
+  if (changed) {
+    removeChangeRecords();
   }
   return changed;
 }
 
 export function adjustFootnotes(page) {
   let changed = false;
+  const { footer } = page;
+  const { listElement } = footer;
+  const baseIndex = listElement.start - 1;
+  const itemElements = [ ...listElement.children ];
   const newContents = new Map;
   // the content of the list items are needed for handling item deletion
-  const { listElement } = page.footer;
-  for (const itemElement of listElement.children) {
+  for (const itemElement of itemElements) {
     const { content } = extractContent(itemElement);
     newContents.set(itemElement, content);
   }
-  const count = page.footer.footnotes.length;
-  const domCount = listElement.children.length;
-  if (count > domCount) {
-    // some items have been deleted by the users
-    // unfortunately, instead of removing the actual LI elements,
-    // Chrome will shift contents upward and delete items from the end
-    // we need to therefore figure out which footnotes remain based on
-    // the content of the nodes
-    //
-    // first, marked all of them as deleted
-    for (const footnote of footer.footnotes) {
-      footnote.deleted = 1;
-    }
-    for (const itemElement of listElement.children) {
-      const newContent = newContents.get(itemElement);
-      const matchingFootnote = footer.footnotes.find(f => matchContent(f.content, newContent, '='))
-                            || footer.footnotes.find(f => matchContent(f.content, newContent, '~'))
-                            || footer.footnotes.find(f => f.deleted);
-      matchingFootnote.deleted = 0;
-      if (matchingFootnote.itemElement !== itemElement) {
-        // remember that the item orignally belonged to another footnote
-        if (matchingFootnote.previousItemElements) {
-          matchingFootnote.previousItemElements.push(matchingFootnote.itemElement);
-        } else {
-          matchingFootnote.previousItemElements = [ matchingFootnote.itemElement ];
-        }
-        matchingFootnote.itemElement = itemElement;
-      }
-    }
-    remove(footer.footnotes, (f) => {
-      if (f.deleted) {
-        // hide the sup element instead of removing it, as it's hard
-        // to figure out where to put it when we need to restore it
-        f.supElement.classList.add('hidden');
-        f.deleted = deletionCount++;
+  // when the user delete a list item, instead of removing the actual LI element,
+  // Chrome will shift contents upward and delete items from the end; we need to figure
+  // out which footnote goes will with which LI element based on the content within
+  const elementToFootnoteMap = new Map;
+  const remainingElements = [ ...itemElements ];
+  const availableFootnotes = [ ...footer.footnotes ];
+  const matchMethods = [
+    (footnote, itemElement) => matchContent(footnote.content, newContents.get(itemElement), '='),
+    (footnote, itemElement) => matchContent(footnote.content, newContents.get(itemElement), '~'),
+    (footnote, itemElement) => true,
+  ];
+  const matchFrom = (list, method) => {
+    remove(remainingElements, (itemElement) => {
+      const footnote = retrieve(list, f => method(f, itemElement));
+      if (footnote) {
+        elementToFootnoteMap.set(itemElement, footnote);
         return true;
       }
     });
-    changed = true;
-  } else if (count < domCount) {
-    // some items have reappeared due to user undoing a delete operation
-    //
-    // undo borrowing first
-    for (const footnote of footer.footnotes) {
-      if (footnote.previousItemElements) {
-        footnote.itemElement = footnote.previousItemElements.pop();
-        if (footnote.previousItemElements.length === 0) {
-          delete footnote.previousItemElements;
-        }
-      }
+  } ;
+  for (const method of matchMethods) {
+    matchFrom(availableFootnotes, method);
+  }
+  if (remainingElements.length > 0) {
+    // look for footnotes in the recycling bin
+    for (const method of matchMethods) {
+      matchFrom(footnoteRecylclingBin, method);
     }
-    // restore delete footnotes, use deletion order to deal with multiple
-    // instances of empty notes
-    const deletedFootnotes = footnotes.filter(f => f.deleted).sort((f1, f2) => f2.deleted - f1.deleted);
-    for (const itemElement of listElement.children) {
-      const footnote = footnotes.find(f => !f.deleted && f.itemElement === itemElement);
-      if (footnote) {
-        // it's there--don't need to do anything
-        continue;
-      }
-      // usually, the original DOM node will reappear
-      // Chrome could create new ones sometimes however in which we need
-      // to match by content
-      const newContent = newContents.get(itemElement);
-      const deletedFootnote = deletedFootnotes.find(f => f.itemElement === itemElement)
-                           || deletedFootnotes.find(f => matchContent(f.content, newContent, '='))
-                           || deletedFootnotes.find(f => matchContent(f.content, newContent, '~'))
-                           || deletedFootnotes[0];
-      deletedFootnote.deleted = 0;
-      deletedFootnote.itemElement = itemElement;
-      remove(deletedFootnotes, deletedFootnote);
-      // unhide the sup element
-      deletedFootnote.supElement.classList.remove('hidden');
-      // adjustLayout() will put the footnote back into the page
+  }
+  for (const [ index, itemElement ] of itemElements.entries()) {
+    const footnote = elementToFootnoteMap.get(itemElement);
+    footnote.supElement.classList.remove('hidden');
+    const number = baseIndex + index + 1;
+    if (footnote.number !== number) {
+      footnote.supElement.textContent = footnote.number = number;
     }
+    footnote.itemElement = itemElement;
+    footnote.content = newContents.get(itemElement);
+    if (insertAt(footer.footnotes, index, footnote)) {
+      changed = true;
+    }
+    // insert into main list as well
+    insertAt(footnotes, baseIndex + index, footnote);
+  }
+  // any extra ones must have been deleted by the user
+  const extraFootnotes = footer.footnotes.splice(itemElements.length);
+  for (const footnote of extraFootnotes) {
+    // stick it into the recycling bin
+    footnoteRecylclingBin.unshift(footnote);
+    // hide the sup element instead of removing it, as it's hard to figure out
+    // where to put it when we need to restore it
+    footnote.supElement.classList.add('hidden');
+    footnote.itemElement = null;
+    footnote.page = null;
+    // remove footnote from the main list as well
+    remove(footnotes, footnote);
     changed = true;
   }
   if (changed) {
-    articleObserver.takeRecords();
-  }
-  for (const footnote of footnotes) {
-    if (!footnote.deleted) {
-      footnote.content = newContents.get(footnote.itemElement);
-    }
+    removeChangeRecords();
   }
   return changed;
 }
@@ -811,7 +786,7 @@ function addContent(element, content) {
 }
 
 export function findDeletedFootnote(id) {
-  return footnotes.find(f => f.deleted && f.id === id);
+  return footnoteRecylclingBin.find(f => f.id === id);
 }
 
 let nextFootnoteId = Math.round(Math.random() * 0x00FFFFFF) * 1000;
@@ -837,8 +812,8 @@ function addElement(element, { tag, style, content, footnote, junk }) {
     addContent(itemElement, content);
     // stick the item into the list backstage so we can obtain its dimensions
     backstageElement.append(itemElement);
-    const page = null, deleted = 0, height = '';
-    footnotes.push({ id, number, page, deleted, supElement, itemElement, height, content, extra });
+    const page = null, height = '';
+    footnotes.push({ id, number, page, supElement, itemElement, height, content, extra });
   }
   element.append(child);
 }
@@ -847,7 +822,7 @@ export function annotateRange(range, content, extra) {
   const id = `footnote-${nextFootnoteId++}`;
   // figure out what number it should have
   let number = 1;
-  for (const { supElement } of footnotes.filter(f => !f.deleted)) {
+  for (const { supElement } of footnotes) {
     if (supElement.compareDocumentPosition(range.endContainer) === Node.DOCUMENT_POSITION_FOLLOWING) {
       number++;
     } else {
@@ -871,8 +846,8 @@ export function annotateRange(range, content, extra) {
   const supElement = contentElement.querySelectorAll('.footnote-number.pending')[0];
   supElement.classList.remove('pending');
   const itemElement = e('LI', { className: 'footnote-item' }, content);
-  const page = null, deleted = 0, height = '';
-  const footnote = { id, number, page, deleted, supElement, itemElement, height, extra };
+  const page = null, height = '';
+  const footnote = { id, number, page, supElement, itemElement, height, extra };
   footnotes.splice(number - 1, 0, footnote);
   return footnote;
 }
@@ -910,7 +885,7 @@ function extractContent(node) {
       if (includeFootnotes) {
         if (classList.contains('footnote-number')) {
           const footnote = footnotes.find((f) => f.supElement === node);
-          if (footnote && !footnote.deleted) {
+          if (footnote) {
             const { content, extra } = footnote;
             object.footnote = { content };
             Object.assign(object.footnote, extra)
@@ -987,6 +962,27 @@ function remove(arr, cb) {
   alter(arr, e => cb(e) ? undefined : e);
 }
 
+function retrieve(arr, cb) {
+  const index = arr.findIndex(cb);
+  if (index !== -1) {
+    const value = arr[index];
+    arr.splice(index, 1);
+    return value;
+  }
+}
+
+function insertAt(arr, index, item) {
+  const currentIndex = arr.indexOf(item);
+  if (currentIndex === index) {
+    return false;
+  }
+  if (currentIndex !== -1) {
+    arr.splice(currentIndex, 1);
+  }
+  arr.splice(index, 0, item);
+  return true;
+}
+
 function observeChanges() {
   if (!observing) {
     articleObserver.observe(contentElement, observerConfig);
@@ -995,6 +991,11 @@ function observeChanges() {
     }
     observing = true;
   }
+}
+
+function removeChangeRecords() {
+  footnoteObserver.takeRecords();
+  articleObserver.takeRecords();
 }
 
 function handleArticleChanges(mutationsList) {
