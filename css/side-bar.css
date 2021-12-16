@@ -65,7 +65,8 @@
   display: none;
 }
 
-#side-bar.clean #finish-button {
+#side-bar.clean #finish-button,
+#side-bar.edit #finish-button {
   display: inline;
 }
 
