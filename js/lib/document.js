@@ -903,8 +903,11 @@ export function annotateRange(range, content, extra) {
   const itemElement = e('LI', { className: 'footnote-item' }, content);
   backstageElement.append(itemElement);
   const page = null, height = '';
-  const footnote = { id, number, page, supElement, itemElement, height, extra };
+  const footnote = { id, number, page, supElement, itemElement, height, content, extra };
   footnotes.splice(number - 1, 0, footnote);
+  // manual handle the change records so footnote will already be attached to a page
+  // when this function returns
+  handleArticleChanges(articleObserver.takeRecords());
   return footnote;
 }
 
