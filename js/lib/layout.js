@@ -797,6 +797,11 @@ function detectLines(blockElement) {
 function decomposeTables() {
   const tables = contentElement.getElementsByTagName('TABLE');
   for (const table of tables) {
+    const { display } = getComputedStyle(table);
+    if (display === 'none') {
+      // make it appear temporarily
+      table.style.display = 'table';
+    }
     if (!table.classList.contains('decomposed')) {
       const cells = table.getElementsByTagName('TD');
       const cellWidths = new WeakMap;
@@ -808,6 +813,9 @@ function decomposeTables() {
         cell.style.width = cellWidths.get(cell) + 'px';
       }
       table.classList.add('decomposed');
+    }
+    if (display === 'none') {
+      table.style.removeProperty('display');
     }
   }
 }
