@@ -1,7 +1,7 @@
 import { e, parseMarkdown, attachRippleEffectHandlers } from './ui.js';
 import { l, setSourceLanguage, getSourceLanguage, getSourceLanguages, getTargetLanguages } from './i18n.js';
 import { getPossibleSettings, getPaperProperties, applyStyles, getSettings, saveSettings } from './settings.js';
-import { updateLayout } from './layout.js';
+import { updateLayout } from './document.js';
 import { modeChange, setEditMode, getEditMode } from './editing.js';
 
 let collapsed = undefined;

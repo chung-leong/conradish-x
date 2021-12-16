@@ -52,7 +52,7 @@ select:focus, input[type="text"]:focus, button:focus {
 select {
   -webkit-appearance: none;
   padding: 1px 32px 2px 8px;
-  background-image: url('../img/arrow_down.svg');
+  background-image: url('../img/arrow-down.svg');
   background-origin: padding-box;
   background-position-x: calc(100% - 8px);
   background-position-y: 50%;

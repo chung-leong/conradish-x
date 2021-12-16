@@ -1,5 +1,5 @@
 import { e, separateWords } from './ui.js';
-import { findDeletedFootnote, annotateRange, setFilterMode, getTitle, setTitle } from './layout.js';
+import { findDeletedFootnote, annotateRange, setFilterMode, getTitle, setTitle } from './document.js';
 import { transverseRange } from './capturing.js';
 import { l, translate, getSourceLanguage, getTargetLanguage, getLanguageDirection } from './i18n.js';
 

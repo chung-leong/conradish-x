@@ -1,5 +1,5 @@
 import { initializeStorage, storageChange, getSettings } from './lib/storage.js';
-import { loadDocument, setFilterMode } from './lib/layout.js';
+import { loadDocument, setFilterMode } from './lib/document.js';
 import { setEditMode, createMenuItems, attachEditingHandlers } from './lib/editing.js';
 import { createArticleNavigation, initializeAutoCollapse } from './lib/side-bar.js';
 import { setWindowName, openPage } from './lib/navigation.js';
