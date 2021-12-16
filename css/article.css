@@ -409,7 +409,8 @@ BODY.ready #status-container {
   #side-bar-button-container,
   #article-menu,
   #status-container,
-  #top-drawer {
+  #top-drawer,
+  .background-button {
     /* hide UI elements */
     display: none;
   }
@@ -427,6 +428,10 @@ BODY.ready #status-container {
     width: fit-content;
     /* remove margin around article */
     margin: 0;
+  }
+
+  #article.filter-manual #article-footers {
+    opacity: 1;
   }
 
   #article-background {
