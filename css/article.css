@@ -106,7 +106,6 @@ BODY {
 
 #article-text TABLE.decomposed TD,
 #article-text TABLE.decomposed TH {
-  display: inline-block;
   flex: 0 0 auto;
   box-sizing: border-box;
   margin-left: -1px;

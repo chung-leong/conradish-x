@@ -114,20 +114,22 @@ async function addFootnote(includeTerm) {
   }
 }
 
-function isCursorAtListItemEnd() {
-  const range = getSelectionRange();
-  if (!range) {
-    return false;
-  }
+function atContainerEnd(range, tagName) {
   const { endContainer, endOffset } = range;
-  // see if offset is at the end of the text node
-  if (endContainer.length !== endOffset) {
+  const container = findParent(endContainer, n => n.tagName === tagName);
+  if (!container) {
     return false;
   }
-  // make sure the node and its ancestors are all the last nodes
-  for (let c = endContainer; c && c.tagName === 'LI'; c = c.parentNode) {
-    if (c.parentNode.lastChild !== c) {
-      return false;
+  const nodeContent = endContainer.nodeValue || endContainer.childNodes;
+  if (endOffset !== nodeContent.length) {
+    return false;
+  }
+  // make sure all parent node are the last node
+  if (endContainer !== container) {
+    for (const n = endContainer.parentNode; n !== container; n = n.parentNode) {
+      if (n.nextSibling) {
+        return false;
+      }
     }
   }
   return true;
@@ -239,24 +241,38 @@ function normalizeRange(range) {
   return range;
 }
 
+function findParent(node, cb) {
+  for (let n = node; n; n = n.parentNode) {
+    if (cb(n)) {
+      return n;
+    }
+  }
+}
+
 function isArticleEditor(node) {
-  if (node) {
-    if (node.id === 'article-text') {
+  return !!findParent(node, n => n.id === 'article-text');
+}
+
+function isFootnoteEditor(node) {
+  return !!findParent(node, n => n.className === 'footer-content');
+}
+
+function isSpanningCells(range) {
+  const { endContainer, startContainer } = range;
+  const cellElement = findParent(endContainer, n => n.tagName === 'TD');
+  if (cellElement) {
+    if (!cellElement.contains(startContainer)) {
       return true;
-    } else {
-      return isArticleEditor(node.parentNode);
     }
   }
   return false;
 }
 
-function isFootnoteEditor(node) {
-  if (node) {
-    if (node.className === 'footer-content') {
-      return true;
-    } else {
-      return isFootnoteEditor(node.parentNode);
-    }
+function isWithinCell(range) {
+  const { endContainer, startContainer } = range;
+  const cellElement = findParent(endContainer, n => n.tagName === 'TD');
+  if (cellElement && cellElement.contains(startContainer)) {
+    return true;
   }
   return false;
 }
@@ -309,44 +325,6 @@ function adjustAttributes(container, addIdentifyingClass = false) {
   scan(container);
 }
 
-function preserveCursorPosition() {
-  const range = getSelectionRange();
-  let { startContainer, endContainer, startOffset, endOffset } = range;
-  if (startContainer.tagName === 'OL') {
-    startOffset = 0;
-    startContainer = startContainer.childNodes[startOffset];
-  }
-  if (endContainer.tagName === 'OL') {
-    endOffset = endContainer.childNodes.length;
-    endContainer = endContainer.childNodes[endOffset];
-  }
-  return { startContainer, endContainer, startOffset, endOffset };
-}
-
-function restoreCursorPosition(cursor) {
-  const { startContainer, endContainer, startOffset, endOffset } = cursor;
-  if (!startContainer || !endContainer) {
-    return;
-  }
-  // find the list element where the cursor is suppose to be
-  let listElement;
-  for (let n = endContainer; n; n = n.parentNode) {
-    if (n.tagName === 'OL') {
-      listElement = n;
-      break;
-    }
-  }
-  // give the list focus if it isn't focused and scroll it into view
-  if (listElement && document.activeElement !== listElement) {
-    listElement.focus();
-    listElement.scrollIntoView({ behavior: 'auto', block: 'nearest' });
-  }
-  // restore the cursor
-  const range = getSelectionRange();
-  range.setStart(startContainer, startOffset);
-  range.setEnd(endContainer, endOffset);
-}
-
 function handleInput(evt) {
   const { target } = evt;
   if (isArticleEditor(target)) {
@@ -361,8 +339,17 @@ function handleInput(evt) {
 function handleBeforeInput(evt) {
   const { target, ctrlKey } = evt;
   if (isArticleEditor(target)) {
-    // prevent editing of footnote numbers
     const range = getSelectionRange();
+    if (isSpanningCells(range)) {
+      evt.preventDefault();
+      evt.stopPropagation();
+    }
+    if (atContainerEnd(range, 'TD') && lastKeyDown === 'Delete') {
+      // prevent contents in the next cell from being pulled into this one
+      evt.preventDefault();
+      evt.stopPropagation();
+    }
+    // prevent editing of footnote numbers
     const number = getFootnoteNumber(range);
     if (number) {
       switch (lastKeyDown) {
@@ -454,15 +441,26 @@ function handleKeyDown(evt) {
 
 function handleKeyPress(evt) {
   const { target } = evt;
-  if (isFootnoteEditor(target)) {
-    const { key, shiftKey, ctrlKey, altKey } = evt;
-    if (key === 'Enter' && !shiftKey && !ctrlKey && !altKey) {
+  const { key, shiftKey, ctrlKey, altKey } = evt;
+  // need to intercept Enter in certain situations, since the default behavior is to split the element
+  // where the cursor reside
+  if (key === 'Enter' && !shiftKey && !ctrlKey && !altKey) {
+    const range = getSelectionRange();
+    let containerTag;
+    if (isFootnoteEditor(target)) {
+      containerTag = 'LI';
+    } else if (isArticleEditor(target)) {
+      if (isWithinCell(range)) {
+        containerTag = 'TD';
+      }
+    }
+    if (containerTag) {
       // cancel default behavior
       evt.preventDefault();
       evt.stopPropagation();
-      // at the end of the list item we need to insert two <BR>s
-      const count = isCursorAtListItemEnd() ? 2 : 1;
-      document.execCommand('insertHTML', false, '<br>'.repeat(count));
+      // at the end of the list item we need to insert two linefeed
+      const count = atContainerEnd(range, containerTag) ? 2 : 1;
+      document.execCommand('insertHTML', false, '\n'.repeat(count));
     }
   }
 }
