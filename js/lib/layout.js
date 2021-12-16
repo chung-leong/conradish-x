@@ -57,6 +57,8 @@ export async function loadDocument(key) {
   applyStyles();
   // add the article text into the DOM
   addContent(contentElement, content);
+  // make tables splitable between pages
+  decomposeTables();
   // adjust layout, inserting footnotes into appropriate page
   adjustLayout({ breakAfterPage: 1 });
   // give browser a chance to render the first page, then finish the rest
@@ -112,7 +114,6 @@ export function updateLayout() {
 
 function adjustLayout(options) {
   const { breakAfterPage } = options || {};
-  console.time('adjustLayout');
   // get the height of each footnote now, since we might detach some of them temporarily from the DOM
   const footnoteHeightMap = new WeakMap;
   for (const footnote of footnotes) {
@@ -265,6 +266,9 @@ function adjustLayout(options) {
   };
   const analyseContent = (element) => {
     const style = getComputedStyle(element);
+    if (style.display === 'none') {
+      return;
+    }
     const rect = getRect(element);
     // if the element spills into the next page, then its bounding rect wouldn't give us
     // the actual height of its contents
@@ -340,7 +344,7 @@ function adjustLayout(options) {
         const line = content.lines.pop();
         content.height -= line.height;
         content.skippedHeight += line.height;
-        content.skippedLines.unshift(line.height);
+        content.skippedLines.unshift(line);
         content.skippedContent = true;
       }
       spaceRequired = getSpaceRequired(content, footerEmpty);
@@ -365,7 +369,7 @@ function adjustLayout(options) {
     if (content.lines) {
       const { left, right } = availableArea;
       for (const line of content.lines) {
-        const bottom = top + line;
+        const bottom = top + line.height;
         const overlayElement = e('DIV', {
           className: 'overlay',
           style: {
@@ -436,6 +440,9 @@ function adjustLayout(options) {
     }
     // get info about this element
     const content = analyseContent(element);
+    if (!content) {
+      continue;
+    }
     // calculate the top margin
     const margin = (atPageTop) ? 0 : Math.max(previousMarginBottom, content.marginTop);
     // trim the amount of content to fit space available in this page
@@ -445,9 +452,9 @@ function adjustLayout(options) {
       //console.log(`${elementIndex}: ${spaceRequired} at ${position}`);
       position += margin;
       positionMap.set(element, position);
-      if (skippedContent) {
+      //if (skippedContent) {
         //addContentOverlay(position, content);
-      }
+      //}
       pageFootnotes.push(...footnotes);
     }
     if (!skippedContent) {
@@ -479,7 +486,6 @@ function adjustLayout(options) {
     paperElement.remove();
     footer.containerElement.remove();
   }
-  console.timeEnd('adjustLayout');
   for (const [ element, position ] of positionMap) {
     const { top, bottom } = getRect(element);
     const positionAfter = positionAfterMap.get(element);
@@ -722,13 +728,19 @@ function detectLines(blockElement) {
   let fragments = [];
   const scan = (element) => {
     const styleMap = element.computedStyleMap();
-    const display = styleMap.get('display');
-    if (display === 'inline-block' || display === 'inline-flex') {
-      const { top, bottom, left, right } = element.getBoundingClientRect();
+    const display = styleMap.get('display').value;
+    if (display !== 'inline' && display !== 'block' && display !== 'list-item') {
+      let { top, bottom, left, right } = element.getBoundingClientRect();
+      const style = getComputedStyle(element);
+      top += parseFixed(style.marginTop);
+      bottom += parseFixed(style.marginBottom);
+      left += parseFixed(style.marginLeft);
+      right += parseFixed(style.marginRight);
+      const wrap = !display.includes('inline');
       const fragment = {
         lineTop: top,
         lineBottom: bottom,
-        top, bottom, right, left, element };
+        top, bottom, right, left, element, wrap };
       fragments.push(fragment);
     } else {
       const lineHeight = getLineHeight(styleMap);
@@ -745,7 +757,7 @@ function detectLines(blockElement) {
             const fragment = {
               lineTop: top - offsetTop,
               lineBottom: bottom + offsetBottom,
-              top, bottom, right, left, element };
+              top, bottom, right, left, element, wrap: false };
             fragments.push(fragment);
           }
         }
@@ -763,7 +775,7 @@ function detectLines(blockElement) {
     elements = [];
   };
   for (const fragment of fragments) {
-    if (lowest && fragment.top >= lowest.bottom) {
+    if (lowest && (fragment.top >= lowest.bottom || fragment.wrap)) {
       wrap();
     }
     if (!highest || fragment.top < highest.top) {
@@ -780,6 +792,24 @@ function detectLines(blockElement) {
     wrap();
   }
   return lines;
+}
+
+function decomposeTables() {
+  const tables = contentElement.getElementsByTagName('TABLE');
+  for (const table of tables) {
+    if (!table.classList.contains('decomposed')) {
+      const cells = table.getElementsByTagName('TD');
+      const cellWidths = new WeakMap;
+      // get all the widths first before setting them
+      for (const cell of cells) {
+        cellWidths.set(cell, cell.offsetWidth);
+      }
+      for (const cell of cells) {
+        cell.style.width = cellWidths.get(cell) + 'px';
+      }
+      table.classList.add('decomposed');
+    }
+  }
 }
 
 export function setFilterMode(mode) {

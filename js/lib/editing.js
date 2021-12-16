@@ -265,35 +265,37 @@ function adjustAttributes(container, addIdentifyingClass = false) {
         classList.add('conradish');
       }
     }
-    const styleAttr = node.getAttribute('style');
-    if (styleAttr) {
-      const items = styleAttr.split(/\s*;\s*/);
-      const itemsKept = [];
-      for (const item of items) {
-        const [ name, value ] = item.split(/\s*:\s*/);
-        if (value) {
-          let keep = false;
-          switch (name) {
-            case 'font-style':
-            case 'font-weight':
-            case 'text-decoration-line':
-            case 'text-decoration-style':
-            case 'vertical-align':
-              keep = true;
-              break;
-            case 'text-size':
-              keep = (value === 'smaller');
-              break;
-          }
-          if (keep) {
-            itemsKept.push(item);
+    if (node.tagName !== 'TD') {
+      const styleAttr = node.getAttribute('style');
+      if (styleAttr) {
+        const items = styleAttr.split(/\s*;\s*/);
+        const itemsKept = [];
+        for (const item of items) {
+          const [ name, value ] = item.split(/\s*:\s*/);
+          if (value) {
+            let keep = false;
+            switch (name) {
+              case 'font-style':
+              case 'font-weight':
+              case 'text-decoration-line':
+              case 'text-decoration-style':
+              case 'vertical-align':
+                keep = true;
+                break;
+              case 'text-size':
+                keep = (value === 'smaller');
+                break;
+            }
+            if (keep) {
+              itemsKept.push(item);
+            }
           }
         }
-      }
-      if (itemsKept.length > 0) {
-        node.setAttribute('style', itemsKept.join(';'));
-      } else {
-        node.removeAttribute('style');
+        if (itemsKept.length > 0) {
+          node.setAttribute('style', itemsKept.join(';'));
+        } else {
+          node.removeAttribute('style');
+        }
       }
     }
     for (const child of children) {

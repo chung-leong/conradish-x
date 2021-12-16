@@ -68,29 +68,18 @@ BODY {
 }
 
 #article-text TABLE {
-  display: grid;
   border-collapse: collapse;
   text-align: start;
   font-size: 80%;
-  /* page height minus top and bottom margins minus footer margin minus some extra space */
-  max-height: calc(297mm - 25mm - 25mm - 5mm - 10mm);
-  /* page width minus left and right margins minus some extra space */
-  width: calc(210mm - 25mm - 25mm - 2mm);
-  margin-inline-start: 1mm;
-  overflow: hidden;
-}
-
-#article-text TABLE CAPTION {
-  text-align: left;
 }
 
 #article-text TD,
 #article-text TH {
-  border: 0.5pt solid rgb(0, 0, 0);
-  padding: 1pt 1pt 0 1pt;
+  border: 1px solid rgb(0, 0, 0);
+  padding: 1px 2px 0 2px;
 }
 
-#article-text TABLE.freeflowing {
+#article-text TABLE.decomposed {
   display: block;
   width: fit-content;
   border-collapse: collapse;
@@ -99,13 +88,15 @@ BODY {
   margin-right: auto;
 }
 
-#article-text TABLE.freeflowing TBODY {
+#article-text TABLE.decomposed TBODY,
+#article-text TABLE.decomposed THEAD,
+#article-text TABLE.decomposed TFOOT {
   display: block;
   width: fit-content;
   max-width: 100%;
 }
 
-#article-text TABLE.freeflowing TR {
+#article-text TABLE.decomposed TR {
   display: flex;
   flex-direction: row;
   margin-bottom: -1px;
@@ -113,14 +104,15 @@ BODY {
   max-width: 100%;
 }
 
-#article-text TABLE.freeflowing TD {
+#article-text TABLE.decomposed TD,
+#article-text TABLE.decomposed TH {
   display: inline-block;
-  border: 1px solid black;
+  flex: 0 0 auto;
+  box-sizing: border-box;
   margin-left: -1px;
-  width: 200px;
 }
 
-#article-text TABLE.freeflowing CAPTION {
+#article-text TABLE.decomposed CAPTION {
   display: flex;
   width: 100%;
   justify-content: center;
