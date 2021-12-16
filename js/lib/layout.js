@@ -260,6 +260,7 @@ function adjustLayout(options) {
       totalFootnoteCount++;
     }
     adjustFooterPosition(page);
+    adjustFooterDirection(page);
   };
   const isSpilling = (rect) => {
     return rect.bottom > contentArea.bottom || rect.top < contentArea.top;
@@ -672,25 +673,23 @@ export function adjustFooterPosition(page) {
   }
 }
 
-function adjustFooterDirection() {
-  for (const page of pages) {
-    const { footer } = page;
-    const { listElement, footnotes } = footer;
-    let ltrCount = 0, rtlCount = 0;
-    for (const footnote of footnotes) {
-      const { lang } = footnote.extra || {};
-      if (lang) {
-        const targetLang = lang.split(',')[1];
-        if (targetLang) {
-          if (getLanguageDirection(targetLang) === 'ltr') {
-            ltrCount++;
-          } else {
-            rtlCount++;
-          }
+function adjustFooterDirection(page) {
+  const { footer } = page;
+  const { listElement, footnotes } = footer;
+  let ltrCount = 0, rtlCount = 0;
+  for (const footnote of footnotes) {
+    const { lang } = footnote.extra || {};
+    if (lang) {
+      const targetLang = lang.split(',')[1];
+      if (targetLang) {
+        if (getLanguageDirection(targetLang) === 'ltr') {
+          ltrCount++;
+        } else {
+          rtlCount++;
         }
       }
-      listElement.classList.toggle('rtl', rtlCount > ltrCount);
     }
+    listElement.classList.toggle('rtl', rtlCount > ltrCount);
   }
 }
 
@@ -1120,11 +1119,11 @@ function handleFootnoteChanges(mutationsList) {
       if (adjustFootnotes(page)) {
         // footnotes were deleted or restored
         adjustLayout();
-      } else {
-        if (adjustFooterPosition(page)) {
-          // the footer size has changed, lines (and hence footnotes) might need to be moved between pages
-          adjustLayout();
-        }
+      } else if (adjustFooterPosition(page)) {
+        // the footer size has changed, lines (and hence footnotes) might need to be moved between pages
+        adjustLayout();
+      } else if (footnotesChanged.get(listElement)) {
+        adjustFooterDirection(page);
       }
     }
   }
