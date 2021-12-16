@@ -5,6 +5,7 @@ import { l, translate, getSourceLanguage, getTargetLanguage, getLanguageDirectio
 
 export const modeChange = new EventTarget;
 
+const containerElement = document.getElementById('article-container');
 const articleMenuElement = document.getElementById('article-menu');
 const articleElement = document.getElementById('article');
 const articleMenuItems = {};
@@ -32,6 +33,9 @@ export function attachEditingHandlers() {
       startEditingTitle();
     }
   });
+  const restoreAllButton = document.getElementById('restore-all-button');
+  restoreAllButton.addEventListener('click', handleRestoreAllClick);
+  restoreAllButton.title = l('keep_all');
 }
 
 export function createMenuItems() {
@@ -596,7 +600,9 @@ export function setEditMode(mode) {
   if (editMode === 'annotate') {
     hideArticleMenu();
   }
+  containerElement.classList.remove(editMode);
   editMode = mode;
+  containerElement.classList.add(editMode);
   setFilterMode(editMode === 'clean' ? 'manual' : 'automatic');
   if (editMode === 'annotate') {
     checkArticleSelection();
@@ -756,4 +762,11 @@ function handleAddDefinition(evt) {
 
 function handleAddTranslation(evt) {
   addFootnote(false);
+}
+
+function handleRestoreAllClick(evt) {
+  const contentElement = document.getElementById('article-text');
+  for (const element of contentElement.children) {
+    element.classList.remove('possibly-junk', 'likely-junk');
+  }
 }

@@ -338,6 +338,28 @@ BODY {
   opacity: 1;
 }
 
+#restore-all-button {
+  position: sticky;
+  top: calc(100% - 32px - 8px);
+  left: calc(100% - 32px - 8px);
+  width: 32px;
+  height: 32px;
+  background-image: url('../img/double-check.svg');
+  background-repeat: no-repeat;
+  background-size: 32px;
+  opacity: 0.25;
+  cursor: pointer;
+  display: none;
+}
+
+#article-container.clean #restore-all-button {
+  display: block;
+}
+
+#restore-all-button:hover {
+  opacity: 1;
+}
+
 .loader {
   opacity: 0;
   transition: opacity 0.5s ease-in;

@@ -1,4 +1,8 @@
 {
+  "keep_all": {
+    "message": "ponechať všetky",
+    "description": "Tooltip text of scrubbing mode keep all button"
+  },
   "create_print_version": {
     "message": "Vytvorte verziu pre tlač",
     "description": "Label for menu item in browser context menu and extension pop-up menu"

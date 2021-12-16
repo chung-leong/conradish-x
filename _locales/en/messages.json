@@ -7,6 +7,10 @@
     "message": "_locales/en/user-guide.html",
     "description": "Path to user guide HTML file"
   },
+  "keep_all": {
+    "message": "keep all",
+    "description": "Tooltip text of scrubbing mode keep all button"
+  },
   "create_print_version": {
     "message": "Create print version",
     "description": "Label for menu item in browser context menu and extension pop-up menu"

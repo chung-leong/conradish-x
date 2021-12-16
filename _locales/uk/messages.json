@@ -1,4 +1,8 @@
 {
+  "keep_all": {
+    "message": "зберігати всі",
+    "description": "Tooltip text of scrubbing mode keep all button"
+  },
   "create_print_version": {
     "message": "Створити версію для друку",
     "description": "Label for menu item in browser context menu and extension pop-up menu"
