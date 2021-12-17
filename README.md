@@ -1,6 +1,8 @@
 # Conradish
 
-Conradish is a Chrome extension that lets you create print version of news articles with footnotes. It's designed for educators who wish to use online materials in the classroom. With its automatic translation feature, this extension is especially useful for teachers of foreign languages.
+Conradish is a Chrome extension that lets you create print version of online news articles. It strips out ads and other distractions, reformatting text to a uniform, professional look. In addition, it lets you attach footnotes to words and sentences.
+
+The extension was designed with educators in mind, those who wish to make use web materials in the classroom. It is especially useful for teachers of foreign languages thanks to its automatic translation feature.
 
 ![Conradish transformation](doc/img/transform-1.jpg)
 
@@ -13,18 +15,20 @@ Conradish is a Chrome extension that lets you create print version of news artic
      - [Removing footnotes](#removing-footnotes)
   - [Applying text style](#applying-text-style)
   - [Finding missing text](#finding-missing-text)
-  - [Removing irrelevant contents](#removing-irrelevant-contents)
+  - [Adjusting filter behavior](#adjusting-filter-behavior)
   - [Printing](#printing)
   - [Finding documents](#finding-documents)
+  - [Changing document title](#changing-document-title)
 * [Limitations](#limitations)
 * [Privacy](#privacy)
+* [Support](#support)
 
 # Features
 
-* Printing only selected portions of articles
+* Printing only selected portion of an article
 * Removal of ads and images
 * Simplification of page layout
-* Editing of text before printing
+* Editing of text prior to printing
 * Point-and-click content scrubbing.
 * Addition of footnotes
 * Integration with Google Translate
@@ -33,7 +37,7 @@ Conradish is a Chrome extension that lets you create print version of news artic
 
 ## Creating print version of article
 
-To create a print version of the article that you're viewing, first select the portion that you wish to print. Then right click (or press the menu key on your keyboard) and choose **Create print version**:
+To create a print version of the article that you're viewing, first select the portion you wish to print. Don't worry if the selection ends up including undesired navigational elements on the side—these will get filtered out. After making the selection, right-click on it (or press the menu key on your keyboard) and choose **Create print version**:
 
 ![Context menu](doc/img/capture-1.jpg)
 
@@ -49,7 +53,7 @@ The print version will open up in a new browser tab:
 
 ### Adding definition
 
-Select the term for which the definition is desired. A pop-up menu will appear underneath. Choose "Add definition":
+Select the term for which the definition is desired. A pop-up menu will appear underneath. Choose **Add definition**:
 
 ![Annotation menu](doc/img/annotate-1.jpg)
 
@@ -61,11 +65,11 @@ If the **To** language matches the **From** language or if "None" is selected, t
 
 ![Footnote](doc/img/footnote-2.jpg)
 
-You can undo the result by pressing **Ctrl-Z** on your keyboard.
+You can undo the action by pressing **Ctrl-Z** on your keyboard.
 
 ### Adding translation/explanation
 
-Select the sentence you wish translated. A pop-up menu will appear underneath. Choose **Add translation**:
+Select the sentence you wish to be translated. A pop-up menu will appear underneath. Choose **Add translation**:
 
 ![Annotation menu](doc/img/annotate-2.jpg)
 
@@ -73,7 +77,9 @@ The translated sentence will then appear in the page's footer:
 
 ![Footnote](doc/img/footnote-3.jpg)
 
-**Add translation** function only differs from **Add definition** in that the original text is omitted from the footnote.
+The **Add translation** functionality only differs from **Add definition** in that the original text is omitted in the footnote.
+
+Both **Add definition** and **Add translation** will appear in the menu when more than one word (but less than 8) are selected.
 
 **Add explanation** will appear in the menu instead when no translation would actually occur (the **To** language is the same as the **From** language or "None" is selected).
 
@@ -122,12 +128,28 @@ With hidden contents shown:
 
 ![Complete view](doc/img/filter-2.jpg)
 
-Filtered contents will appear in red. Contents that Conradish thinks are questionable (but chose to keep) will pulsate in yellow. Click on a section to restore it. When you're done, click the **Finish** button or select "Annotating" in the **Action** drop-down.
+Filtered contents will appear in red. Contents that Conradish thinks are questionable (but chose to keep) will pulsate in yellow. Click on a red section to restore it. Click on a section that isn't red to hide it. When you're done, click the **Finish** button or select "Annotating" in the **Action** drop-down.
 
 You can toggle between scrubbing and annotating mode by pressing the hot-key **Ctrl-Shift-H**.
 
-## Removing irrelevant contents
+Use the double checkmark button at the lower right-hand corner to restore all hidden sections:
 
+![Keep all button](doc/img/bk-button-1.jpg)
+
+
+## Adjusting filter behavior
+
+Conradish's filter setting determines the initial mode when you open a document. When filtering is set to automatic, the editor starts in annotation mode, with suspected junks hidden. When filtering is set to manual, the editor starts in scrubbing mode, allowing you to immediately correct the extension's findings. When filtering is turned off, the editor starts in annotation mode, with suspected junks visible.
+
+Depending on the web sites you visit, one of these settings will prove more convenient than the others. When a site provides a print stylesheet, filtering is generally not necessarily. On the other hand, when a site intermingles a lot of ads and asides with the main article text, or the page layout leads to selection of navigational elements, then leaving it turned on is advisable.
+
+To change the filter setting, click Chrome's extension button in the toolbar then the "kebab" button for Conradish. In the menu, choose **Options**:
+
+![Extension menu](doc/img/extension-menu-1.jpg)
+
+Conradish's option pane will open up in a new tab:
+
+![Options](doc/img/options-1.jpg)
 
 ## Printing
 
@@ -145,6 +167,16 @@ Documents are arranged by date. If you remember particular keywords, you can nar
 
 ![Search results](doc/img/search-1.jpg)
 
+## Changing document title
+
+To change the title of a document, click on the "kebab" button beside the title and choose **Change title**:
+
+![Kebab menu](doc/img/change-title-1.jpg)
+
+If you're in the middle of annotating a document, right click on the page margin (or anywhere else outside the text) and choose **Change title**:
+
+![Context menu](doc/img/change-title-2.jpg)
+
 # Limitations
 
 * Font selection has no impact on the display of East-Asian languages.
@@ -155,3 +187,7 @@ These issues will be addressed in future versions.
 # Privacy
 
 Conradish does not capture any user information. It does not monitor your browsing history. All data is stored locally. The extension does send text to Google for the purpose of translation. The privacy implications are the same as those of using [Google Translate](https://policies.google.com/privacy). When you install the extension, the browser will warn that it can access "your data" at clients5.google.com. The data in question is just the translated phrase.
+
+# Support
+
+If you have any questions or suggestions concerning this extension, feel free to contact me at chernyshevsky@hotmail.com.
