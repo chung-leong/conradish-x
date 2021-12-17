@@ -11,7 +11,8 @@ Conradish is a Chrome extension that lets you create print version of news artic
      - [Adding definition](#adding-definition)
      - [Adding translation/explanation](#adding-translationexplanation)
      - [Removing footnotes](#removing-footnotes)
-     - [Applying text style](#applying-text-style)
+  - [Applying text style](#applying-text-style)
+  - [Finding missing text](#finding-missing-text)
   - [Removing irrelevant contents](#removing-irrelevant-contents)
   - [Printing](#printing)
   - [Finding documents](#finding-documents)
@@ -24,6 +25,7 @@ Conradish is a Chrome extension that lets you create print version of news artic
 * Removal of ads and images
 * Simplification of page layout
 * Editing of text before printing
+* Point-and-click content scrubbing.
 * Addition of footnotes
 * Integration with Google Translate
 
@@ -31,17 +33,17 @@ Conradish is a Chrome extension that lets you create print version of news artic
 
 ## Creating print version of article
 
-To create a print version of the article you're viewing, first select the portion that you wish to print. Then right click (or press the menu key on your keyboard) and choose **Create print version**:
+To create a print version of the article that you're viewing, first select the portion that you wish to print. Then right click (or press the menu key on your keyboard) and choose **Create print version**:
 
-![Context menu](_locales/en/img/capture-1.jpg)
+![Context menu](doc/img/capture-1.jpg)
 
 You can trigger the same action in the extension's menu, if you elect to not add an extra item to the browser's context menu:
 
-![Pop-up menu](_locales/en/img/capture-2.jpg)
+![Pop-up menu](doc/img/capture-2.jpg)
 
 The print version will open up in a new browser tab:
 
-![Print version](_locales/en/img/document-1.jpg)
+![Print version](doc/img/document-1.jpg)
 
 ## Annotating article
 
@@ -49,15 +51,15 @@ The print version will open up in a new browser tab:
 
 Select the term for which the definition is desired. A pop-up menu will appear underneath. Choose "Add definition":
 
-![Annotation menu](_locales/en/img/annotate-1.jpg)
+![Annotation menu](doc/img/annotate-1.jpg)
 
 If the **To** language specified in the side-bar differs from the **From** language, Conradish will look up the definition at Google Translate and insert it automatically as a footnote:
 
-![Footnote](_locales/en/img/footnote-1.jpg)
+![Footnote](doc/img/footnote-1.jpg)
 
 If the **To** language matches the **From** language or if "None" is selected, then you'll need to enter the definition yourself.
 
-![Footnote](_locales/en/img/footnote-2.jpg)
+![Footnote](doc/img/footnote-2.jpg)
 
 You can undo the result by pressing **Ctrl-Z** on your keyboard.
 
@@ -65,11 +67,11 @@ You can undo the result by pressing **Ctrl-Z** on your keyboard.
 
 Select the sentence you wish translated. A pop-up menu will appear underneath. Choose **Add translation**:
 
-![Annotation menu](_locales/en/img/annotate-2.jpg)
+![Annotation menu](doc/img/annotate-2.jpg)
 
 The translated sentence will then appear in the page's footer:
 
-![Footnote](_locales/en/img/footnote-3.jpg)
+![Footnote](doc/img/footnote-3.jpg)
 
 **Add translation** function only differs from **Add definition** in that the original text is omitted from the footnote.
 
@@ -79,13 +81,13 @@ The translated sentence will then appear in the page's footer:
 
 To remove a footnote, simply delete the associated footnote number:
 
-![Footnote number](_locales/en/img/footnote-number-1.jpg)
+![Footnote number](doc/img/footnote-number-1.jpg)
 
 Or delete the footnote entry:
 
-![Footnote](_locales/en/img/footnote-4.jpg)
+![Footnote](doc/img/footnote-4.jpg)
 
-### Applying text style
+## Applying text style
 
 The following hot-keys can be used to add basic text style:
 
@@ -106,50 +108,50 @@ The following hot-keys can be used to add basic text style:
 | **Ctrl-6**           | Heading 6         |
 | **Ctrl-0**           | Regular text      |
 
-## Removing irrelevant contents
+## Finding missing text
 
-By default, Conradish will automatically filter out contents it deems irrelevant (based on their on-screen position). Sometimes bylines and dates can be removed as a result. Too see what got filtered out, press **Ctrl-Shift-H**.
+By default, Conradish will automatically filter out contents it deems irrelevant. Sometimes bylines and dates can be removed as a result. Too see what got filtered out, select "Scrubbing" in the **Action** drop-down in the side-bar.
+
+![Action drop-down](doc/img/action-1.jpg)
 
 Initial view:
 
-![Initial view](_locales/en/img/filter-1.jpg)
+![Initial view](doc/img/filter-1.jpg)
 
 With hidden contents shown:
 
-![Complete view](_locales/en/img/filter-2.jpg)
+![Complete view](doc/img/filter-2.jpg)
 
-Filtered contents will appear in red. Contents that Conradish deemed questionable will pulsate in yellow. Click on a section to restore or hide it. When you're done, press **Ctrl-Shift-H** again.
+Filtered contents will appear in red. Contents that Conradish thinks are questionable (but chose to keep) will pulsate in yellow. Click on a section to restore it. When you're done, click the **Finish** button or select "Annotating" in the **Action** drop-down.
 
-This feature is available even when **Filter page content** is disabled in the option pane.
+You can toggle between scrubbing and annotating mode by pressing the hot-key **Ctrl-Shift-H**.
+
+## Removing irrelevant contents
+
 
 ## Printing
 
 To print, click the **Print** button. Chrome's print window will appear. Double-check that **Paper size** matches what is set in Conradish and that **Margins** is set to "Default". The document will not print correctly if either one of these is off.
 
-![Print window](_locales/en/img/print-1.jpg)
+![Print window](doc/img/print-1.jpg)
 
 ## Finding documents
 
 To find a document you had created earlier, activate the extension's pop-up menu and choose **Show all documents**:
 
-![Pop-up menu](_locales/en/img/pop-up-1.jpg)
+![Pop-up menu](doc/img/pop-up-1.jpg)
 
 Documents are arranged by date. If you remember particular keywords, you can narrow the search by entering them into the search box.
 
-![Search results](_locales/en/img/search-1.jpg)
-
-Note that older documents would get automatically deleted if you hadn't granted unlimited storage to the extension.
+![Search results](doc/img/search-1.jpg)
 
 # Limitations
 
-* The extension currently cannot handle right-to-left languages.
 * Font selection has no impact on the display of East-Asian languages.
-* Long tables can get cut off.
-* User interface in English only.
-* User interface is sub-optimal on devices with smaller screens.
+* User interface not yet optimized for touch screens.
 
 These issues will be addressed in future versions.
 
 # Privacy
 
-Conradish does not capture any user information. It does not monitor your browsing history. All date is stored locally. The extension does sent text to Google for the purpose of translation. The privacy implications are the same as those of using [Google Translate](https://policies.google.com/privacy).
+Conradish does not capture any user information. It does not monitor your browsing history. All data is stored locally. The extension does send text to Google for the purpose of translation. The privacy implications are the same as those of using [Google Translate](https://policies.google.com/privacy). When you install the extension, the browser will warn that it can access "your data" at clients5.google.com. The data in question is just the translated phrase.
