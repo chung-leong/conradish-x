@@ -86,4 +86,15 @@
   BODY {
     display: block;
   }
+
+  IMG {
+    display: block;
+    margin: auto;
+    width: 50%;
+  }
+
+  TABLE {
+    margin: auto;
+    font-size: 90%;
+  }
 }

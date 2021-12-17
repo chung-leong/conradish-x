@@ -557,7 +557,7 @@ function showArticleMenu(container, range) {
     const translating = (targetLang && targetLang !== sourceLang);
     toggle(articleMenuItems.addTranslation, translating && count > 1);
     toggle(articleMenuItems.addExplanation, !translating && count > 1);
-    toggle(articleMenuItems.addDefinition, count <= 10);
+    toggle(articleMenuItems.addDefinition, count < 8);
     toggle(articleMenuElement, true);
     articleMenuElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     // remember the range
