@@ -5,7 +5,6 @@ import { l, translate, getSourceLanguage, getTargetLanguage, getLanguageDirectio
 
 export const modeChange = new EventTarget;
 
-const containerElement = document.getElementById('article-container');
 const articleMenuElement = document.getElementById('article-menu');
 const articleElement = document.getElementById('article');
 const articleMenuItems = {};
@@ -610,9 +609,9 @@ export function setEditMode(mode) {
   if (editMode === 'annotate') {
     hideArticleMenu();
   }
-  containerElement.classList.remove(editMode);
+  document.body.classList.remove(editMode);
   editMode = mode;
-  containerElement.classList.add(editMode);
+  document.body.classList.add(editMode);
   setFilterMode(editMode === 'clean' ? 'manual' : 'automatic');
   if (editMode === 'annotate') {
     checkArticleSelection();

@@ -8,22 +8,25 @@
     <title>...</title>
     <script type="module" src="js/article.js"></script>
   </head>
-  <body>
-    <div id="background"></div>
-    <div id="article-container" class="annotate">
-      <div id="help-button" class="background-button"></div>
-      <div id="restore-all-button"  class="background-button"></div>
-      <div id="article" class="filter-automatic">
-        <div id="article-background">
-          <div class="paper"></div>
-        </div>
-        <div id="article-content">
-          <div id="article-footers"></div>
-          <div id="article-text" contenteditable="true" spellcheck="false"></div>
-          <div id="article-menu" class="hidden"></div>
-          <ol id="footnote-backstage" class="footer-content" spellcheck="false"> <!-- NOT EMPTY --> </ol>
-          <div id="line-height-detection"><div>&nbsp</div></div>
-          <div id="overlays"></div>
+  <body class="annotate">
+    <div id="document-area">
+      <div id="background">
+        <div id="help-button"></div>
+        <div id="restore-all-button"></div>
+      </div>
+      <div id="article-container">
+        <div id="article" class="filter-automatic">
+          <div id="article-background">
+            <div class="paper"></div>
+          </div>
+          <div id="article-content">
+            <div id="article-footers"></div>
+            <div id="article-text" contenteditable="true" spellcheck="false"></div>
+            <div id="article-menu" class="hidden"></div>
+            <ol id="footnote-backstage" class="footer-content" spellcheck="false"> <!-- NOT EMPTY --> </ol>
+            <div id="line-height-detection"><div>&nbsp</div></div>
+            <div id="overlays"></div>
+          </div>
         </div>
       </div>
       <div id="status-container">

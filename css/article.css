@@ -25,11 +25,15 @@ BODY {
   background-color: rgb(169, 169, 169);
 }
 
-#article-container {
+#document-area {
   position: relative;
   flex-grow: 1;
   flex-shrink: 1;
   flex-basis: auto;
+}
+
+#article-container {
+  position: relative;
   /* using text-align to center #article since we want its left margin to be respected */
   text-align: center;
   height: 100%;
@@ -321,7 +325,7 @@ BODY {
 }
 
 #help-button {
-  position: sticky;
+  position: absolute;
   top: calc(100% - 32px - 8px);
   left: 8px;
   width: 32px;
@@ -331,6 +335,7 @@ BODY {
   background-size: 32px;
   opacity: 0.25;
   cursor: pointer;
+  z-index: 10;
 }
 
 #help-button:hover {
@@ -338,9 +343,9 @@ BODY {
 }
 
 #restore-all-button {
-  position: sticky;
+  position: absolute;
   top: calc(100% - 32px - 8px);
-  left: calc(100% - 32px - 8px);
+  left: calc(100% - 32px - 8px - 20px);
   width: 32px;
   height: 32px;
   background-image: url('../img/double-check.svg');
@@ -348,10 +353,11 @@ BODY {
   background-size: 32px;
   opacity: 0.25;
   cursor: pointer;
+  z-index: 10;
   display: none;
 }
 
-#article-container.clean #restore-all-button {
+BODY.clean #restore-all-button {
   display: block;
 }
 
@@ -409,8 +415,7 @@ BODY.ready #status-container {
   #side-bar-button-container,
   #article-menu,
   #status-container,
-  #top-drawer,
-  .background-button {
+  #top-drawer {
     /* hide UI elements */
     display: none;
   }
