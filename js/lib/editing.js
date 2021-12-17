@@ -84,7 +84,7 @@ async function addFootnote(includeTerm) {
   if (isWithinCell(range) && atContainerEnd(range, 'TD')) {
     // Chrome for some reason would add the SUP element outside the TD if the
     // cursor happens to be at the very end of the cell; we need to stick
-    // a zero-width string behind the cursor to prevent this 
+    // a zero-width string behind the cursor to prevent this
     backstoppingNode = document.createTextNode('\u2060');
     range.endContainer.parentNode.append(backstoppingNode);
   }
@@ -110,6 +110,7 @@ async function addFootnote(includeTerm) {
       }
       const text = (includeTerm) ? `${term} - ${translation}` : translation;
       itemElement.textContent = text;
+      footnote.content = text;
       // save additional information from Google Translate
       Object.assign(footnote.extra, extra);
     }
