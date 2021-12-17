@@ -888,8 +888,8 @@ export function annotateRange(range, content, extra) {
   const fragmentHTML = e('DIV', {}, fragment).innerHTML;
   const className = 'conradish footnote-number pending';
   const tempSupElement = e('SUP', { id, className }, number);
-  // trim off whitespaces
-  const htmlBefore = fragmentHTML.trimRight();
+  // trim off whitespaces (including nbsp, so trimRight() isn't used here)
+  const htmlBefore = fragmentHTML.replace(/\s+$/g, '');
   const wsAfter = fragmentHTML.substr(htmlBefore.length);
   const html = htmlBefore + tempSupElement.outerHTML + wsAfter;
   // insert into editor

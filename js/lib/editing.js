@@ -78,16 +78,27 @@ function getSelectedText(range) {
 }
 
 async function addFootnote(includeTerm) {
-  // set the selection to what was last selected
+  // set the text of what was last selected
   const range = normalizeRange(lastSelectedRange.cloneRange());
-  // put placeholder text in footer initially
+  let backstoppingNode;
+  if (isWithinCell(range) && atContainerEnd(range, 'TD')) {
+    // Chrome for some reason would add the SUP element outside the TD if the
+    // cursor happens to be at the very end of the cell; we need to stick
+    // a zero-width string behind the cursor to prevent this 
+    backstoppingNode = document.createTextNode('\u2060');
+    range.endContainer.parentNode.append(backstoppingNode);
+  }
   let term = getSelectedText(range);
   const sourceLang = getSourceLanguage();
   const targetLang = getTargetLanguage();
   const translating = (targetLang && targetLang !== sourceLang);
+  // put placeholder text in footer initially
   const placeholder = (translating) ? '...' : '';
   const initialText = (includeTerm) ? `${term} - ${placeholder}` : placeholder;
   const footnote = annotateRange(range, initialText, { term, lang: `${sourceLang},${targetLang}` });
+  if (backstoppingNode) {
+    backstoppingNode.remove();
+  }
   if (translating) {
     const result = await translate(term, sourceLang, targetLang, includeTerm);
     const { itemElement } = footnote;
@@ -126,7 +137,7 @@ function atContainerEnd(range, tagName) {
   }
   // make sure all parent node are the last node
   if (endContainer !== container) {
-    for (const n = endContainer.parentNode; n !== container; n = n.parentNode) {
+    for (let n = endContainer.parentNode; n !== container; n = n.parentNode) {
       if (n.nextSibling) {
         return false;
       }
