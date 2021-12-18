@@ -13,6 +13,7 @@ The extension was designed with educators in mind, those who wish to make use we
      - [Adding definition](#adding-definition)
      - [Adding translation/explanation](#adding-translationexplanation)
      - [Removing footnotes](#removing-footnotes)
+  - [Editing article](#editing-article)
   - [Applying text style](#applying-text-style)
   - [Finding missing text](#finding-missing-text)
   - [Adjusting filter behavior](#adjusting-filter-behavior)
@@ -93,6 +94,14 @@ Or delete the footnote entry:
 
 ![Footnote](doc/img/footnote-4.jpg)
 
+## Editing article
+
+You can make changes to an article as you annotate it. The pop-up menu that appears whenever you select a some text could be a distraction, however. To turn it off, choose "Editing" in the **Action** drop-down in the side-bar:
+
+![Action drop-down](doc/img/action-2.jpg)
+
+Click the **Finish** button to return to annotation mode.
+
 ## Applying text style
 
 The following hot-keys can be used to add basic text style:
@@ -116,7 +125,7 @@ The following hot-keys can be used to add basic text style:
 
 ## Finding missing text
 
-By default, Conradish will automatically filter out contents it deems irrelevant. Sometimes bylines and dates can be removed as a result. Too see what got filtered out, select "Scrubbing" in the **Action** drop-down in the side-bar.
+By default, Conradish will automatically filter out contents it deems irrelevant. Sometimes bylines and dates can be removed as a result. Too see what got filtered out, choose "Scrubbing" in the **Action** drop-down in the side-bar.
 
 ![Action drop-down](doc/img/action-1.jpg)
 
@@ -128,14 +137,13 @@ With hidden contents shown:
 
 ![Complete view](doc/img/filter-2.jpg)
 
-Filtered contents will appear in red. Contents that Conradish thinks are questionable (but chose to keep) will pulsate in yellow. Click on a red section to restore it. Click on a section that isn't red to hide it. When you're done, click the **Finish** button or select "Annotating" in the **Action** drop-down.
+Filtered contents will appear in red. Contents that Conradish thinks are questionable (but chose to keep) will pulsate in yellow. Click on a red section to restore it. Click on a section that isn't red to hide it. When you're done, click the **Finish** button or choose "Annotating" in the **Action** drop-down.
 
-You can toggle between scrubbing and annotating mode by pressing the hot-key **Ctrl-Shift-H**.
+You can toggle between scrubbing and annotation mode by pressing the hot-key **Ctrl-Shift-H**.
 
 Use the double checkmark button at the lower right-hand corner to restore all hidden sections:
 
 ![Keep all button](doc/img/bk-button-1.jpg)
-
 
 ## Adjusting filter behavior
 
