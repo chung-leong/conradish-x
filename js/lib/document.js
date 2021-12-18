@@ -806,7 +806,7 @@ function decomposeTables() {
       table.style.display = 'table';
     }
     if (!table.classList.contains('decomposed')) {
-      const cells = table.getElementsByTagName('TD');
+      const cells = table.querySelectorAll('TH,TD');
       const cellWidths = new WeakMap;
       // get all the widths first before setting them
       for (const cell of cells) {
