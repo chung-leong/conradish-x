@@ -313,15 +313,25 @@ BODY {
 }
 
 #status-container {
-  display: flex;
   position: absolute;
+  font-size: 1.2em;
+  font-weight: bold;
   left: 0;
   right: 0;
   top: 0;
   bottom: 0;
   margin: auto;
-  justify-content: center;
-  align-items: center;
+  padding: 0.5em 0.5em 0.5em 0.5em;
+  background: rgb(255, 255, 102);
+  border: 3px solid rgb(0, 0, 0);
+  width: fit-content;
+  height: fit-content;
+  max-width: 50%;
+  box-shadow: 4px 4px 5px rgb(0, 0, 0, 0.25);
+}
+
+#status-container:empty {
+  display: none;
 }
 
 #help-button {
@@ -376,13 +386,6 @@ BODY.pending .loader {
 
 BODY.error .loader {
   display: none;
-}
-
-BODY.ready #status-container {
-  display: none;
-}
-
-#error-text {
 }
 
 #overlays {

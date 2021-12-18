@@ -6,7 +6,6 @@ import { setWindowName, openPage } from './lib/navigation.js';
 import { l } from './lib/i18n.js';
 
 async function start() {
-  const setStatus = (status) => document.body.className = status;
   try {
     await initializeStorage();
     const { searchParams } = new URL(location);
@@ -26,7 +25,6 @@ async function start() {
     // attach handlers to elements for editing contents
     attachEditingHandlers();
     attachHelpButtonHandler();
-    setStatus('ready');
     // collapse the side-bar if browser is narrow (unless we're scrubbing)
     if (mode !== 'clean') {
       initializeAutoCollapse();
@@ -39,9 +37,8 @@ async function start() {
     });
   } catch (e) {
     console.error(e);
-    const errorElement = document.getElementById('error-text');
-    errorElement.textContent = e;
-    setStatus('error');
+    const statusElement = document.getElementById('status-container');
+    statusElement.append(e.message);
   }
 }
 
