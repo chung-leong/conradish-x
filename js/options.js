@@ -32,7 +32,7 @@ async function start() {
   filterCheckbox.addEventListener('change', (evt) => {
     const checked = evt.target.classList.contains('checked');
     changeSettings((settings) => {
-      settings.filter = (checked) ? filterSelect.value :' none';
+      settings.filter = (checked) ? filterSelect.value : 'none';
       filterSelect.style.visibility = (checked) ? 'visible' : 'hidden';
     });
   });
