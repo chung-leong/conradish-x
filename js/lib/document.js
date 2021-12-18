@@ -519,7 +519,8 @@ export function addFooter() {
 function adjustFootnoteNumbers() {
   let changed = false;
   const supElements = [ ...contentElement.getElementsByClassName('footnote-number') ].filter((supElement) => {
-    return !supElement.classList.contains('hidden');
+    const { width } = supElement.getBoundingClientRect();
+    return !supElement.classList.contains('hidden') && width !== 0;
   });
   const elementToFootnoteMap = new Map;
   const remainingElements = [ ...supElements ];
@@ -558,8 +559,10 @@ function adjustFootnoteNumbers() {
     footnote.itemElement.remove();
     footnote.supElement = null;
     // take it out the page where it's attached
-    remove(footnote.page.footer.footnotes, footnote);
-    footnote.page = null;
+    if (footnote.page) {
+      remove(footnote.page.footer.footnotes, footnote);
+      footnote.page = null;
+    }
     changed = true;
   }
   if (changed) {
@@ -825,6 +828,7 @@ export function setFilterMode(mode) {
     filterMode = mode;
     articleElement.classList.add(`filter-${filterMode}`);
     adjustLayout();
+    adjustFootnoteNumbers();
   }
 }
 
