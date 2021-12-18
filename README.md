@@ -96,7 +96,7 @@ Or delete the footnote entry:
 
 ## Editing article
 
-You can make changes to an article as you annotate it. The pop-up menu that appears whenever you select a some text could be a distraction, however. To turn it off, choose "Editing" in the **Action** drop-down in the side-bar:
+You can make changes to an article as you annotate it. The pop-up menu that appears whenever you select some text could be a distraction, however. To turn it off, choose "Editing" in the **Action** drop-down in the side-bar:
 
 ![Action drop-down](doc/img/action-2.jpg)
 
@@ -125,7 +125,7 @@ The following hot-keys can be used to add basic text style:
 
 ## Finding missing text
 
-By default, Conradish will automatically filter out contents it deems irrelevant. Sometimes bylines and dates can be removed as a result. Too see what got filtered out, choose "Scrubbing" in the **Action** drop-down in the side-bar.
+By default, Conradish will automatically filter out contents it deems irrelevant. Sometimes bylines and dates can be removed as a result. To see what got filtered out, choose "Scrubbing" in the **Action** drop-down in the side-bar.
 
 ![Action drop-down](doc/img/action-1.jpg)
 
@@ -149,7 +149,7 @@ Use the double checkmark button at the lower right-hand corner to restore all hi
 
 Conradish's filter setting determines the initial mode when you open a document. When filtering is set to automatic, the editor starts in annotation mode, with suspected junks hidden. When filtering is set to manual, the editor starts in scrubbing mode, allowing you to immediately correct the extension's findings. When filtering is turned off, the editor starts in annotation mode, with suspected junks visible.
 
-Depending on the web sites you visit, one of these settings will prove more convenient than the others. When a site provides a print stylesheet, filtering is generally not necessarily. On the other hand, when a site intermingles a lot of ads and asides with the main article text, or the page layout leads to selection of navigational elements, then leaving it turned on is advisable.
+Depending on the web sites you visit, one of these settings will prove more convenient than the others. When a site provides a print stylesheet, filtering is generally not necessary. On the other hand, when a site intermingles a lot of ads and asides with the main article text, or the page layout leads to selection of navigational elements, then leaving it turned on is advisable.
 
 To change the filter setting, click Chrome's extension button in the toolbar then the "kebab" button for Conradish. In the menu, choose **Options**:
 
