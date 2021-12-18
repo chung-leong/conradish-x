@@ -258,12 +258,15 @@ BODY {
   margin: 0;
 }
 
-#kebab-menu UL LI {
+#kebab-menu UL LI,
+#kebab-menu UL A {
+  display: list-item;
   padding: 8px 20px 8px 20px;
   cursor: pointer;
 }
 
-#kebab-menu UL LI:hover {
+#kebab-menu UL LI:hover,
+#kebab-menu UL A:hover {
   background-color: rgb(189, 193, 198);
 }
 
