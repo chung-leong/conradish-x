@@ -25,6 +25,7 @@ let currentDocumentKey;
 let currentDocument;
 let deletionCount = 1;
 let filterMode = 'automatic';
+let classChanged = false;
 
 let autosaveTimeout = 0;
 
@@ -829,6 +830,10 @@ export function setFilterMode(mode) {
     articleElement.classList.add(`filter-${filterMode}`);
     adjustLayout();
     adjustFootnoteNumbers();
+    if (classChanged) {
+      autosave();
+    }
+    classChanged = false;
   }
 }
 
@@ -1072,7 +1077,7 @@ function handleArticleChanges(mutationsList) {
     }
     return false;
   };
-  for (const { type, target, addedNodes, removedNodes } of mutationsList) {
+  for (const { type, target, addedNodes, removedNodes, attributeName } of mutationsList) {
     if (type === 'childList') {
       if (!target.classList.contains('footnote-number')) {
         if (hasFootnoteNumbers(addedNodes) || hasFootnoteNumbers(removedNodes)) {
@@ -1082,6 +1087,8 @@ function handleArticleChanges(mutationsList) {
       }
     } else if (type === 'characterData') {
       articleTextChanged = true;
+    } else if (type === 'attributes' && attributeName === 'class') {
+      classChanged = true;
     }
   }
   if (footnoteNumbersChanged) {
