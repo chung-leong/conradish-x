@@ -40,8 +40,8 @@ export async function captureSelection(selection) {
   const url = document.location.href;
   const title = getTitle();
   const image = getImage();
-  const lang = await getLanguage(range);
   const content = captureRangeContent(range);
+  const lang = await getLanguage(content, range);
   const doc = { url, title, image, lang, content, raw: true };
   return doc;
 }
@@ -1115,8 +1115,9 @@ function getImage() {
   return getMeta('og:image');
 }
 
-async function getLanguage(range) {
-  let lang = await detectLanguage(range.toString());
+async function getLanguage(content, range) {
+  const text = getPlainText(content);
+  let lang = await detectLanguage(text);
   if (!lang) {
     lang = getMeta('og:locale')
   }
