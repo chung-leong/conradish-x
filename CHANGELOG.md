@@ -5,5 +5,8 @@
 * Added drop-down in side-bar to switch into "scrubbing" mode.
 * Added the option to collapse side-bar.
 * Added the ability to change titles of documents.
+* Allowing tables to cross page boundary.
+* Added user guide.
 * Localization for Russian, Ukrainian, Polish, Czech, and Slovak.
 * Fixed imbalance between top and bottom margin in print-out.
+* Fixed appearance of gray background when text is copied to other applications.
