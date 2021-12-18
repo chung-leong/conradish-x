@@ -1,7 +1,7 @@
 import { e, separateWords } from './ui.js';
 import { findDeletedFootnote, annotateRange, setFilterMode, getTitle, setTitle } from './document.js';
 import { transverseRange } from './capturing.js';
-import { l, translate, getSourceLanguage, getTargetLanguage, getLanguageDirection } from './i18n.js';
+import { l, translate, getSourceLanguage, getTargetLanguage, getLanguageDirection, detectDirection } from './i18n.js';
 
 export const modeChange = new EventTarget;
 
@@ -631,6 +631,10 @@ async function startEditingTitle() {
   // create top drawer DIV
   const container = document.getElementById('article-container');
   const inputElement = e('INPUT', { type: 'text', value: originalTitle });
+  const direction = await detectDirection(originalTitle);
+  if (direction === 'rtl') {
+    inputElement.style.direction = 'rtl';
+  }
   const buttonElement = e('BUTTON', {}, 'Save');
   const drawerElement = e('DIV', { id: 'top-drawer' }, [ inputElement, buttonElement ]);
   container.append(drawerElement);
