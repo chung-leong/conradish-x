@@ -386,7 +386,7 @@ function adjustLayout(options) {
       }
     }
   };
-  const positionMap = new Map, positionAfterMap = new Map;
+  //const positionMap = new Map, positionAfterMap = new Map;
   let pageFootnotes = null;
   let spaceRemaining = 0;
   let position = 0;
@@ -415,16 +415,16 @@ function adjustLayout(options) {
         spaceRemaining -= spaceRequired;
         previousMarginBottom = marginBottom;
         position += height;
-        positionAfterMap.set(element, position);
         atPageTop = false;
+        //positionAfterMap.set(element, position);
         // our prediction of where lines will go isn't always accurate
         // see how much we're off by
         const domPosition = getRect(element).bottom;
         const diff = domPosition - position;
         if (diff > 0) {
-          //console.log(`Diff: ${diff}, text: ${element.textContent.substr(0, 20)} (${elementIndex})`);
           spaceRemaining -= diff;
           position = domPosition;
+          //console.log(`Diff: ${diff}, text: ${element.textContent.substr(0, 20)} (${elementIndex})`);
         }
       } else {
         // didn't fit completely into this either--need to start another page
@@ -442,6 +442,7 @@ function adjustLayout(options) {
     }
     // get info about this element
     const content = analyseContent(element);
+    //console.log(`${elementIndex}: ${content.footnoteHeight} ${content.footnotes.length}`);
     if (!content) {
       continue;
     }
@@ -451,13 +452,13 @@ function adjustLayout(options) {
     const spaceRequired = cropContent(content, spaceRemaining - margin, !pageFootnotes.length);
     const { footnotes, marginBottom, height, skippedContent } = content;
     if (spaceRequired) {
-      //console.log(`${elementIndex}: ${spaceRequired} at ${position}`);
+      pageFootnotes.push(...footnotes);
       position += margin;
-      positionMap.set(element, position);
+      //console.log(`${elementIndex}: ${spaceRequired} at ${position}`);
+      //positionMap.set(element, position);
       //if (skippedContent) {
         //addContentOverlay(position, content);
       //}
-      pageFootnotes.push(...footnotes);
     }
     if (!skippedContent) {
       // continue on this page if there's enough space for the bottom margin
@@ -465,8 +466,8 @@ function adjustLayout(options) {
         spaceRemaining -= margin + spaceRequired;
         previousMarginBottom = marginBottom;
         position += height;
-        positionAfterMap.set(element, position);
         atPageTop = false;
+        //positionAfterMap.set(element, position);
       } else {
         initiatePageBreak();
       }
@@ -488,16 +489,18 @@ function adjustLayout(options) {
     paperElement.remove();
     footer.containerElement.remove();
   }
+  // removed any events caused by layout changes
+  footnoteObserver.takeRecords();
+  restoreCursor();
+  /*
   for (const [ element, position ] of positionMap) {
     const { top, bottom } = getRect(element);
     const positionAfter = positionAfterMap.get(element);
     if (top != position) {
-      //console.log(`Diff: ${top - position}, diffAfter: ${bottom - positionAfter}, text: ${element.textContent.substr(0, 20)}`);
+      console.log(`Diff: ${top - position}, diffAfter: ${bottom - positionAfter}, text: ${element.textContent.substr(0, 20)}`);
     }
   }
-  // removed any events caused by layout changes
-  footnoteObserver.takeRecords();
-  restoreCursor();
+  */
 }
 
 export function addFooter() {
@@ -547,6 +550,10 @@ function adjustFootnoteNumbers() {
     const number = index + 1;
     if (footnote.number !== number) {
       footnote.supElement.textContent = footnote.number = number;
+    }
+    if (!footnote.itemElement.parentNode) {
+      // put item into backstage so adjustLayout() can get the height
+      backstageElement.append(footnote.itemElement);
     }
     if (insertAt(footnotes, index, footnote)) {
       changed = true;
