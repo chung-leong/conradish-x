@@ -1076,10 +1076,21 @@ function removeChangeRecords() {
 function handleArticleChanges(mutationsList) {
   let footnoteNumbersChanged = false;
   let articleTextChanged = false;
+  const isFootnoteNumber = (node) => {
+    return node.classList.contains('footnote-number');
+  };
   const hasFootnoteNumbers = (nodes) => {
     for (const node of nodes) {
-      if (node.nodeType === Node.ELEMENT_NODE && node.classList.contains('footnote-number')) {
-        return true;
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        if (isFootnoteNumber(node)) {
+          return true;
+        } else {
+          for (const child of node.getElementsByTagName('*')) {
+            if (isFootnoteNumber(child)) {
+              return true;
+            }
+          }
+        }
       }
     }
     return false;
