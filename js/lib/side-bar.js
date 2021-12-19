@@ -172,11 +172,11 @@ function createSpeechBubble() {
   return e('DIV', { className: 'speech-bubble hidden' }, [ icon, message ]);
 }
 
-function changeSettings(callback) {
+function changeSettings(callback, paperSizeChanged = false) {
   const settings = getSettings();
   callback(settings);
   applyStyles();
-  updateLayout();
+  updateLayout({ paperSizeChanged });
   saveSettings();
 }
 
@@ -256,7 +256,7 @@ function handlePaperChange(evt) {
     for (const input of inputs) {
       input.value = settings.customMargins[input.name];
     }
-  });
+  }, true);
 }
 
 function handleMarginChange(evt) {

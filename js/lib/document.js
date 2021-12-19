@@ -109,12 +109,19 @@ export function setTitle(title) {
   autosave(0);
 }
 
-export function updateLayout() {
+export function updateLayout(options = {}) {
+  const { paperSizeChanged } = options;
+  if (paperSizeChanged) {
+    // update the contentArea and availableArea
+    for (const page of pages) {
+      adjustFooterPosition(page);
+    }
+  }
   adjustLayout();
 }
 
-function adjustLayout(options) {
-  const { breakAfterPage } = options || {};
+function adjustLayout(options = {}) {
+  const { breakAfterPage } = options;
   // get the height of each footnote now, since we might detach some of them temporarily from the DOM
   const footnoteHeightMap = new WeakMap;
   for (const footnote of footnotes) {
@@ -364,7 +371,7 @@ function adjustLayout(options) {
     content.skippedFootnoteHeight = 0;
     content.skippedContent = false;
   };
-  while (overlayContainerElement.firstChild) {
+  /*while (overlayContainerElement.firstChild) {
     overlayContainerElement.firstChild.remove();
   }
   const addContentOverlay = (top, content) => {
@@ -385,7 +392,7 @@ function adjustLayout(options) {
         top = bottom;
       }
     }
-  };
+  };*/
   //const positionMap = new Map, positionAfterMap = new Map;
   let pageFootnotes = null;
   let spaceRemaining = 0;

@@ -53,7 +53,7 @@ BODY {
   left: 0;
   bottom: 0;
   right: 0;
-  padding: 25mm 25mm 25mm 25mm;
+  padding: 25mm calc(25mm - 1px) 25mm 25mm;
 }
 
 #article-text {
@@ -424,8 +424,7 @@ BODY.error .loader {
   }
 
   #article-container {
-    /* remove background and prevent appear of scroll bar */
-    background-color: transparent;
+    /* appearance of scroll bar */
     overflow: visible;
   }
 

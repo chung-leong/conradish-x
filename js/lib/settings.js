@@ -23,7 +23,8 @@ export function applyStyles() {
           rule.style.textAlign = (justify) ? 'justify' : 'start';
         } else if (selectorText === '#article-content') {
           rule.style.paddingLeft = page.margins.left;
-          rule.style.paddingRight = page.margins.right;
+          // account for the 1px used by the footer-pusher
+          rule.style.paddingRight = `calc(${page.margins.right} - 1px)`;
           rule.style.paddingTop = page.margins.top;
           rule.style.paddingBottom = page.margins.bottom;
         } else if (selectorText === '#article-text sup') {
