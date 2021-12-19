@@ -8,6 +8,7 @@ const tocContainer = document.getElementById('left-side-bar');
 
 async function start() {
   setWindowName('help');
+  document.title = l('user_guide');
   createToolbar();
   await loadUserGuide();
   listContainer.parentNode.addEventListener('scroll', handleScroll);

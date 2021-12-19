@@ -145,6 +145,10 @@
     "message": "Vlastné",
     "description": "Item in margins drop-down in side-bar"
   },
+  "finish": {
+    "message": "Skončiť",
+    "description": "Label for button in side-bar"
+  },
   "print": {
     "message": "Tlačiť",
     "description": "Label for button in side-bar"

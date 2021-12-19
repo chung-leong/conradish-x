@@ -22,6 +22,10 @@ SECTION {
   margin-right: 12px;
 }
 
+LABEL {
+  white-space: nowrap;
+}
+
 LABEL SELECT {
   margin-top: -12px;
   margin-bottom: -12px;

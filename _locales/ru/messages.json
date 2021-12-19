@@ -145,6 +145,10 @@
     "message": "Другое",
     "description": "Item in margins drop-down in side-bar"
   },
+  "finish": {
+    "message": "Закончить",
+    "description": "Label for button in side-bar"
+  },
   "print": {
     "message": "Печать",
     "description": "Label for button in side-bar"

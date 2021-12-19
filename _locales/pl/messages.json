@@ -145,7 +145,11 @@
     "message": "Niestandardowe",
     "description": "Item in margins drop-down in side-bar"
   },
-   "print": {
+  "finish": {
+    "message": "Zakończ",
+    "description": "Label for button in side-bar"
+  },
+  "print": {
     "message": "Drukuj",
     "description": "Label for button in side-bar"
   },
