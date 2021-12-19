@@ -500,10 +500,10 @@ function filterHTML(html) {
         supElement.remove();
       }
     }
-    // remove BR tags
+    // replace BR with empty P element so DIV don't get created
     const brElements = [ ...div.getElementsByTagName('BR') ];
     for (const brElement of brElements) {
-      brElement.remove();
+      brElement.replaceWith(e('P'));
     }
     adjustAttributes(div);
     return div.innerHTML;
@@ -514,6 +514,7 @@ function insertData(target, dataTransfer) {
   if (isArticleEditor(target)) {
     const html = dataTransfer.getData('text/html');
     const filteredHTML = filterHTML(html);
+    console.log(filteredHTML);
     if (filteredHTML) {
       document.execCommand('insertHTML', false, filteredHTML);
     } else {
