@@ -1139,6 +1139,7 @@ function handleFootnoteChanges(mutationsList) {
     if (footnotesChanged.get(listElement) || footnoteTextChanged.get(listElement)) {
       if (adjustFootnotes(page)) {
         // footnotes were deleted or restored
+        adjustFootnoteNumbers();
         adjustLayout();
       } else if (adjustFooterPosition(page)) {
         // the footer size has changed, lines (and hence footnotes) might need to be moved between pages
