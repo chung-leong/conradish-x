@@ -500,6 +500,11 @@ function filterHTML(html) {
         supElement.remove();
       }
     }
+    // remove BR tags
+    const brElements = [ ...div.getElementsByTagName('BR') ];
+    for (const brElement of brElements) {
+      brElement.remove();
+    }
     adjustAttributes(div);
     return div.innerHTML;
   }
