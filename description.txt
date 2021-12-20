@@ -1,0 +1,31 @@
+Conradish lets you create print version of online news articles. It strips out ads and other distractions, reformatting text to a uniform, professional look. In addition, it lets you attach footnotes to words and sentences.
+
+The extension was designed with educators in mind, those who wish to make use web materials in the classroom. It is especially useful for teachers of foreign languages thanks to its automatic translation feature.
+
+Features
+
+• Printing only selected portion of an article
+• Removal of ads and images
+• Simplification of page layout
+• Editing of text prior to printing
+• Point-and-click content scrubbing.
+• Addition of footnotes
+• Integration with Google Translate
+
+User Guide
+
+To create a print version of the article that you're viewing, first select the portion you wish to print. Don't worry if the selection ends up including undesired navigational elements—these will get filtered out. After making the selection, right-click on it and choose "Create print version". The print version will open up in a new browser tab.
+
+To footnote the definition of a word, first select the word using your mouse, then click "Add definition" in the pop-up menu that appears underneath.
+
+To footnote a whole sentence, select it then click "Add translation".
+
+To remove a footnote, simply delete the associated footnote number or delete the entry in the page footer.
+
+All actions can be reversed by pressing Ctrl-Z.
+
+For more instructions, please consult the built-in user guide. You can access it by clicking the question-mark icon in the lower left-hand corner.
+
+Privacy
+
+Conradish does not capture any user information. It does not monitor your browsing history. All data is stored locally. The extension does send text to Google for the purpose of translation. The privacy implications are the same as those of using Google Translate. When you install the extension, the browser will warn that it can access "your data" at clients5.google.com. The data in question is just translated phrases.

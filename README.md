@@ -38,7 +38,7 @@ The extension was designed with educators in mind, those who wish to make use we
 
 ## Creating print version of article
 
-To create a print version of the article that you're viewing, first select the portion you wish to print. Don't worry if the selection ends up including undesired navigational elements on the side—these will get filtered out. After making the selection, right-click on it (or press the menu key on your keyboard) and choose **Create print version**:
+To create a print version of the article that you're viewing, first select the portion you wish to print. Don't worry if the selection ends up including undesired navigational elements—these will get filtered out. After making the selection, right-click on it (or press the menu key on your keyboard) and choose **Create print version**:
 
 ![Context menu](doc/img/capture-1.jpg)
 
@@ -194,7 +194,7 @@ These issues will be addressed in future versions.
 
 # Privacy
 
-Conradish does not capture any user information. It does not monitor your browsing history. All data is stored locally. The extension does send text to Google for the purpose of translation. The privacy implications are the same as those of using [Google Translate](https://policies.google.com/privacy). When you install the extension, the browser will warn that it can access "your data" at clients5.google.com. The data in question is just the translated phrase.
+Conradish does not capture any user information. It does not monitor your browsing history. All data is stored locally. The extension does send text to Google for the purpose of translation. The privacy implications are the same as those of using [Google Translate](https://policies.google.com/privacy). When you install the extension, the browser will warn that it can access "your data" at clients5.google.com. The data in question is just translated phrases.
 
 # Support
 
