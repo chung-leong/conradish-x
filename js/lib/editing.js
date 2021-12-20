@@ -514,7 +514,6 @@ function insertData(target, dataTransfer) {
   if (isArticleEditor(target)) {
     const html = dataTransfer.getData('text/html');
     const filteredHTML = filterHTML(html);
-    console.log(filteredHTML);
     if (filteredHTML) {
       document.execCommand('insertHTML', false, filteredHTML);
     } else {

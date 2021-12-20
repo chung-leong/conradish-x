@@ -499,15 +499,13 @@ function adjustLayout(options = {}) {
   // removed any events caused by layout changes
   footnoteObserver.takeRecords();
   restoreCursor();
-  /*
-  for (const [ element, position ] of positionMap) {
-    const { top, bottom } = getRect(element);
-    const positionAfter = positionAfterMap.get(element);
-    if (top != position) {
-      console.log(`Diff: ${top - position}, diffAfter: ${bottom - positionAfter}, text: ${element.textContent.substr(0, 20)}`);
-    }
-  }
-  */
+  //for (const [ element, position ] of positionMap) {
+    //const { top, bottom } = getRect(element);
+    //const positionAfter = positionAfterMap.get(element);
+    //if (top != position) {
+      //console.log(`Diff: ${top - position}, diffAfter: ${bottom - positionAfter}, text: ${element.textContent.substr(0, 20)}`);
+    //}
+  //}
 }
 
 export function addFooter() {

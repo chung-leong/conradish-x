@@ -24,7 +24,6 @@ async function start() {
   filterSelect.style.visibility = (filtering) ? 'visible' : 'hidden';
   filterSelect.addEventListener('change', (evt) => {
     changeSettings((settings) => {
-      console.log(settings);
       settings.filter = filterSelect.value;
     });
   });
