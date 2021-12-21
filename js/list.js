@@ -336,6 +336,7 @@ function addSearchString(content, lang, list) {
     }
   } else if (content instanceof Object) {
     addSearchString(content.content, lang, list);
+    addSearchString(content.footnote, lang, list);
   }
 }
 
