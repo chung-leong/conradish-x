@@ -70,7 +70,8 @@ export function getUILanguage() {
     if (!fallBackLanguageCode) {
       // absolutely ridiculous way of detecting the current locale
       const lang = fallBackLanguageCode = navigator.language.replace(/\-.*/g, '').toLowerCase();
-      const date = new Date('2000-01-01T00:00:00.000Z');
+      // March is different in Norwegian and Danish
+      const date = new Date('2000-03-05T00:00:00.000Z');
       const dateOpts = { weekday: 'long', month: 'long' };
       const dateString = date.toLocaleDateString(undefined, dateOpts);
       if (dateString !== date.toLocaleDateString(lang, dateOpts)) {
