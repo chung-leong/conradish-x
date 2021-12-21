@@ -1,18 +1,18 @@
 {
   "keep_all": {
-    "message": "behold alle",
+    "message": "behåll alla",
     "description": "Tooltip text of scrubbing mode keep all button"
   },
   "create_print_version": {
-    "message": "Opret printversion",
+    "message": "Skapa utskriftsversion",
     "description": "Label for menu item in browser context menu and extension pop-up menu"
   },
   "selection_portion_of_document": {
-    "message": "vælg den del af dokumentet, du ønsker at udskrive først",
+    "message": "välj den del av dokumentet du vill skriva ut först",
     "description": "Text for tooltip in pop-up menu, when there's no selection"
   },
   "created_on": {
-    "message": "oprettet på $DATE$",
+    "message": "skapad på $DATE$",
     "description": "Text for tooltip of recent documents in pop-up menu",
     "placeholders": {
       "date": {
@@ -22,47 +22,47 @@
     }
   },
   "show_all_documents": {
-    "message": "Vis alle dokumenter",
+    "message": "Visa alla dokument",
     "description": "Label for menu item in pop-up menu"
   },
   "add_definition": {
-    "message": "Tilføj definition",
+    "message": "Lägg till definition",
     "description": "Label for item in annotation menu"
   },
   "show_term_and_definition": {
-    "message": "vis både termin og definition i fodnote",
+    "message": "visa både termin och definition i fotnot",
     "description": "Text for tooltip of item in annotation menu"
   },
   "add_translation": {
-    "message": "Tilføj oversættelse",
+    "message": "Lägg till översättning",
     "description": "Label for item in annotation menu"
   },
   "show_translation_only": {
-    "message": "vis kun oversat sætning i fodnote",
+    "message": "visa endast översatt mening i fotnot",
     "description": "Text for tooltip of item in annotation menu"
   },
   "add_explanation": {
-    "message": "Tilføj forklaring",
+    "message": "Lägg till förklaring",
     "description": "Label for item in annotation menu"
   },
   "show_explanation": {
-    "message": "vis forklaring i fodnote",
+    "message": "visa förklaring i fotnot",
     "description": "Text for tooltip of item in annotation menu"
   },
   "add_context_menu_item": {
-    "message": "Føj element til browserens kontekstmenu",
+    "message": "Lägg till objekt i webbläsarens snabbmeny",
     "description": "Label for checkbox in options"
   },
   "filter_page_content": {
-    "message": "Filtrer sideindhold",
+    "message": "Filtrera sidans innehåll",
     "description": "Label for checkbox in options"
   },
   "filter_automatic": {
-    "message": "Automatisk",
+    "message": "Automatiskt",
     "description": "Label for filter drop-down in options"
   },
   "filter_manual": {
-    "message": "Manuelt",
+    "message": "Manuellt",
     "description": "Label for filter drop-down in options"
   },
   "action": {
@@ -74,19 +74,19 @@
     "description": "Item in action drop-down"
   },
   "annotating": {
-    "message": "Anmærkning",
+    "message": "Kommentering",
     "description": "Item in action drop-down"
   },
   "scrubbing": {
-    "message": "Skrubning",
+    "message": "Skrubbning",
     "description": "Item in action drop-down"
   },
   "from_language": {
-    "message": "Fra",
+    "message": "Från",
     "description": "Label for drop-down in side-bar"
   },
   "to_language": {
-    "message": "Til",
+    "message": "Till",
     "description": "Label for drop-down in side-bar"
   },
   "article_font_family": {
@@ -94,11 +94,11 @@
     "description": "Label for drop-down in side-bar"
   },
   "article_font_size": {
-    "message": "Fontstørrelse",
+    "message": "Fontstorlek",
     "description": "Label for drop-down in side-bar"
   },
   "article_justification": {
-    "message": "Tekstbegrundelse",
+    "message": "Textjustering",
     "description": "Label for drop-down in side-bar"
   },
   "justification_none": {
@@ -106,35 +106,35 @@
     "description": "Item in justification drop-down in side-bar"
   },
   "justification_text": {
-    "message": "Kun tekst",
+    "message": "Text endast",
     "description": "Item in justification drop-down in side-bar"
   },
   "justification_text_and_headings": {
-    "message": "Tekst og overskrifter",
+    "message": "Text och rubriker",
     "description": "Item in justification drop-down in side-bar"
   },
   "article_spacing": {
-    "message": "Linjeafstand",
+    "message": "Radavstånd",
     "description": "Label for drop-down in side-bar"
   },
   "spacing_normal": {
-    "message": "Normal",
+    "message": "Normalt",
     "description": "Item in line-spacing drop-down in side-bar"
   },
   "footnote_font_family": {
-    "message": "Font til fodnoter",
+    "message": "Font för fotnoter",
     "description": "Label for drop-down in side-bar"
   },
   "footnote_font_size": {
-    "message": "Fontstørrelse til fodnoter",
+    "message": "Fontstorlek för fotnoter",
     "description": "Label for drop-down in side-bar"
   },
   "paper_size": {
-    "message": "Papirstørrelse",
+    "message": "Pappersstorlek",
     "description": "Label for drop-down in side-bar"
   },
   "margins": {
-    "message": "Margener",
+    "message": "Marginaler",
     "description": "Label for drop-down in side-bar"
   },
   "margins_default": {
@@ -142,31 +142,31 @@
     "description": "Item in margins drop-down in side-bar"
   },
   "margins_custom": {
-    "message": "Tilpassede",
+    "message": "Anpassa",
     "description": "Item in margins drop-down in side-bar"
   },
   "print": {
-    "message": "Udskriv",
+    "message": "Skriva ut",
     "description": "Label for button in side-bar"
   },
   "finish": {
-    "message": "Afslut",
+    "message": "Avsluta",
     "description": "Label for button in side-bar"
   },
   "check_paper_size": {
-    "message": "I udskriftsvinduet skal du sørge for, at **Papirstørrelse** matcher det, der er angivet ovenfor, og at **Margener** er indstillet til \"Standard\"",
+    "message": "I utskriftsfönstret, se till att **Pappersstorlek** matchar det som anges ovan och att **Marginals** är inställda på ”Standard”",
     "description": "Message in speech bubble over print button in side-bar (Markdown)"
   },
   "documents": {
-    "message": "Dokumenter",
+    "message": "Dokument",
     "description": "Title in document list"
   },
   "selected_document_sg": {
-    "message": "1 er valgt",
+    "message": "1 markerade",
     "description": "For displaying the number of selected documents (singular)"
   },
   "selected_document_pl": {
-    "message": "$NUMBER$ er valgt",
+    "message": "$NUMBER$ markerade",
     "description": "For displaying the number of selected documents (plural)",
     "placeholders": {
       "number": {
@@ -176,23 +176,23 @@
     }
   },
   "no_documents": {
-    "message": "Ingen dokumenter",
+    "message": "Inga dokument",
     "description": "Message in document list when there aren't any documents"
   },
   "no_search_results": {
-    "message": "Der blev ikke fundet nogen søgeresultater",
+    "message": "Inga sökresultat hittades",
     "description": "Message in document list when a search yields no results"
   },
   "search_documents": {
-    "message": "Søg i dokumenter",
+    "message": "Sök i dokument",
     "description": "Placeholder of search box and icon tooltip in document list"
   },
   "search_result_sg": {
-    "message": "1 søgeresultat",
+    "message": "1 sökresultat",
     "description": "For displaying the number of search results (singular)"
   },
   "search_result_pl": {
-    "message": "$NUMBER$ søgeresultater",
+    "message": "$NUMBER$ sökresultat",
     "description": "For displaying the number of search results (plural)",
     "placeholders": {
       "number": {
@@ -202,7 +202,7 @@
     }
   },
   "for_query": {
-    "message": "Der blev fundet $RESULTS$ for \"$QUERY$\"",
+    "message": "Hittade $RESULTS$ för $QUERY$",
     "description": "Text for card heading in document list",
     "placeholders": {
       "results": {
@@ -236,23 +236,23 @@
     }
   },
   "clear_search": {
-    "message": "Ryd søgning",
+    "message": "Rensa sökning",
     "description": "Tooltip of search box x button in document list"
   },
   "delete": {
-    "message": "Slet",
+    "message": "Radera",
     "description": "Label for delete button in document list"
   },
   "cancel": {
-    "message": "Annuller",
+    "message": "Avbryt",
     "description": "Label for x button used to clear selection in document list"
   },
   "change_title": {
-    "message": "Rediger titel",
+    "message": "Ändra titel",
     "description": "Label for menu item in document list"
   },
   "open_original_page": {
-    "message": "Gå til den originale side",
+    "message": "Gå till originalsidan",
     "description": "Label for menu item in document list"
   },
   "language_none": {
@@ -260,92 +260,92 @@
     "description": "For top item in To language dropdown in side-bar"
   },
   "language_unknown": {
-    "message": "Ukendt",
+    "message": "Okänt",
     "description": "For top item in From language dropdown in side-bar"
   },
   "language_af": {
     "message": "Afrikaans"
   },
   "language_am": {
-    "message": "Amharisk"
+    "message": "Amhariska"
   },
   "language_ar": {
-    "message": "Arabisk"
+    "message": "Arabiska"
   },
   "language_az": {
-    "message": "Aserbajdsjansk"
+    "message": "Azerbajdzjanska"
   },
   "language_be": {
-    "message": "Hviderussisk"
+    "message": "Vitryska"
   },
   "language_bg": {
-    "message": "Bulgarsk"
+    "message": "Bulgariska"
   },
   "language_bn": {
     "message": "Bengali"
   },
   "language_bs": {
-    "message": "Bosnisk"
+    "message": "Bosniska"
   },
   "language_ca": {
-    "message": "Katalansk"
+    "message": "Katalanska"
   },
   "language_ceb": {
     "message": "Cebuano"
   },
   "language_co": {
-    "message": "Korsikansk"
+    "message": "Korsiska"
   },
   "language_cs": {
-    "message": "Tjekkisk"
+    "message": "Tjeckiska"
   },
   "language_cy": {
-    "message": "Walisisk"
+    "message": "Walesiska"
   },
   "language_da": {
-    "message": "Dansk"
+    "message": "Danska"
   },
   "language_de": {
-    "message": "Tysk"
+    "message": "Tyska"
   },
   "language_el": {
-    "message": "Græsk"
+    "message": "Grekiska"
   },
   "language_en": {
-    "message": "Engelsk"
+    "message": "Engelska"
   },
   "language_eo": {
     "message": "Esperanto"
   },
   "language_es": {
-    "message": "Spansk"
+    "message": "Spanska"
   },
   "language_et": {
-    "message": "Estisk"
+    "message": "Estniska"
   },
   "language_eu": {
-    "message": "Baskisk"
+    "message": "Baskiska"
   },
   "language_fa": {
-    "message": "Persisk"
+    "message": "Persiska"
   },
   "language_fi": {
-    "message": "Finsk"
+    "message": "Finska"
   },
   "language_fr": {
-    "message": "Fransk"
+    "message": "Franska"
   },
   "language_fy": {
-    "message": "Frisisk"
+    "message": "Frisiska"
   },
   "language_ga": {
-    "message": "Irsk"
+    "message": "Irländska"
   },
   "language_gd": {
-    "message": "Skotsk gælisk"
+    "message": "Gaeliska"
   },
   "language_gl": {
-    "message": "Galicisk"
+    "message": "Galiciska"
   },
   "language_gu": {
     "message": "Gujarati"
@@ -354,7 +354,7 @@
     "message": "Hausa"
   },
   "language_haw": {
-    "message": "Hawaiiansk"
+    "message": "Hawaiianska"
   },
   "language_hi": {
     "message": "Hindi"
@@ -363,133 +363,133 @@
     "message": "Hmong"
   },
   "language_hr": {
-    "message": "Kroatisk"
+    "message": "Kroatiska"
   },
   "language_ht": {
-    "message": "Haitisk kreolsk"
+    "message": "Haitiska"
   },
   "language_hu": {
-    "message": "Ungarsk"
+    "message": "Ungerska"
   },
   "language_hy": {
-    "message": "Armensk"
+    "message": "Armeniska"
   },
   "language_id": {
-    "message": "Indonesisk"
+    "message": "Indonesiska"
   },
   "language_ig": {
     "message": "Igbo"
   },
   "language_is": {
-    "message": "Islandsk"
+    "message": "Isländska"
   },
   "language_it": {
-    "message": "Italiensk"
+    "message": "Italienska"
   },
   "language_iw": {
-    "message": "Hebraisk"
+    "message": "Hebreiska"
   },
   "language_ja": {
-    "message": "Japansk"
+    "message": "Japanska"
   },
   "language_jw": {
-    "message": "Javanesisk"
+    "message": "Javanesiska"
   },
   "language_ka": {
-    "message": "Georgisk"
+    "message": "Georgiska"
   },
   "language_kk": {
-    "message": "Kasakhisk"
+    "message": "Kazakiska"
   },
   "language_km": {
     "message": "Khmer"
   },
   "language_kn": {
-    "message": "Kannada"
+    "message": "Kanaresiska"
   },
   "language_ko": {
-    "message": "Koreansk"
+    "message": "Koreanska"
   },
   "language_ku": {
-    "message": "Kurdisk"
+    "message": "Kurdiska"
   },
   "language_ky": {
-    "message": "Kirgisk"
+    "message": "Kirgiziska"
   },
   "language_la": {
     "message": "Latin"
   },
   "language_lb": {
-    "message": "Luxembourgsk"
+    "message": "Luxemburgska"
   },
   "language_lo": {
-    "message": "Laotisk"
+    "message": "Laotiska"
   },
   "language_lt": {
-    "message": "Litauisk"
+    "message": "Litauiska"
   },
   "language_lv": {
-    "message": "Lettisk"
+    "message": "Lettiska"
   },
   "language_mg": {
-    "message": "Malagassisk"
+    "message": "Malagassiska"
   },
   "language_mi": {
     "message": "Maori"
   },
   "language_mk": {
-    "message": "Makedonsk"
+    "message": "Makedonska"
   },
   "language_ml": {
     "message": "Malayalam"
   },
   "language_mn": {
-    "message": "Mongolsk"
+    "message": "Mongoliska"
   },
   "language_mr": {
     "message": "Marathi"
   },
   "language_ms": {
-    "message": "Malajisk"
+    "message": "Malaysiska"
   },
   "language_mt": {
-    "message": "Maltesisk"
+    "message": "Maltesiska"
   },
   "language_my": {
-    "message": "Burmesisk"
+    "message": "Burmesiska"
   },
   "language_ne": {
-    "message": "Nepalesisk"
+    "message": "Nepali"
   },
   "language_nl": {
-    "message": "Nederlandsk"
+    "message": "Nederländska"
   },
   "language_no": {
-    "message": "Norsk"
+    "message": "Norska"
   },
   "language_ny": {
     "message": "Chichewa"
   },
   "language_or": {
-    "message": "Odia (Oriya)"
+    "message": "Oriya (odia)"
   },
   "language_pa": {
     "message": "Punjabi"
   },
   "language_pl": {
-    "message": "Polsk"
+    "message": "Polska"
   },
   "language_ps": {
     "message": "Pashto"
   },
   "language_pt": {
-    "message": "Portugisisk"
+    "message": "Portugisiska"
   },
   "language_ro": {
-    "message": "Rumænsk"
+    "message": "Rumänska"
   },
   "language_ru": {
-    "message": "Russisk"
+    "message": "Ryska"
   },
   "language_rw": {
     "message": "Kinyarwanda"
@@ -498,37 +498,37 @@
     "message": "Sindhi"
   },
   "language_si": {
-    "message": "Sinhala"
+    "message": "Singalesiska"
   },
   "language_sk": {
-    "message": "Slovakisk"
+    "message": "Slovakiska"
   },
   "language_sl": {
-    "message": "Slovensk"
+    "message": "Slovenska"
   },
   "language_sm": {
-    "message": "Samoansk"
+    "message": "Samoanska"
   },
   "language_sn": {
     "message": "Shona"
   },
   "language_so": {
-    "message": "Somalisk"
+    "message": "Somaliska"
   },
   "language_sq": {
-    "message": "Albansk"
+    "message": "Albanska"
   },
   "language_sr": {
-    "message": "Serbisk"
+    "message": "Serbiska"
   },
   "language_st": {
     "message": "Sesotho"
   },
   "language_su": {
-    "message": "Sundanesisk"
+    "message": "Sundanesiska"
   },
   "language_sv": {
-    "message": "Svensk"
+    "message": "Svenska"
   },
   "language_sw": {
     "message": "Swahili"
@@ -540,37 +540,37 @@
     "message": "Telugu"
   },
   "language_tg": {
-    "message": "Tadsjikisk"
+    "message": "Tadzjikiska"
   },
   "language_th": {
-    "message": "Thailandsk"
+    "message": "Thailändska"
   },
   "language_tk": {
-    "message": "Turkmensk"
+    "message": "Turkmeniska"
   },
   "language_tl": {
-    "message": "Tagalog"
+    "message": "Filippinska"
   },
   "language_tr": {
-    "message": "Tyrkisk"
+    "message": "Turkiska"
   },
   "language_tt": {
-    "message": "Tatarisk"
+    "message": "Tatariska"
   },
   "language_ug": {
-    "message": "Uighursk"
+    "message": "Uiguriska"
   },
   "language_uk": {
-    "message": "Ukrainsk"
+    "message": "Ukrainska"
   },
   "language_ur": {
     "message": "Urdu"
   },
   "language_uz": {
-    "message": "Usbekisk"
+    "message": "Uzbekiska"
   },
   "language_vi": {
-    "message": "Vietnamesisk"
+    "message": "Vietnamesiska"
   },
   "language_xh": {
     "message": "Xhosa"
@@ -582,13 +582,13 @@
     "message": "Yoruba"
   },
   "language_zh": {
-    "message": "Kinesisk"
+    "message": "Kinesiska"
   },
   "language_zh_cn": {
-    "message": "Kinesisk (forenklet)"
+    "message": "Kinesiska (förenklad)"
   },
   "language_zh_tw": {
-    "message": "Kinesisk (traditionelt)"
+    "message": "Kinesiska (traditionell)"
   },
   "language_zu": {
     "message": "Zulu"

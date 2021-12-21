@@ -88,6 +88,7 @@ export function getUILanguage() {
       }
     }
     if (fallBackLanguageCode === 'no') {
+      // use Bokmål when Norwegian is detected
       fallBackLanguageCode = 'nb';
     }
     return fallBackLanguageCode;
