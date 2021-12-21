@@ -1,0 +1,596 @@
+{
+  "keep_all": {
+    "message": "pidä kaikki",
+    "description": "Tooltip text of scrubbing mode keep all button"
+  },
+  "create_print_version": {
+    "message": "Luo tulostettu versio",
+    "description": "Label for menu item in browser context menu and extension pop-up menu"
+  },
+  "selection_portion_of_document": {
+    "message": "valitse ensin se osa asiakirjasta, jonka haluat tulostaa",
+    "description": "Text for tooltip in pop-up menu, when there's no selection"
+  },
+  "created_on": {
+    "message": "luomispäivä: $DATE$",
+    "description": "Text for tooltip of recent documents in pop-up menu",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "11/28/2021, 10:01:35 PM"
+      }
+    }
+  },
+  "show_all_documents": {
+    "message": "Näytä kaikki asiakirjat",
+    "description": "Label for menu item in pop-up menu"
+  },
+  "add_definition": {
+    "message": "Lisää määritelmä",
+    "description": "Label for item in annotation menu"
+  },
+  "show_term_and_definition": {
+    "message": "näytä sekä ilmaus että määritelmä alaviitteessä",
+    "description": "Text for tooltip of item in annotation menu"
+  },
+  "add_translation": {
+    "message": "Lisää käännös",
+    "description": "Label for item in annotation menu"
+  },
+  "show_translation_only": {
+    "message": "näytä käännetty lause vain alaviitteessä",
+    "description": "Text for tooltip of item in annotation menu"
+  },
+  "add_explanation": {
+    "message": "Lisää selitys",
+    "description": "Label for item in annotation menu"
+  },
+  "show_explanation": {
+    "message": "näytä selitys alaviitteessä",
+    "description": "Text for tooltip of item in annotation menu"
+  },
+  "add_context_menu_item": {
+    "message": "Lisää kohde selaimen pikavalikkoon",
+    "description": "Label for checkbox in options"
+  },
+  "filter_page_content": {
+    "message": "Suodata sivun sisältö",
+    "description": "Label for checkbox in options"
+  },
+  "filter_automatic": {
+    "message": "Automaattisesti",
+    "description": "Label for filter drop-down in options"
+  },
+  "filter_manual": {
+    "message": "Käsin",
+    "description": "Label for filter drop-down in options"
+  },
+  "action": {
+    "message": "Toiminta",
+    "description": "Label for drop-down in side-bar"
+  },
+  "editing": {
+    "message": "Muokkaus",
+    "description": "Item in action drop-down"
+  },
+  "annotating": {
+    "message": "Annotointi",
+    "description": "Item in action drop-down"
+  },
+  "scrubbing": {
+    "message": "Perkaus",
+    "description": "Item in action drop-down"
+  },
+  "from_language": {
+    "message": "Kielestä",
+    "description": "Label for drop-down in side-bar"
+  },
+  "to_language": {
+    "message": "Kielelle",
+    "description": "Label for drop-down in side-bar"
+  },
+  "article_font_family": {
+    "message": "Fontti",
+    "description": "Label for drop-down in side-bar"
+  },
+  "article_font_size": {
+    "message": "Fonttikoko",
+    "description": "Label for drop-down in side-bar"
+  },
+  "article_justification": {
+    "message": "Tekstin perustelu",
+    "description": "Label for drop-down in side-bar"
+  },
+  "justification_none": {
+    "message": "Ei perustelua",
+    "description": "Item in justification drop-down in side-bar"
+  },
+  "justification_text": {
+    "message": "Ainoastaan tekstin",
+    "description": "Item in justification drop-down in side-bar"
+  },
+  "justification_text_and_headings": {
+    "message": "Tekstin ja otsikkojen",
+    "description": "Item in justification drop-down in side-bar"
+  },
+  "article_spacing": {
+    "message": "Riviväli",
+    "description": "Label for drop-down in side-bar"
+  },
+  "spacing_normal": {
+    "message": "Normaali",
+    "description": "Item in line-spacing drop-down in side-bar"
+  },
+  "footnote_font_family": {
+    "message": "Alaviitteen fontti",
+    "description": "Label for drop-down in side-bar"
+  },
+  "footnote_font_size": {
+    "message": "Alaviitteen fonttikoko",
+    "description": "Label for drop-down in side-bar"
+  },
+  "paper_size": {
+    "message": "Paperin koko",
+    "description": "Label for drop-down in side-bar"
+  },
+  "margins": {
+    "message": "Reunukset",
+    "description": "Label for drop-down in side-bar"
+  },
+  "margins_default": {
+    "message": "Oletus",
+    "description": "Item in margins drop-down in side-bar"
+  },
+  "margins_custom": {
+    "message": "Oma",
+    "description": "Item in margins drop-down in side-bar"
+  },
+  "print": {
+    "message": "Tulosta",
+    "description": "Label for button in side-bar"
+  },
+  "finish": {
+    "message": "Pääty",
+    "description": "Label for button in side-bar"
+  },
+  "check_paper_size": {
+    "message": "Varmista tulostusikkunassa, että **Paperin koko** vastaa yllä määritettyä ja että **Reunukset** on asetettu ”Oletus”.",
+    "description": "Message in speech bubble over print button in side-bar (Markdown)"
+  },
+  "documents": {
+    "message": "Asiakirjat",
+    "description": "Title in document list"
+  },
+  "selected_document_sg": {
+    "message": "Valittu: 1",
+    "description": "For displaying the number of selected documents (singular)"
+  },
+  "selected_document_pl": {
+    "message": "Valittu: $NUMBER$",
+    "description": "For displaying the number of selected documents (plural)",
+    "placeholders": {
+      "number": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "no_documents": {
+    "message": "Ei asiakirjoja",
+    "description": "Message in document list when there aren't any documents"
+  },
+  "no_search_results": {
+    "message": "Ei hakutuloksia",
+    "description": "Message in document list when a search yields no results"
+  },
+  "search_documents": {
+    "message": "Haku asiakirjoista",
+    "description": "Placeholder of search box and icon tooltip in document list"
+  },
+  "search_result_sg": {
+    "message": "1 hakutulos",
+    "description": "For displaying the number of search results (singular)"
+  },
+  "search_result_pl": {
+    "message": "$NUMBER$ hakutulokset",
+    "description": "For displaying the number of search results (plural)",
+    "placeholders": {
+      "number": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "for_query": {
+    "message": "Haku $QUERY$ tuotii $RESULTS$",
+    "description": "Text for card heading in document list",
+    "placeholders": {
+      "results": {
+        "content": "$1",
+        "example": "2 results"
+      },
+      "query": {
+        "content": "$2",
+        "example": "CNN"
+      }
+    }
+  },
+  "today_being": {
+    "message": "Tänään - $DATE$",
+    "description": "Text for card heading in document list",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "Sunday, November 13, 2001"
+      }
+    }
+  },
+  "yesterday_being": {
+    "message": "Eilen - $DATE$",
+    "description": "Text for card heading in document list",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "Sunday, November 13, 2001"
+      }
+    }
+  },
+  "clear_search": {
+    "message": "Tyhjennä haku",
+    "description": "Tooltip of search box x button in document list"
+  },
+  "delete": {
+    "message": "Poista",
+    "description": "Label for delete button in document list"
+  },
+  "cancel": {
+    "message": "Peru",
+    "description": "Label for x button used to clear selection in document list"
+  },
+  "change_title": {
+    "message": "Vaihda otsikko",
+    "description": "Label for menu item in document list"
+  },
+  "open_original_page": {
+    "message": "Siirry alkuperäiselle sivulle",
+    "description": "Label for menu item in document list"
+  },
+  "language_none": {
+    "message": "Ei minkään",
+    "description": "For top item in To language dropdown in side-bar"
+  },
+  "language_unknown": {
+    "message": "Tuntemattoman",
+    "description": "For top item in From language dropdown in side-bar"
+  },
+  "language_af": {
+    "message": "Afrikaanin"
+  },
+  "language_am": {
+    "message": "Amharan"
+  },
+  "language_ar": {
+    "message": "Arabian"
+  },
+  "language_az": {
+    "message": "Azerin"
+  },
+  "language_be": {
+    "message": "Valkovenäjän"
+  },
+  "language_bg": {
+    "message": "Bulgarian"
+  },
+  "language_bn": {
+    "message": "Bengalin"
+  },
+  "language_bs": {
+    "message": "Bosnian"
+  },
+  "language_ca": {
+    "message": "Katalaanin"
+  },
+  "language_ceb": {
+    "message": "Cebun"
+  },
+  "language_co": {
+    "message": "Korsikan"
+  },
+  "language_cs": {
+    "message": "Tsekkin"
+  },
+  "language_cy": {
+    "message": "Kymrin"
+  },
+  "language_da": {
+    "message": "Tanskan"
+  },
+  "language_de": {
+    "message": "Saksan"
+  },
+  "language_el": {
+    "message": "Kreikkan"
+  },
+  "language_en": {
+    "message": "Englannin"
+  },
+  "language_eo": {
+    "message": "Esperanton"
+  },
+  "language_es": {
+    "message": "Espanjan"
+  },
+  "language_et": {
+    "message": "Viron"
+  },
+  "language_eu": {
+    "message": "Baskin"
+  },
+  "language_fa": {
+    "message": "Persian"
+  },
+  "language_fi": {
+    "message": "Suomen"
+  },
+  "language_fr": {
+    "message": "Ranskan"
+  },
+  "language_fy": {
+    "message": "Friisin"
+  },
+  "language_ga": {
+    "message": "Iirin"
+  },
+  "language_gd": {
+    "message": "Skottigaelin"
+  },
+  "language_gl": {
+    "message": "Galician"
+  },
+  "language_gu": {
+    "message": "Gujaratin"
+  },
+  "language_ha": {
+    "message": "Hausan"
+  },
+  "language_haw": {
+    "message": "Havaijin"
+  },
+  "language_hi": {
+    "message": "Hindin"
+  },
+  "language_hmn": {
+    "message": "Hmongin"
+  },
+  "language_hr": {
+    "message": "Kroatian"
+  },
+  "language_ht": {
+    "message": "Haitinkreolin"
+  },
+  "language_hu": {
+    "message": "Unkarin"
+  },
+  "language_hy": {
+    "message": "Armenian"
+  },
+  "language_id": {
+    "message": "Indonesian"
+  },
+  "language_ig": {
+    "message": "Igbon"
+  },
+  "language_is": {
+    "message": "Islannin"
+  },
+  "language_it": {
+    "message": "Italian"
+  },
+  "language_iw": {
+    "message": "Heprean"
+  },
+  "language_ja": {
+    "message": "Japanin"
+  },
+  "language_jw": {
+    "message": "Jaavan"
+  },
+  "language_ka": {
+    "message": "Gruusian"
+  },
+  "language_kk": {
+    "message": "Kazakkin"
+  },
+  "language_km": {
+    "message": "Khmerin"
+  },
+  "language_kn": {
+    "message": "Kannadan"
+  },
+  "language_ko": {
+    "message": "Korean"
+  },
+  "language_ku": {
+    "message": "Kurdin"
+  },
+  "language_ky": {
+    "message": "Kirgisian"
+  },
+  "language_la": {
+    "message": "Latinan"
+  },
+  "language_lb": {
+    "message": "Luxemburgin"
+  },
+  "language_lo": {
+    "message": "Laosin"
+  },
+  "language_lt": {
+    "message": "Liettuan"
+  },
+  "language_lv": {
+    "message": "Latvian"
+  },
+  "language_mg": {
+    "message": "Madagaskarin"
+  },
+  "language_mi": {
+    "message": "Maorin"
+  },
+  "language_mk": {
+    "message": "Makedonian"
+  },
+  "language_ml": {
+    "message": "Malayalamin"
+  },
+  "language_mn": {
+    "message": "Mongolian"
+  },
+  "language_mr": {
+    "message": "Marathin"
+  },
+  "language_ms": {
+    "message": "Malaijin"
+  },
+  "language_mt": {
+    "message": "Maltan"
+  },
+  "language_my": {
+    "message": "Burman"
+  },
+  "language_ne": {
+    "message": "Nepalin"
+  },
+  "language_nl": {
+    "message": "Hollannin"
+  },
+  "language_no": {
+    "message": "Norjan"
+  },
+  "language_ny": {
+    "message": "Njandžan"
+  },
+  "language_or": {
+    "message": "Odian (orijan)"
+  },
+  "language_pa": {
+    "message": "Punjabin"
+  },
+  "language_pl": {
+    "message": "Puolan"
+  },
+  "language_ps": {
+    "message": "Pashton"
+  },
+  "language_pt": {
+    "message": "Portugalin"
+  },
+  "language_ro": {
+    "message": "Romanian"
+  },
+  "language_ru": {
+    "message": "Venäjän"
+  },
+  "language_rw": {
+    "message": "Kinyarwandan"
+  },
+  "language_sd": {
+    "message": "Sindhin"
+  },
+  "language_si": {
+    "message": "Sinhalan"
+  },
+  "language_sk": {
+    "message": "Slovakian"
+  },
+  "language_sl": {
+    "message": "Slovenian"
+  },
+  "language_sm": {
+    "message": "Samoan"
+  },
+  "language_sn": {
+    "message": "Shonan"
+  },
+  "language_so": {
+    "message": "Somalin"
+  },
+  "language_sq": {
+    "message": "Albanian"
+  },
+  "language_sr": {
+    "message": "Serbian"
+  },
+  "language_st": {
+    "message": "Sesothon"
+  },
+  "language_su": {
+    "message": "Sundaneesin"
+  },
+  "language_sv": {
+    "message": "Ruotsin"
+  },
+  "language_sw": {
+    "message": "Swahilin"
+  },
+  "language_ta": {
+    "message": "Tamilin"
+  },
+  "language_te": {
+    "message": "Telugun"
+  },
+  "language_tg": {
+    "message": "Tadžikin"
+  },
+  "language_th": {
+    "message": "Thain"
+  },
+  "language_tk": {
+    "message": "Turkmeenin"
+  },
+  "language_tl": {
+    "message": "Tagalogin"
+  },
+  "language_tr": {
+    "message": "Turkkin"
+  },
+  "language_tt": {
+    "message": "Tataarin"
+  },
+  "language_ug": {
+    "message": "Uiguurin"
+  },
+  "language_uk": {
+    "message": "Ukrainan"
+  },
+  "language_ur": {
+    "message": "Urdun"
+  },
+  "language_uz": {
+    "message": "Uzbekkin"
+  },
+  "language_vi": {
+    "message": "Vietnamin"
+  },
+  "language_xh": {
+    "message": "Xhosan"
+  },
+  "language_yi": {
+    "message": "Jiddišin"
+  },
+  "language_yo": {
+    "message": "Joruban"
+  },
+  "language_zh_cn": {
+    "message": "Kiinan"
+  },
+  "language_zh_cn": {
+    "message": "Kiinan (yksinkertaistettu)"
+  },
+  "language_zh_tw": {
+    "message": "Kiinan (perinteinen)"
+  },
+  "language_zu": {
+    "message": "Zulun"
+  }
+}
