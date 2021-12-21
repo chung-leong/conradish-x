@@ -86,6 +86,9 @@ export function getUILanguage() {
         }
       }
     }
+    if (fallBackLanguageCode === 'no') {
+      fallBackLanguageCode = 'nb';
+    }
     return fallBackLanguageCode;
   }
 }

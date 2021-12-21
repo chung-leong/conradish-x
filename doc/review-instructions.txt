@@ -1,0 +1,1 @@
+Select headline and text of an online article. Right click and choose "Create print version" in context menu. New document will appear in new tab. Choose a target language in drop-down in side-bar on the right. Select a word in the document. A pop-up menu will appear. Click "Add definition". Scroll down and see definition in page footer.
