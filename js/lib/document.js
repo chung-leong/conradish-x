@@ -894,6 +894,47 @@ function addElement(element, { tag, style, content, footnote, junk }) {
   element.append(child);
 }
 
+function insertSupElement(supElement, container) {
+  // find all the text nodes
+  const textNodes = [];
+  const addTextNodes = (node) => {
+    if (node.nodeType === Node.TEXT_NODE) {
+      textNodes.push(node);
+    } else if (node.nodeType === Node.ELEMENT_NODE) {
+      for (const child of node.childNodes) {
+        addTextNodes(child);
+      }
+    }
+  };
+  addTextNodes(container);
+  // use the last one
+  const textNode = textNodes.pop();
+  const { parentNode, nodeValue, nextSibling } = textNode;
+  let refNode;
+  // look for white-spaces (including nbsp)
+  const m = nodeValue.match(/\s+$/);
+  if (m) {
+    // there's white-spaces at the end of the text
+    const ws = m[0];
+    if (ws.length === nodeValue.length) {
+      // all white-spaces---put <sup> in front of this
+      refNode = textNode;
+    } else {
+      // we need to split the text node
+      textNode.remove();
+      const text = nodeValue.substr(0, nodeValue.length - ws.length);
+      const newTextNode = document.createTextNode(text);
+      const wsNode = document.createTextNode(ws);
+      parentNode.insertBefore(wsNode, nextSibling);
+      parentNode.insertBefore(newTextNode, wsNode);
+      refNode = wsNode;
+    }
+  } else {
+    refNode = nextSibling;
+  }
+  parentNode.insertBefore(supElement, refNode);
+};
+
 export function annotateRange(range, content, extra) {
   const id = `footnote-${nextFootnoteId++}`;
   // figure out what number it should have
@@ -905,14 +946,12 @@ export function annotateRange(range, content, extra) {
       break;
     }
   }
-  const fragment = range.cloneContents();
-  const fragmentHTML = e('DIV', {}, fragment).innerHTML;
   const className = 'conradish footnote-number pending';
   const tempSupElement = e('SUP', { id, className }, number);
-  // trim off whitespaces (including nbsp, so trimRight() isn't used here)
-  const htmlBefore = fragmentHTML.replace(/\s+$/g, '');
-  const wsAfter = fragmentHTML.substr(htmlBefore.length);
-  const html = htmlBefore + tempSupElement.outerHTML + wsAfter;
+  const fragment = range.cloneContents();
+  const fragmentDIV = e('DIV', {}, fragment);
+  insertSupElement(tempSupElement, fragmentDIV);
+  const html = fragmentDIV.innerHTML;
   // insert into editor
   const selection = getSelection();
   selection.removeAllRanges();

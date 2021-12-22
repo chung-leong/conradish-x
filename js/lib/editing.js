@@ -76,9 +76,67 @@ function getSelectedText(range) {
   return fragmentDIV.innerText.trim();
 }
 
+function getSelectedRange() {
+  let { startContainer, endContainer, startOffset, endOffset } = lastSelectedRange;
+  const atBeginning = (container, offset) => {
+    return offset === 0;
+  };
+  const atEnd = (container, offset) => {
+    if (container.nodeType === Node.TEXT_NODE) {
+      return (offset === container.nodeValue.length);
+    } else if (container.nodeType === Node.ELEMENT_NODE) {
+      return (offset === container.childNodes.length);
+    }
+  };
+  const inline = (container) => {
+    if (container.nodeType === Node.TEXT_NODE) {
+      return true;
+    } else if (container.nodeType === Node.ELEMENT_NODE) {
+      const { display } = getComputedStyle(container);
+      return display.includes('inline');
+    } else {
+      return false;
+    }
+  };
+  const block = (container) => {
+    if (container.nodeType === Node.ELEMENT_NODE) {
+      const { display } = getComputedStyle(container);
+      return display === 'block';
+    } else {
+      return false;
+    }
+  };
+  // move selection to just in front of the node if is at the very beginning of its contents
+  // so the element doesn't get replaced completely
+  while (atBeginning(startContainer, startOffset)) {
+    if (!inline(startContainer)) {
+      break;
+    }
+    startOffset = [ ...startContainer.parentNode.childNodes ].indexOf(startContainer);
+    startContainer = startContainer.parentNode;
+  }
+  // do the same at the end
+  while (atEnd(endContainer, endOffset)) {
+    if (!inline(endContainer)) {
+      break;
+    }
+    endOffset = [ ...endContainer.parentNode.childNodes ].indexOf(endContainer) + 1;
+    endContainer = endContainer.parentNode;
+  }
+  if (atBeginning(endContainer, endOffset)) {
+    if (block(endContainer)) {
+      endContainer = endContainer.previousElementSibling;
+      endOffset = endContainer.childNodes.length;
+    }
+  }
+  const range = document.createRange();
+  range.setStart(startContainer, startOffset);
+  range.setEnd(endContainer, endOffset);
+  return range;
+}
+
 async function addFootnote(includeTerm) {
-  // set the text of what was last selected
-  const range = normalizeRange(lastSelectedRange.cloneRange());
+  const range = getSelectedRange();
   let backstoppingNode;
   if (isWithinCell(range) && atContainerEnd(range, 'TD')) {
     // Chrome for some reason would add the SUP element outside the TD if the
@@ -230,26 +288,6 @@ function getFootnoteNumber(range, ignoreWhitespaceBefore = false) {
 
 function atFootnoteNumber(range) {
   return !!getFootnoteNumber(range, true);
-}
-
-function normalizeRange(range) {
-  let startContainer, endContainer;
-  let startOffset = 0, endOffset = 0;
-  transverseRange(range, (node, startIndex, endIndex) => {
-    if (node.nodeType === Node.TEXT_NODE) {
-      if (!startContainer) {
-        startContainer = node;
-        startOffset = startIndex;
-      }
-      endContainer = node;
-      endOffset = endIndex;
-    }
-  });
-  if (startContainer && endContainer) {
-    range.setStart(startContainer, startOffset);
-    range.setEnd(endContainer, endOffset);
-  }
-  return range;
 }
 
 function findParent(node, cb) {
