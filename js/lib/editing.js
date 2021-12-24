@@ -8,6 +8,7 @@ export const modeChange = new EventTarget;
 const articleMenuElement = document.getElementById('article-menu');
 const articleElement = document.getElementById('article');
 const articleMenuItems = {};
+const articleMenuSections = {};
 let lastSelectedRange = null;
 let articleMenuClicked = false;
 let editMode = 'annotate';
@@ -38,7 +39,7 @@ export function attachEditingHandlers() {
 }
 
 export function createMenuItems() {
-  const itemDefs = {
+  const annotationItemDefs = {
     addDefinition: {
       label: l('add_definition'),
       title: l('show_term_and_definition'),
@@ -55,16 +56,101 @@ export function createMenuItems() {
       handler: handleAddTranslation,
     }
   };
-  const list = e('UL');
-  list.addEventListener('mousedown', handleMenuMouseDown);
-  for (const [ key, itemDef ] of Object.entries(itemDefs)) {
+  const annotationMenu = articleMenuSections.annotation = e('UL', { id: 'menu-annotate' });
+  annotationMenu.addEventListener('mousedown', handleAnnotationMenuMouseDown);
+  for (const [ key, itemDef ] of Object.entries(annotationItemDefs)) {
     const { label, title, handler } = itemDef;
     const item = e('LI', { title }, label);
     item.addEventListener('click', handler);
-    list.append(item);
+    annotationMenu.append(item);
     articleMenuItems[key] = item;
   }
-  articleMenuElement.appendChild(list);
+  const inlineStyleDefs = {
+    bold: {
+      className: 'bold',
+      title: l('style-bold'),
+    },
+    italic: {
+      className: 'italic',
+      title: l('style-italic'),
+    },
+    underline: {
+      className: 'underline',
+      title: l('style-underline'),
+    },
+    strikeThrough: {
+      className: 'strikethrough',
+      title: l('style-strikethrough'),
+    },
+    subscript: {
+      className: 'subscript',
+      title: l('style-subscript'),
+    },
+    superscript: {
+      className: 'superscript',
+      title: l('style-superscript'),
+    },
+    removeFormat: {
+      className: 'remove',
+      title: l('style-remove'),
+    },
+  };
+  const inlineStyleMenu = articleMenuSections.inlineStyle = e('DIV', { id: 'menu-inline-styles' });
+  inlineStyleMenu.addEventListener('mousedown', handleInlineStyleMenuMouseDown);
+  for (const [ key, itemDef ] of Object.entries(inlineStyleDefs)) {
+    const { className, title } = itemDef;
+    const item = e('DIV', { className: `style-button ${className}`, title });
+    item.dataset.command = key;
+    inlineStyleMenu.append(item);
+    articleMenuItems[key] = item;
+  }
+  const blockStyleDefs = {
+    heading1: {
+      className: 'heading1',
+      title: l('style-heading', 1),
+      tag: 'H1'
+    },
+    heading2: {
+      className: 'heading2',
+      title: l('style-heading', 2),
+      tag: 'H2'
+    },
+    heading3: {
+      className: 'heading3',
+      title: l('style-heading', 3),
+      tag: 'H3'
+    },
+    heading4: {
+      className: 'heading4',
+      title: l('style-heading', 4),
+      tag: 'H4'
+    },
+    heading5: {
+      className: 'heading5',
+      title: l('style-heading', 5),
+      tag: 'H5'
+    },
+    heading6: {
+      className: 'heading6',
+      title: l('style-heading', 6),
+      tag: 'H6'
+    },
+    paragraph: {
+      className: 'paragraph',
+      title: l('style-paragraph'),
+      tag: 'P'
+    },
+  };
+  const blockStyleMenu = articleMenuSections.blockStyle = e('DIV', { id: 'menu-block-styles' });
+  blockStyleMenu.addEventListener('mousedown', handleBlockStyleMenuMouseDown);
+  for (const [ key, itemDef ] of Object.entries(blockStyleDefs)) {
+    const { className, title, tag } = itemDef;
+    const item = e('DIV', { className: `style-button ${className}`, title });
+    item.dataset.tag = tag;
+    blockStyleMenu.append(item);
+    articleMenuItems[key] = item;
+  }
+  articleMenuElement.append(annotationMenu, inlineStyleMenu, blockStyleMenu);
 }
 
 function getSelectedText(range) {
@@ -581,33 +667,113 @@ function getEditableContainer(node) {
   }
 }
 
-function showArticleMenu(container, range) {
-  const words = separateWords(range.toString());
-  if (words.length > 0) {
-    const sourceLang = getSourceLanguage();
-    const sourceLangDir = getLanguageDirection(sourceLang);
-    const targetLang = getTargetLanguage();
-    const r1 = range.getBoundingClientRect();
-    const r2 = articleMenuElement.parentNode.getBoundingClientRect();
-    if (sourceLangDir === 'ltr') {
-      articleMenuElement.style.left = `${r1.left - r2.left}px`;
-    } else {
-      articleMenuElement.style.right = `${r2.right - r1.right}px`;
+function showAnnotationMenu(range) {
+  if (!range.collapsed) {
+    if (!isMultiparagraph(range) && !atFootnoteNumber(range)) {
+      const words = separateWords(range.toString());
+      if (words.length > 0) {
+        const sourceLang = getSourceLanguage();
+        const targetLang = getTargetLanguage();
+        const translating = (targetLang && targetLang !== sourceLang);
+        // show/hide menu item depending on how many words are selected
+        const count = words.length;
+        toggle(articleMenuItems.addTranslation, translating && count > 1);
+        toggle(articleMenuItems.addExplanation, !translating && count > 1);
+        toggle(articleMenuItems.addDefinition, count < 8);
+        showMenuSection('annotation');
+        positionArticleMenu(range);
+        toggle(articleMenuElement, true);
+        return true;
+      }
     }
-    articleMenuElement.style.top = `${r1.bottom - r2.top + 2}px`;
-    // show/hide menu item depending on how many words are selected
-    const count = words.length;
-    const translating = (targetLang && targetLang !== sourceLang);
-    toggle(articleMenuItems.addTranslation, translating && count > 1);
-    toggle(articleMenuItems.addExplanation, !translating && count > 1);
-    toggle(articleMenuItems.addDefinition, count < 8);
-    toggle(articleMenuElement, true);
-    articleMenuElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    // remember the range
-    lastSelectedRange = range;
-    return true;
   }
   return false;
+}
+
+function showStylingMenu(range) {
+  const inEffect = {};
+  const noteEffect = (name, state) => {
+    const status = inEffect[name];
+    if (state && !status) {
+      inEffect[name] = 'set';
+    } else if (state && status === 'off') {
+      inEffect[name] = 'partial';
+    } else if (!state && !status) {
+      inEffect[name] = 'off';
+    } else if (!state && status === 'set') {
+      inEffect[name] = 'partial';
+    }
+  };
+  const setButtonStatus = () => {
+    for (const [ name, status ] of Object.entries(inEffect)) {
+      const { classList } = articleMenuItems[name];
+      classList.remove('set', 'partial');
+      if (status !== 'off') {
+        classList.add(status);
+      }
+    }
+  };
+  if (!range.collapsed) {
+    // get the styling of the selected text
+    transverseRange(range, (node, startOffset, endOffset) => {
+      if (node.nodeType === Node.TEXT_NODE && endOffset > startOffset) {
+        const { fontWeight, fontStyle, textDecorationLine, verticalAlign } = getComputedStyle(node.parentNode);
+        noteEffect('bold', fontWeight >= 600);
+        noteEffect('italic', fontStyle === 'italic');
+        noteEffect('underline', textDecorationLine.includes('underline'));
+        noteEffect('strikeThrough', textDecorationLine.includes('line-through'));
+        noteEffect('subscript', verticalAlign === 'sub');
+        noteEffect('superscript', verticalAlign === 'super');
+      }
+    });
+    setButtonStatus();
+    showMenuSection('inlineStyle');
+    positionArticleMenu(range);
+    toggle(articleMenuElement, true);
+    return true;
+  } else {
+    const blockElement = findParent(range.commonAncestorContainer, n => n.parentNode.id === 'article-text');
+    if (blockElement) {
+      const { tagName } = blockElement;
+      if (tagName !== 'TABLE') {
+        noteEffect('heading1', tagName === 'H1');
+        noteEffect('heading2', tagName === 'H2');
+        noteEffect('heading3', tagName === 'H3');
+        noteEffect('heading4', tagName === 'H4');
+        noteEffect('heading5', tagName === 'H5');
+        noteEffect('heading6', tagName === 'H6');
+        noteEffect('paragraph', tagName === 'P');
+        setButtonStatus();
+        showMenuSection('blockStyle');
+        const blockRange = document.createRange();
+        blockRange.selectNode(blockElement);
+        positionArticleMenu(blockRange);
+        toggle(articleMenuElement, true);
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+function showMenuSection(selected) {
+  for (const [ name, section ] of Object.entries(articleMenuSections)) {
+    section.classList.toggle('hidden', name !== selected);
+  }
+}
+
+function positionArticleMenu(range) {
+  const sourceLang = getSourceLanguage();
+  const sourceLangDir = getLanguageDirection(sourceLang);
+  const r1 = range.getBoundingClientRect();
+  const r2 = articleMenuElement.parentNode.getBoundingClientRect();
+  if (sourceLangDir === 'ltr') {
+    articleMenuElement.style.left = `${r1.left - r2.left}px`;
+  } else {
+    articleMenuElement.style.right = `${r2.right - r1.right}px`;
+  }
+  articleMenuElement.style.top = `${r1.bottom - r2.top + 2}px`;
+  articleMenuElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
 function hideArticleMenu() {
@@ -628,15 +794,19 @@ function toggle(element, shown) {
   element.classList.toggle('hidden', !shown);
 }
 
-function checkArticleSelection() {
-  const range = getSelectionRange();
-  const container = getRangeContainer(range);
+function updateArticleMenu() {
   let hideMenu = true;
-  if (isArticleEditor(container)) {
-    if (!range.collapsed) {
-      if (!isMultiparagraph(range) && !atFootnoteNumber(range)) {
-        hideMenu = !showArticleMenu(container, range);
+  if (editMode === 'annotate' || editMode === 'style') {
+    const range = getSelectionRange();
+    const container = getRangeContainer(range);
+    if (isArticleEditor(container)) {
+      if (editMode === 'annotate') {
+        hideMenu = !showAnnotationMenu(range);
+      } else if (editMode === 'style') {
+        hideMenu = !showStylingMenu(range);
       }
+      // remember the range
+      lastSelectedRange = range;
     }
   }
   if (hideMenu) {
@@ -649,16 +819,11 @@ export function getEditMode(mode) {
 }
 
 export function setEditMode(mode) {
-  if (editMode === 'annotate') {
-    hideArticleMenu();
-  }
   document.body.classList.remove(editMode);
   editMode = mode;
   document.body.classList.add(editMode);
   setFilterMode(editMode === 'clean' ? 'manual' : 'automatic');
-  if (editMode === 'annotate') {
-    checkArticleSelection();
-  }
+  updateArticleMenu();
   modeChange.dispatchEvent(new CustomEvent('change'));
 }
 
@@ -771,9 +936,7 @@ function handleDrop(evt) {
 }
 
 function handleSelectionChange(evt) {
-  if (editMode === 'annotate') {
-    checkArticleSelection();
-  }
+  updateArticleMenu();
 }
 
 function handleClick(evt) {
@@ -808,8 +971,35 @@ function handleMouseDown(evt) {
   }
 }
 
-function handleMenuMouseDown(evt) {
+function handleAnnotationMenuMouseDown(evt) {
   articleMenuClicked = true;
+}
+
+function handleInlineStyleMenuMouseDown(evt) {
+  const { target } = evt;
+  if (target.classList.contains('style-button')) {
+    document.execCommand(target.dataset.command);
+    updateArticleMenu();
+    evt.preventDefault();
+    evt.stopPropagation();
+  }
+}
+
+function handleBlockStyleMenuMouseDown(evt) {
+  const { target } = evt;
+  if (target.classList.contains('style-button')) {
+    let { tag } = target.dataset;
+    if (target.classList.contains('set')) {
+      // turn it into a paragraph unless it's one already
+      tag = (tag !== 'P') ? 'P' : undefined;
+    }
+    if (tag) {
+      document.execCommand('formatBlock', false, tag);
+      updateArticleMenu();
+    }
+    evt.preventDefault();
+    evt.stopPropagation();
+  }
 }
 
 function handleAddDefinition(evt) {

@@ -21,6 +21,10 @@ export function createArticleNavigation() {
       value: 'edit'
     },
     {
+      label: l('styling'),
+      value: 'style'
+    },
+    {
       label: l('annotating'),
       value: 'annotate'
     },

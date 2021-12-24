@@ -66,6 +66,7 @@
 }
 
 #side-bar.clean #finish-button,
+#side-bar.style #finish-button,
 #side-bar.edit #finish-button {
   display: inline;
 }
@@ -183,7 +184,7 @@
 
 .speech-bubble {
   position: absolute;
-  display: flex;
+  display: flex !important;
   right: 16px;
   bottom: 80px;
   width: 80%;

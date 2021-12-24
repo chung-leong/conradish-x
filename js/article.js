@@ -15,7 +15,7 @@ async function start() {
     const existing = await loadDocument(key);
     // set filter and edit mode
     const { filter } = getSettings();
-    const mode = (filter === 'manual' && !existing) ? 'clean' : 'annotate';
+    const mode = 'style'// (filter === 'manual' && !existing) ? 'clean' : 'annotate';
     setFilterMode(filter);
     setEditMode(mode);
     // create menu items

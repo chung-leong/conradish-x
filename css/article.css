@@ -15,6 +15,10 @@ BODY {
   user-select: none;
 }
 
+*.hidden {
+  display: none;
+}
+
 #background {
   /* background is in its own div so text copied to clipboard don't pick up a background color */
   position: absolute;
@@ -174,10 +178,6 @@ BODY {
   font-size: 10pt;
 }
 
-.footnote-number.hidden {
-  display: none;
-}
-
 #article-menu {
   position: absolute;
   background-color: #eeeeee;
@@ -187,30 +187,119 @@ BODY {
   white-space: nowrap;
 }
 
-#article-menu.hidden {
-  display: none;
-}
-
-#article-menu UL {
+#menu-annotate {
   font-size: 1.4em;
   list-style-type: none;
   padding: 0;
   margin: 0;
 }
 
-#article-menu UL LI {
+#menu-annotate LI {
   padding: 0.2em 0.4em 0.2em 0.4em;
   cursor: pointer;
 }
 
-#article-menu UL LI.hidden {
-  display: none;
-}
-
-#article-menu UL LI:hover {
+#menu-annotate LI:hover {
   color: #ffffff;
   background-color: #333333;
   border-radius: 4px;
+}
+
+.style-button {
+  display: inline-block;
+  position: relative;
+  box-sizing: border-box;
+  margin: 2px 2px 0 2px;
+  border-radius: 3px;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+
+.style-button::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-repeat: no-repeat;
+  background-size: 18px;
+  background-position: center;
+  filter: brightness(0);
+}
+
+.style-button.set {
+  background-color: rgb(0, 0, 0);
+  border-radius: 3px;
+}
+
+.style-button.set::before {
+  filter: brightness(100);
+}
+
+.style-button.partial {
+  background-color: rgb(200, 200, 200);
+}
+
+.style-button.bold::before {
+  background-image: url('../img/bold.svg');
+}
+
+.style-button.italic::before {
+  background-image: url('../img/italic.svg');
+}
+
+.style-button.underline::before {
+  background-image: url('../img/underline.svg');
+}
+
+.style-button.strikethrough::before {
+  background-image: url('../img/strike-through.svg');
+}
+
+.style-button.subscript::before {
+  background-image: url('../img/subscript.svg');
+}
+
+.style-button.superscript::before {
+  background-image: url('../img/superscript.svg');
+}
+
+.style-button.remove::before {
+  background-image: url('../img/format-clear.svg');
+}
+
+.style-button.heading1::before {
+  background-image: url('../img/heading-1.svg');
+}
+
+.style-button.heading2::before {
+  background-image: url('../img/heading-2.svg');
+}
+
+.style-button.heading3::before {
+  background-image: url('../img/heading-3.svg');
+}
+
+.style-button.heading4::before {
+  background-image: url('../img/heading-4.svg');
+}
+
+.style-button.heading5::before {
+  background-image: url('../img/heading-5.svg');
+}
+
+.style-button.heading6::before {
+  background-image: url('../img/heading-6.svg');
+}
+
+.style-button.blockquote::before {
+  background-image: url('../img/blockquote.svg');
+}
+
+.style-button.paragraph::before {
+  background-image: url('../img/paragraph.svg');
 }
 
 #footnote-backstage {

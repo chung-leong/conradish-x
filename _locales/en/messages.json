@@ -81,6 +81,10 @@
     "message": "Editing",
     "description": "Item in action drop-down"
   },
+  "styling": {
+    "message": "Styling",
+    "description": "Item in action drop-down"
+  },
   "annotating": {
     "message": "Annotating",
     "description": "Item in action drop-down"
