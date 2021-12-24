@@ -49,6 +49,48 @@
     "message": "twoje wyjaśnienie w przypisie",
     "description": "Text for tooltip of item in annotation menu"
   },
+  "style_bold": {
+    "message": "pogrubienie",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_italic": {
+    "message": "kursywa",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_underline": {
+    "message": "podkreślenie",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_strikethrough": {
+    "message": "przekreślenie",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_subscript": {
+    "message": "indeks dolny",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_superscript": {
+    "message": "indek górny",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_remove": {
+    "message": "wyczyść formatowanie",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_heading": {
+    "message": "nagłowek $NUMBER$",
+    "description": "Text for tooltip of button in style menu",
+    "placeholders": {
+      "number": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "style_paragraph": {
+    "message": "zwykły akapit",
+    "description": "Text for tooltip of button in style menu"
+  },
   "add_context_menu_item": {
     "message": "Dodatkowy element w menu kontekstowym przeglądarki",
     "description": "Label for checkbox in options"
@@ -71,6 +113,10 @@
   },
   "editing": {
     "message": "Redagowanie",
+    "description": "Item in action drop-down"
+  },
+  "styling": {
+    "message": "Formatowanie",
     "description": "Item in action drop-down"
   },
   "annotating": {

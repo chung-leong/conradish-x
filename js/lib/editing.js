@@ -68,31 +68,31 @@ export function createMenuItems() {
   const inlineStyleDefs = {
     bold: {
       className: 'bold',
-      title: l('style-bold'),
+      title: l('style_bold'),
     },
     italic: {
       className: 'italic',
-      title: l('style-italic'),
+      title: l('style_italic'),
     },
     underline: {
       className: 'underline',
-      title: l('style-underline'),
+      title: l('style_underline'),
     },
     strikeThrough: {
       className: 'strikethrough',
-      title: l('style-strikethrough'),
+      title: l('style_strikethrough'),
     },
     subscript: {
       className: 'subscript',
-      title: l('style-subscript'),
+      title: l('style_subscript'),
     },
     superscript: {
       className: 'superscript',
-      title: l('style-superscript'),
+      title: l('style_superscript'),
     },
     removeFormat: {
       className: 'remove',
-      title: l('style-remove'),
+      title: l('style_remove'),
     },
   };
   const inlineStyleMenu = articleMenuSections.inlineStyle = e('DIV', { id: 'menu-inline-styles' });
@@ -107,37 +107,37 @@ export function createMenuItems() {
   const blockStyleDefs = {
     heading1: {
       className: 'heading1',
-      title: l('style-heading', 1),
+      title: l('style_heading', [ 1 ]),
       tag: 'H1'
     },
     heading2: {
       className: 'heading2',
-      title: l('style-heading', 2),
+      title: l('style_heading', [ 2 ]),
       tag: 'H2'
     },
     heading3: {
       className: 'heading3',
-      title: l('style-heading', 3),
+      title: l('style_heading', [ 3 ]),
       tag: 'H3'
     },
     heading4: {
       className: 'heading4',
-      title: l('style-heading', 4),
+      title: l('style_heading', [ 4 ]),
       tag: 'H4'
     },
     heading5: {
       className: 'heading5',
-      title: l('style-heading', 5),
+      title: l('style_heading', [ 5 ]),
       tag: 'H5'
     },
     heading6: {
       className: 'heading6',
-      title: l('style-heading', 6),
+      title: l('style_heading', [ 6 ]),
       tag: 'H6'
     },
     paragraph: {
       className: 'paragraph',
-      title: l('style-paragraph'),
+      title: l('style_paragraph'),
       tag: 'P'
     },
   };

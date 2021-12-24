@@ -49,6 +49,48 @@
     "message": "ваше пояснення у виносці",
     "description": "Text for tooltip of item in annotation menu"
   },
+  "style_bold": {
+    "message": "напівжирний",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_italic": {
+    "message": "курсив",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_underline": {
+    "message": "підкреслений",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_strikethrough": {
+    "message": "закреслений",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_subscript": {
+    "message": "нижній індекс",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_superscript": {
+    "message": "верхній індекс",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_remove": {
+    "message": "очистити форматування",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_heading": {
+    "message": "заголовок $NUMBER$",
+    "description": "Text for tooltip of button in style menu",
+    "placeholders": {
+      "number": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "style_paragraph": {
+    "message": "звичайний абзац",
+    "description": "Text for tooltip of button in style menu"
+  },
   "add_context_menu_item": {
     "message": "Додатковий пункт у контекстному меню браузера",
     "description": "Label for checkbox in options"
@@ -71,6 +113,10 @@
   },
   "editing": {
     "message": "Редагування",
+    "description": "Item in action drop-down"
+  },
+  "styling": {
+    "message": "Форматування",
     "description": "Item in action drop-down"
   },
   "annotating": {

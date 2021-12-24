@@ -57,6 +57,48 @@
     "message": "show explanation in footnote",
     "description": "Text for tooltip of item in annotation menu"
   },
+  "style_bold": {
+    "message": "bold",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_italic": {
+    "message": "italic",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_underline": {
+    "message": "underline",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_strikethrough": {
+    "message": "strike-through",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_subscript": {
+    "message": "subscript",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_superscript": {
+    "message": "superscript",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_remove": {
+    "message": "clear formatting",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_heading": {
+    "message": "heading $NUMBER$",
+    "description": "Text for tooltip of button in style menu",
+    "placeholders": {
+      "number": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "style_paragraph": {
+    "message": "paragraph",
+    "description": "Text for tooltip of button in style menu"
+  },
   "add_context_menu_item": {
     "message": "Add item to browser context menu",
     "description": "Label for checkbox in options"

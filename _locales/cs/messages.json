@@ -49,6 +49,48 @@
     "message": "vaše vysvětlení v poznámce pod čarou",
     "description": "Text for tooltip of item in annotation menu"
   },
+  "style_bold": {
+    "message": "tučně",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_italic": {
+    "message": "kurzíva",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_underline": {
+    "message": "podtržene",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_strikethrough": {
+    "message": "přeškrtnute",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_subscript": {
+    "message": "dolní index",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_superscript": {
+    "message": "horní index",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_remove": {
+    "message": "vymazat formátování",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_heading": {
+    "message": "nadpis $NUMBER$",
+    "description": "Text for tooltip of button in style menu",
+    "placeholders": {
+      "number": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "style_paragraph": {
+    "message": "normální odstavec",
+    "description": "Text for tooltip of button in style menu"
+  },
   "add_context_menu_item": {
     "message": "Další položka v kontextové nabídce prohlížeče",
     "description": "Label for checkbox in options"
@@ -71,6 +113,10 @@
   },
   "editing": {
     "message": "Editace",
+    "description": "Item in action drop-down"
+  },
+  "styling": {
+    "message": "Formátování",
     "description": "Item in action drop-down"
   },
   "annotating": {
