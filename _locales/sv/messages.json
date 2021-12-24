@@ -49,6 +49,48 @@
     "message": "visa förklaring i fotnot",
     "description": "Text for tooltip of item in annotation menu"
   },
+  "style_bold": {
+    "message": "fetstil",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_italic": {
+    "message": "kursiv",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_underline": {
+    "message": "understrykning",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_strikethrough": {
+    "message": "genomstruken",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_subscript": {
+    "message": "nedsänkt",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_superscript": {
+    "message": "upphöjd",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_remove": {
+    "message": "rensa formatering",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_heading": {
+    "message": "rubrik $NUMBER$",
+    "description": "Text for tooltip of button in style menu",
+    "placeholders": {
+      "number": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "style_paragraph": {
+    "message": "normal stycke",
+    "description": "Text for tooltip of button in style menu"
+  },
   "add_context_menu_item": {
     "message": "Lägg till objekt i webbläsarens snabbmeny",
     "description": "Label for checkbox in options"
@@ -71,6 +113,10 @@
   },
   "editing": {
     "message": "Redigering",
+    "description": "Item in action drop-down"
+  },
+  "styling": {
+    "message": "Formatering",
     "description": "Item in action drop-down"
   },
   "annotating": {

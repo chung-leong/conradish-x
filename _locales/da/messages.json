@@ -49,6 +49,48 @@
     "message": "vis forklaring i fodnote",
     "description": "Text for tooltip of item in annotation menu"
   },
+  "style_bold": {
+    "message": "fed",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_italic": {
+    "message": "kursiv",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_underline": {
+    "message": "underskregning",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_strikethrough": {
+    "message": "gennemstregning",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_subscript": {
+    "message": "sænket skrift",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_superscript": {
+    "message": "hævet skrift",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_remove": {
+    "message": "ryd formatering",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_heading": {
+    "message": "overskrift $NUMBER$",
+    "description": "Text for tooltip of button in style menu",
+    "placeholders": {
+      "number": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "style_paragraph": {
+    "message": "normal afsnit",
+    "description": "Text for tooltip of button in style menu"
+  },
   "add_context_menu_item": {
     "message": "Føj element til browserens kontekstmenu",
     "description": "Label for checkbox in options"
@@ -71,6 +113,10 @@
   },
   "editing": {
     "message": "Redigering",
+    "description": "Item in action drop-down"
+  },
+  "styling": {
+    "message": "Formatering",
     "description": "Item in action drop-down"
   },
   "annotating": {
@@ -98,7 +144,7 @@
     "description": "Label for drop-down in side-bar"
   },
   "article_justification": {
-    "message": "Tekstbegrundelse",
+    "message": "Tekstjustering",
     "description": "Label for drop-down in side-bar"
   },
   "justification_none": {

@@ -49,6 +49,48 @@
     "message": "näytä selitys alaviitteessä",
     "description": "Text for tooltip of item in annotation menu"
   },
+  "style_bold": {
+    "message": "lihavointi",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_italic": {
+    "message": "kursivointi",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_underline": {
+    "message": "alleviivaus",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_strikethrough": {
+    "message": "yliviivaus",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_subscript": {
+    "message": "alaindeksi",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_superscript": {
+    "message": "yläindeksi",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_remove": {
+    "message": "tyhjennä muotoilu",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_heading": {
+    "message": "otsikko $NUMBER$",
+    "description": "Text for tooltip of button in style menu",
+    "placeholders": {
+      "number": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "style_paragraph": {
+    "message": "tavallinen kappale",
+    "description": "Text for tooltip of button in style menu"
+  },
   "add_context_menu_item": {
     "message": "Lisää kohde selaimen pikavalikkoon",
     "description": "Label for checkbox in options"
@@ -71,6 +113,10 @@
   },
   "editing": {
     "message": "Muokkaus",
+    "description": "Item in action drop-down"
+  },
+  "styling": {
+    "message": "Muotoilu",
     "description": "Item in action drop-down"
   },
   "annotating": {
