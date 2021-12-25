@@ -837,7 +837,7 @@ async function startEditingTitle() {
   }
   const originalTitle = getTitle();
   // create top drawer DIV
-  const container = document.getElementById('article-container');
+  const container = document.getElementById('document-area');
   const inputElement = e('INPUT', { type: 'text', value: originalTitle });
   const direction = await detectDirection(originalTitle);
   if (direction === 'rtl') {
