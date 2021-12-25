@@ -104,7 +104,19 @@ Click the **Finish** button to return to annotation mode.
 
 ## Applying text style
 
-The following hot-keys can be used to add basic text style:
+To apply text style to the document, choose "Styling" in the **Action** drop-down in the side-bar:
+
+![Action drop-down](doc/img/action-3.jpg)
+
+If you wish to change the size of a heading, place the text cursor inside it, then click one of the buttons in the tool-bar that appears below:
+
+![Block style toolbar](doc/img/styling-1.jpg)
+
+If you wish to bold or underline a word, select the word, then click the applicable button in the tool-bar that appears underneath:
+
+![Inline style toolbar](doc/img/styling-2.jpg)
+
+You can also use the following hot-keys:
 
 | Hot-key              | Text style        |
 |----------------------|-------------------|
@@ -121,7 +133,7 @@ The following hot-keys can be used to add basic text style:
 | **Ctrl-4**           | Heading 4         |
 | **Ctrl-5**           | Heading 5         |
 | **Ctrl-6**           | Heading 6         |
-| **Ctrl-0**           | Regular text      |
+| **Ctrl-0**           | Regular paragraph |
 
 ## Finding missing text
 
