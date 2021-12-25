@@ -1,3 +1,10 @@
+# Version 1.2
+
+* Added styling mode.
+* Localization for Norwegian, Danish, Swedish, and Finnish.
+* Including footnotes as well when searching documents.
+* Fixed issue when translating a whole paragraph.
+
 # Version 1.1
 
 * Correct handling of right-to-left languages.
