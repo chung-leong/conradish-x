@@ -116,7 +116,7 @@ If you wish to bold or underline a word, select the word, then click the applica
 
 ![Inline style toolbar](doc/img/styling-2.jpg)
 
-You can also use the following hot-keys:
+You can also apply style utilizing the following hot-keys:
 
 | Hot-key              | Text style        |
 |----------------------|-------------------|
