@@ -1,6 +1,7 @@
 import { initializeStorage, findObjects, loadObject, saveObject, deleteObjects, storageChange } from './lib/storage.js';
 import { e, attachCustomCheckboxHandlers, attachRippleEffectHandlers, separateWords } from './lib/ui.js';
 import { setWindowName, openPage } from './lib/navigation.js';
+import { createTopBar, attachShadowHandlers } from './lib/top-bar.js';
 import { l, lc, detectDirection, capitalize } from './lib/i18n.js';
 
 const listContainer = document.getElementById('list-container');
@@ -17,62 +18,38 @@ async function start() {
   await initializeStorage();
   attachRippleEffectHandlers();
   attachCustomCheckboxHandlers();
+  attachShadowHandlers();
   document.addEventListener('click', handleClick);
   document.addEventListener('change', handleChange);
   createSearchToolbar();
   createCommandToolbar();
   await createCards();
-  listContainer.parentNode.addEventListener('scroll', handleScroll);
   storageChange.addEventListener('create', handleCreate);
   storageChange.addEventListener('delete', handleDelete);
   storageChange.addEventListener('update', handleUpdate);
 }
 
 function createSearchToolbar() {
-  const leftElement = e('DIV', { className: 'toolbar-left' }, l('documents'));
   const inputElement = e('INPUT', { type: 'text', placeholder: l('search_documents') });
-  const iconElement = e('SPAN', { className: 'magnifying-glass', title: l('search_documents') });
-  const buttonElement = e('SPAN', {
-    className: 'x-button',
-    title: l('clear_search'),
-  });
-  const searchElement = e('DIV', {
-    id: 'search-input',
-  }, [ inputElement, iconElement, buttonElement ]);
-  const centerElement = e('DIV', {
-    className: 'toolbar-center'
-  }, searchElement);
-  const rightElement = e('DIV', { className: 'toolbar-right' });
-  const container = document.getElementById('toolbar-search');
-  container.append(leftElement, centerElement, rightElement);
   inputElement.addEventListener('input', handleSearchInput);
   inputElement.addEventListener('focus', handleSearchFocus);
   inputElement.addEventListener('blur', handleSearchBlur);
+  const iconElement = e('SPAN', { className: 'magnifying-glass', title: l('search_documents') });
+  const buttonElement = e('SPAN', { className: 'x-button', title: l('clear_search') });
+  const searchElement = e('DIV', { id: 'search-input' }, [ inputElement, iconElement, buttonElement ]);
   buttonElement.addEventListener('click', handleClearClick);
+  createTopBar('toolbar-search', { left: l('documents'), center: searchElement });
 }
 
 function createCommandToolbar() {
-  const container = document.getElementById('toolbar-commands');
-  const leftElement = e('DIV', { className: 'toolbar-left' });
-  const xButtonElement = e('SPAN', {
-    className: 'x-button',
-    title: l('cancel'),
-  });
-  const spanElement = e('SPAN', { id: 'selection-status' });
-  const centerLeftElement = e('DIV', {
-    id: 'toolbar-commands-left',
-  }, [ xButtonElement, spanElement ]);
-  const deleteButtonElement = e('BUTTON', {}, l('delete'));
-  const centerRightElement = e('DIV', {
-    id: 'toolbar-commands-lright',
-  }, [ deleteButtonElement ]);
-  const centerElement = e('DIV', {
-    className: 'toolbar-center'
-  }, [ centerLeftElement, centerRightElement ] );
-  const rightElement = e('DIV', { className: 'toolbar-right' });
-  container.append(leftElement, centerElement, rightElement);
+  const xButtonElement = e('SPAN', { className: 'x-button', title: l('cancel') });
   xButtonElement.addEventListener('click', handleCancelClick);
+  const spanElement = e('SPAN', { id: 'selection-status' });
+  const centerLeftElement = e('DIV', { id: 'toolbar-commands-left' }, [ xButtonElement, spanElement ]);
+  const deleteButtonElement = e('BUTTON', {}, l('delete'));
   deleteButtonElement.addEventListener('click', handleDeleteClick);
+  const centerRightElement = e('DIV', { id: 'toolbar-commands-lright' }, [ deleteButtonElement ]);
+  createTopBar('toolbar-commands', { center: [ centerLeftElement, centerRightElement ] });
 }
 
 function openKebabMenu() {
@@ -470,12 +447,6 @@ async function handleDeleteClick(evt) {
   updateToolbar();
   updateCardTitles();
   await deleteObjects(keys);
-}
-
-function handleScroll(evt) {
-  const { target } = evt;
-  const { classList } = toolbarContainer;
-  classList.toggle('shadow', target.scrollTop > 0);
 }
 
 async function handleCreate(evt) {

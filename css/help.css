@@ -1,5 +1,6 @@
-#toolbar-title {
+.toolbar.default {
   background-color: rgb(246, 228, 183);
+  color: rgb(0, 0, 0);
 }
 
 #list-container {
@@ -14,10 +15,6 @@
 
 #right-side-bar {
   flex-shrink: 1;
-}
-
-.toolbar-center {
-  flex-basis: 0;
 }
 
 .toolbar-right {

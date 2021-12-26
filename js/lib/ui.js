@@ -165,6 +165,14 @@ function handleCustomCheckboxClick(evt) {
   if (target.classList.contains('checkbox')) {
     toggleCheckbox(target, shiftKey);
     setTimeout(() => target.classList.add('clicked'), 200);
+  } else if (target.tagName === 'LABEL') {
+    // focus the checkbox and toggle it
+    const [ checkbox ] = target.parentNode.getElementsByClassName('checkbox');
+    if (checkbox) {
+      checkbox.focus();
+      const kbEvent = new KeyboardEvent('keypress', { key: ' ', bubbles: true });
+      checkbox.dispatchEvent(kbEvent);
+    }
   }
 }
 

@@ -91,6 +91,14 @@
     "message": "normální odstavec",
     "description": "Text for tooltip of button in style menu"
   },
+  "extension_options": {
+    "message": "Možnosti rozšíření",
+    "description": "Title in options page"
+  },
+  "basic_options": {
+    "message": "Základní možnosti",
+    "description": "Title of basic option card"
+  },
   "add_context_menu_item": {
     "message": "Další položka v kontextové nabídce prohlížeče",
     "description": "Label for checkbox in options"

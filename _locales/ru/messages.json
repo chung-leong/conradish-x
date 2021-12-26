@@ -91,6 +91,14 @@
     "message": "обычный абзац",
     "description": "Text for tooltip of button in style menu"
   },
+  "extension_options": {
+    "message": "параметры расширений",
+    "description": "Title in options page"
+  },
+  "basic_options": {
+    "message": "Основные параметры",
+    "description": "Title of basic option card"
+  },
   "add_context_menu_item": {
     "message": "Дополнительный пункт в контекстном меню браузера",
     "description": "Label for checkbox in options"

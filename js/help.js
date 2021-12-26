@@ -1,6 +1,7 @@
 import { e } from './lib/ui.js';
 import { l } from './lib/i18n.js';
 import { setWindowName } from './lib/navigation.js';
+import { createTopBar, attachShadowHandlers } from './lib/top-bar.js';
 
 const listContainer = document.getElementById('list-container');
 const toolbarContainer = document.getElementById('toolbar-container');
@@ -8,18 +9,11 @@ const tocContainer = document.getElementById('left-side-bar');
 
 async function start() {
   setWindowName('help');
-  document.title = l('user_guide');
-  createToolbar();
+  const title = document.title = l('user_guide');
+  createTopBar('toolbar-title', { left: title });
+  attachShadowHandlers();
   await loadUserGuide();
   listContainer.parentNode.addEventListener('scroll', handleScroll);
-}
-
-function createToolbar() {
-  const leftElement = e('DIV', { className: 'toolbar-left' }, l('user_guide'));
-  const centerElement = e('DIV', { className: 'toolbar-center' });
-  const rightElement = e('DIV', { className: 'toolbar-right' });
-  const container = document.getElementById('toolbar-title');
-  container.append(leftElement, centerElement, rightElement);
 }
 
 async function loadUserGuide() {

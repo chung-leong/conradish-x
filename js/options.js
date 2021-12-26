@@ -1,13 +1,29 @@
-import { initializeStorage, getSettings, saveSettings, storageChange } from './lib/storage.js';
 import { e, attachCustomCheckboxHandlers } from './lib/ui.js';
 import { l } from './lib/i18n.js';
+import { initializeStorage, getSettings, saveSettings, storageChange } from './lib/storage.js';
+import { setWindowName } from './lib/navigation.js';
+import { createTopBar, attachShadowHandlers } from './lib/top-bar.js';
+
+const listContainer = document.getElementById('list-container');
+
+const cards = [];
+let activeCardType = 'basic';
 
 async function start() {
   await initializeStorage();
+  setWindowName('options');
+  const title = document.title = l('extension_options');
+  createTopBar('toolbar-title', { left: title });
+  createBasicOptionCard();
+  showActiveCards();
+  attachCustomCheckboxHandlers();
+}
+
+function createBasicOptionCard() {
+  const container = e('DIV', { className: 'input-container' });
   const { contextMenu, filter } = getSettings();
-  const value = [name];
   // add checkbox for controlling the presence of Conradish item in context menu
-  const contextMenuCheckbox = addCheckbox(l('add_context_menu_item'), contextMenu);
+  const contextMenuCheckbox = addCheckbox(container, l('add_context_menu_item'), contextMenu);
   contextMenuCheckbox.addEventListener('change', (evt) => {
     const checked = evt.target.classList.contains('checked');
     changeSettings((settings) => {
@@ -27,7 +43,7 @@ async function start() {
       settings.filter = filterSelect.value;
     });
   });
-  const filterCheckbox = addCheckbox([ l('filter_page_content'), ' ', filterSelect ], filtering);
+  const filterCheckbox = addCheckbox(container, [ l('filter_page_content'), ' ', filterSelect ], filtering);
   filterCheckbox.addEventListener('change', (evt) => {
     const checked = evt.target.classList.contains('checked');
     changeSettings((settings) => {
@@ -44,11 +60,10 @@ async function start() {
       filterSelect.style.visibility = (filtering) ? 'visible' : 'hidden';
     }
   });
-  document.addEventListener('click', handleClick);
-  attachCustomCheckboxHandlers();
+  return addCard(l('basic_options'), 'basic', container);
 }
 
-function addCheckbox(label, checked) {
+function addCheckbox(container, label, checked) {
   const rippleElement = e('SPAN', { className: 'ripple' });
   const checkboxElement = e('SPAN', {
      className: 'checkbox',
@@ -59,25 +74,34 @@ function addCheckbox(label, checked) {
   if (checked) {
     checkboxElement.classList.add('checked');
   }
-  document.body.append(sectionElement);
+  container.append(sectionElement);
   return checkboxElement;
+}
+
+function addCard(title, type, children) {
+  if (!(children instanceof Array)) {
+    children = (children) ? [ children ] : [];
+  }
+  const headerElement = e('DIV', { className: 'card-title' }, title);
+  const cardElement = e('DIV', { className: 'card' }, [ headerElement, ...children ]);
+  const card = { type, headerElement, cardElement };
+  cards.push(card);
+  return card;
+}
+
+function showActiveCards() {
+  while(listContainer.firstChild) {
+    listContainer.firstChild.remove();
+  }
+  const activeCards = cards.filter(c => c.type === activeCardType);
+  const elements = activeCards.map(c => c.cardElement);
+  listContainer.append(...elements);
 }
 
 async function changeSettings(cb) {
   const settings = getSettings();
   cb(settings);
   await saveSettings();
-}
-
-function handleClick(evt) {
-  const { target } = evt;
-  if (target.tagName === 'LABEL') {
-    // focus the checkbox and toggle it
-    const [ checkbox ] = target.parentNode.getElementsByClassName('checkbox');
-    checkbox.focus();
-    const kbEvent = new KeyboardEvent('keypress', { key: ' ', bubbles: true });
-    checkbox.dispatchEvent(kbEvent);
-  }
 }
 
 start();
