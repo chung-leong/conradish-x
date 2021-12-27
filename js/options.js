@@ -1,5 +1,5 @@
 import { e, attachCustomCheckboxHandlers } from './lib/ui.js';
-import { l, getUILanguage } from './lib/i18n.js';
+import { l, getUILanguage, getScriptDirection } from './lib/i18n.js';
 import { initializeStorage, getSettings, saveSettings, storageChange } from './lib/storage.js';
 import { setWindowName } from './lib/navigation.js';
 import { createTopBar, attachShadowHandlers } from './lib/top-bar.js';
@@ -9,7 +9,7 @@ const listContainer = document.getElementById('list-container');
 
 const cards = [];
 let activeCardType = 'font';
-let activeScript = 'Arab';
+let activeScript = 'Latn';
 
 async function start() {
   await initializeStorage();
@@ -20,6 +20,7 @@ async function start() {
   createFontSelectionCards();
   showActiveCards();
   attachCustomCheckboxHandlers();
+  attachShadowHandlers();
 }
 
 function createBasicOptionCard() {
@@ -68,6 +69,9 @@ function createBasicOptionCard() {
 
 async function createFontSelectionCards() {
   for await (const { fontId, displayName, coverage } of getFontCoverage()) {
+    if (symbolicFontIds.includes(fontId)) {
+      continue;
+    }
     for (const script of Object.keys(coverage)) {
       const selected = true;
       createFontSelectionCard(fontId, displayName, script, selected);
@@ -83,8 +87,13 @@ function createFontSelectionCard(fontId, displayName, script, selected) {
       fontFamily: fontId,
     }
   }, sampleSentence);
+  if (getScriptDirection(script) === 'rtl') {
+    sentenceElement.classList.add('rtl');
+  }
+  const titleElement = e('SPAN', { className: 'font-display-name' });
+  const checkboxElement = addCheckbox(titleElement, displayName, selected);
   const previewElement = e('DIV', { className: 'preview-container' }, sentenceElement);
-  return addCard(displayName, previewElement, () => activeCardType === 'font' && activeScript === script);
+  return addCard(titleElement, previewElement, () => activeCardType === 'font' && activeScript === script);
 }
 
 function addCheckbox(container, label, checked) {
@@ -111,7 +120,8 @@ function addCard(title, children, isActive) {
   const card = { headerElement, cardElement, isActive };
   cards.push(card);
   if (isActive()) {
-    listContainer.append(cardElement);
+    const [ spacerElement ] = listContainer.getElementsByClassName('list-end-spacer');
+    listContainer.insertBefore(cardElement, spacerElement);
   }
   return card;
 }
@@ -123,6 +133,8 @@ function showActiveCards() {
   const activeCards = cards.filter(c => c.isActive());
   const elements = activeCards.map(c => c.cardElement);
   listContainer.append(...elements);
+  const spacerElement = e('DIV', { className: 'list-end-spacer' }, '\u00a0');
+  listContainer.append(spacerElement);
 }
 
 async function changeSettings(cb) {
@@ -141,17 +153,20 @@ function getSampleSentence(script) {
       const code = language.replace(/\-.*/, '').toLowerCase();
       if (keys.includes(code)) {
         key = code;
+        break;
       }
     }
   }
   return entry[key];
 }
 
+const symbolicFontIds = [ 'Webdings', 'Wingdings', 'Wingdings 2', 'Wingdings 3' ];
+
 const sampleSentences = {
   Arab: {
+    ur: 'میرا معلق جہاز بام مچھلیوں سے بھرا ہوا ہے',
     ar: 'حَوّامتي مُمْتِلئة بِأَنْقَلَيْسون',
     fa: 'هاورکرافت من پر مارماهى است',
-    ur: 'میرا معلق جہاز بام مچھلیوں سے بھرا ہوا ہے',
     ug: 'مېنىڭ ھاۋا-نېگىز كېمەمدە يىلان بېلىق تۇشۇپ كەتتى',
   },
   Armn: {

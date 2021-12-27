@@ -41,6 +41,16 @@ export async function *getFontCoverage() {
   }
 }
 
+export function getSimiliarScriptsBySize(script) {
+  for (const grouping of fontSizeGroupings) {
+    if (grouping.includes(script)) {
+      return group;
+    }
+  }
+  return [ script ];
+}
+
+// hardcoded  for all script to 4 right now
 const essentialCharacters = {
     Arab: '\u0627\u0628\u0629\u0630',
     Armn: '\u0521\u0522\u0523\u0524',
@@ -69,3 +79,13 @@ const essentialCharacters = {
     Telu: '\u0c15\u0c16\u0c17\u0c18',
     Thai: '\u0e01\u0e02\u0e03\u0e04'
 };
+
+// scripts that're kinda similiar in appearance should have their sizes set all at once
+// if the user thinks 12pt is the proper size for Latin, then it's probably right for
+// Cyrillic and Greek too
+const fontSizeGroupings = [
+  [ 'Latn', 'Cyrl', 'Grek' ],
+  [ 'Hans', 'Hant', 'Hang', 'Jpan' ],
+  [ 'Deva', 'Beng', 'Gujr', 'Guru', 'Knda', 'Mlym', 'Orya', 'Sinh', 'Taml', 'Telu' ],
+  [ 'Thai', 'Khmr', 'Laoo' ]
+];

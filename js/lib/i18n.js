@@ -104,9 +104,13 @@ export function getLanguageScript(lang) {
   return 'Latn';
 }
 
+export function getScriptDirection(script) {
+  return rightToLeftScripts.includes(script) ? 'rtl' : 'ltr';
+}
+
 export function getLanguageDirection(lang) {
   const script = getLanguageScript(lang);
-  return rightToLeftScripts.includes(script) ? 'rtl' : 'ltr';
+  return getScriptDirection(script);
 }
 
 export async function detectLanguage(text) {

@@ -1,3 +1,8 @@
+.checkbox {
+  margin-right: 12px;
+  vertical-align: middle;
+}
+
 .input-container {
   padding-bottom: 8px;
 }
@@ -7,10 +12,6 @@
   align-items: center;
   padding: 4px 4px 4px 4px;
   margin: 12px 12px 12px 12px;
-}
-
-.input-container .checkbox {
-  margin-right: 12px;
 }
 
 .input-container LABEL {
@@ -23,6 +24,14 @@
   margin-left: 4px;
 }
 
+.preview-container {
+  padding: 16px 24px 24px 48px;
+}
+
 .preview-sentence {
-  font-size: 48pt;
+  font-size: 36pt;
+}
+
+.preview-sentence.rtl {
+  direction: rtl;
 }
