@@ -1,13 +1,15 @@
 import { e, attachCustomCheckboxHandlers } from './lib/ui.js';
-import { l } from './lib/i18n.js';
+import { l, getUILanguage } from './lib/i18n.js';
 import { initializeStorage, getSettings, saveSettings, storageChange } from './lib/storage.js';
 import { setWindowName } from './lib/navigation.js';
 import { createTopBar, attachShadowHandlers } from './lib/top-bar.js';
+import { getFontCoverage } from './lib/fonts.js';
 
 const listContainer = document.getElementById('list-container');
 
 const cards = [];
-let activeCardType = 'basic';
+let activeCardType = 'font';
+let activeScript = 'Arab';
 
 async function start() {
   await initializeStorage();
@@ -15,6 +17,7 @@ async function start() {
   const title = document.title = l('extension_options');
   createTopBar('toolbar-title', { left: title });
   createBasicOptionCard();
+  createFontSelectionCards();
   showActiveCards();
   attachCustomCheckboxHandlers();
 }
@@ -60,7 +63,28 @@ function createBasicOptionCard() {
       filterSelect.style.visibility = (filtering) ? 'visible' : 'hidden';
     }
   });
-  return addCard(l('basic_options'), 'basic', container);
+  return addCard(l('basic_options'), container, () => activeCardType === 'basic');
+}
+
+async function createFontSelectionCards() {
+  for await (const { fontId, displayName, coverage } of getFontCoverage()) {
+    for (const script of Object.keys(coverage)) {
+      const selected = true;
+      createFontSelectionCard(fontId, displayName, script, selected);
+    }
+  }
+}
+
+function createFontSelectionCard(fontId, displayName, script, selected) {
+  const sampleSentence = getSampleSentence(script);
+  const sentenceElement = e('DIV', {
+    className: 'preview-sentence',
+    style: {
+      fontFamily: fontId,
+    }
+  }, sampleSentence);
+  const previewElement = e('DIV', { className: 'preview-container' }, sentenceElement);
+  return addCard(displayName, previewElement, () => activeCardType === 'font' && activeScript === script);
 }
 
 function addCheckbox(container, label, checked) {
@@ -78,14 +102,17 @@ function addCheckbox(container, label, checked) {
   return checkboxElement;
 }
 
-function addCard(title, type, children) {
+function addCard(title, children, isActive) {
   if (!(children instanceof Array)) {
     children = (children) ? [ children ] : [];
   }
   const headerElement = e('DIV', { className: 'card-title' }, title);
   const cardElement = e('DIV', { className: 'card' }, [ headerElement, ...children ]);
-  const card = { type, headerElement, cardElement };
+  const card = { headerElement, cardElement, isActive };
   cards.push(card);
+  if (isActive()) {
+    listContainer.append(cardElement);
+  }
   return card;
 }
 
@@ -93,7 +120,7 @@ function showActiveCards() {
   while(listContainer.firstChild) {
     listContainer.firstChild.remove();
   }
-  const activeCards = cards.filter(c => c.type === activeCardType);
+  const activeCards = cards.filter(c => c.isActive());
   const elements = activeCards.map(c => c.cardElement);
   listContainer.append(...elements);
 }
@@ -103,5 +130,174 @@ async function changeSettings(cb) {
   cb(settings);
   await saveSettings();
 }
+
+function getSampleSentence(script) {
+  const entry = sampleSentences[script];
+  const keys = Object.keys(entry);
+  let key = keys[0];
+  if (keys.length > 1) {
+    const languages = [ getUILanguage(), ...navigator.languages ];
+    for (const language of languages) {
+      const code = language.replace(/\-.*/, '').toLowerCase();
+      if (keys.includes(code)) {
+        key = code;
+      }
+    }
+  }
+  return entry[key];
+}
+
+const sampleSentences = {
+  Arab: {
+    ar: 'حَوّامتي مُمْتِلئة بِأَنْقَلَيْسون',
+    fa: 'هاورکرافت من پر مارماهى است',
+    ur: 'میرا معلق جہاز بام مچھلیوں سے بھرا ہوا ہے',
+    ug: 'مېنىڭ ھاۋا-نېگىز كېمەمدە يىلان بېلىق تۇشۇپ كەتتى',
+  },
+  Armn: {
+    hy: 'Իմ օդաթիռը լի է օձաձկերով',
+  },
+  Beng: {
+    bn: 'আমার হভারক্রাফ্ট কুঁচে মাছ-এ ভরা হয়ে গেছে',
+  },
+  Cyrl: {
+    ru: 'Моё судно на воздушной подушке полно угрей',
+    br: 'Маё судна на паветранай падушцы поўна вуграмі',
+    bg: 'Моят ховъркрафт е пълен със змиорки',
+    kk: 'Менің әуе негіз кемесi жыланбалықпен толтырылған',
+    ky: 'Менин аба кемем курт балыктар менен толуп турат',
+    mk: 'Моето летачко возило е полно со јагули',
+    ms: 'Hoverkraf saya penuh dengan belut',
+    mn: 'Миний хөвөгч онгоц могой загасаар дүүрсэн байна',
+    sr: 'Мој ховеркрафт је пун јегуља',
+    uk: 'Моє судно на повітряній подушці повне вугрів',
+    uz: 'Mening havo yostiqli kemam ilonbalig\'i bilan to\'lgan',
+  },
+  Deva: {
+    hi: 'मेरी मँडराने वाली नाव सर्पमीनों से भरी हैं',
+    mr: 'माझी हॉवरक्राफ्ट ईल माशांनी भरली आहे',
+    ne: 'मेरो पानीजहाज वाम माछाले भरिपूर्ण छ',
+  },
+  Ethi: {
+    am: 'የኔ ማንዣበቢያ መኪና በዓሣዎች ተሞልቷል',
+  },
+  Geor: {
+    ka: 'ჩემი ხომალდი საჰაერო ბალიშზე სავსეა გველთევზებით',
+  },
+  Grek: {
+    el: 'Το αερόστρωμνό μου είναι γεμάτο χέλια',
+  },
+  Gujr: {
+    gu: 'મારી ભમતિ હોડી ઈલ માછલીઓ થી ભરેલી છે',
+  },
+  Guru: {
+    pa: 'ਮੇਰਾ ਹਵਰਕ੍ਰਾਫ਼ਤ ਨਾਂਗਾਂ ਨਾਲ਼ ਭਰਿਆ ਪਿਆ।',
+  },
+  Hang: {
+    ko: '제 호버크래프트가 장어로 가득해요',
+  },
+  Hans: {
+    zh: '我的气垫船装满了鳝鱼',
+  },
+  Hant: {
+    zh: '我的氣墊船裝滿了鱔魚 ',
+  },
+  Hebr: {
+    iw: 'הרחפת שלי מלאה בצלופחים',
+    yi: 'מײַן שוועבשיף איז פֿול מיט ווענגערס',
+  },
+  Jpan: {
+    jp: '私のホバークラフトは鰻でいっぱいです',
+  },
+  Khmr: {
+    km: 'សុទ្ធ​តែ​អន្ទង់​ពេញ​ទូក​ហោះ​យើង',
+  },
+  Knda: {
+    kn: 'ನನ್ನ ಯಾಂತ್ರಿಕದೋಣಿ ಹಾವುಮೀನುಗಳಿಂದ ತುಂಬಿದೆ',
+  },
+  Laoo: {
+    lo: 'ມີປາໄຫຼເຕັມຢູ່ໃນເຮືອພັດລົມຂອງຂ້ອຍ',
+  },
+  Latn: {
+    en: 'My hovercraft is full of eels',
+    af: 'My skeertuig is vol palings',
+    sq: 'Automjeti im është plot me ngjala',
+    az: 'Hoverkraftimin içi ilan balıǧı ilə doludur',
+    eu: 'Nire aerolabaingailua aingirez beteta dago',
+    bs: 'Moja lebdjelica je puna jegulja',
+    ca: 'El meu aerolliscador està ple d\'anguiles',
+    ceb: 'Puno ug palos akong huberkrap',
+    co: 'U me battellu hè carcu d\'anguili',
+    hr: 'Moja je lebdjelica puna jegulja',
+    cs: 'Moje vznášedlo je plné úhořů',
+    da: 'Mit luftpudefartøj er fyldt med ål',
+    nl: 'Mijn luchtkussenboot zit vol paling',
+    et: 'Mu hõljuk on angerjaid täis',
+    tl: 'Puno ng palos ang aking hoberkrap',
+    fi: 'Ilmatyynyalukseni on täynnä ankeriaita',
+    fr: 'Mon aéroglisseur est plein d\'anguilles',
+    fy: 'Min luftdümpetbüüdj as ful ma äil',
+    gl: 'O meu aerodeslizador esta cheo de anguías',
+    de: 'Mein Luftkissenfahrzeug ist voller Aale',
+    ht: 'Se bato mwen ki flote sou dlo a ki te ranpli avèk èèl',
+    ha: 'Jirgina a cike yake da bano',
+    haw: 'Pihaʻū oʻu mokukauaheahe i nā puhi',
+    hu: 'A légpárnás hajóm tele van angolnákkal',
+    is: 'Svifnökkvinn minn er fullur af álum',
+    ig: 'Azụ juputara na hovercraft m',
+    id: 'Hovercraft saya penuh dengan belut',
+    ga: 'Tá m\'árthach foluaineach lán d\'eascanna',
+    it: 'Il mio aeroscafo è pieno di anguille',
+    rw: 'Gutwara ibintu nabantu kumaz',
+    ku: 'Hoverkrafta mi tijé marmasî e',
+    la: 'Mea navis volitans anguillis plena est',
+    lv: 'Mans gliseris ir pilns ar zušiem',
+    lt: 'Mano laivas su oro pagalve pilnas ungurių',
+    lb: 'Mäi Loftkësseboot ass voller Éilen',
+    mt: 'Il-hovercraft tiegħi hu mimli sallur',
+    mi: 'Kī tōnu taku waka topaki i te tuna',
+    no: 'Luftputebåten min er full av ål',
+    pl: 'Mój poduszkowiec jest pełen węgorzy',
+    pt: 'O meu hovercraft está cheio de enguias',
+    ro: 'Aeroglisorul meu e plin de țipari',
+    sm: 'Ua tumu la\'u ato fagota i pusi',
+    gd: 'Tha an hovercraft agam loma-làn easgannan',
+    sn: 'Hovercraft yangu yakazara nemikunga',
+    sk: 'Moje vznášadlo je plné úhorov',
+    sl: 'Moje vozilo na zračni blazini je polno jegulj',
+    so: 'Huufarkarafkayga waxaa ka buuxa eels',
+    es: 'Mi aerodeslizador está lleno de anguilas',
+    su: 'Kapal ngalayang abdi pinuh ku belut',
+    sw: 'Gari langu linaloangama limejaa na mikunga',
+    sv: 'Min svävare är full med ål',
+    tr: 'Hoverkraftım yılan balığı dolu',
+    vi: 'Tàu cánh ngầm của tôi đầy lươn',
+    cy: 'Mae fy hofrenfad yn llawn llyswennod',
+    xh: 'Inqwelo etshitshiliza phezu kwamanzi izele ziipalanga',
+    yo: 'Ọkọ afategun-sare mi kun fun ẹja arọ',
+    zu: 'Umkhumbi wami ugcwele ngenyoka zemanzini',
+  },
+  Mlym: {
+    ml: 'എന്‍റെ പറക്കും-പേടകം നിറയെ വ്ളാങ്കുകളാണ്',
+  },
+  Mymr: {
+    my: 'ကျွန်တော်ရဲ့ လေစီးယာဉ်မှာ ငါးရှင့်တွေအပြည့်ရှိနေပါတယ်။',
+  },
+  Orya: {
+    or: 'ମୋ ହୋବର୍କ୍ରାଫ୍ଟ ରେ ଇଲ୍ ଭର୍ତି ହେଇ ଜାଇଛି।',
+  },
+  Sinh: {
+    si: 'මාගේ වායු පා යානයේ ආඳන් පිරී ඇත',
+  },
+  Taml: {
+    ta: 'என் மிதவை நிறைய விலாங்கு மீன்கள்',
+  },
+  Telu: {
+    te: 'నా విమానము అంతా మలుగు చేపలతో నిండిపోయింది',
+  },
+  Thai: {
+    th: 'โฮเวอร์คราฟท์ของผมเต็มไปด้วยปลาไหล',
+  },
+};
 
 start();

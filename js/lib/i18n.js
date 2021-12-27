@@ -693,7 +693,7 @@ const languages = [
   },
   { // Sundanese
     code: 'su',
-    script: 'Sund',
+    script: 'Latn',
   },
   { // Swahili
     code: 'sw',
@@ -761,7 +761,7 @@ const languages = [
   },
   { // Yiddish
     code: 'yi',
-    script: 'Latn',
+    script: 'Hebr',
   },
   { // Yoruba
     code: 'yo',
