@@ -7,6 +7,10 @@ export function createElement(name, attrs, children) {
 
 export { createElement as e };
 
+export async function waitForRedraw() {
+  return new Promise(r => window.requestAnimationFrame(r));
+}
+
 function assignAttributes(object, props) {
   if (!props) {
     return;
