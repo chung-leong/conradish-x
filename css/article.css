@@ -15,10 +15,6 @@ BODY {
   user-select: none;
 }
 
-*.hidden {
-  display: none;
-}
-
 #background {
   /* background is in its own div so text copied to clipboard don't pick up a background color */
   position: absolute;

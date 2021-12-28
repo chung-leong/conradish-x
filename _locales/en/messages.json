@@ -115,6 +115,114 @@
     "message": "Filter page content",
     "description": "Label for checkbox in options"
   },
+  "fonts": {
+    "message": "Fonts",
+    "description": "Used in section navigation in option page"
+  },
+  "script_arab": {
+    "message": "Arabic",
+    "description": "Name of script, used in option page"
+  },
+  "script_armn": {
+    "message": "Armenian",
+    "description": "Name of script, used in option page"
+  },
+  "script_beng": {
+    "message": "Bengali",
+    "description": "Name of script, used in option page"
+  },
+  "script_cyrl": {
+    "message": "Cyrillic",
+    "description": "Name of script, used in option page"
+  },
+  "script_deva": {
+    "message": "Devanagari",
+    "description": "Name of script, used in option page"
+  },
+  "script_ethi": {
+    "message": "Ethiopic",
+    "description": "Name of script, used in option page"
+  },
+  "script_geor": {
+    "message": "Georgian",
+    "description": "Name of script, used in option page"
+  },
+  "script_grek": {
+    "message": "Greek",
+    "description": "Name of script, used in option page"
+  },
+  "script_gujr": {
+    "message": "Gujurati",
+    "description": "Name of script, used in option page"
+  },
+  "script_guru": {
+    "message": "Gurmukhi",
+    "description": "Name of script, used in option page"
+  },
+  "script_hang": {
+    "message": "Korean",
+    "description": "Name of script, used in option page"
+  },
+  "script_hans": {
+    "message": "Chinese (Simplified)",
+    "description": "Name of script, used in option page"
+  },
+  "script_hant": {
+    "message": "Chinese (Traditional)",
+    "description": "Name of script, used in option page"
+  },
+  "script_hebr": {
+    "message": "Hebrew",
+    "description": "Name of script, used in option page"
+  },
+  "script_jpan": {
+    "message": "Japanese",
+    "description": "Name of script, used in option page"
+  },
+  "script_khmr": {
+    "message": "Khmer",
+    "description": "Name of script, used in option page"
+  },
+  "script_knda": {
+    "message": "Kannada",
+    "description": "Name of script, used in option page"
+  },
+  "script_laoo": {
+    "message": "Laotian",
+    "description": "Name of script, used in option page"
+  },
+  "script_latn": {
+    "message": "Latin",
+    "description": "Name of script, used in option page"
+  },
+  "script_mlym": {
+    "message": "Malayalam",
+    "description": "Name of script, used in option page"
+  },
+  "script_mymr": {
+    "message": "Burmese",
+    "description": "Name of script, used in option page"
+  },
+  "script_orya": {
+    "message": "Orya",
+    "description": "Name of script, used in option page"
+  },
+  "script_sinh": {
+    "message": "Sinhala",
+    "description": "Name of script, used in option page"
+  },
+  "script_taml": {
+    "message": "Tamil",
+    "description": "Name of script, used in option page"
+  },
+  "script_telu": {
+    "message": "Telugu",
+    "description": "Name of script, used in option page"
+  },
+  "script_thai": {
+    "message": "Thai",
+    "description": "Name of script, used in option page"
+  },
   "filter_automatic": {
     "message": "Automatically",
     "description": "Label for filter drop-down in options"

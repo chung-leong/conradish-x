@@ -1,26 +1,72 @@
 import { e, attachCustomCheckboxHandlers } from './lib/ui.js';
-import { l, getUILanguage, getScriptDirection } from './lib/i18n.js';
+import { l, getUILanguage, getTargetLanguage, getLanguageScript, getScriptDirection } from './lib/i18n.js';
 import { initializeStorage, getSettings, saveSettings, storageChange } from './lib/storage.js';
 import { setWindowName } from './lib/navigation.js';
 import { createTopBar, attachShadowHandlers } from './lib/top-bar.js';
-import { getFontCoverage } from './lib/fonts.js';
+import { getScripts, getFontCoverage } from './lib/fonts.js';
 
 const listContainer = document.getElementById('list-container');
 
 const cards = [];
-let activeCardType = 'font';
-let activeScript = 'Latn';
+let activeCardType = 'basic';
+let activeScript = '';
 
 async function start() {
   await initializeStorage();
   setWindowName('options');
   const title = document.title = l('extension_options');
   createTopBar('toolbar-title', { left: title });
+  createSectionNavigation();
   createBasicOptionCard();
   createFontSelectionCards();
   showActiveCards();
   attachCustomCheckboxHandlers();
   attachShadowHandlers();
+}
+
+function createSectionNavigation() {
+  const basicElement = e('LI', { className: 'basic selected' }, l('basic_options'));
+  const scripts = getScripts();
+  const scriptElements = scripts.map((script) => {
+    return e('LI', { dataset: { script } }, l(`script_${script.toLowerCase()}`));
+  });
+  const scriptListElement = e('UL', { className: 'script-list hidden' }, scriptElements);
+  const fontElement = e('LI', { className: 'fonts' }, [ l('fonts'), scriptListElement ]);
+  const listElement = e('UL', { className: 'section-nav' }, [ basicElement, fontElement ]);
+  const sideBarElement = document.getElementById('left-side-bar');
+  sideBarElement.append(listElement);
+  basicElement.addEventListener('click', (evt) => {
+    activeCardType = 'basic';
+    showActiveCards();
+    basicElement.classList.add('selected');
+    fontElement.classList.remove('selected');
+    scriptListElement.classList.add('hidden');
+  });
+  fontElement.addEventListener('click', (evt) => {
+    activeCardType = 'font';
+    if (!activeScript) {
+      const lang = getTargetLanguage();
+      activeScript = getLanguageScript(lang);
+      const selectedElement = scriptElements.find(e => e.dataset.script === activeScript);
+      selectedElement.classList.add('selected');
+    }
+    showActiveCards();
+    basicElement.classList.remove('selected');
+    fontElement.classList.add('selected');
+    scriptListElement.classList.remove('hidden');
+  });
+  scriptListElement.addEventListener('click', (evt) => {
+    const { script } = evt.target.dataset;
+    console.log(script);
+    if (script) {
+      for (const scriptElement of scriptElements) {
+        scriptElement.classList.toggle('selected', scriptElement === evt.target);
+      }
+      activeScript = script;
+      showActiveCards();
+      evt.stopPropagation();
+    }
+  });
 }
 
 function createBasicOptionCard() {
@@ -84,7 +130,7 @@ function createFontSelectionCard(fontId, displayName, script, selected) {
   const sentenceElement = e('DIV', {
     className: 'preview-sentence',
     style: {
-      fontFamily: fontId,
+      fontFamily: `${fontId}, Adobe NotDef`,
     }
   }, sampleSentence);
   if (getScriptDirection(script) === 'rtl') {

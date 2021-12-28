@@ -1,5 +1,9 @@
 import { waitForRedraw } from './ui.js';
 
+export function getScripts() {
+  return Object.keys(essentialCharacters);
+}
+
 export async function getFontList() {
   const list = await new Promise(r => chrome.fontSettings.getFontList(r));
   return list.sort((a, b) => a.displayName.localeCompare(b.displayName));
