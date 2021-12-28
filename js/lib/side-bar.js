@@ -1,20 +1,36 @@
 import { e, parseMarkdown, attachRippleEffectHandlers } from './ui.js';
 import { l, setSourceLanguage, getSourceLanguage, getSourceLanguages, getTargetLanguages } from './i18n.js';
-import { getPossibleSettings, getPaperProperties, applyStyles, getSettings, saveSettings } from './settings.js';
+import { getPaperProperties, applyStyles, getSettings, saveSettings } from './settings.js';
 import { updateLayout } from './document.js';
 import { modeChange, setEditMode, getEditMode } from './editing.js';
+
+const containerElement = document.getElementById('side-bar');
+const mainAreaElement = document.getElementById('side-bar-top');
+const buttonAreaElement = document.getElementById('side-bar-bottom');
 
 let collapsed = undefined;
 let reopenedManually = false;
 let sideBarWidth = undefined;
 
 export function createArticleNavigation() {
-  const settings = getSettings();
-  const possible = getPossibleSettings();
-  const top = document.getElementById('side-bar-top');
-  const sideBar = document.getElementById('side-bar');
-  const currentMode = sideBar.className = getEditMode();
   // add mode selector
+  createActionControls();
+  // add source and target language dropdowns
+  createLanguageControls();
+  // add dropdowns for controling text properties
+  createTextControls();
+  // add dropdowns for paper size and margins
+  createPaperControls();
+  // add buttons
+  createButtons();
+  // add ripple effect to buttons
+  attachRippleEffectHandlers();
+  // add handler for collapse button
+  addCollapseButtonHandlers();
+}
+
+function createActionControls() {
+  const currentMode = containerElement.className = getEditMode();
   const modes = [
     {
       label: l('editing'),
@@ -34,77 +50,179 @@ export function createArticleNavigation() {
     }
   ];
   const modeSelect = createSelect(modes, currentMode);
-  addSection(top, l('action'), modeSelect, true);
+  addSection(l('action'), modeSelect, true);
   modeChange.addEventListener('change', () => {
-    sideBar.className = modeSelect.value = getEditMode();
+    containerElement.className = modeSelect.value = getEditMode();
   });
   modeSelect.addEventListener('change', handleModeChange);
-  // add source language select
+}
+
+function createLanguageControls() {
+  const settings = getSettings();
   const sourceLangs = getSourceLanguages();
   const sourceLang = getSourceLanguage();
   const sourceLangSelect = createSelect(sourceLangs, sourceLang);
   sourceLangSelect.addEventListener('change', handleSourceLanguageChange);
-  addSection(top, l('from_language'), sourceLangSelect);
-  // add target language select
+  addSection(l('from_language'), sourceLangSelect);
   const targetLangs = getTargetLanguages();
   const targetLangSelect = createSelect(targetLangs, settings.target);
   targetLangSelect.addEventListener('change', handleTargetLanguageChange);
-  addSection(top, l('to_language'), targetLangSelect, true);
-  // add font family and size dropdowns for main text
-  const articleFontSelect = createFontFamilySelect(possible.fontFamily, settings.article.fontFamily);
+  addSection(l('to_language'), targetLangSelect, true);
+}
+
+function createTextControls() {
+  const settings = getSettings();
+  const fontFamilies = [
+    {
+      label: 'Arial',
+      value: 'Arial',
+    },
+    {
+      label: 'Brush Script',
+      value: 'Brush Script MT',
+    },
+    {
+      label: 'Courier',
+      value: 'Courier',
+    },
+    {
+      label: 'Garamond',
+      value: 'Garamond',
+    },
+    {
+      label: 'Georgia',
+      value: 'Georgia',
+    },
+    {
+      label: 'Tahoma',
+      value: 'Tahoma',
+    },
+    {
+      label: 'Times New Roman',
+      value: 'Times New Roman',
+    },
+    {
+      label: 'Verdana',
+      value: 'Verdana',
+    },
+  ];
+  const fontSizes = [ 8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48 ].map((pt) => {
+    return {
+      label: `${pt}`,
+      value: `${pt}pt`
+    };
+  });
+  const justifications = [
+    {
+      label: l('justification_none'),
+      value: 'none'
+    },
+    {
+      label: l('justification_text'),
+      value: 'text'
+    },
+    {
+      label: l('justification_text_and_headings'),
+      value: 'both'
+    },
+  ];
+  const spacings = [
+    {
+      label: '1',
+      value: '1',
+    },
+    {
+      label: l('spacing_normal'),
+      value: 'normal',
+    },
+    {
+      label: '1.5',
+      value: '1.5',
+    },
+    {
+      label: '2',
+      value: '2',
+    },
+    {
+      label: '3',
+      value: '3',
+    },
+  ];
+  // for main text
+  const articleFontSelect = createFontFamilySelect(fontFamilies, settings.article.fontFamily);
   articleFontSelect.dataset.setting = 'article.fontFamily';
   articleFontSelect.addEventListener('change', handleSettingChange);
-  addSection(top, l('article_font_family'), articleFontSelect);
-  const articleSizeSelect = createFontSizeSelect(possible.fontSize, settings.article.fontSize);
+  addSection(l('article_font_family'), articleFontSelect);
+  const articleSizeSelect = createFontSizeSelect(fontSizes, settings.article.fontSize);
   articleSizeSelect.dataset.setting = 'article.fontSize';
   articleSizeSelect.addEventListener('change', handleSettingChange);
-  addSection(top, l('article_font_size'), articleSizeSelect);
-  const articleJustificationSelect = createSelect(possible.justification, settings.article.justification);
+  addSection(l('article_font_size'), articleSizeSelect);
+  const articleJustificationSelect = createSelect(justifications, settings.article.justification);
   articleJustificationSelect.dataset.setting = 'article.justification';
   articleJustificationSelect.addEventListener('change', handleSettingChange);
-  addSection(top, l('article_justification'), articleJustificationSelect);
-  const articleSpacingSelect = createSelect(possible.spacing, settings.article.spacing);
+  addSection(l('article_justification'), articleJustificationSelect);
+  const articleSpacingSelect = createSelect(spacings, settings.article.spacing);
   articleSpacingSelect.dataset.setting = 'article.spacing';
   articleSpacingSelect.addEventListener('change', handleSettingChange);
-  addSection(top, l('article_spacing'), articleSpacingSelect);
-  // add font family and size dropdowns for footnotes
-  const footnoteFontSelect = createFontFamilySelect(possible.fontFamily, settings.footnote.fontFamily);
+  addSection(l('article_spacing'), articleSpacingSelect);
+  // for footnotes
+  const footnoteFontSelect = createFontFamilySelect(fontFamilies, settings.footnote.fontFamily);
   footnoteFontSelect.dataset.setting = 'footnote.fontFamily';
   footnoteFontSelect.addEventListener('change', handleSettingChange);
-  addSection(top, l('footnote_font_family'), footnoteFontSelect);
-  const footnoteSizeSelect = createFontSizeSelect(possible.fontSize, settings.footnote.fontSize);
+  addSection(l('footnote_font_family'), footnoteFontSelect);
+  const footnoteSizeSelect = createFontSizeSelect(fontSizes, settings.footnote.fontSize);
   footnoteSizeSelect.dataset.setting = 'footnote.fontSize';
   footnoteSizeSelect.addEventListener('change', handleSettingChange);
-  addSection(top, l('footnote_font_size'), footnoteSizeSelect, true);
-  // add paper size dropdown
-  const paperSelect = createSelect(possible.paper, settings.paper);
+  addSection(l('footnote_font_size'), footnoteSizeSelect, true);
+}
+
+function createPaperControls() {
+  const settings = getSettings();
+  const papers = [
+    {
+      label: 'A4 210 x 297 mm',
+      value: 'A4',
+    },
+    {
+      label: 'Letter 8.5 x 11 in',
+      value: 'letter',
+    }
+  ];
+  const margins = [
+    {
+      label: l('margins_default'),
+      value: 'default',
+    },
+    {
+      label: l('margins_custom'),
+      value: 'custom',
+    }
+  ];
+  const paperSelect = createSelect(papers, settings.paper);
   paperSelect.addEventListener('change', handlePaperChange);
-  addSection(top, l('paper_size'), paperSelect);
-  // add margins dropdown
-  const marginSelect = createSelect(possible.margins, settings.margins);
+  addSection(l('paper_size'), paperSelect);
+  const marginSelect = createSelect(margins, settings.margins);
   marginSelect.addEventListener('change', handleMarginChange);
-  addSection(top, l('margins'), marginSelect);
-  // add custom margins input pane
+  addSection(l('margins'), marginSelect);
   const customMargins = createCustomMarginInputs(settings.customMargins, settings.margins === 'default');
   const inputs = customMargins.getElementsByTagName('INPUT');
   for (const input of inputs) {
     input.addEventListener('input', handleCustomMarginInput);
     input.addEventListener('blur', handleCustomMarginBlur);
   }
-  addSection(top, '', customMargins);
+  addSection('', customMargins);
+}
 
+function createButtons() {
   // add buttons to bottom pane
-  const bottom = document.getElementById('side-bar-bottom');
   const finishButton = e('BUTTON', { id: 'finish-button' }, l('finish'));
   finishButton.addEventListener('click', handleFinishClick);
   const printButton = e('BUTTON', { id: 'print-button', className: 'default' }, l('print'));
   printButton.addEventListener('click', handlePrintClick)
-  bottom.append(finishButton, printButton);
-
+  buttonAreaElement.append(finishButton, printButton);
   // add message about paper size and margin
-  const sidebar = bottom.parentNode;
   const speechBubble = createSpeechBubble();
-  sidebar.append(speechBubble);
+  containerElement.append(speechBubble);
   // show it when user mouses over the print button
   const showBubble = () => speechBubble.classList.remove('hidden');
   const hideBubble = () => speechBubble.classList.add('hidden');
@@ -112,14 +230,9 @@ export function createArticleNavigation() {
   printButton.addEventListener('mouseout', hideBubble);
   printButton.addEventListener('focus', showBubble);
   printButton.addEventListener('blur', hideBubble);
-
-  // add ripple effect to buttons
-  attachRippleEffectHandlers();
-  // add handler for collapse button
-  addCollapseButtonHandlers();
 }
 
-function addSection(container, label, control, last = false) {
+function addSection(label, control, last = false) {
   const section = e('SECTION', {}, [
     e('LABEL', { className: 'label' }, label),
     e('DIV', { className: 'control' }, control)
@@ -127,7 +240,7 @@ function addSection(container, label, control, last = false) {
   if (last) {
     section.classList.add('last');
   }
-  container.append(section);
+  mainAreaElement.append(section);
 }
 
 function createSelect(items, currentValue) {
