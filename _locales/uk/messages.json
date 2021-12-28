@@ -115,6 +115,114 @@
     "message": "Ручна",
     "description": "Label for filter drop-down in options"
   },
+  "fonts": {
+    "message": "Шрифти",
+    "description": "Used in section navigation in option page"
+  },
+  "script_arab": {
+    "message": "Арабське",
+    "description": "Name of script, used in option page"
+  },
+  "script_armn": {
+    "message": "Вірменське",
+    "description": "Name of script, used in option page"
+  },
+  "script_beng": {
+    "message": "Бенгальське",
+    "description": "Name of script, used in option page"
+  },
+  "script_cyrl": {
+    "message": "Кирилиця",
+    "description": "Name of script, used in option page"
+  },
+  "script_deva": {
+    "message": "Деванагарі",
+    "description": "Name of script, used in option page"
+  },
+  "script_ethi": {
+    "message": "Ефіопське",
+    "description": "Name of script, used in option page"
+  },
+  "script_geor": {
+    "message": "Грузинське",
+    "description": "Name of script, used in option page"
+  },
+  "script_grek": {
+    "message": "Грецьке",
+    "description": "Name of script, used in option page"
+  },
+  "script_gujr": {
+    "message": "Гуджураті",
+    "description": "Name of script, used in option page"
+  },
+  "script_guru": {
+    "message": "Гурмухі",
+    "description": "Name of script, used in option page"
+  },
+  "script_hang": {
+    "message": "Корейське",
+    "description": "Name of script, used in option page"
+  },
+  "script_hans": {
+    "message": "Китайське (спрощене)",
+    "description": "Name of script, used in option page"
+  },
+  "script_hant": {
+    "message": "Китайське (традиційне)",
+    "description": "Name of script, used in option page"
+  },
+  "script_hebr": {
+    "message": "Єврейське",
+    "description": "Name of script, used in option page"
+  },
+  "script_jpan": {
+    "message": "Японське",
+    "description": "Name of script, used in option page"
+  },
+  "script_khmr": {
+    "message": "Кхмерське",
+    "description": "Name of script, used in option page"
+  },
+  "script_knda": {
+    "message": "Каннада",
+    "description": "Name of script, used in option page"
+  },
+  "script_laoo": {
+    "message": "Лаосське",
+    "description": "Name of script, used in option page"
+  },
+  "script_latn": {
+    "message": "Латинське",
+    "description": "Name of script, used in option page"
+  },
+  "script_mlym": {
+    "message": "Малаяламське",
+    "description": "Name of script, used in option page"
+  },
+  "script_mymr": {
+    "message": "Бірманське",
+    "description": "Name of script, used in option page"
+  },
+  "script_orya": {
+    "message": "Орія",
+    "description": "Name of script, used in option page"
+  },
+  "script_sinh": {
+    "message": "Сингальське",
+    "description": "Name of script, used in option page"
+  },
+  "script_taml": {
+    "message": "Тамільське",
+    "description": "Name of script, used in option page"
+  },
+  "script_telu": {
+    "message": "Телугу",
+    "description": "Name of script, used in option page"
+  },
+  "script_thai": {
+    "message": "Тайська",
+    "description": "Name of script, used in option page"
+  },
   "action": {
     "message": "Дія",
     "description": "Label for drop-down in side-bar"

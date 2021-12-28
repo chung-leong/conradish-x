@@ -115,6 +115,114 @@
     "message": "Ruční",
     "description": "Label for filter drop-down in options"
   },
+  "fonts": {
+    "message": "Písma",
+    "description": "Used in section navigation in option page"
+  },
+  "script_arab": {
+    "message": "Arabské",
+    "description": "Name of script, used in option page"
+  },
+  "script_armn": {
+    "message": "Arménský",
+    "description": "Name of script, used in option page"
+  },
+  "script_beng": {
+    "message": "Bengálské",
+    "description": "Name of script, used in option page"
+  },
+  "script_cyrl": {
+    "message": "Cyrilice",
+    "description": "Name of script, used in option page"
+  },
+  "script_deva": {
+    "message": "Dévanágarí",
+    "description": "Name of script, used in option page"
+  },
+  "script_ethi": {
+    "message": "Etiopské",
+    "description": "Name of script, used in option page"
+  },
+  "script_geor": {
+    "message": "Gruzínské",
+    "description": "Name of script, used in option page"
+  },
+  "script_grek": {
+    "message": "Řecké",
+    "description": "Name of script, used in option page"
+  },
+  "script_gujr": {
+    "message": "Gujuratský",
+    "description": "Name of script, used in option page"
+  },
+  "script_guru": {
+    "message": "Gurmukhi",
+    "description": "Name of script, used in option page"
+  },
+  "script_hang": {
+    "message": "Korejské",
+    "description": "Name of script, used in option page"
+  },
+  "script_hans": {
+    "message": "Čínské (zjednodušené)",
+    "description": "Name of script, used in option page"
+  },
+  "script_hant": {
+    "message": "Čínské (tradičné)",
+    "description": "Name of script, used in option page"
+  },
+  "script_hebr": {
+    "message": "Hebrejské",
+    "description": "Name of script, used in option page"
+  },
+  "script_jpan": {
+    "message": "Japonské",
+    "description": "Name of script, used in option page"
+  },
+  "script_khmr": {
+    "message": "Khmerské",
+    "description": "Name of script, used in option page"
+  },
+  "script_knda": {
+    "message": "Kannadské",
+    "description": "Name of script, used in option page"
+  },
+  "script_laoo": {
+    "message": "Laoské",
+    "description": "Name of script, used in option page"
+  },
+  "script_latn": {
+    "message": "Latinské",
+    "description": "Name of script, used in option page"
+  },
+  "script_mlym": {
+    "message": "Malajálamské",
+    "description": "Name of script, used in option page"
+  },
+  "script_mymr": {
+    "message": "Barmské",
+    "description": "Name of script, used in option page"
+  },
+  "script_orya": {
+    "message": "Orya",
+    "description": "Name of script, used in option page"
+  },
+  "script_sinh": {
+    "message": "Sinhálské",
+    "description": "Name of script, used in option page"
+  },
+  "script_taml": {
+    "message": "Tamilské",
+    "description": "Name of script, used in option page"
+  },
+  "script_telu": {
+    "message": "Telugské",
+    "description": "Name of script, used in option page"
+  },
+  "script_thai": {
+    "message": "Thajské",
+    "description": "Name of script, used in option page"
+  },
   "action": {
     "message": "Akce",
     "description": "Label for drop-down in side-bar"

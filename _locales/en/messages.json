@@ -115,6 +115,14 @@
     "message": "Filter page content",
     "description": "Label for checkbox in options"
   },
+  "filter_automatic": {
+    "message": "Automatically",
+    "description": "Label for filter drop-down in options"
+  },
+  "filter_manual": {
+    "message": "Manually",
+    "description": "Label for filter drop-down in options"
+  },
   "fonts": {
     "message": "Fonts",
     "description": "Used in section navigation in option page"
@@ -222,14 +230,6 @@
   "script_thai": {
     "message": "Thai",
     "description": "Name of script, used in option page"
-  },
-  "filter_automatic": {
-    "message": "Automatically",
-    "description": "Label for filter drop-down in options"
-  },
-  "filter_manual": {
-    "message": "Manually",
-    "description": "Label for filter drop-down in options"
   },
   "action": {
     "message": "Action",
