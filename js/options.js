@@ -3,7 +3,7 @@ import { l, getUILanguage, getTargetLanguage, getLanguageScript, getScriptDirect
 import { initializeStorage, getSettings, saveSettings, storageChange } from './lib/storage.js';
 import { setWindowName } from './lib/navigation.js';
 import { createTopBar, attachShadowHandlers } from './lib/top-bar.js';
-import { getScripts, getFontCoverage } from './lib/fonts.js';
+import { getScripts, getFontCoverage, applyDefaultFontSettings } from './lib/fonts.js';
 
 const listContainer = document.getElementById('list-container');
 
@@ -13,6 +13,7 @@ let activeScript = '';
 
 async function start() {
   await initializeStorage();
+  await applyDefaultFontSettings();
   setWindowName('options');
   const title = document.title = l('extension_options');
   createTopBar('toolbar-title', { left: title });
@@ -118,7 +119,7 @@ async function createFontSelectionCards() {
     if (symbolicFontIds.includes(fontId)) {
       continue;
     }
-    for (const script of Object.keys(coverage)) {
+    for (const script of coverage) {
       const selected = true;
       createFontSelectionCard(fontId, displayName, script, selected);
     }

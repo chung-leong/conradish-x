@@ -56,29 +56,121 @@ export function applyStyles() {
 }
 
 export function getDefaultSettings() {
-  const article = {
-    fontFamily: 'Arial',
-    fontSize: '12pt',
-    justification: 'text',
-    spacing: 'normal',
-  };
-  const footnote = {
-    fontFamily: 'Arial',
-    fontSize: '10pt'
-  };
   const codes = (navigator.languages[0] || 'en-US').toLowerCase().split('-');
   const target = codes[0];
   const country = codes[1] || codes[0];
   const paper = letterCountries.includes(country) ? 'letter' : 'A4';
-  const margins = 'default';
-  const customMargins = Object.assign({}, paperProperties[paper].defaultMargins);
-  const filter = 'automatic';
-  const contextMenu = true;
-  const heading = 'H2';
-  return {
-    target, article, footnote, paper, margins, customMargins,
-    contextMenu, filter, heading,
+  const getTextSize = (scriptGroup) => {
+    switch (scriptGroup) {
+      case 'european':
+        return 12;
+      default:
+        return 14;
+    }
   };
+  const articleText = (scriptGroup) => {
+    return {
+      // insert default font later
+      fontFamily: '',
+      fontSize: `${getTextSize(scriptGroup)}pt`,
+      justification: 'text',
+      spacing: 'normal',
+    };
+  };
+  const footnoteText = (scriptGroup) => {
+    return {
+      fontFamily: '',
+      fontSize: `${getTextSize(scriptGroup) - 2}pt`,
+    };
+  };
+  const settings = {
+    target: codes[0],
+    paper: paper,
+    margins: 'default',
+    customMargins: { ...paperProperties[paper].defaultMargins },
+    contextMenu: true,
+    filter: 'automatic',
+    heading: 'H2',
+    article: articleText('european'),
+    articleArab: articleText('middle-eastern'),
+    articleArmn: articleText('european'),
+    articleBeng: articleText('south-asian'),
+    articleCyrl: articleText('european'),
+    articleDeva: articleText('south-asian'),
+    articleEthi: articleText('african'),
+    articleGeor: articleText('european'),
+    articleGrek: articleText('european'),
+    articleGujr: articleText('south-asian'),
+    articleGuru: articleText('south-asian'),
+    articleHang: articleText('east-asian'),
+    articleHans: articleText('east-asian'),
+    articleHant: articleText('east-asian'),
+    articleHebr: articleText('middle-eastern'),
+    articleJpan: articleText('east-asian'),
+    articleKhmr: articleText('southeast-asian'),
+    articleKnda: articleText('south-asian'),
+    articleLaoo: articleText('southeast-asian'),
+    articleMlym: articleText('south-asian'),
+    articleMymr: articleText('southeast-asian'),
+    articleOrya: articleText('south-asian'),
+    articleSinh: articleText('south-asian'),
+    articleTaml: articleText('south-asian'),
+    articleTelu: articleText('south-asian'),
+    articleThai: articleText('southeast-asian'),
+    footnote: footnoteText('european'),
+    footnoteArab: footnoteText('middle-eastern'),
+    footnoteArmn: footnoteText('european'),
+    footnoteBeng: footnoteText('south-asian'),
+    footnoteCyrl: footnoteText('european'),
+    footnoteDeva: footnoteText('south-asian'),
+    footnoteEthi: footnoteText('african'),
+    footnoteGeor: footnoteText('european'),
+    footnoteGrek: footnoteText('european'),
+    footnoteGujr: footnoteText('south-asian'),
+    footnoteGuru: footnoteText('south-asian'),
+    footnoteHang: footnoteText('east-asian'),
+    footnoteHans: footnoteText('east-asian'),
+    footnoteHant: footnoteText('east-asian'),
+    footnoteHebr: footnoteText('middle-eastern'),
+    footnoteJpan: footnoteText('east-asian'),
+    footnoteKhmr: footnoteText('southeast-asian'),
+    footnoteKnda: footnoteText('south-asian'),
+    footnoteLaoo: footnoteText('southeast-asian'),
+    footnoteMlym: footnoteText('south-asian'),
+    footnoteMymr: footnoteText('southeast-asian'),
+    footnoteOrya: footnoteText('south-asian'),
+    footnoteSinh: footnoteText('south-asian'),
+    footnoteTaml: footnoteText('south-asian'),
+    footnoteTelu: footnoteText('south-asian'),
+    footnoteThai: footnoteText('southeast-asian'),
+    fonts: [],
+    fontsArab: [],
+    fontsArmn: [],
+    fontsBeng: [],
+    fontsCyrl: [],
+    fontsDeva: [],
+    fontsEthi: [],
+    fontsGeor: [],
+    fontsGrek: [],
+    fontsGujr: [],
+    fontsGuru: [],
+    fontsHang: [],
+    fontsHans: [],
+    fontsHant: [],
+    fontsHebr: [],
+    fontsJpan: [],
+    fontsKhmr: [],
+    fontsKnda: [],
+    fontsLaoo: [],
+    fontsMlym: [],
+    fontsMymr: [],
+    fontsOrya: [],
+    fontsSinh: [],
+    fontsTaml: [],
+    fontsTelu: [],
+    fontsThai: [],
+  };
+  return settings;
 }
 
 export function getPaperProperties(paper) {

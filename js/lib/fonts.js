@@ -1,47 +1,144 @@
 import { waitForRedraw } from './ui.js';
+import { getSettings, saveSettings } from './settings.js';
+
+let fontList;
 
 export function getScripts() {
   return Object.keys(essentialCharacters);
 }
 
 export async function getFontList() {
-  const list = await new Promise(r => chrome.fontSettings.getFontList(r));
-  return list.sort((a, b) => a.displayName.localeCompare(b.displayName));
+  if (!fontList) {
+    fontList = await new Promise(r => chrome.fontSettings.getFontList(r));
+    fontList.sort((a, b) => a.displayName.localeCompare(b.displayName));
+  }
+  return fontList;
+}
+
+export async function getDefaultFonts(script) {
+
+  const getFont = async (genericFamily, script) => {
+    if (script === 'Latn') {
+      // use the default; not sure why 'Latn' yields nothing
+      script = 'Zyyy';
+    }
+    return new Promise(r => chrome.fontSettings.getFont({ genericFamily, script }, r));
+  };
+  const promises = [
+    'sansserif',
+    'serif',
+    'fixed',
+    'cursive',
+  ].map(f => getFont(f, script));
+  const fonts = await Promise.all(promises);
+  // remove duplicates
+  return fonts.filter((font, index, arr) => {
+    return font.fontId && index === arr.findIndex(f => f.fontId === font.fontId);
+  });
+}
+
+export async function applyDefaultFontSettings(options = {}) {
+  const { thorough } = options;
+  let changed = false;
+  const scripts = getScripts();
+  const settings = getSettings();
+  const key = (name, script) => name + (script === 'Latn' ? '' : script);
+  const uncoveredScripts = [];
+  for (const script of scripts) {
+    // make sure the font list for the script isn't empty
+    const list = settings[key('fonts', script)];
+    if (list.length === 0) {
+      const defaultFonts = await getDefaultFonts(script);
+      if (defaultFonts.length > 0) {
+        list.push(...defaultFonts.map(f => f.fontId));
+        changed = true;
+      } else {
+        uncoveredScripts.push(script);
+      }
+    }
+  }
+  if (thorough && uncoveredScripts.length > 0) {
+    // this is time consuming
+    for await (const font of getFontCoverage()) {
+      for (const script of font.coverage) {
+        const index = uncoveredScripts.indexOf(script);
+        if (index !== -1) {
+          const list = settings[key('fonts', script)];
+          list.push(font.fontId);
+          changed = true;
+          if (list.length >= 4) {
+            uncoveredScripts.splice(index, 1);
+          }
+        }
+      }
+      if (uncoveredScripts.length === 0) {
+        break;
+      }
+    }
+    for (const script of uncoveredScripts) {
+      const list = settings[key('fonts', script)];
+      if (list.length === 0) {
+        list.push('sans-serif');
+        changed = true;
+      }
+    }
+  }
+  for (const script of scripts) {
+    const list = settings[key('fonts', script)];
+    // set font for article text if it's isn't set
+    const article = settings[key('article', script)];
+    if (!article.fontFamily && list[0]) {
+      article.fontFamily = list[0];
+      changed = true;
+    }
+    // set font for footnote text
+    const footnote = settings[key('footnote', script)];
+    if (!footnote.fontFamily && list[0]) {
+      footnote.fontFamily = list[0];
+      changed = true;
+    }
+  }
+  if (changed) {
+    await saveSettings(settings);
+  }
+  return changed;
 }
 
 export async function *getFontCoverage() {
   const fonts = await getFontList();
   const iframe = document.getElementById('scratch-pad');
-  const win = iframe.contentWindow;
-  const doc = win.document;
+  const doc = iframe.contentWindow.document;
   const bin = doc.getElementById('bin');
   const spans = Array.from('ABCD').map(() => doc.createElement('SPAN'));
   bin.append(...spans);
-  for (const { fontId, displayName } of fonts) {
-    // set the font, with blank font (zero width for all characters) as fallback
+  try {
+    for (const { fontId, displayName } of fonts) {
+      // set the font, with blank font (zero width for all characters) as fallback
+      for (const span of spans) {
+        span.style.fontFamily = `${fontId}, Adobe Blank`;
+      }
+      const coverage = [];
+      let initial = 'true';
+      for (const [ script, characters ] of Object.entries(essentialCharacters)) {
+        for (const [ index, span ] of spans.entries()) {
+          span.innerText = characters.charAt(index);
+        }
+        if (initial) {
+          // give browser time to load the font
+          await waitForRedraw();
+          initial = false;
+        }
+        // see if every one of the essential characters are present in the font
+        if (spans.every(span => span.offsetWidth > 0)) {
+          coverage.push(script);
+        }
+      }
+      yield { fontId, displayName, coverage };
+    }
+  } finally {
     for (const span of spans) {
-      span.style.fontFamily = `${fontId}, Adobe Blank`;
+      span.remove();
     }
-    const coverage = {};
-    let initial = 'true';
-    for (const [ script, characters ] of Object.entries(essentialCharacters)) {
-      for (const [ index, span ] of spans.entries()) {
-        span.innerText = characters.charAt(index);
-      }
-      if (initial) {
-        // give browser time to load the font
-        await waitForRedraw();
-        initial = false;
-      }
-      // see if every one of the essential characters are present in the font
-      if (spans.every(span => span.offsetWidth > 0)) {
-        coverage[script] = true;
-      }
-    }
-    yield { fontId, displayName, coverage };
-  }
-  for (const span of spans) {
-    span.remove();
   }
 }
 
