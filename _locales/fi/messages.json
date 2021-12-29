@@ -115,6 +115,114 @@
     "message": "Käsin",
     "description": "Label for filter drop-down in options"
   },
+  "fonts": {
+    "message": "Fontit",
+    "description": "Used in section navigation in option page"
+  },
+  "script_arab": {
+    "message": "Arabialainen",
+    "description": "Name of script, used in option page"
+  },
+  "script_armn": {
+    "message": "Armenialainen",
+    "description": "Name of script, used in option page"
+  },
+  "script_beng": {
+    "message": "Bengalilainen",
+    "description": "Name of script, used in option page"
+  },
+  "script_cyrl": {
+    "message": "Kyrillinen",
+    "description": "Name of script, used in option page"
+  },
+  "script_deva": {
+    "message": "Devanagari",
+    "description": "Name of script, used in option page"
+  },
+  "script_ethi": {
+    "message": "Etiopialainen",
+    "description": "Name of script, used in option page"
+  },
+  "script_geor": {
+    "message": "Georgialainen",
+    "description": "Name of script, used in option page"
+  },
+  "script_grek": {
+    "message": "Kreikkalainen",
+    "description": "Name of script, used in option page"
+  },
+  "script_gujr": {
+    "message": "Gudžaratilainen",
+    "description": "Name of script, used in option page"
+  },
+  "script_guru": {
+    "message": "Gurmukhi",
+    "description": "Name of script, used in option page"
+  },
+  "script_hang": {
+    "message": "Korean",
+    "description": "Name of script, used in option page"
+  },
+  "script_hans": {
+    "message": "Kiinalainen (yksinkertaistettu)",
+    "description": "Name of script, used in option page"
+  },
+  "script_hant": {
+    "message": "Kiinalainen (perinteinen)",
+    "description": "Name of script, used in option page"
+  },
+  "script_hebr": {
+    "message": "Heprealainen",
+    "description": "Name of script, used in option page"
+  },
+  "script_jpan": {
+    "message": "Japanilainen",
+    "description": "Name of script, used in option page"
+  },
+  "script_khmr": {
+    "message": "Khmeriläinen",
+    "description": "Name of script, used in option page"
+  },
+  "script_knda": {
+    "message": "Kannadalainen",
+    "description": "Name of script, used in option page"
+  },
+  "script_laoo": {
+    "message": "Laosin",
+    "description": "Name of script, used in option page"
+  },
+  "script_latn": {
+    "message": "Latinalainen",
+    "description": "Name of script, used in option page"
+  },
+  "script_mlym": {
+    "message": "Malajalamilainen",
+    "description": "Name of script, used in option page"
+  },
+  "script_mymr": {
+    "message": "Burman",
+    "description": "Name of script, used in option page"
+  },
+  "script_orya": {
+    "message": "Orya",
+    "description": "Name of script, used in option page"
+  },
+  "script_sinh": {
+    "message": "Sinhalilainen",
+    "description": "Name of script, used in option page"
+  },
+  "script_taml": {
+    "message": "Tamililainen",
+    "description": "Name of script, used in option page"
+  },
+  "script_telu": {
+    "message": "Telugulainen",
+    "description": "Name of script, used in option page"
+  },
+  "script_thai": {
+    "message": "Thailainen",
+    "description": "Name of script, used in option page"
+  },
   "action": {
     "message": "Toiminta",
     "description": "Label for drop-down in side-bar"

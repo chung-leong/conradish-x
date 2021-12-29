@@ -115,6 +115,114 @@
     "message": "Manuelt",
     "description": "Label for filter drop-down in options"
   },
+  "fonts": {
+    "message": "Fonter",
+    "description": "Used in section navigation in option page"
+  },
+  "script_arab": {
+    "message": "Arabisk",
+    "description": "Name of script, used in option page"
+  },
+  "script_armn": {
+    "message": "Armensk",
+    "description": "Name of script, used in option page"
+  },
+  "script_beng": {
+    "message": "Bengalsk",
+    "description": "Name of script, used in option page"
+  },
+  "script_cyrl": {
+    "message": "Kyrillisk",
+    "description": "Name of script, used in option page"
+  },
+  "script_deva": {
+    "message": "Devanagari",
+    "description": "Name of script, used in option page"
+  },
+  "script_ethi": {
+    "message": "Etiopisk",
+    "description": "Name of script, used in option page"
+  },
+  "script_geor": {
+    "message": "Georgisk",
+    "description": "Name of script, used in option page"
+  },
+  "script_grek": {
+    "message": "Gresk",
+    "description": "Name of script, used in option page"
+  },
+  "script_gujr": {
+    "message": "Gujurati",
+    "description": "Name of script, used in option page"
+  },
+  "script_guru": {
+    "message": "Gurmukhi",
+    "description": "Name of script, used in option page"
+  },
+  "script_hang": {
+    "message": "Koreansk",
+    "description": "Name of script, used in option page"
+  },
+  "script_hans": {
+    "message": "Kinesisk (forenklet)",
+    "description": "Name of script, used in option page"
+  },
+  "script_hant": {
+    "message": "Kinesisk (tradisjonell)",
+    "description": "Name of script, used in option page"
+  },
+  "script_hebr": {
+    "message": "Hebraisk",
+    "description": "Name of script, used in option page"
+  },
+  "script_jpan": {
+    "message": "Japansk",
+    "description": "Name of script, used in option page"
+  },
+  "script_khmr": {
+    "message": "Khmer",
+    "description": "Name of script, used in option page"
+  },
+  "script_knda": {
+    "message": "Kannada",
+    "description": "Name of script, used in option page"
+  },
+  "script_laoo": {
+    "message": "Laotisk",
+    "description": "Name of script, used in option page"
+  },
+  "script_latn": {
+    "message": "Latinsk",
+    "description": "Name of script, used in option page"
+  },
+  "script_mlym": {
+    "message": "Malayalam",
+    "description": "Name of script, used in option page"
+  },
+  "script_mymr": {
+    "message": "Burmesisk",
+    "description": "Name of script, used in option page"
+  },
+  "script_orya": {
+    "message": "Orya",
+    "description": "Name of script, used in option page"
+  },
+  "script_sinh": {
+    "message": "Singalesisk",
+    "description": "Name of script, used in option page"
+  },
+  "script_taml": {
+    "message": "Tamilsk",
+    "description": "Name of script, used in option page"
+  },
+  "script_telu": {
+    "message": "Telugu",
+    "description": "Name of script, used in option page"
+  },
+  "script_thai": {
+    "message": "Thai",
+    "description": "Name of script, used in option page"
+  },
   "action": {
     "message": "Handling",
     "description": "Label for drop-down in side-bar"
