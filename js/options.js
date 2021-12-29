@@ -3,7 +3,7 @@ import { l, getUILanguage, getTargetLanguage, getLanguageScript, getScriptDirect
 import { initializeStorage, getSettings, saveSettings, storageChange } from './lib/storage.js';
 import { setWindowName } from './lib/navigation.js';
 import { createTopBar, attachShadowHandlers } from './lib/top-bar.js';
-import { getScripts, getFontCoverage, applyDefaultFontSettings } from './lib/fonts.js';
+import { getScripts, getFontCoverage, getScriptSpecificSettings, updateFontAvailability, updateFontSelection, applyDefaultFontSettings } from './lib/fonts.js';
 
 const listContainer = document.getElementById('list-container');
 
@@ -58,7 +58,6 @@ function createSectionNavigation() {
   });
   scriptListElement.addEventListener('click', (evt) => {
     const { script } = evt.target.dataset;
-    console.log(script);
     if (script) {
       for (const scriptElement of scriptElements) {
         scriptElement.classList.toggle('selected', scriptElement === evt.target);
@@ -115,14 +114,20 @@ function createBasicOptionCard() {
 }
 
 async function createFontSelectionCards() {
+  let changed = false;
   for await (const { fontId, displayName, coverage } of getFontCoverage()) {
-    if (symbolicFontIds.includes(fontId)) {
-      continue;
-    }
     for (const script of coverage) {
-      const selected = true;
+      if (updateFontAvailability(fontId, script)) {
+        changed = true;
+      }
+      const list = getScriptSpecificSettings('fonts', script);
+      const selected = list.includes(fontId);
       createFontSelectionCard(fontId, displayName, script, selected);
     }
+  }
+  if (changed) {
+    updateFontSelection();
+    await saveSettings();
   }
 }
 
@@ -139,6 +144,19 @@ function createFontSelectionCard(fontId, displayName, script, selected) {
   }
   const titleElement = e('SPAN', { className: 'font-display-name' });
   const checkboxElement = addCheckbox(titleElement, displayName, selected);
+  checkboxElement.addEventListener('change', async (evt) => {
+    const checked = checkboxElement.classList.contains('checked');
+    const list = getScriptSpecificSettings('fonts', script);
+    if (checked) {
+      list.push(fontId);
+    } else {
+      const index = list.indexOf(fontId);
+      if (index !== -1) {
+        list.splice(index, 1);
+      }
+    }
+    await saveSettings();
+  });
   const previewElement = e('DIV', { className: 'preview-container' }, sentenceElement);
   return addCard(titleElement, previewElement, () => activeCardType === 'font' && activeScript === script);
 }
@@ -206,8 +224,6 @@ function getSampleSentence(script) {
   }
   return entry[key];
 }
-
-const symbolicFontIds = [ 'Webdings', 'Wingdings', 'Wingdings 2', 'Wingdings 3' ];
 
 const sampleSentences = {
   Arab: {

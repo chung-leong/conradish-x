@@ -118,5 +118,6 @@
 
 @font-face {
   font-family: "Adobe NotDef";
+  font-display: block;
   src: url("../fnt/AND-Regular.otf") format("opentype");
 }

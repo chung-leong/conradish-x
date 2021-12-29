@@ -16,7 +16,6 @@ export async function getFontList() {
 }
 
 export async function getDefaultFonts(script) {
-
   const getFont = async (genericFamily, script) => {
     if (script === 'Latn') {
       // use the default; not sure why 'Latn' yields nothing
@@ -37,69 +36,84 @@ export async function getDefaultFonts(script) {
   });
 }
 
-export async function applyDefaultFontSettings(options = {}) {
-  const { thorough } = options;
-  let changed = false;
-  const scripts = getScripts();
+export function getScriptSpecificSettings(name, script) {
   const settings = getSettings();
-  const key = (name, script) => name + (script === 'Latn' ? '' : script);
-  const uncoveredScripts = [];
-  for (const script of scripts) {
-    // make sure the font list for the script isn't empty
-    const list = settings[key('fonts', script)];
-    if (list.length === 0) {
-      const defaultFonts = await getDefaultFonts(script);
-      if (defaultFonts.length > 0) {
-        list.push(...defaultFonts.map(f => f.fontId));
-        changed = true;
-      } else {
+  const key = name + (script === 'Latn' ? '' : script);
+  return settings[key];
+}
+
+export async function applyDefaultFontSettings(options = {}) {
+  const { scan } = options;
+  let changed = false;
+  if (scan === 'fonts') {
+    const uncoveredScripts = [];
+    for (const script of getScripts()) {
+      // make sure the font list for the script isn't empty
+      const list = getScriptSpecificSettings('fonts', script);
+      if (list.length === 0) {
         uncoveredScripts.push(script);
       }
     }
-  }
-  if (thorough && uncoveredScripts.length > 0) {
-    // this is time consuming
-    for await (const font of getFontCoverage()) {
-      for (const script of font.coverage) {
-        const index = uncoveredScripts.indexOf(script);
-        if (index !== -1) {
-          const list = settings[key('fonts', script)];
-          list.push(font.fontId);
-          changed = true;
-          if (list.length >= 4) {
+    if (uncoveredScripts.length > 0) {
+      for await (const { fontId, coverage } of getFontCoverage()) {
+        for (const script of coverage) {
+          if (updateFontAvailability(fontId, script)) {
+            const index = uncoveredScripts.indexOf(script);
             uncoveredScripts.splice(index, 1);
+            changed = true;
           }
         }
-      }
-      if (uncoveredScripts.length === 0) {
-        break;
+        if (uncoveredScripts.length === 0) {
+          break;
+        }
       }
     }
-    for (const script of uncoveredScripts) {
-      const list = settings[key('fonts', script)];
+  } else {
+    for (const script of getScripts()) {
+      // make sure the font list for the script isn't empty
+      const list = getScriptSpecificSettings('fonts', script);
       if (list.length === 0) {
-        list.push('sans-serif');
-        changed = true;
+        const defaultFonts = await getDefaultFonts(script);
+        if (defaultFonts.length > 0) {
+          list.push(...defaultFonts.map(f => f.fontId));
+          changed = true;
+        }
       }
-    }
-  }
-  for (const script of scripts) {
-    const list = settings[key('fonts', script)];
-    // set font for article text if it's isn't set
-    const article = settings[key('article', script)];
-    if (!article.fontFamily && list[0]) {
-      article.fontFamily = list[0];
-      changed = true;
-    }
-    // set font for footnote text
-    const footnote = settings[key('footnote', script)];
-    if (!footnote.fontFamily && list[0]) {
-      footnote.fontFamily = list[0];
-      changed = true;
     }
   }
   if (changed) {
-    await saveSettings(settings);
+    updateFontSelection();
+    await saveSettings();
+  }
+  return changed;
+}
+
+export function updateFontSelection() {
+  let changed = false;
+  for (const script of getScripts()) {
+    const list = getScriptSpecificSettings('fonts', script);
+    // set font for article text if it's isn't set
+    const article = getScriptSpecificSettings('article', script);
+    if (!list.includes(article.fontFamily)) {
+      article.fontFamily = list[0] || '';
+      changed = true;
+    }
+    // set font for footnote text
+    const footnote = getScriptSpecificSettings('footnote', script);
+    if (!list.includes(footnote.fontFamily)) {
+      footnote.fontFamily = list[0] || '';
+      changed = true;
+    }
+  }
+  return changed;
+}
+
+export function updateFontAvailability(fontId, script) {
+  let changed = false;
+  const list = getScriptSpecificSettings('fonts', script);
+  if (list.length === 0) {
+    list.push(fontId);
+    changed = true;
   }
   return changed;
 }
@@ -113,12 +127,15 @@ export async function *getFontCoverage() {
   bin.append(...spans);
   try {
     for (const { fontId, displayName } of fonts) {
+      if (symbolicFontIds.includes(fontId)) {
+        continue;
+      }
       // set the font, with blank font (zero width for all characters) as fallback
       for (const span of spans) {
         span.style.fontFamily = `${fontId}, Adobe Blank`;
       }
       const coverage = [];
-      let initial = 'true';
+      let initial = true;
       for (const [ script, characters ] of Object.entries(essentialCharacters)) {
         for (const [ index, span ] of spans.entries()) {
           span.innerText = characters.charAt(index);
@@ -170,7 +187,7 @@ const essentialCharacters = {
     Jpan: '\u3041\u3042\u3043\u3044',
     Khmr: '\u1780\u1781\u1782\u1783',
     Knda: '\u0c95\u0c96\u0c97\u0c98',
-    Laoo: '\u0e81\u0e82\u0e84\u0e86',
+    Laoo: '\u0e81\u0e82\u0e84\u0e87',
     Latn: 'ABCD',
     Mlym: '\u0d15\u0d16\u0d17\u0d18',
     Mymr: '\u1000\u1001\u1002\u1003',
@@ -190,3 +207,5 @@ const fontSizeGroupings = [
   [ 'Deva', 'Beng', 'Gujr', 'Guru', 'Knda', 'Mlym', 'Orya', 'Sinh', 'Taml', 'Telu' ],
   [ 'Thai', 'Khmr', 'Laoo' ]
 ];
+
+const symbolicFontIds = [ 'Webdings', 'Wingdings', 'Wingdings 2', 'Wingdings 3' ];
