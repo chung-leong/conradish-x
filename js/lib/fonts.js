@@ -42,6 +42,20 @@ export function getScriptSpecificSettings(name, script) {
   return settings[key];
 }
 
+export async function getAvailableFonts(requestedScript) {
+  const fonts = await getFontList();
+  const available = {};
+  for (const script of getScripts()) {
+    if (!requestedScript || script === requestedScript) {
+      const list = getScriptSpecificSettings('fonts', script);
+      for (const fontId of list) {
+        available[fontId] = true;
+      }
+    }
+  }
+  return fonts.filter(f => available[f.fontId]);
+}
+
 export async function applyDefaultFontSettings(options = {}) {
   const { scan } = options;
   let changed = false;

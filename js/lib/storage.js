@@ -3,7 +3,7 @@ import { getDefaultSettings } from './settings.js';
 const directory = [];
 let initialized = false;
 let settings;
-let savingSettings = false;
+const saving = [];
 
 export const storageChange = new EventTarget;
 
@@ -12,7 +12,6 @@ export function getSettings() {
 }
 
 export async function saveSettings() {
-  savingSettings = true;
   return set('.settings', settings);
 }
 
@@ -76,6 +75,7 @@ export async function storeObject(suffix, object) {
 }
 
 export async function saveObject(key, object) {
+  saving.push(key);
   for (;;) {
     try {
       await set(key, object);
@@ -83,6 +83,10 @@ export async function saveObject(key, object) {
     } catch (e) {
       const deleted = await removeOldestObject();
       if (!deleted) {
+        const index = saving.indexOf(key);
+        if (index !== -1) {
+          saving.splice(index, 1);
+        }
         throw e;
       }
     }
@@ -165,13 +169,18 @@ async function handleChanged(changes, areaName) {
   }
   let dirChanged = false;
   for (const [ key, change ] of Object.entries(changes)) {
+    const index = saving.indexOf(key);
+    const self = (index !== -1);
+    if (index !== -1) {
+      saving.splice(index, 1);
+    }
     if (key.charAt(0) === '.') {
       if (key === '.settings') {
-        if (!savingSettings) {
+        if (!self) {
           // modified by another process--reload it
           settings = await get('.settings');
         }
-        const detail = { self: savingSettings };
+        const detail = { self };
         const evt = new CustomEvent('settings', { detail });
         storageChange.dispatchEvent(evt);
         savingSettings = false;
@@ -193,7 +202,7 @@ async function handleChanged(changes, areaName) {
     } else {
       type = 'update';
     }
-    const detail = parseKey(key);
+    const detail = { self, ...parseKey(key) };
     const evt = new CustomEvent(type, { detail });
     storageChange.dispatchEvent(evt);
   }

@@ -1,8 +1,9 @@
 import { e, parseMarkdown, attachRippleEffectHandlers } from './ui.js';
-import { l, setSourceLanguage, getSourceLanguage, getSourceLanguages, getTargetLanguages } from './i18n.js';
+import { l, setSourceLanguage, getSourceLanguage, getSourceLanguages, getTargetLanguage, getTargetLanguages, getLanguageScript } from './i18n.js';
 import { getPaperProperties, applyStyles, getSettings, saveSettings } from './settings.js';
 import { updateLayout } from './document.js';
 import { modeChange, setEditMode, getEditMode } from './editing.js';
+import { getAvailableFonts, getScriptSpecificSettings } from './fonts.js';
 
 const containerElement = document.getElementById('side-bar');
 const mainAreaElement = document.getElementById('side-bar-top');
@@ -12,13 +13,13 @@ let collapsed = undefined;
 let reopenedManually = false;
 let sideBarWidth = undefined;
 
-export function createArticleNavigation() {
+export async function createArticleNavigation() {
   // add mode selector
   createActionControls();
   // add source and target language dropdowns
   createLanguageControls();
   // add dropdowns for controling text properties
-  createTextControls();
+  await createTextControls();
   // add dropdowns for paper size and margins
   createPaperControls();
   // add buttons
@@ -70,42 +71,12 @@ function createLanguageControls() {
   addSection(l('to_language'), targetLangSelect, true);
 }
 
-function createTextControls() {
+async function createTextControls() {
   const settings = getSettings();
-  const fontFamilies = [
-    {
-      label: 'Arial',
-      value: 'Arial',
-    },
-    {
-      label: 'Brush Script',
-      value: 'Brush Script MT',
-    },
-    {
-      label: 'Courier',
-      value: 'Courier',
-    },
-    {
-      label: 'Garamond',
-      value: 'Garamond',
-    },
-    {
-      label: 'Georgia',
-      value: 'Georgia',
-    },
-    {
-      label: 'Tahoma',
-      value: 'Tahoma',
-    },
-    {
-      label: 'Times New Roman',
-      value: 'Times New Roman',
-    },
-    {
-      label: 'Verdana',
-      value: 'Verdana',
-    },
-  ];
+  const fonts = await getAvailableFonts();
+  const fontFamilies = fonts.map(({ fontId, displayName }) => {
+    return { label: displayName, value: fontId };
+  });
   const fontSizes = [ 8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48 ].map((pt) => {
     return {
       label: `${pt}`,
@@ -149,30 +120,36 @@ function createTextControls() {
     },
   ];
   // for main text
-  const articleFontSelect = createFontFamilySelect(fontFamilies, settings.article.fontFamily);
+  let sourceLanguage = getTargetLanguage();
+  let sourceScript = getLanguageScript(sourceLanguage);
+  let article = getScriptSpecificSettings('article', sourceScript);
+  const articleFontSelect = createFontFamilySelect(fontFamilies, article.fontFamily);
   articleFontSelect.dataset.setting = 'article.fontFamily';
-  articleFontSelect.addEventListener('change', handleSettingChange);
+  articleFontSelect.addEventListener('change', handleTextStyleChange);
   addSection(l('article_font_family'), articleFontSelect);
-  const articleSizeSelect = createFontSizeSelect(fontSizes, settings.article.fontSize);
+  const articleSizeSelect = createFontSizeSelect(fontSizes, article.fontSize);
   articleSizeSelect.dataset.setting = 'article.fontSize';
-  articleSizeSelect.addEventListener('change', handleSettingChange);
+  articleSizeSelect.addEventListener('change', handleTextStyleChange);
   addSection(l('article_font_size'), articleSizeSelect);
-  const articleJustificationSelect = createSelect(justifications, settings.article.justification);
+  const articleJustificationSelect = createSelect(justifications, article.justification);
   articleJustificationSelect.dataset.setting = 'article.justification';
-  articleJustificationSelect.addEventListener('change', handleSettingChange);
+  articleJustificationSelect.addEventListener('change', handleTextStyleChange);
   addSection(l('article_justification'), articleJustificationSelect);
-  const articleSpacingSelect = createSelect(spacings, settings.article.spacing);
+  const articleSpacingSelect = createSelect(spacings, article.spacing);
   articleSpacingSelect.dataset.setting = 'article.spacing';
-  articleSpacingSelect.addEventListener('change', handleSettingChange);
+  articleSpacingSelect.addEventListener('change', handleTextStyleChange);
   addSection(l('article_spacing'), articleSpacingSelect);
   // for footnotes
-  const footnoteFontSelect = createFontFamilySelect(fontFamilies, settings.footnote.fontFamily);
+  let targetLanguage = getTargetLanguage();
+  let targetScript = getLanguageScript(targetLanguage);
+  let footnote = getScriptSpecificSettings('footnote', targetScript);
+  const footnoteFontSelect = createFontFamilySelect(fontFamilies, footnote.fontFamily);
   footnoteFontSelect.dataset.setting = 'footnote.fontFamily';
-  footnoteFontSelect.addEventListener('change', handleSettingChange);
+  footnoteFontSelect.addEventListener('change', handleTextStyleChange);
   addSection(l('footnote_font_family'), footnoteFontSelect);
-  const footnoteSizeSelect = createFontSizeSelect(fontSizes, settings.footnote.fontSize);
+  const footnoteSizeSelect = createFontSizeSelect(fontSizes, footnote.fontSize);
   footnoteSizeSelect.dataset.setting = 'footnote.fontSize';
-  footnoteSizeSelect.addEventListener('change', handleSettingChange);
+  footnoteSizeSelect.addEventListener('change', handleTextStyleChange);
   addSection(l('footnote_font_size'), footnoteSizeSelect, true);
 }
 
@@ -347,7 +324,7 @@ function handleCollapseButtonClick() {
   }
 }
 
-function handleSettingChange(evt) {
+function handleTextStyleChange(evt) {
   const { target } = evt;
   const { setting } = target.dataset;
   const path = setting.split('.');
