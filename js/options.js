@@ -3,7 +3,8 @@ import { l, getUILanguage, getTargetLanguage, getLanguageScript, getScriptDirect
 import { initializeStorage, getSettings, saveSettings, storageChange } from './lib/storage.js';
 import { setWindowName } from './lib/navigation.js';
 import { createTopBar, attachShadowHandlers } from './lib/top-bar.js';
-import { getScripts, getFontCoverage, getScriptSpecificSettings, updateFontAvailability, updateFontSelection, applyDefaultFontSettings } from './lib/fonts.js';
+import { getScriptSpecificSettings } from './lib/settings.js';
+import { getScripts, getFontCoverage, updateFontAvailability, updateFontSelection, applyDefaultFontSettings } from './lib/fonts.js';
 
 const listContainer = document.getElementById('list-container');
 

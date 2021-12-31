@@ -3,7 +3,8 @@ import { l, setSourceLanguage, getSourceLanguage, getSourceLanguages, getTargetL
 import { getPaperProperties, applyStyles, getSettings, saveSettings } from './settings.js';
 import { updateLayout } from './document.js';
 import { modeChange, setEditMode, getEditMode } from './editing.js';
-import { getAvailableFonts, getScriptSpecificSettings, fontAvailability } from './fonts.js';
+import { getScriptSpecificSettings } from './settings.js';
+import { getAvailableFonts, fontAvailability } from './fonts.js';
 
 const containerElement = document.getElementById('side-bar');
 const mainAreaElement = document.getElementById('side-bar-top');
@@ -309,7 +310,7 @@ function createFontElements(fonts, currentValue) {
 }
 
 function createFontFamilySelect(fonts, currentValue) {
-  return e('SELECT', {}, createFontElements(fonts));
+  return e('SELECT', {}, createFontElements(fonts, currentValue));
 }
 
 function updateFontFamilySelect(selectElement, fonts, currentValue) {

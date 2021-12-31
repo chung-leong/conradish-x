@@ -12,28 +12,35 @@ export function applyStyles() {
     if (styleSheet.href.endsWith('article.css')) {
       for (const rule of styleSheet.cssRules) {
         const { selectorText, cssText } = rule;
-        if (selectorText === '#article-text') {
-          const justify = [ 'text', 'both' ].includes(settings.article.justification);
-          rule.style.fontFamily = settings.article.fontFamily;
-          rule.style.fontSize = settings.article.fontSize;
-          rule.style.lineHeight = settings.article.spacing;
-          rule.style.textAlign = (justify) ? 'justify' : 'start';
-        } else if (/#article\-text h\d/.test(selectorText)) {
-          const justify = [ 'both' ].includes(settings.article.justification);
-          rule.style.textAlign = (justify) ? 'justify' : 'start';
+        if (selectorText && selectorText.startsWith('#article-text')) {
+          let m;
+          if (selectorText === '#article-text sup') {
+            rule.style.fontSize = `calc(${settings.article.fontSize} * 5 / 6)`;
+          } else if (selectorText === '#article-text table') {
+            const { top, bottom, left, right } = page.margins;
+            const { width, height } = page;
+            rule.style.width = `calc(${width} - ${left} - ${right} - 2mm)`;
+            rule.style.maxheight = `calc(${height} - ${top} - ${bottom} - 5mm - 10mm)`;
+          } else if (m = /#article\-text\.([A-Z][a-z]{3})\s*(.*)/.exec(selectorText)) {
+            const script = m[1], children = m[2];
+            const article = getScriptSpecificSettings('article', script);
+            if (!children) {
+              const justify = [ 'text', 'both' ].includes(article.justification);
+              rule.style.fontFamily = `${article.fontFamily}, sans-serif`;
+              rule.style.fontSize = article.fontSize;
+              rule.style.lineHeight = article.spacing;
+              rule.style.textAlign = (justify) ? 'justify' : 'start';
+            } else if (children.startsWith(':is(h1')) {
+              const justify = [ 'both' ].includes(article.justification);
+              rule.style.textAlign = (justify) ? 'justify' : 'start';
+            }
+          }
         } else if (selectorText === '#article-content') {
           rule.style.paddingLeft = page.margins.left;
           // account for the 1px used by the footer-pusher
           rule.style.paddingRight = `calc(${page.margins.right} - 1px)`;
           rule.style.paddingTop = page.margins.top;
           rule.style.paddingBottom = page.margins.bottom;
-        } else if (selectorText === '#article-text sup') {
-          rule.style.fontSize = `calc(${settings.article.fontSize} * 5 / 6)`;
-        } else if (selectorText === '#article-text table') {
-          const { top, bottom, left, right } = page.margins;
-          const { width, height } = page;
-          rule.style.width = `calc(${width} - ${left} - ${right} - 2mm)`;
-          rule.style.maxheight = `calc(${height} - ${top} - ${bottom} - 5mm - 10mm)`;
         } else if (selectorText === '.footer-content') {
           rule.style.fontFamily = settings.footnote.fontFamily;
           rule.style.fontSize = settings.footnote.fontSize;
@@ -171,6 +178,12 @@ export function getDefaultSettings() {
     fontsThai: [],
   };
   return settings;
+}
+
+export function getScriptSpecificSettings(name, script) {
+  const settings = getSettings();
+  const key = name + (script === 'Latn' ? '' : script);
+  return settings[key];
 }
 
 export function getPaperProperties(paper) {

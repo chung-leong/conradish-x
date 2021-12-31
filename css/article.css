@@ -62,12 +62,187 @@ BODY {
   white-space: pre-wrap;
 }
 
-#article-text H1,
-#article-text H2,
-#article-text H3,
-#article-text H4,
-#article-text H5,
-#article-text H6 {
+#article-text.Arab {
+  direction: rtl;
+}
+
+#article-text.Arab :is(H1, H2, H3, H4, H5, H6) {
+  text-align: start;
+}
+
+#article-text.Armn {
+}
+
+#article-text.Armn :is(H1, H2, H3, H4, H5, H6) {
+  text-align: start;
+}
+
+#article-text.Beng {
+}
+
+#article-text.Beng :is(H1, H2, H3, H4, H5, H6) {
+  text-align: start;
+}
+
+#article-text.Cyrl {
+}
+
+#article-text.Cyrl :is(H1, H2, H3, H4, H5, H6) {
+  text-align: start;
+}
+
+#article-text.Deva {
+}
+
+#article-text.Deva :is(H1, H2, H3, H4, H5, H6) {
+  text-align: start;
+}
+
+#article-text.Ethi {
+}
+
+#article-text.Ethi :is(H1, H2, H3, H4, H5, H6) {
+  text-align: start;
+}
+
+#article-text.Geor {
+}
+
+#article-text.Geor :is(H1, H2, H3, H4, H5, H6) {
+  text-align: start;
+}
+
+#article-text.Grek {
+}
+
+#article-text.Grek :is(H1, H2, H3, H4, H5, H6) {
+  text-align: start;
+}
+
+#article-text.Gujr {
+}
+
+#article-text.Gujr :is(H1, H2, H3, H4, H5, H6) {
+  text-align: start;
+}
+
+#article-text.Guru {
+}
+
+#article-text.Guru :is(H1, H2, H3, H4, H5, H6) {
+  text-align: start;
+}
+
+#article-text.Hang {
+}
+
+#article-text.Hang :is(H1, H2, H3, H4, H5, H6) {
+  text-align: start;
+}
+
+#article-text.Hans {
+}
+
+#article-text.Hans :is(H1, H2, H3, H4, H5, H6) {
+  text-align: start;
+}
+
+#article-text.Hant {
+}
+
+#article-text.Hant :is(H1, H2, H3, H4, H5, H6) {
+  text-align: start;
+}
+
+#article-text.Hebr {
+  direction: rtl;
+}
+
+#article-text.Hebr :is(H1, H2, H3, H4, H5, H6) {
+  text-align: start;
+}
+
+#article-text.Jpan {
+}
+
+#article-text.Jpan :is(H1, H2, H3, H4, H5, H6) {
+  text-align: start;
+}
+
+#article-text.Khmr {
+}
+
+#article-text.Khmr :is(H1, H2, H3, H4, H5, H6) {
+  text-align: start;
+}
+
+#article-text.Knda {
+}
+
+#article-text.Knda :is(H1, H2, H3, H4, H5, H6) {
+  text-align: start;
+}
+
+#article-text.Laoo {
+}
+
+#article-text.Laoo :is(H1, H2, H3, H4, H5, H6) {
+  text-align: start;
+}
+
+#article-text.Latn {
+}
+
+#article-text.Latn :is(H1, H2, H3, H4, H5, H6) {
+  text-align: start;
+}
+
+#article-text.Mlym {
+}
+
+#article-text.Mlym :is(H1, H2, H3, H4, H5, H6) {
+  text-align: start;
+}
+
+#article-text.Mymr {
+}
+
+#article-text.Mymr :is(H1, H2, H3, H4, H5, H6) {
+  text-align: start;
+}
+
+#article-text.Orya {
+}
+
+#article-text.Orya :is(H1, H2, H3, H4, H5, H6) {
+  text-align: start;
+}
+
+#article-text.Sinh {
+}
+
+#article-text.Sinh :is(H1, H2, H3, H4, H5, H6) {
+  text-align: start;
+}
+
+#article-text.Taml {
+}
+
+#article-text.Taml :is(H1, H2, H3, H4, H5, H6) {
+  text-align: start;
+}
+
+#article-text.Telu {
+}
+
+#article-text.Telu :is(H1, H2, H3, H4, H5, H6) {
+  text-align: start;
+}
+
+#article-text.Thai {
+}
+
+#article-text.Thai :is(H1, H2, H3, H4, H5, H6) {
   text-align: start;
 }
 

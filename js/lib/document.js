@@ -1,6 +1,6 @@
-import { e } from './ui.js';
+import { e, waitForRedraw } from './ui.js';
 import { applyStyles, getPageProperties } from './settings.js';
-import { setSourceLanguage, getSourceLanguage, getLanguageDirection } from './i18n.js';
+import { setSourceLanguage, getSourceLanguage, getLanguageScript, getLanguageDirection } from './i18n.js';
 import { insertContent, replaceUselessElements, removeEmptyNodes } from './capturing.js';
 import { loadObject, saveObject, storageChange } from './storage.js';
 
@@ -23,7 +23,6 @@ let observing = false;
 
 let currentDocumentKey;
 let currentDocument;
-let deletionCount = 1;
 let filterMode = 'automatic';
 let classChanged = false;
 
@@ -48,11 +47,8 @@ export async function loadDocument(key) {
   const { title, content, lang, raw } = currentDocument;
   // set the source language
   setSourceLanguage(lang);
-  // use rtl layout for Arabic and Hebrew
-  const direction = getLanguageDirection(lang);
-  if (direction === 'rtl') {
-    contentElement.classList.add('rtl');
-  }
+  const script = getLanguageScript(lang);
+  contentElement.classList.add(script);
   document.title = title;
   // alter CSS rules based on settings
   applyStyles();
@@ -63,7 +59,7 @@ export async function loadDocument(key) {
   // adjust layout, inserting footnotes into appropriate page
   adjustLayout({ breakAfterPage: 1 });
   // give browser a chance to render the first page, then finish the rest
-  await new Promise(r => setTimeout(r, 0));
+  await waitForRedraw();
   adjustLayout();
   // watch for changes to article
   observeChanges();

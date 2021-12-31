@@ -1,5 +1,5 @@
 import { waitForRedraw } from './ui.js';
-import { getSettings, saveSettings } from './settings.js';
+import { getSettings, saveSettings, getScriptSpecificSettings } from './settings.js';
 import { storageChange } from './storage.js';
 
 export const fontAvailability = new EventTarget;
@@ -43,12 +43,6 @@ export async function getDefaultFonts(script) {
   return fonts.filter((font, index, arr) => {
     return font.fontId && index === arr.findIndex(f => f.fontId === font.fontId);
   });
-}
-
-export function getScriptSpecificSettings(name, script) {
-  const settings = getSettings();
-  const key = name + (script === 'Latn' ? '' : script);
-  return settings[key];
 }
 
 export async function getAvailableFonts(script) {
