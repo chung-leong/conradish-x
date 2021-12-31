@@ -1,5 +1,6 @@
 #left-side-bar {
   min-width: 220px;
+  overflow: auto;
 }
 
 #right-side-bar {

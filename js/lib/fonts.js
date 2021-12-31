@@ -1,11 +1,16 @@
 import { waitForRedraw } from './ui.js';
 import { getSettings, saveSettings } from './settings.js';
+import { storageChange } from './storage.js';
+
+export const fontAvailability = new EventTarget;
+
+storageChange.addEventListener('settings', (evt) => {
+  if (!evt.detail.self) {
+    fontAvailability.dispatchEvent(new CustomEvent('change'));
+  }
+});
 
 let fontList;
-
-export function getScripts() {
-  return Object.keys(essentialCharacters);
-}
 
 export async function getFontList() {
   if (!fontList) {
@@ -13,6 +18,10 @@ export async function getFontList() {
     fontList.sort((a, b) => a.displayName.localeCompare(b.displayName));
   }
   return fontList;
+}
+
+export function getScripts() {
+  return Object.keys(essentialCharacters);
 }
 
 export async function getDefaultFonts(script) {
@@ -42,16 +51,12 @@ export function getScriptSpecificSettings(name, script) {
   return settings[key];
 }
 
-export async function getAvailableFonts(requestedScript) {
+export async function getAvailableFonts(script) {
   const fonts = await getFontList();
   const available = {};
-  for (const script of getScripts()) {
-    if (!requestedScript || script === requestedScript) {
-      const list = getScriptSpecificSettings('fonts', script);
-      for (const fontId of list) {
-        available[fontId] = true;
-      }
-    }
+  const list = getScriptSpecificSettings('fonts', script);
+  for (const fontId of list) {
+    available[fontId] = true;
   }
   return fonts.filter(f => available[f.fontId]);
 }
@@ -98,6 +103,7 @@ export async function applyDefaultFontSettings(options = {}) {
   if (changed) {
     updateFontSelection();
     await saveSettings();
+    fontAvailability.dispatchEvent(new CustomEvent('change'));
   }
   return changed;
 }

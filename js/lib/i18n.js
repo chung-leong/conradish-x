@@ -96,9 +96,16 @@ export function getUILanguage() {
 }
 
 export function getLanguageScript(lang) {
-  for (const { code, script } of languages) {
+  for (const { code, script, variants } of languages) {
     if (code === lang) {
       return script;
+    }
+    if (variants) {
+      for (const { code, script } of variants) {
+        if (code === lang) {
+          return script;
+        }
+      }
     }
   }
   return 'Latn';
@@ -733,11 +740,11 @@ const languages = [
   },
   { // Turkmen
     code: 'tk',
-    script: 'cyrl',
+    script: 'Cyrl',
   },
   { // Ukrainian
     code: 'uk',
-    script: 'cyrl',
+    script: 'Cyrl',
   },
   { // Urdu
     code: 'ur',
@@ -749,7 +756,7 @@ const languages = [
   },
   { // Uzbek
     code: 'uz',
-    script: 'cyrl',
+    script: 'Cyrl',
   },
   { // Vietnamese
     code: 'vi',

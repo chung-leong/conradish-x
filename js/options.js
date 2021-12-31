@@ -200,6 +200,7 @@ function showActiveCards() {
   listContainer.append(...elements);
   const spacerElement = e('DIV', { className: 'list-end-spacer' }, '\u00a0');
   listContainer.append(spacerElement);
+  listContainer.scrollIntoView({ block: 'start', behavior: 'auto' });
 }
 
 async function changeSettings(cb) {

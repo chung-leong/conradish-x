@@ -12,7 +12,7 @@ export function getSettings() {
 }
 
 export async function saveSettings() {
-  return set('.settings', settings);
+  return saveObject('.settings', settings);
 }
 
 chrome.storage.onChanged.addListener(handleChanged);
@@ -183,7 +183,6 @@ async function handleChanged(changes, areaName) {
         const detail = { self };
         const evt = new CustomEvent('settings', { detail });
         storageChange.dispatchEvent(evt);
-        savingSettings = false;
       }
       continue;
     }

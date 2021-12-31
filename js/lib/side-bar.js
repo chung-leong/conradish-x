@@ -3,7 +3,7 @@ import { l, setSourceLanguage, getSourceLanguage, getSourceLanguages, getTargetL
 import { getPaperProperties, applyStyles, getSettings, saveSettings } from './settings.js';
 import { updateLayout } from './document.js';
 import { modeChange, setEditMode, getEditMode } from './editing.js';
-import { getAvailableFonts, getScriptSpecificSettings } from './fonts.js';
+import { getAvailableFonts, getScriptSpecificSettings, fontAvailability } from './fonts.js';
 
 const containerElement = document.getElementById('side-bar');
 const mainAreaElement = document.getElementById('side-bar-top');
@@ -55,7 +55,9 @@ function createActionControls() {
   modeChange.addEventListener('change', () => {
     containerElement.className = modeSelect.value = getEditMode();
   });
-  modeSelect.addEventListener('change', handleModeChange);
+  modeSelect.addEventListener('change', (evt) => {
+    setEditMode(evt.target.value);
+  });
 }
 
 function createLanguageControls() {
@@ -63,20 +65,21 @@ function createLanguageControls() {
   const sourceLangs = getSourceLanguages();
   const sourceLang = getSourceLanguage();
   const sourceLangSelect = createSelect(sourceLangs, sourceLang);
-  sourceLangSelect.addEventListener('change', handleSourceLanguageChange);
+  sourceLangSelect.id = 'from-lang-select';
+  sourceLangSelect.addEventListener('change', (evt) => setSourceLanguage(evt.target.value));
   addSection(l('from_language'), sourceLangSelect);
   const targetLangs = getTargetLanguages();
   const targetLangSelect = createSelect(targetLangs, settings.target);
-  targetLangSelect.addEventListener('change', handleTargetLanguageChange);
+  targetLangSelect.id = 'to-lang-select';
+  targetLangSelect.addEventListener('change', (evt) => {
+    const settings = getSettings();
+    settings.target = evt.target.value;
+    saveSettings();
+  });
   addSection(l('to_language'), targetLangSelect, true);
 }
 
 async function createTextControls() {
-  const settings = getSettings();
-  const fonts = await getAvailableFonts();
-  const fontFamilies = fonts.map(({ fontId, displayName }) => {
-    return { label: displayName, value: fontId };
-  });
   const fontSizes = [ 8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48 ].map((pt) => {
     return {
       label: `${pt}`,
@@ -120,37 +123,58 @@ async function createTextControls() {
     },
   ];
   // for main text
-  let sourceLanguage = getTargetLanguage();
-  let sourceScript = getLanguageScript(sourceLanguage);
-  let article = getScriptSpecificSettings('article', sourceScript);
-  const articleFontSelect = createFontFamilySelect(fontFamilies, article.fontFamily);
-  articleFontSelect.dataset.setting = 'article.fontFamily';
-  articleFontSelect.addEventListener('change', handleTextStyleChange);
+  const article = getArticleSettings();
+  const articleFonts = await getArticleFonts();
+  const articleFontSelect = createFontFamilySelect(articleFonts, article.fontFamily);
+  articleFontSelect.addEventListener('change', (evt) => {
+    changeArticleSettings((article) => article.fontFamily = evt.target.value);
+  });
   addSection(l('article_font_family'), articleFontSelect);
   const articleSizeSelect = createFontSizeSelect(fontSizes, article.fontSize);
-  articleSizeSelect.dataset.setting = 'article.fontSize';
-  articleSizeSelect.addEventListener('change', handleTextStyleChange);
+  articleSizeSelect.addEventListener('change', (evt) => {
+    changeArticleSettings((article) => article.fontSize = evt.target.value);
+  });
   addSection(l('article_font_size'), articleSizeSelect);
   const articleJustificationSelect = createSelect(justifications, article.justification);
-  articleJustificationSelect.dataset.setting = 'article.justification';
-  articleJustificationSelect.addEventListener('change', handleTextStyleChange);
+  articleJustificationSelect.addEventListener('change', (evt) => {
+    changeArticleSettings((article) => article.justification = evt.target.value);
+  });
   addSection(l('article_justification'), articleJustificationSelect);
   const articleSpacingSelect = createSelect(spacings, article.spacing);
-  articleSpacingSelect.dataset.setting = 'article.spacing';
-  articleSpacingSelect.addEventListener('change', handleTextStyleChange);
+  articleSpacingSelect.addEventListener('change', (evt) => {
+    changeArticleSettings((article) => article.spacing = evt.target.value);
+  });
   addSection(l('article_spacing'), articleSpacingSelect);
   // for footnotes
-  let targetLanguage = getTargetLanguage();
-  let targetScript = getLanguageScript(targetLanguage);
-  let footnote = getScriptSpecificSettings('footnote', targetScript);
-  const footnoteFontSelect = createFontFamilySelect(fontFamilies, footnote.fontFamily);
-  footnoteFontSelect.dataset.setting = 'footnote.fontFamily';
-  footnoteFontSelect.addEventListener('change', handleTextStyleChange);
+  const footnote = getFootnoteSettings();
+  const footnoteFonts = await getFootnoteFonts();
+  const footnoteFontSelect = createFontFamilySelect(footnoteFonts, footnote.fontFamily);
+  footnoteFontSelect.addEventListener('change', (evt) => {
+    changeFootnoteSettings((footnote) => footnote.fontFamily = evt.target.value);
+  });
   addSection(l('footnote_font_family'), footnoteFontSelect);
   const footnoteSizeSelect = createFontSizeSelect(fontSizes, footnote.fontSize);
-  footnoteSizeSelect.dataset.setting = 'footnote.fontSize';
-  footnoteSizeSelect.addEventListener('change', handleTextStyleChange);
+  footnoteSizeSelect.addEventListener('change', (evt) => {
+    changeFootnoteSettings((footnote) => footnote.fontSize = evt.target.value);
+  });
   addSection(l('footnote_font_size'), footnoteSizeSelect, true);
+  // update font list when user change language settings
+  const targetLangSelect = document.getElementById('to-lang-select');
+  targetLangSelect.addEventListener('change', async (evt) => {
+    const footnote = getFootnoteSettings();
+    const footnoteFonts = await getFootnoteFonts();
+    updateFontFamilySelect(footnoteFontSelect, footnoteFonts, footnote.fontFamily);
+    footnoteSizeSelect.value = footnote.fontSize;
+  });
+  // update font lists when font availability changes
+  fontAvailability.addEventListener('change', async (evt) => {
+    const article = getArticleSettings();
+    const articleFonts = await getArticleFonts();
+    updateFontFamilySelect(articleFontSelect, articleFonts, article.fontFamily);
+    const footnote = getFootnoteSettings();
+    const footnoteFonts = await getFootnoteFonts();
+    updateFontFamilySelect(footnoteFontSelect, footnoteFonts, footnote.fontFamily);
+  });
 }
 
 function createPaperControls() {
@@ -176,16 +200,65 @@ function createPaperControls() {
     }
   ];
   const paperSelect = createSelect(papers, settings.paper);
-  paperSelect.addEventListener('change', handlePaperChange);
+  paperSelect.addEventListener('change', (evt) => {
+    changeSettings((settings) => {
+      const props = getPaperProperties(evt.target.value);
+      settings.paper = evt.target.value;
+      settings.customMargins = Object.assign({}, props.defaultMargins);
+      const [ customMargins ] = document.getElementsByClassName('custom-margins');
+      const inputs = customMargins.getElementsByTagName('INPUT');
+      for (const input of inputs) {
+        input.value = settings.customMargins[input.name];
+      }
+    }, true);
+  });
   addSection(l('paper_size'), paperSelect);
   const marginSelect = createSelect(margins, settings.margins);
-  marginSelect.addEventListener('change', handleMarginChange);
+  marginSelect.addEventListener('change', (evt) => {
+    changeSettings((settings) => {
+      const [ customMargins ] = document.getElementsByClassName('custom-margins');
+      settings.margins = evt.target.value;
+      if (settings.margins === 'default') {
+        customMargins.classList.add('hidden');
+      } else {
+        customMargins.classList.remove('hidden');
+        customMargins.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    });
+  });
   addSection(l('margins'), marginSelect);
   const customMargins = createCustomMarginInputs(settings.customMargins, settings.margins === 'default');
   const inputs = customMargins.getElementsByTagName('INPUT');
+  const handleInput = (evt) => {
+    const { target } = evt;
+    const dim = target.value.trim().replace(/\s/g, '');
+    const value = parseFloat(dim);
+    const unit = dim.substr(-2).toLowerCase();
+    let valid = false;
+    if (!isNaN(value) || [ 'in', 'mm' ].includes(unit)) {
+      if (unit === 'in' && value >= 1 && value <= 3) {
+        valid = true;
+      } else if (unit === 'mm' && value >= 25 && value <= 80) {
+        valid = true;
+      }
+    }
+    if (valid) {
+      changeSettings(settings => settings.customMargins[target.name] = `${value}${unit}`);
+      target.classList.remove('invalid');
+    } else {
+      target.classList.add('invalid');
+    }
+  };
+  const handleBlur = (evt) => {
+    // set the text to match what's stored in settings
+    const { target } = evt;
+    const settings = getSettings();
+    target.value = settings.customMargins[target.name];
+    target.classList.remove('invalid');
+  };
   for (const input of inputs) {
-    input.addEventListener('input', handleCustomMarginInput);
-    input.addEventListener('blur', handleCustomMarginBlur);
+    input.addEventListener('input', handleInput);
+    input.addEventListener('blur', handleBlur);
   }
   addSection('', customMargins);
 }
@@ -193,9 +266,9 @@ function createPaperControls() {
 function createButtons() {
   // add buttons to bottom pane
   const finishButton = e('BUTTON', { id: 'finish-button' }, l('finish'));
-  finishButton.addEventListener('click', handleFinishClick);
+  finishButton.addEventListener('click', (evt) => setEditMode('annotate'));
   const printButton = e('BUTTON', { id: 'print-button', className: 'default' }, l('print'));
-  printButton.addEventListener('click', handlePrintClick)
+  printButton.addEventListener('click', (evt) => print());
   buttonAreaElement.append(finishButton, printButton);
   // add message about paper size and margin
   const speechBubble = createSpeechBubble();
@@ -227,12 +300,29 @@ function createSelect(items, currentValue) {
   }));
 }
 
-function createFontFamilySelect(fontFamilies, currentValue) {
-  return e('SELECT', {}, fontFamilies.map(({ label, value }) => {
-    const selected = (value === currentValue);
-    const style = { fontFamily: value, fontSize: '13pt' };
-    return e('OPTION', { value, selected, style }, label);
-  }));
+function createFontElements(fonts, currentValue) {
+  return fonts.map(({ fontId, displayName }) => {
+    const selected = (fontId === currentValue);
+    const style = { fontFamily: fontId, fontSize: '13pt' };
+    return e('OPTION', { value: fontId, selected, style }, displayName);
+  });
+}
+
+function createFontFamilySelect(fonts, currentValue) {
+  return e('SELECT', {}, createFontElements(fonts));
+}
+
+function updateFontFamilySelect(selectElement, fonts, currentValue) {
+  const currentList = [ ...selectElement.children ].map(li => li.value).join();
+  const newList = fonts.map(f => f.fontId).join();
+  if (newList !== currentList) {
+    while (selectElement.firstChild) {
+      selectElement.firstChild.remove();
+    }
+    selectElement.append(...createFontElements(fonts, currentValue));
+  } else {
+    selectElement.value = currentValue;
+  }
 }
 
 function createFontSizeSelect(fontSizes, currentValue) {
@@ -274,6 +364,46 @@ function changeSettings(callback, paperSizeChanged = false) {
   saveSettings();
 }
 
+function changeArticleSettings(callback) {
+  const section = getArticleSettings();
+  callback(section);
+  applyStyles();
+  updateLayout();
+  saveSettings();
+}
+
+function getArticleSettings() {
+  const language = getSourceLanguage();
+  const script = getLanguageScript(language);
+  return getScriptSpecificSettings('article', script);
+}
+
+function changeFootnoteSettings(callback) {
+  const section = getFootnoteSettings();
+  callback(section);
+  applyStyles();
+  updateLayout();
+  saveSettings();
+}
+
+function getFootnoteSettings() {
+  const language = getTargetLanguage();
+  const script = getLanguageScript(language);
+  return getScriptSpecificSettings('footnote', script);
+}
+
+async function getArticleFonts() {
+  const language = getSourceLanguage();
+  const script = getLanguageScript(language);
+  return getAvailableFonts(script);
+}
+
+async function getFootnoteFonts() {
+  const language = getTargetLanguage();
+  const script = getLanguageScript(language);
+  return getAvailableFonts(script);
+}
+
 export function initializeAutoCollapse() {
   // the button won't have an offsetParent if it's not displayed
   const button = document.getElementById('side-bar-button');
@@ -287,8 +417,15 @@ export function initializeAutoCollapse() {
 
 function addCollapseButtonHandlers() {
   const button = document.getElementById('side-bar-button');
-  button.addEventListener('click', handleCollapseButtonClick);
-  window.addEventListener('resize', initializeAutoCollapse);
+  button.addEventListener('click', (evt) => {
+    if (collapsed) {
+      reopenSideBar();
+      reopenedManually = true;
+    } else {
+      collapseSideBar();
+    }
+  });
+  window.addEventListener('resize', (evt) => initializeAutoCollapse());
 }
 
 async function collapseSideBar() {
@@ -313,110 +450,4 @@ function reopenSideBar() {
   container.style.width = sideBarWidth + 'px';
   button.classList.remove('reverse', 'initial');
   collapsed = false;
-}
-
-function handleCollapseButtonClick() {
-  if (collapsed) {
-    reopenSideBar();
-    reopenedManually = true;
-  } else {
-    collapseSideBar();
-  }
-}
-
-function handleTextStyleChange(evt) {
-  const { target } = evt;
-  const { setting } = target.dataset;
-  const path = setting.split('.');
-  changeSettings((settings) => {
-    let section = settings;
-    while (path.length > 1) {
-      const name = path.shift();
-      section = section[name];
-    }
-    const name = path.shift();
-    section[name] = target.value
-  });
-}
-
-function handlePaperChange(evt) {
-  const { target } = evt;
-  changeSettings((settings) => {
-    const props = getPaperProperties(target.value);
-    settings.paper = target.value;
-    settings.customMargins = Object.assign({}, props.defaultMargins);
-    const [ customMargins ] = document.getElementsByClassName('custom-margins');
-    const inputs = customMargins.getElementsByTagName('INPUT');
-    for (const input of inputs) {
-      input.value = settings.customMargins[input.name];
-    }
-  }, true);
-}
-
-function handleMarginChange(evt) {
-  const { target } = evt;
-  changeSettings((settings) => {
-    const [ customMargins ] = document.getElementsByClassName('custom-margins');
-    settings.margins = target.value;
-    if (settings.margins === 'default') {
-      customMargins.classList.add('hidden');
-    } else {
-      customMargins.classList.remove('hidden');
-      customMargins.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
-  });
-}
-
-function handleCustomMarginInput(evt) {
-  const { target } = evt;
-  const dim = target.value.trim().replace(/\s/g, '');
-  const value = parseFloat(dim);
-  const unit = dim.substr(-2).toLowerCase();
-  let valid = false;
-  if (!isNaN(value) || [ 'in', 'mm' ].includes(unit)) {
-    if (unit === 'in' && value >= 1 && value <= 3) {
-      valid = true;
-    } else if (unit === 'mm' && value >= 25 && value <= 80) {
-      valid = true;
-    }
-  }
-  if (valid) {
-    changeSettings(settings => settings.customMargins[target.name] = `${value}${unit}`);
-    target.classList.remove('invalid');
-  } else {
-    target.classList.add('invalid');
-  }
-}
-
-function handleCustomMarginBlur(evt) {
-  // set the text to match what's stored in settings
-  const { target } = evt;
-  const settings = getSettings();
-  target.value = settings.customMargins[target.name];
-  target.classList.remove('invalid');
-}
-
-function handleSourceLanguageChange(evt) {
-  const { target } = evt;
-  setSourceLanguage(target.value);
-}
-
-function handleTargetLanguageChange(evt) {
-  const { target } = evt;
-  const settings = getSettings();
-  settings.target = target.value;
-  saveSettings();
-}
-
-function handlePrintClick(evt) {
-  print();
-}
-
-function handleFinishClick(evt) {
-  setEditMode('annotate');
-}
-
-function handleModeChange(evt) {
-  const { target } = evt;
-  setEditMode(target.value);
 }

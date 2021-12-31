@@ -3,11 +3,13 @@ import { loadDocument, setFilterMode } from './lib/document.js';
 import { setEditMode, createMenuItems, attachEditingHandlers } from './lib/editing.js';
 import { createArticleNavigation, initializeAutoCollapse } from './lib/side-bar.js';
 import { setWindowName, openPage } from './lib/navigation.js';
+import { applyDefaultFontSettings } from './lib/fonts.js';
 import { l } from './lib/i18n.js';
 
 async function start() {
   try {
     await initializeStorage();
+    await applyDefaultFontSettings();
     const { searchParams } = new URL(location);
     const key = searchParams.get('t');
     setWindowName('article', [ key ]);
@@ -29,6 +31,8 @@ async function start() {
     if (mode !== 'clean') {
       initializeAutoCollapse();
     }
+    // do time-consuming scan for fonts
+    applyDefaultFontSettings({ scan: 'fonts' });
     // close the window if the document is deleted
     storageChange.addEventListener('delete', (evt) => {
       if (evt.detail.key === key) {
