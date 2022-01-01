@@ -1016,6 +1016,44 @@ function extractContent(node) {
   return root;
 }
 
+function splitContent(item, sep) {
+  if (typeof(item) === 'string') {
+    const index = item.indexOf(sep);
+    if (index !== -1) {
+      return [ item.substr(0, index), item.substr(index) ];
+    }
+  } else if (item instanceof Array) {
+    for (const [ index, child ] of item.entries()) {
+      const [ first, second ] = splitContent(child, sep);
+      if (second !== undefined) {
+        const arr1 = [ ...item.slice(0, index), first ];
+        const arr2 = [ second, ...item.slice(index + 1)];
+        return [ arr1, arr2 ];
+      }
+    }
+  } else if (item instanceof Object) {
+    const [ first, second ] = splitContent(item.content, sep);
+    if (second !== undefined) {
+      const obj1 = { ...item, content: first };
+      const obj2 = { ...item, content: second };
+      return [ obj1, obj2 ];
+    }
+  }
+  return [ item ];
+}
+
+function getPlainText(item) {
+  if (typeof(item) === 'string') {
+    return item;
+  } else if (item instanceof Array) {
+    return item.map(getPlainText).join('');
+  } else if (item instanceof Object) {
+    return getPlainText(item.content);
+  } else {
+    return '';
+  }
+}
+
 function isBetween(a, b) {
   return (a.top >= b.top && a.bottom <= b.bottom);
 }
