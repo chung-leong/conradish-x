@@ -16,8 +16,8 @@ async function start() {
     // set filter and edit mode
     const { filter } = getSettings();
     const mode = (filter === 'manual' && !existing) ? 'clean' : 'annotate';
-    setFilterMode(filter);
     setEditMode(mode);
+    setFilterMode(filter);
     // create menu items
     createMenuItems();
     // create side navigation
