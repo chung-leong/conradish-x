@@ -81,6 +81,7 @@
   align-items: center;
   top: calc(50% - 40px / 2);
   left: -55px;
+  z-index: 3;
 }
 
 #side-bar-button .left-arrow {

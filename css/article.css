@@ -34,6 +34,7 @@ BODY {
   flex-grow: 1;
   flex-shrink: 1;
   flex-basis: auto;
+  min-width: 0;
 }
 
 #article-container {
@@ -49,6 +50,7 @@ BODY {
   position: relative;
   margin: 5mm 5mm 5mm 5mm;
   text-align: start;
+  z-index: 2;
 }
 
 #article-content {
@@ -434,7 +436,7 @@ BODY {
   background-size: 32px;
   opacity: 0.25;
   cursor: pointer;
-  z-index: 10;
+  z-index: 1;
 }
 
 #help-button:hover {
@@ -452,7 +454,7 @@ BODY {
   background-size: 32px;
   opacity: 0.25;
   cursor: pointer;
-  z-index: 10;
+  z-index: 1;
   display: none;
 }
 
