@@ -11,13 +11,14 @@ async function start() {
     const { searchParams } = new URL(location);
     const key = searchParams.get('t');
     setWindowName('article', [ key ]);
+    // set filter
+    const { filter } = getSettings();
+    setFilterMode(filter);
     // load the document
     const existing = await loadDocument(key);
-    // set filter and edit mode
-    const { filter } = getSettings();
+    // set edit mode
     const mode = (filter === 'manual' && !existing) ? 'clean' : 'annotate';
     setEditMode(mode);
-    setFilterMode(filter);
     // create menu items
     createMenuItems();
     // create side navigation

@@ -819,12 +819,14 @@ export function getEditMode(mode) {
 }
 
 export function setEditMode(mode) {
-  document.body.classList.remove(editMode);
-  editMode = mode;
-  document.body.classList.add(editMode);
-  setFilterMode(editMode === 'clean' ? 'manual' : 'automatic');
-  updateArticleMenu();
-  modeChange.dispatchEvent(new CustomEvent('change'));
+  if (editMode !== mode) {
+    document.body.classList.remove(editMode);
+    editMode = mode;
+    document.body.classList.add(editMode);
+    setFilterMode(editMode === 'clean' ? 'manual' : 'automatic');
+    updateArticleMenu();
+    modeChange.dispatchEvent(new CustomEvent('change'));
+  }
 }
 
 function toggleMode() {
