@@ -188,11 +188,11 @@
     "description": "Item in margins drop-down in side-bar"
   },
   "margins_custom": {
-    "message": "Tilpasset",
+    "message": "Egendefinert",
     "description": "Item in margins drop-down in side-bar"
   },
   "print": {
-    "message": "Skrive ut",
+    "message": "Skriv ut",
     "description": "Label for button in side-bar"
   },
   "finish": {
