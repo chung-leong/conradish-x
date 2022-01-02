@@ -225,7 +225,7 @@ function createPaperControls() {
         customMargins.classList.remove('hidden');
         customMargins.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       }
-    });
+    }, true);
   });
   addSection(l('margins'), marginSelect);
   const customMargins = createCustomMarginInputs(settings.customMargins, settings.margins === 'default');
@@ -244,7 +244,7 @@ function createPaperControls() {
       }
     }
     if (valid) {
-      changeSettings(settings => settings.customMargins[target.name] = `${value}${unit}`);
+      changeSettings(settings => settings.customMargins[target.name] = `${value}${unit}`, true);
       target.classList.remove('invalid');
     } else {
       target.classList.add('invalid');
