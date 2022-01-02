@@ -1,26 +1,18 @@
 {
-  "user_guide": {
-    "message": "User Guide",
-    "description": "Title of help page"
-  },
-  "user_guide_path": {
-    "message": "_locales/en/user-guide.html",
-    "description": "Path to user guide HTML file"
-  },
   "keep_all": {
-    "message": "keep all",
+    "message": "保留全部",
     "description": "Tooltip text of scrubbing mode keep all button"
   },
   "create_print_version": {
-    "message": "Create print version",
+    "message": "創建列印版本",
     "description": "Label for menu item in browser context menu and extension pop-up menu"
   },
   "selection_portion_of_document": {
-    "message": "select portion of document you wish to print first",
+    "message": "首先選擇要列印的文檔部分",
     "description": "Text for tooltip in pop-up menu, when there's no selection"
   },
   "created_on": {
-    "message": "created on $DATE$",
+    "message": "創立日期: $DATE$",
     "description": "Text for tooltip of recent documents in pop-up menu",
     "placeholders": {
       "date": {
@@ -30,63 +22,63 @@
     }
   },
   "show_all_documents": {
-    "message": "Show all documents",
+    "message": "顯示所有文件",
     "description": "Label for menu item in pop-up menu"
   },
   "add_definition": {
-    "message": "Add definition",
+    "message": "添加定義",
     "description": "Label for item in annotation menu"
   },
   "show_term_and_definition": {
-    "message": "show both term and definition in footnote",
+    "message": "在腳註中顯示單詞和定義",
     "description": "Text for tooltip of item in annotation menu"
   },
   "add_translation": {
-    "message": "Add translation",
+    "message": "添加翻譯",
     "description": "Label for item in annotation menu"
   },
   "show_translation_only": {
-    "message": "show translated sentence only in footnote",
+    "message": "在腳註中只顯示翻譯了的句子",
     "description": "Text for tooltip of item in annotation menu"
   },
   "add_explanation": {
-    "message": "Add explanation",
+    "message": "添加解釋",
     "description": "Label for item in annotation menu"
   },
   "show_explanation": {
-    "message": "show explanation in footnote",
+    "message": "在腳註中顯示解釋",
     "description": "Text for tooltip of item in annotation menu"
   },
   "style_bold": {
-    "message": "bold",
+    "message": "粗體",
     "description": "Text for tooltip of button in style menu"
   },
   "style_italic": {
-    "message": "italic",
+    "message": "斜體",
     "description": "Text for tooltip of button in style menu"
   },
   "style_underline": {
-    "message": "underline",
+    "message": "底線",
     "description": "Text for tooltip of button in style menu"
   },
   "style_strikethrough": {
-    "message": "strike-through",
+    "message": "刪除線",
     "description": "Text for tooltip of button in style menu"
   },
   "style_subscript": {
-    "message": "subscript",
+    "message": "下標",
     "description": "Text for tooltip of button in style menu"
   },
   "style_superscript": {
-    "message": "superscript",
+    "message": "上標",
     "description": "Text for tooltip of button in style menu"
   },
   "style_remove": {
-    "message": "clear formatting",
+    "message": "清除格式",
     "description": "Text for tooltip of button in style menu"
   },
   "style_heading": {
-    "message": "heading $NUMBER$",
+    "message": "標題 $NUMBER$",
     "description": "Text for tooltip of button in style menu",
     "placeholders": {
       "number": {
@@ -96,159 +88,159 @@
     }
   },
   "style_paragraph": {
-    "message": "paragraph",
+    "message": "段落",
     "description": "Text for tooltip of button in style menu"
   },
   "extension_options": {
-    "message": "Extension options",
+    "message": "擴充功能選項",
     "description": "Title in options page"
   },
   "basic_options": {
-    "message": "Basic options",
+    "message": "基本選項",
     "description": "Title of basic option card"
   },
   "add_context_menu_item": {
-    "message": "Add item to browser context menu",
+    "message": "在瀏覽器的上下文菜單添加項目",
     "description": "Label for checkbox in options"
   },
   "filter_page_content": {
-    "message": "Filter page content",
+    "message": "過濾頁面內容",
     "description": "Label for checkbox in options"
   },
   "filter_automatic": {
-    "message": "Automatically",
+    "message": "自動",
     "description": "Label for filter drop-down in options"
   },
   "filter_manual": {
-    "message": "Manually",
+    "message": "手動",
     "description": "Label for filter drop-down in options"
   },
   "fonts": {
-    "message": "Fonts",
+    "message": "字體",
     "description": "Used in section navigation in option page"
   },
   "script_arab": {
-    "message": "Arabic",
+    "message": "阿拉伯文",
     "description": "Name of script, used in option page"
   },
   "script_armn": {
-    "message": "Armenian",
+    "message": "亞美尼亞文",
     "description": "Name of script, used in option page"
   },
   "script_beng": {
-    "message": "Bengali",
+    "message": "孟加拉文",
     "description": "Name of script, used in option page"
   },
   "script_cyrl": {
-    "message": "Cyrillic",
+    "message": "西里爾字",
     "description": "Name of script, used in option page"
   },
   "script_deva": {
-    "message": "Devanagari",
+    "message": "梵文",
     "description": "Name of script, used in option page"
   },
   "script_ethi": {
-    "message": "Ethiopic",
+    "message": "埃塞俄比亞文",
     "description": "Name of script, used in option page"
   },
   "script_geor": {
-    "message": "Georgian",
+    "message": "格魯吉亞文",
     "description": "Name of script, used in option page"
   },
   "script_grek": {
-    "message": "Greek",
+    "message": "希臘文",
     "description": "Name of script, used in option page"
   },
   "script_gujr": {
-    "message": "Gujurati",
+    "message": "古吉拉特文",
     "description": "Name of script, used in option page"
   },
   "script_guru": {
-    "message": "Gurmukhi",
+    "message": "古爾穆基文",
     "description": "Name of script, used in option page"
   },
   "script_hang": {
-    "message": "Korean",
+    "message": "韓文",
     "description": "Name of script, used in option page"
   },
   "script_hans": {
-    "message": "Chinese (Simplified)",
+    "message": "中文（簡體）",
     "description": "Name of script, used in option page"
   },
   "script_hant": {
-    "message": "Chinese (Traditional)",
+    "message": "中文（繁體）",
     "description": "Name of script, used in option page"
   },
   "script_hebr": {
-    "message": "Hebrew",
+    "message": "希伯來文",
     "description": "Name of script, used in option page"
   },
   "script_jpan": {
-    "message": "Japanese",
+    "message": "日文",
     "description": "Name of script, used in option page"
   },
   "script_khmr": {
-    "message": "Khmer",
+    "message": "高棉文",
     "description": "Name of script, used in option page"
   },
   "script_knda": {
-    "message": "Kannada",
+    "message": "卡納達文",
     "description": "Name of script, used in option page"
   },
   "script_laoo": {
-    "message": "Laotian",
+    "message": "老撾文",
     "description": "Name of script, used in option page"
   },
   "script_latn": {
-    "message": "Latin",
+    "message": "拉丁文",
     "description": "Name of script, used in option page"
   },
   "script_mlym": {
-    "message": "Malayalam",
+    "message": "馬拉雅拉姆文",
     "description": "Name of script, used in option page"
   },
   "script_mymr": {
-    "message": "Burmese",
+    "message": "緬文",
     "description": "Name of script, used in option page"
   },
   "script_orya": {
-    "message": "Orya",
+    "message": "奧里亞文",
     "description": "Name of script, used in option page"
   },
   "script_sinh": {
-    "message": "Sinhala",
+    "message": "僧伽羅文",
     "description": "Name of script, used in option page"
   },
   "script_taml": {
-    "message": "Tamil",
+    "message": "泰米爾文",
     "description": "Name of script, used in option page"
   },
   "script_telu": {
-    "message": "Telugu",
+    "message": "泰盧固文",
     "description": "Name of script, used in option page"
   },
   "script_thai": {
-    "message": "Thai",
+    "message": "泰文",
     "description": "Name of script, used in option page"
   },
   "action": {
-    "message": "Action",
+    "message": "行動",
     "description": "Label for drop-down in side-bar"
   },
   "editing": {
-    "message": "Editing",
+    "message": "編輯",
     "description": "Item in action drop-down"
   },
   "styling": {
-    "message": "Styling",
+    "message": "造型",
     "description": "Item in action drop-down"
   },
   "annotating": {
-    "message": "Annotating",
+    "message": "批註",
     "description": "Item in action drop-down"
   },
   "scrubbing": {
-    "message": "Scrubbing",
+    "message": "清理",
     "description": "Item in action drop-down"
   },
   "from_language": {
@@ -324,7 +316,7 @@
     "description": "Label for button in side-bar"
   },
   "check_paper_size": {
-    "message": "In the print window, make sure **Paper size** matches what’s specified above and that **Margins** are set to “Default”",
+    "message": "在列印窗口中，確保**紙張大小**是與上面的選擇相同，並且**邊界**是設置為「預設值」",
     "description": "Message in speech bubble over print button in side-bar (Markdown)"
   },
   "documents": {

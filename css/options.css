@@ -115,6 +115,7 @@
 .script-list > LI.selected {
   color: rgb(51, 103, 214);
   text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 @font-face {
