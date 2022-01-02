@@ -1,0 +1,763 @@
+{
+  "user_guide": {
+    "message": "User Guide",
+    "description": "Title of help page"
+  },
+  "user_guide_path": {
+    "message": "_locales/en/user-guide.html",
+    "description": "Path to user guide HTML file"
+  },
+  "keep_all": {
+    "message": "keep all",
+    "description": "Tooltip text of scrubbing mode keep all button"
+  },
+  "create_print_version": {
+    "message": "Create print version",
+    "description": "Label for menu item in browser context menu and extension pop-up menu"
+  },
+  "selection_portion_of_document": {
+    "message": "select portion of document you wish to print first",
+    "description": "Text for tooltip in pop-up menu, when there's no selection"
+  },
+  "created_on": {
+    "message": "created on $DATE$",
+    "description": "Text for tooltip of recent documents in pop-up menu",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "11/28/2021, 10:01:35 PM"
+      }
+    }
+  },
+  "show_all_documents": {
+    "message": "Show all documents",
+    "description": "Label for menu item in pop-up menu"
+  },
+  "add_definition": {
+    "message": "Add definition",
+    "description": "Label for item in annotation menu"
+  },
+  "show_term_and_definition": {
+    "message": "show both term and definition in footnote",
+    "description": "Text for tooltip of item in annotation menu"
+  },
+  "add_translation": {
+    "message": "Add translation",
+    "description": "Label for item in annotation menu"
+  },
+  "show_translation_only": {
+    "message": "show translated sentence only in footnote",
+    "description": "Text for tooltip of item in annotation menu"
+  },
+  "add_explanation": {
+    "message": "Add explanation",
+    "description": "Label for item in annotation menu"
+  },
+  "show_explanation": {
+    "message": "show explanation in footnote",
+    "description": "Text for tooltip of item in annotation menu"
+  },
+  "style_bold": {
+    "message": "bold",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_italic": {
+    "message": "italic",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_underline": {
+    "message": "underline",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_strikethrough": {
+    "message": "strike-through",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_subscript": {
+    "message": "subscript",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_superscript": {
+    "message": "superscript",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_remove": {
+    "message": "clear formatting",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_heading": {
+    "message": "heading $NUMBER$",
+    "description": "Text for tooltip of button in style menu",
+    "placeholders": {
+      "number": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "style_paragraph": {
+    "message": "paragraph",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "extension_options": {
+    "message": "Extension options",
+    "description": "Title in options page"
+  },
+  "basic_options": {
+    "message": "Basic options",
+    "description": "Title of basic option card"
+  },
+  "add_context_menu_item": {
+    "message": "Add item to browser context menu",
+    "description": "Label for checkbox in options"
+  },
+  "filter_page_content": {
+    "message": "Filter page content",
+    "description": "Label for checkbox in options"
+  },
+  "filter_automatic": {
+    "message": "Automatically",
+    "description": "Label for filter drop-down in options"
+  },
+  "filter_manual": {
+    "message": "Manually",
+    "description": "Label for filter drop-down in options"
+  },
+  "fonts": {
+    "message": "Fonts",
+    "description": "Used in section navigation in option page"
+  },
+  "script_arab": {
+    "message": "Arabic",
+    "description": "Name of script, used in option page"
+  },
+  "script_armn": {
+    "message": "Armenian",
+    "description": "Name of script, used in option page"
+  },
+  "script_beng": {
+    "message": "Bengali",
+    "description": "Name of script, used in option page"
+  },
+  "script_cyrl": {
+    "message": "Cyrillic",
+    "description": "Name of script, used in option page"
+  },
+  "script_deva": {
+    "message": "Devanagari",
+    "description": "Name of script, used in option page"
+  },
+  "script_ethi": {
+    "message": "Ethiopic",
+    "description": "Name of script, used in option page"
+  },
+  "script_geor": {
+    "message": "Georgian",
+    "description": "Name of script, used in option page"
+  },
+  "script_grek": {
+    "message": "Greek",
+    "description": "Name of script, used in option page"
+  },
+  "script_gujr": {
+    "message": "Gujurati",
+    "description": "Name of script, used in option page"
+  },
+  "script_guru": {
+    "message": "Gurmukhi",
+    "description": "Name of script, used in option page"
+  },
+  "script_hang": {
+    "message": "Korean",
+    "description": "Name of script, used in option page"
+  },
+  "script_hans": {
+    "message": "Chinese (Simplified)",
+    "description": "Name of script, used in option page"
+  },
+  "script_hant": {
+    "message": "Chinese (Traditional)",
+    "description": "Name of script, used in option page"
+  },
+  "script_hebr": {
+    "message": "Hebrew",
+    "description": "Name of script, used in option page"
+  },
+  "script_jpan": {
+    "message": "Japanese",
+    "description": "Name of script, used in option page"
+  },
+  "script_khmr": {
+    "message": "Khmer",
+    "description": "Name of script, used in option page"
+  },
+  "script_knda": {
+    "message": "Kannada",
+    "description": "Name of script, used in option page"
+  },
+  "script_laoo": {
+    "message": "Laotian",
+    "description": "Name of script, used in option page"
+  },
+  "script_latn": {
+    "message": "Latin",
+    "description": "Name of script, used in option page"
+  },
+  "script_mlym": {
+    "message": "Malayalam",
+    "description": "Name of script, used in option page"
+  },
+  "script_mymr": {
+    "message": "Burmese",
+    "description": "Name of script, used in option page"
+  },
+  "script_orya": {
+    "message": "Orya",
+    "description": "Name of script, used in option page"
+  },
+  "script_sinh": {
+    "message": "Sinhala",
+    "description": "Name of script, used in option page"
+  },
+  "script_taml": {
+    "message": "Tamil",
+    "description": "Name of script, used in option page"
+  },
+  "script_telu": {
+    "message": "Telugu",
+    "description": "Name of script, used in option page"
+  },
+  "script_thai": {
+    "message": "Thai",
+    "description": "Name of script, used in option page"
+  },
+  "action": {
+    "message": "Action",
+    "description": "Label for drop-down in side-bar"
+  },
+  "editing": {
+    "message": "Editing",
+    "description": "Item in action drop-down"
+  },
+  "styling": {
+    "message": "Styling",
+    "description": "Item in action drop-down"
+  },
+  "annotating": {
+    "message": "Annotating",
+    "description": "Item in action drop-down"
+  },
+  "scrubbing": {
+    "message": "Scrubbing",
+    "description": "Item in action drop-down"
+  },
+  "from_language": {
+    "message": "原文語言",
+    "description": "Label for drop-down in side-bar"
+  },
+  "to_language": {
+    "message": "目標語言",
+    "description": "Label for drop-down in side-bar"
+  },
+  "article_font_family": {
+    "message": "字體",
+    "description": "Label for drop-down in side-bar"
+  },
+  "article_font_size": {
+    "message": "字體大小",
+    "description": "Label for drop-down in side-bar"
+  },
+  "article_justification": {
+    "message": "文本對齊",
+    "description": "Label for drop-down in side-bar"
+  },
+  "justification_none": {
+    "message": "不適用",
+    "description": "Item in justification drop-down in side-bar"
+  },
+  "justification_text": {
+    "message": "只對齊文本",
+    "description": "Item in justification drop-down in side-bar"
+  },
+  "justification_text_and_headings": {
+    "message": "對齊文本和標題",
+    "description": "Item in justification drop-down in side-bar"
+  },
+  "article_spacing": {
+    "message": "行間距",
+    "description": "Label for drop-down in side-bar"
+  },
+  "spacing_normal": {
+    "message": "正常",
+    "description": "Item in line-spacing drop-down in side-bar"
+  },
+  "footnote_font_family": {
+    "message": "腳註字體",
+    "description": "Label for drop-down in side-bar"
+  },
+  "footnote_font_size": {
+    "message": "腳註字體大小",
+    "description": "Label for drop-down in side-bar"
+  },
+  "paper_size": {
+    "message": "紙張大小",
+    "description": "Label for drop-down in side-bar"
+  },
+  "margins": {
+    "message": "邊界",
+    "description": "Label for drop-down in side-bar"
+  },
+  "margins_default": {
+    "message": "預設值",
+    "description": "Item in margins drop-down in side-bar"
+  },
+  "margins_custom": {
+    "message": "自訂",
+    "description": "Item in margins drop-down in side-bar"
+  },
+  "print": {
+    "message": "列印",
+    "description": "Label for button in side-bar"
+  },
+  "finish": {
+    "message": "結束",
+    "description": "Label for button in side-bar"
+  },
+  "check_paper_size": {
+    "message": "In the print window, make sure **Paper size** matches what’s specified above and that **Margins** are set to “Default”",
+    "description": "Message in speech bubble over print button in side-bar (Markdown)"
+  },
+  "documents": {
+    "message": "文件",
+    "description": "Title in document list"
+  },
+  "selected_document_sg": {
+    "message": "已選取 1 個項目",
+    "description": "For displaying the number of selected documents (singular)"
+  },
+  "selected_document_pl": {
+    "message": "已選取 $NUMBER$ 個項目",
+    "description": "For displaying the number of selected documents (plural)",
+    "placeholders": {
+      "number": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "no_documents": {
+    "message": "沒有文件",
+    "description": "Message in document list when there aren't any documents"
+  },
+  "no_search_results": {
+    "message": "找不到相符的搜尋結果",
+    "description": "Message in document list when a search yields no results"
+  },
+  "search_documents": {
+    "message": "搜索文件",
+    "description": "Placeholder of search box and icon tooltip in document list"
+  },
+  "search_result_sg": {
+    "message": "1 個",
+    "description": "For displaying the number of search results (singular)"
+  },
+  "search_result_pl": {
+    "message": "$NUMBER$ 個",
+    "description": "For displaying the number of search results (plural)",
+    "placeholders": {
+      "number": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "for_query": {
+    "message": "找到 $RESULTS$與「$QUERY$」相符的搜尋結果",
+    "description": "Text for card heading in document list",
+    "placeholders": {
+      "results": {
+        "content": "$1",
+        "example": "2 results"
+      },
+      "query": {
+        "content": "$2",
+        "example": "CNN"
+      }
+    }
+  },
+  "today_being": {
+    "message": "今天 - $DATE$",
+    "description": "Text for card heading in document list",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "Sunday, November 13, 2001"
+      }
+    }
+  },
+  "yesterday_being": {
+    "message": "昨天 - $DATE$",
+    "description": "Text for card heading in document list",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "Sunday, November 13, 2001"
+      }
+    }
+  },
+  "clear_search": {
+    "message": "清除搜索",
+    "description": "Tooltip of search box x button in document list"
+  },
+  "delete": {
+    "message": "刪除",
+    "description": "Label for delete button in document list"
+  },
+  "cancel": {
+    "message": "取消",
+    "description": "Label for x button used to clear selection in document list"
+  },
+  "change_title": {
+    "message": "更改標題",
+    "description": "Label for menu item in document list"
+  },
+  "open_original_page": {
+    "message": "轉到原始頁面",
+    "description": "Label for menu item in document list"
+  },
+  "language_none": {
+    "message": "不適用",
+    "description": "For top item in To language dropdown in side-bar"
+  },
+  "language_unknown": {
+    "message": "未知",
+    "description": "For top item in From language dropdown in side-bar"
+  },
+  "language_af": {
+    "message": "布爾文"
+  },
+  "language_am": {
+    "message": "阿姆哈拉文"
+  },
+  "language_ar": {
+    "message": "阿拉伯文"
+  },
+  "language_az": {
+    "message": "亞塞拜然文"
+  },
+  "language_be": {
+    "message": "白俄羅斯文"
+  },
+  "language_bg": {
+    "message": "保加利亞文"
+  },
+  "language_bn": {
+    "message": "孟加拉文"
+  },
+  "language_bs": {
+    "message": "波士尼亞文"
+  },
+  "language_ca": {
+    "message": "加泰羅尼亞文"
+  },
+  "language_ceb": {
+    "message": "宿霧文"
+  },
+  "language_co": {
+    "message": "科西嘉文"
+  },
+  "language_cs": {
+    "message": "捷克文"
+  },
+  "language_cy": {
+    "message": "威爾斯文"
+  },
+  "language_da": {
+    "message": "丹麥文"
+  },
+  "language_de": {
+    "message": "德文"
+  },
+  "language_el": {
+    "message": "希臘文"
+  },
+  "language_en": {
+    "message": "英文"
+  },
+  "language_eo": {
+    "message": "世界語"
+  },
+  "language_es": {
+    "message": "西班牙文"
+  },
+  "language_et": {
+    "message": "愛沙尼亞文"
+  },
+  "language_eu": {
+    "message": "巴斯克文"
+  },
+  "language_fa": {
+    "message": "波斯文"
+  },
+  "language_fi": {
+    "message": "芬蘭文"
+  },
+  "language_fr": {
+    "message": "法文"
+  },
+  "language_fy": {
+    "message": "弗利然文"
+  },
+  "language_ga": {
+    "message": "愛爾蘭文"
+  },
+  "language_gd": {
+    "message": "蘇格蘭的蓋爾文"
+  },
+  "language_gl": {
+    "message": "加里西亞文"
+  },
+  "language_gu": {
+    "message": "印度古哈拉地文"
+  },
+  "language_ha": {
+    "message": "豪沙文"
+  },
+  "language_haw": {
+    "message": "夏威夷文"
+  },
+  "language_hi": {
+    "message": "印度文"
+  },
+  "language_hmn": {
+    "message": "苗文"
+  },
+  "language_hr": {
+    "message": "克羅埃西亞文"
+  },
+  "language_ht": {
+    "message": "海地克里奧文"
+  },
+  "language_hu": {
+    "message": "匈牙利文"
+  },
+  "language_hy": {
+    "message": "亞美尼亞文"
+  },
+  "language_id": {
+    "message": "印尼文"
+  },
+  "language_ig": {
+    "message": "伊博文"
+  },
+  "language_is": {
+    "message": "冰島文"
+  },
+  "language_it": {
+    "message": "義大利文"
+  },
+  "language_iw": {
+    "message": "希伯來文"
+  },
+  "language_ja": {
+    "message": "日文"
+  },
+  "language_jw": {
+    "message": "爪哇文"
+  },
+  "language_ka": {
+    "message": "喬治亞文"
+  },
+  "language_kk": {
+    "message": "哈薩克文"
+  },
+  "language_km": {
+    "message": "高棉文"
+  },
+  "language_kn": {
+    "message": "卡納達文"
+  },
+  "language_ko": {
+    "message": "韓文"
+  },
+  "language_ku": {
+    "message": "庫德文"
+  },
+  "language_ky": {
+    "message": "吉爾吉斯文"
+  },
+  "language_la": {
+    "message": "拉丁文"
+  },
+  "language_lb": {
+    "message": "盧森堡文"
+  },
+  "language_lo": {
+    "message": "寮文"
+  },
+  "language_lt": {
+    "message": "立陶宛文"
+  },
+  "language_lv": {
+    "message": "拉脫維亞文"
+  },
+  "language_mg": {
+    "message": "馬拉加斯文"
+  },
+  "language_mi": {
+    "message": "毛利文"
+  },
+  "language_mk": {
+    "message": "馬其頓文"
+  },
+  "language_ml": {
+    "message": "馬拉雅拉姆文"
+  },
+  "language_mn": {
+    "message": "蒙古文"
+  },
+  "language_mr": {
+    "message": "馬拉地文"
+  },
+  "language_ms": {
+    "message": "馬來文"
+  },
+  "language_mt": {
+    "message": "馬耳他文"
+  },
+  "language_my": {
+    "message": "緬甸文"
+  },
+  "language_ne": {
+    "message": "尼泊爾文"
+  },
+  "language_nl": {
+    "message": "荷蘭文"
+  },
+  "language_no": {
+    "message": "挪威文"
+  },
+  "language_ny": {
+    "message": "奇切瓦文"
+  },
+  "language_or": {
+    "message": "歐利亞文 (奧里雅文)"
+  },
+  "language_pa": {
+    "message": "旁遮普文"
+  },
+  "language_pl": {
+    "message": "波蘭文"
+  },
+  "language_ps": {
+    "message": "帕施圖文"
+  },
+  "language_pt": {
+    "message": "葡萄牙文"
+  },
+  "language_ro": {
+    "message": "羅馬尼亞文"
+  },
+  "language_ru": {
+    "message": "俄文"
+  },
+  "language_rw": {
+    "message": "盧安達文"
+  },
+  "language_sd": {
+    "message": "信德文"
+  },
+  "language_si": {
+    "message": "錫蘭文"
+  },
+  "language_sk": {
+    "message": "斯洛伐克文"
+  },
+  "language_sl": {
+    "message": "斯洛維尼亞文"
+  },
+  "language_sm": {
+    "message": "薩摩亞文"
+  },
+  "language_sn": {
+    "message": "紹納文"
+  },
+  "language_so": {
+    "message": "索馬里文"
+  },
+  "language_sq": {
+    "message": "阿爾巴尼亞文"
+  },
+  "language_sr": {
+    "message": "塞爾維亞文"
+  },
+  "language_st": {
+    "message": "瑟索托文"
+  },
+  "language_su": {
+    "message": "印尼巽他文"
+  },
+  "language_sv": {
+    "message": "瑞典文"
+  },
+  "language_sw": {
+    "message": "斯瓦希里文"
+  },
+  "language_ta": {
+    "message": "泰米爾文"
+  },
+  "language_te": {
+    "message": "泰盧固文"
+  },
+  "language_tg": {
+    "message": "塔吉克文"
+  },
+  "language_th": {
+    "message": "泰文"
+  },
+  "language_tk": {
+    "message": "土庫曼文"
+  },
+  "language_tl": {
+    "message": "菲律賓文"
+  },
+  "language_tr": {
+    "message": "土耳其文"
+  },
+  "language_tt": {
+    "message": "韃靼文"
+  },
+  "language_ug": {
+    "message": "維吾爾文"
+  },
+  "language_uk": {
+    "message": "烏克蘭文"
+  },
+  "language_ur": {
+    "message": "烏爾都文"
+  },
+  "language_uz": {
+    "message": "烏茲別克文"
+  },
+  "language_vi": {
+    "message": "越南文"
+  },
+  "language_xh": {
+    "message": "南非柯薩文"
+  },
+  "language_yi": {
+    "message": "意第緒文"
+  },
+  "language_yo": {
+    "message": "優魯巴文"
+  },
+  "language_zh_cn": {
+    "message": "中文 (簡體)"
+  },
+  "language_zh_tw": {
+    "message": "中文 (繁體)"
+  },
+  "language_zu": {
+    "message": "南非祖魯文"
+  }
+}
