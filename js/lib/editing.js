@@ -888,6 +888,9 @@ function handlePaste(evt) {
     const number = isArticleEditor(target) ? getFootnoteNumber(range) : null;
     if (!number || number.position === 'after') {
       insertData(target, clipboardData);
+      const range = getSelectionRange();
+      const element = findParent(range.endContainer, n => n.nodeType === Node.ELEMENT_NODE);
+      element.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
     }
     evt.preventDefault();
     evt.stopPropagation();
