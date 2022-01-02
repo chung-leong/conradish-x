@@ -35,6 +35,18 @@ export function applyStyles() {
               rule.style.textAlign = (justify) ? 'justify' : 'start';
             }
           }
+        } else if (selectorText && selectorText.startsWith('.footnote-item')) {
+          let m;
+          if (m = /\.footnote\-item\.([A-Z][a-z]{3})/.exec(selectorText)) {
+            const script = m[1];
+            const footnote = getScriptSpecificSettings('footnote', script);
+            rule.style.fontFamily = `${footnote.fontFamily}, sans-serif`;
+            rule.style.fontSize = footnote.fontSize;
+          } else if (m = /\.footnote\-item \.term\.([A-Z][a-z]{3})/.exec(selectorText)) {
+            const script = m[1];
+            const article = getScriptSpecificSettings('article', script);
+            rule.style.fontFamily = `${article.fontFamily}, sans-serif`;
+          }
         } else if (selectorText === '#article-content') {
           rule.style.paddingLeft = page.margins.left;
           // account for the 1px used by the footer-pusher

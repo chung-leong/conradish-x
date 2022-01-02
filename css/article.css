@@ -508,15 +508,170 @@ BODY {
   outline-offset: 12px;
 }
 
-.footer-content.rtl {
-  direction: rtl;
-}
-
 .footer-content:empty {
   /* no margin needed when it's empty */
   margin-top: 0;
   padding-top: 0;
   padding-bottom: 0;
+}
+
+.footnote-item.Arab {
+  direction: rtl;
+}
+
+.footnote-item .term.Arab  {
+  direction: rtl;
+}
+
+.footnote-item.Armn {
+}
+
+.footnote-item .term.Armn  {
+}
+
+.footnote-item.Beng {
+}
+
+.footnote-item .term.Beng  {
+}
+
+.footnote-item.Cyrl {
+}
+
+.footnote-item .term.Cyrl  {
+}
+
+.footnote-item.Deva {
+}
+
+.footnote-item .term.Deva  {
+}
+
+.footnote-item.Ethi {
+}
+
+.footnote-item .term.Ethi  {
+}
+
+.footnote-item.Geor {
+}
+
+.footnote-item .term.Geor  {
+}
+
+.footnote-item.Grek {
+}
+
+.footnote-item .term.Grek  {
+}
+
+.footnote-item.Gujr {
+}
+
+.footnote-item .term.Gujr  {
+}
+
+.footnote-item.Guru {
+}
+
+.footnote-item .term.Guru  {
+}
+
+.footnote-item.Hang {
+}
+
+.footnote-item .term.Hang  {
+}
+
+.footnote-item.Hans {
+}
+
+.footnote-item .term.Hans  {
+}
+
+.footnote-item.Hant {
+}
+
+.footnote-item .term.Hant  {
+}
+
+.footnote-item.Hebr {
+  direction: rtl;
+}
+
+.footnote-item .term.Hebr  {
+}
+
+.footnote-item.Jpan {
+}
+
+.footnote-item .term.Jpan  {
+}
+
+.footnote-item.Khmr {
+}
+
+.footnote-item .term.Khmr  {
+}
+
+.footnote-item.Knda {
+}
+
+.footnote-item .term.Knda  {
+}
+
+.footnote-item.Laoo {
+}
+
+.footnote-item .term.Laoo  {
+}
+
+.footnote-item.Latn {
+}
+
+.footnote-item .term.Latn  {
+}
+
+.footnote-item.Mlym {
+}
+
+.footnote-item .term.Mlym  {
+}
+
+.footnote-item.Mymr {
+}
+
+.footnote-item .term.Mymr  {
+}
+
+.footnote-item.Orya {
+}
+
+.footnote-item .term.Orya  {
+}
+
+.footnote-item.Sinh {
+}
+
+.footnote-item .term.Sinh  {
+}
+
+.footnote-item.Taml {
+}
+
+.footnote-item .term.Taml  {
+}
+
+.footnote-item.Telu {
+}
+
+.footnote-item .term.Telu  {
+}
+
+.footnote-item.Thai {
+}
+
+.footnote-item .term.Thai  {
 }
 
 .footer-spacer {

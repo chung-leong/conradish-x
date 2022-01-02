@@ -1,5 +1,5 @@
 import { e, separateWords } from './ui.js';
-import { findDeletedFootnote, annotateRange, setFilterMode, getTitle, setTitle } from './document.js';
+import { findDeletedFootnote, annotateRange, updateFootnoteContent, setFilterMode, getTitle, setTitle } from './document.js';
 import { transverseRange } from './capturing.js';
 import { l, translate, getSourceLanguage, getTargetLanguage, getLanguageDirection, detectDirection } from './i18n.js';
 
@@ -231,41 +231,28 @@ async function addFootnote(includeTerm) {
     backstoppingNode = document.createTextNode('\u2060');
     range.endContainer.parentNode.append(backstoppingNode);
   }
-  let term = getSelectedText(range);
+  const selectedText = getSelectedText(range);
   const sourceLang = getSourceLanguage();
   const targetLang = getTargetLanguage();
   const translating = (targetLang && targetLang !== sourceLang);
   // put placeholder text in footer initially
-  const placeholder = (translating) ? '...' : '';
-  const initialText = (includeTerm) ? `${term} - ${placeholder}` : placeholder;
-  const footnote = annotateRange(range, initialText, { term, lang: `${sourceLang},${targetLang}` });
+  const initialContent = {
+    term: { text: selectedText, lang: sourceLang },
+    translation: { text: (translating) ? '...' : '', lang: targetLang },
+  };
+  const footnote = annotateRange(range, initialContent, includeTerm);
   if (backstoppingNode) {
     backstoppingNode.remove();
   }
   if (translating) {
-    const result = await translate(term, sourceLang, targetLang, includeTerm);
-    const { itemElement } = footnote;
-    if (itemElement.textContent === initialText) {
-      const { translation, ...extra } = result;
-      if (extra.term) {
-        // case is different
-        term = extra.term;
-      }
-      const text = (includeTerm) ? `${term} - ${translation}` : translation;
-      itemElement.textContent = text;
-      footnote.content = text;
-      // save additional information from Google Translate
-      Object.assign(footnote.extra, extra);
-    }
+    const result = await translate(selectedText, sourceLang, targetLang, includeTerm);
+    updateFootnoteContent(footnote, result, includeTerm);
   } else {
-    const { footer } = footnote.page;
-    footer.listElement.focus();
-    const sel = getSelection();
-    sel.removeAllRanges();
-    const range = document.createRange();
-    range.selectNode(footnote.itemElement.lastChild);
+    const { listElement, itemElement } = footnote.page.footer;
+    listElement.focus();
+    const range = getSelectionRange();
+    range.selectNode(itemElement.lastChild);
     range.collapse();
-    sel.addRange(range);
   }
 }
 

@@ -875,16 +875,38 @@ function addElement(element, { tag, style, content, footnote, junk }) {
   }
   if (footnote instanceof Object) {
     const { content, ...extra } = footnote;
+    const [ termLang, translationLang ] = (extra.lang || 'en,en').split(',');
+    const termScript = getLanguageScript(termLang);
+    const translationScript = getLanguageScript(translationLang);
     const number = footnotes.length + 1;
     const supElement = child;
     const id = `footnote-${nextFootnoteId++}`;
     supElement.id = id;
     supElement.classList.add('footnote-number');
-    const itemElement = e('LI', { className: 'footnote-item' });
-    addContent(itemElement, content);
+    const itemElement = e('LI', { className: `footnote-item ${translationScript}` });
     // stick the item into the list backstage so we can obtain its dimensions
     backstageElement.append(itemElement);
     const page = null, height = '';
+    let includeTerm = extra.incl;
+    if (includeTerm === undefined) {
+      const plainText = getPlainText(content);
+      if (plainText.includes(extra.term)) {
+        includeTerm = true;
+      }
+    }
+    if (includeTerm) {
+      const parts = splitContent(content, ' - ');
+      if (parts.length === 2) {
+        const spanElement = e('SPAN', { className: `term ${termScript}` });
+        itemElement.append(spanElement);
+        addContent(spanElement, parts[0]);
+        addContent(itemElement, parts[1]);
+      } else {
+        addContent(itemElement, content);
+      }
+    } else {
+      addContent(itemElement, content);
+    }
     footnotes.push({ id, number, page, supElement, itemElement, height, content, extra });
   }
   element.append(child);
@@ -931,7 +953,8 @@ function insertSupElement(supElement, container) {
   parentNode.insertBefore(supElement, refNode);
 };
 
-export function annotateRange(range, content, extra) {
+export function annotateRange(range, content, includeTerm) {
+  const { term, translation } = content;
   const id = `footnote-${nextFootnoteId++}`;
   // figure out what number it should have
   let number = 1;
@@ -956,15 +979,39 @@ export function annotateRange(range, content, extra) {
   // find the <sup>
   const supElement = contentElement.querySelectorAll('.footnote-number.pending')[0];
   supElement.classList.remove('pending');
-  const itemElement = e('LI', { className: 'footnote-item' }, content);
+  const itemElement = e('LI', { className: 'footnote-item' });
   backstageElement.append(itemElement);
   const page = null, height = '';
+  const extra = {
+    term: term.text,
+    lang: `${term.lang},${translation.lang}`,
+    incl: includeTerm,
+  };
   const footnote = { id, number, page, supElement, itemElement, height, content, extra };
+  updateFootnoteContent(footnote, content, includeTerm);
   footnotes.splice(number - 1, 0, footnote);
   // manual handle the change records so footnote will already be attached to a page
   // when this function returns
   handleArticleChanges(articleObserver.takeRecords());
   return footnote;
+}
+
+export function updateFootnoteContent(footnote, content, includeTerm) {
+  const { term, translation, ...extra } = content;
+  const { itemElement } = footnote;
+  while (itemElement.firstChild) {
+    itemElement.firstChild.remove();
+  }
+  if (includeTerm)  {
+    const termScript = getLanguageScript(term.lang);
+    const termElement = e('SPAN', { className: `term ${termScript}` }, term.text)
+    itemElement.append(termElement, ` - ${translation.text}`);
+  } else {
+    itemContent.append(translation.text);
+  }
+  const translationScript = getLanguageScript(translation.lang);
+  itemElement.classList.add(translationScript);
+  Object.assign(footnote.extra, extra);
 }
 
 function extractContent(node) {

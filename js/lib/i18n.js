@@ -259,7 +259,9 @@ function getDeclensionFunction() {
 }
 
 export async function translate(original, sourceLang, targetLang, singleWord) {
-  const result = {};
+  const result = {
+    term: { text: original, lang: sourceLang },
+  };
   try {
     const url = new URL('https://clients5.google.com/translate_a/t');
     let lowerCaseAlt;
@@ -282,10 +284,10 @@ export async function translate(original, sourceLang, targetLang, singleWord) {
     if (json.sentences instanceof Array) {
       const sentences = json.sentences.filter(s => !!s.trans);
       const trans = sentences.map(s => s.trans).join('');
-      result.translation = trans;
+      result.translation = { text: trans, lang: targetLang };
       // return the lowercase version if the translation isn't in uppercase
       if (lowerCaseAlt && !isCapitalized(trans)) {
-        result.term = lowerCaseAlt;
+        result.term.text = lowerCaseAlt;
       }
       if (json.alternative_translations) {
         const alternatives = [];
@@ -313,7 +315,7 @@ export async function translate(original, sourceLang, targetLang, singleWord) {
         if (result.term) {
           // use inflection info to determine whether word should be capitalized
           if (inflections[original]) {
-            delete result.term;
+            result.term.text = original;
           }
         }
       }
