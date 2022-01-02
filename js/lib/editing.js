@@ -224,12 +224,13 @@ function getSelectedRange() {
 async function addFootnote(includeTerm) {
   const range = getSelectedRange();
   let backstoppingNode;
-  if (isWithinCell(range) && atContainerEnd(range, 'TD')) {
+  if (isWithinCell(range) && atContainerEnd(range, isTableCell)) {
     // Chrome for some reason would add the SUP element outside the TD if the
     // cursor happens to be at the very end of the cell; we need to stick
     // a zero-width string behind the cursor to prevent this
+    const cell = findParent(range.endContainer, isTableCell);
     backstoppingNode = document.createTextNode('\u2060');
-    range.endContainer.parentNode.append(backstoppingNode);
+    cell.append(backstoppingNode);
   }
   let term = getSelectedText(range);
   const sourceLang = getSourceLanguage();
@@ -269,9 +270,9 @@ async function addFootnote(includeTerm) {
   }
 }
 
-function atContainerEnd(range, tagName) {
+function atContainerEnd(range, cb) {
   const { endContainer, endOffset } = range;
-  const container = findParent(endContainer, n => n.tagName === tagName);
+  const container = findParent(endContainer, cb);
   if (!container) {
     return false;
   }
@@ -392,9 +393,17 @@ function isFootnoteEditor(node) {
   return !!findParent(node, n => n.className === 'footer-content');
 }
 
+function isTableCell(node) {
+  switch (node.tagName) {
+    case 'TD':
+    case 'TH': return true;
+    default: return false;
+  }
+}
+
 function isSpanningCells(range) {
   const { endContainer, startContainer } = range;
-  const cellElement = findParent(endContainer, n => n.tagName === 'TD');
+  const cellElement = findParent(endContainer, isTableCell);
   if (cellElement) {
     if (!cellElement.contains(startContainer)) {
       return true;
@@ -405,7 +414,7 @@ function isSpanningCells(range) {
 
 function isWithinCell(range) {
   const { endContainer, startContainer } = range;
-  const cellElement = findParent(endContainer, n => n.tagName === 'TD');
+  const cellElement = findParent(endContainer, isTableCell);
   if (cellElement && cellElement.contains(startContainer)) {
     return true;
   }
@@ -420,7 +429,7 @@ function adjustAttributes(container, addIdentifyingClass = false) {
         classList.add('conradish');
       }
     }
-    if (node.tagName !== 'TD') {
+    if (!isTableCell(node)) {
       const styleAttr = node.getAttribute('style');
       if (styleAttr) {
         const items = styleAttr.split(/\s*;\s*/);
@@ -479,7 +488,7 @@ function handleBeforeInput(evt) {
       evt.preventDefault();
       evt.stopPropagation();
     }
-    if (atContainerEnd(range, 'TD') && lastKeyDown === 'Delete') {
+    if (atContainerEnd(range, isTableCell) && lastKeyDown === 'Delete') {
       // prevent contents in the next cell from being pulled into this one
       evt.preventDefault();
       evt.stopPropagation();
@@ -594,7 +603,7 @@ function handleKeyPress(evt) {
       evt.preventDefault();
       evt.stopPropagation();
       // at the end of the list item we need to insert two linefeed
-      const count = atContainerEnd(range, containerTag) ? 2 : 1;
+      const count = atContainerEnd(range, node => node.tagName === containerTag) ? 2 : 1;
       document.execCommand('insertHTML', false, '\n'.repeat(count));
     }
   }
