@@ -426,7 +426,8 @@ function addCollapseButtonHandlers() {
       collapseSideBar();
     }
   });
-  window.addEventListener('resize', (evt) => initializeAutoCollapse());
+  const observer = new ResizeObserver(entries => initializeAutoCollapse());
+  observer.observe(button);
 }
 
 async function collapseSideBar() {
