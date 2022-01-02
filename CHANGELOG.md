@@ -4,6 +4,7 @@
 * Localization for Norwegian, Danish, Swedish, and Finnish.
 * Including footnotes as well when searching documents.
 * Fixed issue when translating a whole paragraph.
+* Fixed issues with content filtering.
 
 # Version 1.1
 

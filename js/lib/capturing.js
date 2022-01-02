@@ -729,14 +729,13 @@ function rateContent(root, objectDossiers) {
   const maxLeft = getMaxKey(leftCounts);
   const maxRight = getMaxKey(rightCounts);
   const maxRect = { left: maxLeft, right: maxRight };
-  const calculatePositionScore = (rect1, rect2, direction) => {
+  const calculatePositionScore = (rect1, rect2, direction, display) => {
     const leftDiff = Math.abs(rect1.left - rect2.left);
     const rightDiff = Math.abs(rect1.right - rect2.right);
-    if (direction === 'rtl') {
-      return rightDiff + (leftDiff / 5);
-    } else {
-      return leftDiff + (rightDiff / 5);
-    }
+    const startDiff = (direction === 'rtl') ? rightDiff : leftDiff;
+    const endDiff = (direction === 'rtl') ? leftDiff : rightDiff;
+    // take end difference into consideration unless display mode is inline
+    return display.includes('inline') ? startDiff : startDiff + (endDiff / 5);
   };
   const parseRGB = (color) => {
     const m = color.replace(/[rgba\(\)\s]/g, '').split(',');
@@ -773,10 +772,10 @@ function rateContent(root, objectDossiers) {
   for (const object of root.content) {
     if (object instanceof Object) {
       const { style, rect } = objectDossiers.get(object);
-      const { color } = style;
+      const { color, display, direction } = style;
       // calculate the "junk" scores
       const scoreColor = calculateColorScore(color, maxColor);
-      const scorePos = calculatePositionScore(rect, maxRect, style.direction);
+      const scorePos = calculatePositionScore(rect, maxRect, direction, display);
       const normalizer = calculateNormalizer(object);
       // normalize the score against a factor that sort of represents the amount of content
       const scoreColorNorm = scoreColor / normalizer;
