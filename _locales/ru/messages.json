@@ -119,6 +119,10 @@
     "message": "Шрифты",
     "description": "Used in section navigation in option page"
   },
+  "search_font": {
+    "message": "Найти шрифт",
+    "description": "Placeholder of search box and icon tooltip in document list"
+  },
   "script_arab": {
     "message": "Арабское",
     "description": "Name of script, used in option page"

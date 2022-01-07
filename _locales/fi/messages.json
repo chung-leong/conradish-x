@@ -119,6 +119,10 @@
     "message": "Fontit",
     "description": "Used in section navigation in option page"
   },
+  "search_font": {
+    "message": "Etsi fontti",
+    "description": "Placeholder of search box and icon tooltip in document list"
+  },
   "script_arab": {
     "message": "Arabialainen",
     "description": "Name of script, used in option page"

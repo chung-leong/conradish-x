@@ -119,6 +119,10 @@
     "message": "字體",
     "description": "Used in section navigation in option page"
   },
+  "search_font": {
+    "message": "查找字體",
+    "description": "Placeholder of search box and icon tooltip in document list"
+  },
   "script_arab": {
     "message": "阿拉伯文",
     "description": "Name of script, used in option page"

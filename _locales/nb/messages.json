@@ -119,6 +119,10 @@
     "message": "Fonter",
     "description": "Used in section navigation in option page"
   },
+  "search_font": {
+    "message": "Finn font",
+    "description": "Placeholder of search box and icon tooltip in document list"
+  },
   "script_arab": {
     "message": "Arabisk",
     "description": "Name of script, used in option page"

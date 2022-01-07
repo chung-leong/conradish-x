@@ -7,6 +7,7 @@ import { getScriptSpecificSettings } from './lib/settings.js';
 import { getScripts, getFontCoverage, updateFontAvailability, updateFontSelection, applyDefaultFontSettings } from './lib/fonts.js';
 
 const listContainer = document.getElementById('list-container');
+let searchInput;
 
 const cards = [];
 let activeCardType = 'basic';
@@ -16,14 +17,35 @@ async function start() {
   await initializeStorage();
   await applyDefaultFontSettings();
   setWindowName('options');
-  const title = document.title = l('extension_options');
-  createTopBar('toolbar-title', { left: title });
+  document.title = l('extension_options');
+  createSearchToolbar();
   createSectionNavigation();
   createBasicOptionCard();
   createFontSelectionCards();
   showActiveCards();
   attachCustomCheckboxHandlers();
   attachShadowHandlers();
+}
+
+function createSearchToolbar() {
+  const inputElement = e('INPUT', { type: 'text' });
+  inputElement.addEventListener('input', (evt) => {
+    const query = evt.target.value.trim();
+    searchElement.classList.toggle('active', !!query);
+    search(query);
+  });
+  inputElement.addEventListener('focus', (evt) => searchElement.classList.add('focus'));
+  inputElement.addEventListener('blur', (evt) => searchElement.classList.remove('focus'));
+  const iconElement = e('SPAN', { className: 'magnifying-glass' });
+  const buttonElement = e('SPAN', { className: 'x-button', title: l('clear_search') });
+  const searchElement = e('DIV', { id: 'search-input', className: 'hidden' }, [ inputElement, iconElement, buttonElement ]);
+  buttonElement.addEventListener('click', (evt) => {
+    searchElement.classList.remove('active');
+    inputElement.value = '';
+    inputElement.focus();
+  });
+  searchInput = { searchElement, iconElement, inputElement }
+  createTopBar('toolbar-search', { left: l('extension_options'), center: searchElement });
 }
 
 function createSectionNavigation() {
@@ -111,7 +133,7 @@ function createBasicOptionCard() {
       filterSelect.style.visibility = (filtering) ? 'visible' : 'hidden';
     }
   });
-  return addCard(l('basic_options'), container, () => activeCardType === 'basic');
+  return addCard(l('basic_options'), container, [], () => activeCardType === 'basic');
 }
 
 async function createFontSelectionCards() {
@@ -159,7 +181,8 @@ function createFontSelectionCard(fontId, displayName, script, selected) {
     await saveSettings();
   });
   const previewElement = e('DIV', { className: 'preview-container' }, sentenceElement);
-  return addCard(titleElement, previewElement, () => activeCardType === 'font' && activeScript === script);
+  const searchStrings = [ fontId.toLocaleLowerCase(), displayName.toLocaleLowerCase() ];
+  return addCard(titleElement, previewElement, searchStrings, () => activeCardType === 'font' && activeScript === script);
 }
 
 function addCheckbox(container, label, checked) {
@@ -177,13 +200,13 @@ function addCheckbox(container, label, checked) {
   return checkboxElement;
 }
 
-function addCard(title, children, isActive) {
+function addCard(title, children, searchStrings, isActive) {
   if (!(children instanceof Array)) {
     children = (children) ? [ children ] : [];
   }
   const headerElement = e('DIV', { className: 'card-title' }, title);
   const cardElement = e('DIV', { className: 'card' }, [ headerElement, ...children ]);
-  const card = { headerElement, cardElement, isActive };
+  const card = { headerElement, cardElement, searchStrings, isActive };
   cards.push(card);
   if (isActive()) {
     const [ spacerElement ] = listContainer.getElementsByClassName('list-end-spacer');
@@ -202,6 +225,32 @@ function showActiveCards() {
   const spacerElement = e('DIV', { className: 'list-end-spacer' }, '\u00a0');
   listContainer.append(spacerElement);
   listContainer.scrollIntoView({ block: 'start', behavior: 'auto' });
+  const { searchElement, iconElement, inputElement } = searchInput;
+  const label = l(`search_${activeCardType}`);
+  if (label) {
+    searchElement.classList.remove('hidden');
+    iconElement.title = label;
+    inputElement.placeholder = label;
+    inputElement.value = '';
+  } else {
+    searchElement.classList.add('hidden');
+  }
+}
+
+function search(query) {
+  const queryLC = query.toLocaleLowerCase();
+  const card = cards.find((card) => {
+    if (card.isActive()) {
+      for (const searchString of card.searchStrings) {
+        if (searchString.includes(queryLC)) {
+          return true;
+        }
+      }
+    }
+  });
+  if (card) {
+    card.cardElement.scrollIntoView();
+  }
 }
 
 async function changeSettings(cb) {

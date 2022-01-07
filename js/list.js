@@ -31,13 +31,22 @@ async function start() {
 
 function createSearchToolbar() {
   const inputElement = e('INPUT', { type: 'text', placeholder: l('search_documents') });
-  inputElement.addEventListener('input', handleSearchInput);
-  inputElement.addEventListener('focus', handleSearchFocus);
-  inputElement.addEventListener('blur', handleSearchBlur);
+  inputElement.addEventListener('input', (evt) => {
+    const query = evt.target.value.trim();
+    searchElement.classList.toggle('active', !!query);
+    search(query);
+  });
+  inputElement.addEventListener('focus', (evt) => searchElement.classList.add('focus'));
+  inputElement.addEventListener('blur', (evt) => searchElement.classList.remove('focus'));
   const iconElement = e('SPAN', { className: 'magnifying-glass', title: l('search_documents') });
   const buttonElement = e('SPAN', { className: 'x-button', title: l('clear_search') });
   const searchElement = e('DIV', { id: 'search-input' }, [ inputElement, iconElement, buttonElement ]);
-  buttonElement.addEventListener('click', handleClearClick);
+  buttonElement.addEventListener('click', (evt) => {
+    searchElement.classList.remove('active');
+    inputElement.value = '';
+    inputElement.focus();
+    search('');
+  });
   createTopBar('toolbar-search', { left: l('documents'), center: searchElement });
 }
 
@@ -403,35 +412,6 @@ function handleChange(evt) {
   }
 }
 
-function handleSearchInput(evt) {
-  const { target } = evt;
-  const { classList } = target.parentNode;
-  const query = target.value.trim();
-  classList.toggle('active', !!query);
-  search(query);
-}
-
-function handleSearchFocus(evt) {
-  const { target } = evt;
-  const { classList } = target.parentNode;
-  classList.add('focus');
-}
-
-function handleSearchBlur(evt) {
-  const { target } = evt;
-  const { classList } = target.parentNode;
-  classList.remove('focus');
-}
-
-function handleClearClick(evt) {
-  const { target } = evt;
-  const { classList } = target.parentNode;
-  const [ input ] = target.parentNode.getElementsByTagName('INPUT');
-  classList.remove('active');
-  input.value = '';
-  search('');
-}
-
 function handleCancelClick(evt) {
   const checkboxes = getSelectedCheckboxes();
   for (const cb of checkboxes) {
@@ -510,46 +490,40 @@ function handleChangeTitleClick(evt) {
     inputElement.classList.add('rtl');
   }
   selectedItem.inputElement = inputElement;
-  inputElement.addEventListener('blur', handleTitleInputBlur);
-  inputElement.addEventListener('keydown', handleTitleInputKeyDown);
-  inputElement.addEventListener('input', handleTitleInputChange);
-  inputElement.focus();
-}
-
-async function handleTitleInputBlur(evt) {
-  if (selectedItem) {
-    const { key, inputElement, titleElement } = selectedItem;
-    const newTitle = inputElement.value;
-    const oldTitle = titleElement.textContent;
-    selectedItem = selectedItem.inputElement = null;
-    inputElement.parentNode.remove();
-    if (newTitle !== oldTitle) {
-      titleElement.textContent = newTitle;
-      try {
-        const doc = await loadObject(key);
-        doc.title = newTitle;
-        await saveObject(key, doc);
-      } catch (e) {
-        // put in the old title if saving failed
-        titleElement.textContent = oldTitle;
+  inputElement.addEventListener('blur', async (evt) => {
+    if (selectedItem) {
+      const { key, inputElement, titleElement } = selectedItem;
+      const newTitle = inputElement.value;
+      const oldTitle = titleElement.textContent;
+      selectedItem = selectedItem.inputElement = null;
+      inputElement.parentNode.remove();
+      if (newTitle !== oldTitle) {
+        titleElement.textContent = newTitle;
+        try {
+          const doc = await loadObject(key);
+          doc.title = newTitle;
+          await saveObject(key, doc);
+        } catch (e) {
+          // put in the old title if saving failed
+          titleElement.textContent = oldTitle;
+        }
       }
     }
-  }
-}
-
-function handleTitleInputKeyDown(evt) {
-  const { inputElement } = selectedItem;
-  if (evt.key === 'Escape') {
-    selectedItem = null;
-    inputElement.parentNode.remove();
-  } else if (evt.key === 'Enter') {
-    inputElement.blur();
-  }
-}
-
-function handleTitleInputChange(evt) {
-  const { inputElement } = selectedItem;
-  adjustTextDirection(inputElement, inputElement.value);
+  });
+  inputElement.addEventListener('keydown', (evt) => {
+    const { inputElement } = selectedItem;
+    if (evt.key === 'Escape') {
+      selectedItem = null;
+      inputElement.parentNode.remove();
+    } else if (evt.key === 'Enter') {
+      inputElement.blur();
+    }
+  });
+  inputElement.addEventListener('input', (evt) => {
+    const { inputElement } = selectedItem;
+    adjustTextDirection(inputElement, inputElement.value);
+  });
+  inputElement.focus();
 }
 
 start();

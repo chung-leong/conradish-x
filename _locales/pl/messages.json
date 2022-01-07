@@ -119,6 +119,10 @@
     "message": "Czcionki",
     "description": "Used in section navigation in option page"
   },
+  "search_font": {
+    "message": "Find font",
+    "description": "Placeholder of search box and icon tooltip in document list"
+  },
   "script_arab": {
     "message": "Arabskie",
     "description": "Name of script, used in option page"
