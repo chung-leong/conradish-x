@@ -58,34 +58,23 @@ export async function getAvailableFonts(script) {
 export async function applyDefaultFontSettings(options = {}) {
   const { scan } = options;
   let changed = false;
-  if (scan === 'fonts') {
-    const uncoveredScripts = [];
-    for (const script of getScripts()) {
-      // make sure the font list for the script isn't empty
-      const list = getScriptSpecificSettings('fonts', script);
-      if (list.length === 0) {
-        uncoveredScripts.push(script);
-      }
+  const uncovered = {};
+  for (const script of getScripts()) {
+    // make sure the font list for the script isn't empty
+    const list = getScriptSpecificSettings('fonts', script);
+    if (list.length === 0) {
+      uncovered[script] = list;
     }
-    if (uncoveredScripts.length > 0) {
-      for await (const { fontId, coverage } of getFontCoverage()) {
-        for (const script of coverage) {
-          if (updateFontAvailability(fontId, script)) {
-            const index = uncoveredScripts.indexOf(script);
-            uncoveredScripts.splice(index, 1);
-            changed = true;
-          }
-        }
-        if (uncoveredScripts.length === 0) {
-          break;
-        }
+  }
+  if (Object.keys(uncovered).length > 0) {
+    if (scan === 'fonts') {
+      const fonts = [];
+      for await (const font of getFontCoverage()) {
+        fonts.push(font);
       }
-    }
-  } else {
-    for (const script of getScripts()) {
-      // make sure the font list for the script isn't empty
-      const list = getScriptSpecificSettings('fonts', script);
-      if (list.length === 0) {
+      changed = updateFontAvailability(fonts);
+    } else {
+      for (const [ script, list ] of Object.entries(uncovered)) {
         const defaultFonts = await getDefaultFonts(script);
         if (defaultFonts.length > 0) {
           list.push(...defaultFonts.map(f => f.fontId));
@@ -122,12 +111,41 @@ export function updateFontSelection() {
   return changed;
 }
 
-export function updateFontAvailability(fontId, script) {
+export function updateFontAvailability(fonts) {
+  const popularFontNames = [
+    'Arial',
+    'Noto',
+    'Times',
+  ];
+  const isPopular = (fontId) => {
+    for (const name of popularFontNames) {
+      if (fontId.includes(name)) {
+        return true;
+      }
+    }
+    return false;
+  };
   let changed = false;
-  const list = getScriptSpecificSettings('fonts', script);
-  if (list.length === 0) {
-    list.push(fontId);
-    changed = true;
+  for (const script of getScripts()) {
+    const list = getScriptSpecificSettings('fonts', script);
+    if (list.length === 0) {
+      for (let pass = 1; pass <= 2; pass++) {
+        for (const { fontId, coverage } of fonts) {
+          if (coverage.includes(script)) {
+            let include;
+            if (pass === 1) {
+              include = isPopular(fontId) && list.length < 8;
+            } else if (pass === 2) {
+              include = list.length < 4;
+            }
+            if(include) {
+              list.push(fontId);
+              changed = true;
+            }
+          }
+        }
+      }
+    }
   }
   return changed;
 }

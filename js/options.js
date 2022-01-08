@@ -137,24 +137,22 @@ function createBasicOptionCard() {
 }
 
 async function createFontSelectionCards() {
-  let changed = false;
-  for await (const { fontId, displayName, coverage } of getFontCoverage()) {
+  const fonts = [];
+  for await (const font of getFontCoverage()) {
+    const { fontId, displayName, coverage } = font;
     for (const script of coverage) {
-      if (updateFontAvailability(fontId, script)) {
-        changed = true;
-      }
-      const list = getScriptSpecificSettings('fonts', script);
-      const selected = list.includes(fontId);
-      createFontSelectionCard(fontId, displayName, script, selected);
+      createFontSelectionCard(fontId, displayName, script);
     }
+    fonts.push(font);
   }
+  const changed = updateFontAvailability(fonts);
   if (changed) {
     updateFontSelection();
     await saveSettings();
   }
 }
 
-function createFontSelectionCard(fontId, displayName, script, selected) {
+function createFontSelectionCard(fontId, displayName, script) {
   const sampleSentence = getSampleSentence(script);
   const sentenceElement = e('DIV', {
     className: 'preview-sentence',
@@ -166,7 +164,11 @@ function createFontSelectionCard(fontId, displayName, script, selected) {
     sentenceElement.classList.add('rtl');
   }
   const titleElement = e('SPAN', { className: 'font-display-name' });
-  const checkboxElement = addCheckbox(titleElement, displayName, selected);
+  const isSelected = () => {
+    const list = getScriptSpecificSettings('fonts', script);
+    return list.includes(fontId);
+  };
+  const checkboxElement = addCheckbox(titleElement, displayName, isSelected());
   checkboxElement.addEventListener('change', async (evt) => {
     const checked = checkboxElement.classList.contains('checked');
     const list = getScriptSpecificSettings('fonts', script);
@@ -179,6 +181,9 @@ function createFontSelectionCard(fontId, displayName, script, selected) {
       }
     }
     await saveSettings();
+  });
+  storageChange.addEventListener('settings', (evt) => {
+    checkboxElement.classList.toggle('checked', isSelected());
   });
   const previewElement = e('DIV', { className: 'preview-container' }, sentenceElement);
   const searchStrings = [ fontId.toLocaleLowerCase(), displayName.toLocaleLowerCase() ];
