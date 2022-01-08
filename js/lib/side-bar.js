@@ -175,6 +175,8 @@ async function createTextControls() {
     const footnote = getFootnoteSettings();
     const footnoteFonts = await getFootnoteFonts();
     updateFontFamilySelect(footnoteFontSelect, footnoteFonts, footnote.fontFamily);
+    applyStyles();
+    updateLayout();
   });
 }
 
