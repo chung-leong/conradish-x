@@ -1,6 +1,6 @@
 import { e, waitForRedraw } from './ui.js';
 import { applyStyles, getPageProperties } from './settings.js';
-import { setSourceLanguage, getSourceLanguage, getLanguageScript, getLanguageDirection } from './i18n.js';
+import { setSourceLanguage, setSourceVariant, getSourceLanguage, getLanguageScript, getLanguageDirection } from './i18n.js';
 import { insertContent, replaceUselessElements, removeEmptyNodes } from './capturing.js';
 import { loadObject, saveObject, storageChange } from './storage.js';
 
@@ -47,6 +47,14 @@ export async function loadDocument(key) {
   const { title, content, lang, raw } = currentDocument;
   // set the source language
   setSourceLanguage(lang);
+  if (lang === 'zh') {
+    // need to detect whether the text is in simplified or traditional chinese
+    const codeURL = chrome.runtime.getURL('js/lib/chinese.js');
+    const { isSimplified } = await import(codeURL);
+    const text = getPlainText(content);
+    const country = isSimplified(text) ? 'CN' : 'TW';
+    setSourceVariant(country);
+  }
   const script = getLanguageScript(lang);
   contentElement.classList.add(script);
   document.title = title;

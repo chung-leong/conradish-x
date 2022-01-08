@@ -1,5 +1,6 @@
 import { getSettings } from './settings.js';
 let sourceLanguage;
+let sourceVariant;
 
 export { getMessage as l, getMessageWithCardinal as lc };
 
@@ -96,6 +97,10 @@ export function getUILanguage() {
 }
 
 export function getLanguageScript(lang) {
+  if (lang === sourceLanguage) {
+    // take variant into consideration
+    lang = getSourceLanguage(true);
+  }
   for (const { code, script, variants } of languages) {
     if (code === lang) {
       return script;
@@ -144,12 +149,20 @@ export function canUseGenericFont(lang) {
   return genericFontScripts.includes(script);
 }
 
-export function getSourceLanguage() {
-  return sourceLanguage;
+export function getSourceLanguage(variant = false) {
+  if (variant && sourceVariant) {
+    return `${sourceLanguage}-${sourceVariant}`;
+  } else {
+    return sourceLanguage;
+  }
 }
 
 export function setSourceLanguage(lang) {
   sourceLanguage = lang;
+}
+
+export function setSourceVariant(country) {
+  sourceVariant = country;
 }
 
 export function getTargetLanguage() {

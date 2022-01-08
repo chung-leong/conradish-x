@@ -374,7 +374,7 @@ function changeArticleSettings(callback) {
 }
 
 function getArticleSettings() {
-  const language = getSourceLanguage();
+  const language = getSourceLanguage(true);
   const script = getLanguageScript(language);
   return getScriptSpecificSettings('article', script);
 }
@@ -394,7 +394,7 @@ function getFootnoteSettings() {
 }
 
 async function getArticleFonts() {
-  const language = getSourceLanguage();
+  const language = getSourceLanguage(true);
   const script = getLanguageScript(language);
   return getAvailableFonts(script);
 }
