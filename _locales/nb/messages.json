@@ -115,6 +115,10 @@
     "message": "Manuelt",
     "description": "Label for filter drop-down in options"
   },
+  "limit_heading_size": {
+    "message": "Begrens overskriftstørrelse",
+    "description": "Label for checkbox in options"
+  },
   "fonts": {
     "message": "Fonter",
     "description": "Used in section navigation in option page"

@@ -115,6 +115,10 @@
     "message": "Ручна",
     "description": "Label for filter drop-down in options"
   },
+  "limit_heading_size": {
+    "message": "Обмеження розміру заголовків",
+    "description": "Label for checkbox in options"
+  },
   "fonts": {
     "message": "Шрифти",
     "description": "Used in section navigation in option page"

@@ -94,7 +94,7 @@ function createSectionNavigation() {
 
 function createBasicOptionCard() {
   const container = e('DIV', { className: 'input-container' });
-  const { contextMenu, filter } = getSettings();
+  const { contextMenu, filter, heading } = getSettings();
   // add checkbox for controlling the presence of Conradish item in context menu
   const contextMenuCheckbox = addCheckbox(container, l('add_context_menu_item'), contextMenu);
   contextMenuCheckbox.addEventListener('change', (evt) => {
@@ -124,6 +124,13 @@ function createBasicOptionCard() {
       filterSelect.style.visibility = (checked) ? 'visible' : 'hidden';
     });
   });
+  const headingCheckbox = addCheckbox(container, l('limit_heading_size'), heading === 'H2');
+  headingCheckbox.addEventListener('change', (evt) => {
+    const checked = evt.target.classList.contains('checked');
+    changeSettings((settings) => {
+      settings.heading = (checked) ? 'H2' : 'H1';
+    });
+  });
   storageChange.addEventListener('settings', (evt) => {
     if (!evt.detail.self) {
       const { contextMenu, filter } = getSettings();
@@ -131,6 +138,7 @@ function createBasicOptionCard() {
       contextMenuCheckbox.classList.toggle('checked', contextMenu);
       filterCheckbox.classList.toggle('checked', filtering);
       filterSelect.style.visibility = (filtering) ? 'visible' : 'hidden';
+      headingCheckbox.classList.toggle('checked', heading === 'H2');
     }
   });
   return addCard(l('basic_options'), container, [], () => activeCardType === 'basic');

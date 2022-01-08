@@ -52,15 +52,17 @@ function updateContextMenu() {
 
 async function createDocument(tab) {
   const codeURL = chrome.runtime.getURL('js/lib/capturing.js');
+  await initializeLocalization();
+  const settings = getSettings();
   await chrome.scripting.executeScript({
     target: { allFrames: true, tabId: tab.id },
-    args: [ codeURL ],
-    func: async (codeURL) => {
+    args: [ codeURL, settings ],
+    func: async (codeURL, settings) => {
       const selection = getSelection();
       if (!selection.isCollapsed) {
         // load the code for capturing only if the frame has selection
         const { captureSelection } = await import(codeURL);
-        const doc = await captureSelection(selection);
+        const doc = await captureSelection(selection, settings);
         try {
           chrome.runtime.sendMessage({ type: 'create', document: doc });
         } catch (err) {

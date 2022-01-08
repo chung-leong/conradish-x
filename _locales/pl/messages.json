@@ -115,6 +115,10 @@
     "message": "ręczne",
     "description": "Label for filter drop-down in options"
   },
+  "limit_heading_size": {
+    "message": "Ograniczenie rozmiaru nagłówków",
+    "description": "Label for checkbox in options"
+  },
   "fonts": {
     "message": "Czcionki",
     "description": "Used in section navigation in option page"

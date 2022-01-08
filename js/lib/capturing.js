@@ -35,18 +35,19 @@ export function transverseRange(range, cb) {
   scan(commonAncestorContainer);
 }
 
-export async function captureSelection(selection) {
+export async function captureSelection(selection, settings) {
   const range = selection.getRangeAt(0);
   const url = document.location.href;
   const title = getTitle();
   const image = getImage();
-  const content = captureRangeContent(range);
+  const content = captureRangeContent(range, settings);
   const lang = await getLanguage(content, range);
   const doc = { url, title, image, lang, content, raw: true };
   return doc;
 }
 
-export function captureRangeContent(range) {
+export function captureRangeContent(range, settings) {
+  const { heading } = settings;
   const nodeStyles = new WeakMap;
   const getNodeStyle = (node) => {
     let style = nodeStyles.get(node);
@@ -571,7 +572,9 @@ export function captureRangeContent(range) {
   // add junk rating based on presence of links, positions, and colors
   rateContent(root, objectDossiers);
   // H1 is generally too large for printing--shrink them down
-  shrinkHeadings(root);
+  if (heading === 'H2') {
+    shrinkHeadings(root);
+  }
   return root.content;
 }
 

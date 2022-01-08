@@ -115,6 +115,10 @@
     "message": "Käsin",
     "description": "Label for filter drop-down in options"
   },
+  "limit_heading_size": {
+    "message": "Rajoita otsikoiden kokoa",
+    "description": "Label for checkbox in options"
+  },
   "fonts": {
     "message": "Fontit",
     "description": "Used in section navigation in option page"

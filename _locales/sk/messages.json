@@ -115,6 +115,10 @@
     "message": "Manuálne",
     "description": "Label for filter drop-down in options"
   },
+  "limit_heading_size": {
+    "message": "Obmedzenie veľkosti nadpisov",
+    "description": "Label for checkbox in options"
+  },
   "fonts": {
     "message": "Písma",
     "description": "Used in section navigation in option page"

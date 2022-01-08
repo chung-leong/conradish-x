@@ -115,6 +115,10 @@
     "message": "手動",
     "description": "Label for filter drop-down in options"
   },
+  "limit_heading_size": {
+    "message": "限制標題大小",
+    "description": "Label for checkbox in options"
+  },
   "fonts": {
     "message": "字體",
     "description": "Used in section navigation in option page"
