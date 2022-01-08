@@ -912,7 +912,7 @@ function addElement(element, { tag, style, content, footnote, junk }) {
   element.append(child);
 }
 
-function insertSupElement(supElement, container) {
+function insertSupElement(supElement, container, script) {
   // find all the text nodes
   const textNodes = [];
   const addTextNodes = (node) => {
@@ -951,7 +951,29 @@ function insertSupElement(supElement, container) {
     refNode = nextSibling;
   }
   parentNode.insertBefore(supElement, refNode);
-};
+  if (script === 'Arab') {
+    // stick in a zero-width-non-joiner to ensure correct text rendering after insertHTML is performed
+    const sepNode = document.createTextNode('\u200c');
+    parentNode.insertBefore(sepNode, supElement);
+  }
+}
+
+function removeSeparationNode(supElement) {
+  const { previousSibling } = supElement;
+  if (previousSibling && previousSibling.nodeType === Node.TEXT_NODE) {
+    const { parentNode, textContent } = previousSibling;
+    if (textContent === '\u200c') {
+      previousSibling.remove();
+    } else {
+      const lc = textContent.charAt(textContent.length - 1);
+      if (lc === '\u200c') {
+        // trim off the last character and replace the text node
+        const newTextNode = document.createTextNode(textContent.substr(0, textContent.length - 1));
+        parentNode.replaceChild(newTextNode, previousSibling);
+      }
+    }
+  }
+}
 
 export function annotateRange(range, content, includeTerm) {
   const { term, translation } = content;
@@ -965,11 +987,12 @@ export function annotateRange(range, content, includeTerm) {
       break;
     }
   }
+  const script = getLanguageScript(term.lang);
   const className = 'conradish footnote-number pending';
   const tempSupElement = e('SUP', { id, className }, number);
   const fragment = range.cloneContents();
   const fragmentDIV = e('DIV', {}, fragment);
-  insertSupElement(tempSupElement, fragmentDIV);
+  insertSupElement(tempSupElement, fragmentDIV, script);
   const html = fragmentDIV.innerHTML;
   // insert into editor
   const selection = getSelection();
@@ -978,6 +1001,7 @@ export function annotateRange(range, content, includeTerm) {
   document.execCommand('insertHTML', false, html);
   // find the <sup>
   const supElement = contentElement.querySelectorAll('.footnote-number.pending')[0];
+  removeSeparationNode(supElement);
   supElement.classList.remove('pending');
   const itemElement = e('LI', { className: 'footnote-item' });
   backstageElement.append(itemElement);
