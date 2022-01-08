@@ -25,6 +25,7 @@ export function getScripts() {
 }
 
 export async function getDefaultFonts(script) {
+  const fonts = await getFontList();
   const getFont = async (genericFamily, script) => {
     if (script === 'Latn') {
       // use the default; not sure why 'Latn' yields nothing
@@ -38,10 +39,16 @@ export async function getDefaultFonts(script) {
     'fixed',
     'cursive',
   ].map(f => getFont(f, script));
-  const fonts = await Promise.all(promises);
-  // remove duplicates
-  return fonts.filter((font, index, arr) => {
-    return font.fontId && index === arr.findIndex(f => f.fontId === font.fontId);
+  const defaultfonts = await Promise.all(promises);
+  return defaultfonts.filter((font, index, arr) => {
+    // remove duplicates
+    if (font.fontId && index === arr.findIndex(f => f.fontId === font.fontId)) {
+      // ensure that font is actually availble on the computer
+      if (fonts.find(f => f.fontId === font.fontId)) {
+        return true;
+      }
+    }
+    return false;
   });
 }
 
