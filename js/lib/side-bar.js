@@ -306,7 +306,7 @@ function createSelect(items, currentValue) {
 function createFontElements(fonts, currentValue) {
   return fonts.map(({ fontId, displayName }) => {
     const selected = (fontId === currentValue);
-    const style = { fontFamily: fontId, fontSize: '13pt' };
+    const style = { fontFamily: `${fontId}, sans-serif`, fontSize: '13pt' };
     return e('OPTION', { value: fontId, selected, style }, displayName);
   });
 }
