@@ -132,17 +132,48 @@ export function updateFontAvailability(fonts) {
     }
     return false;
   };
+  const scriptIndicators = [
+    {
+      pattern: /\bCJK\b.*?\JP\b/i,
+      scripts: [ 'Jpan' ],
+    },
+    {
+      pattern: /\bCJK\b.*?\bKR\b/i,
+      scripts: [ 'Hang' ],
+    },
+    {
+      pattern: /\bCJK\b.*?\bSC\b/i,
+      scripts: [ 'Hans' ]
+    },
+    {
+      pattern: /\bCJK\b.*?\b(TC|HK)\b/i,
+      scripts: [ 'Hant' ]
+    },
+    {
+      pattern: /\bCJK\b/i,
+      scripts: [ 'Hang', 'Hans', 'Hant', 'Jpan' ],
+    },
+  ];
+  const isTailoredFor = (fontId, script) => {
+    for (const { pattern, scripts } of scriptIndicators) {
+      if (pattern.test(fontId)) {
+        return scripts.includes(script);
+      }
+    }
+  };
   let changed = false;
   for (const script of getScripts()) {
     const list = getScriptSpecificSettings('fonts', script);
     if (list.length === 0) {
-      for (let pass = 1; pass <= 2; pass++) {
+      for (let pass = 1; pass <= 3; pass++) {
         for (const { fontId, coverage } of fonts) {
           if (coverage.includes(script)) {
             let include;
             if (pass === 1) {
-              include = isPopular(fontId) && list.length < 8;
+              include = isPopular(fontId) && isTailoredFor(fontId, script) !== false && list.length < 8;
             } else if (pass === 2) {
+              include = isTailoredFor(fontId, script) !== false && list.length < 4;
+            } else if (pass === 3) {
               include = list.length < 4;
             }
             if(include) {

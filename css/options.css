@@ -39,6 +39,7 @@
 
 .preview-container {
   padding: 16px 24px 20px 48px;
+  user-select: text;
 }
 
 .preview-sentence {
