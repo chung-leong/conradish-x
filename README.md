@@ -17,6 +17,8 @@ The extension was designed with educators in mind, those who wish to make use we
   - [Applying text style](#applying-text-style)
   - [Finding missing text](#finding-missing-text)
   - [Adjusting filter behavior](#adjusting-filter-behavior)
+  - [Permitting large headings](#permitting-large-headings)
+  - [Selecting additional fonts](#selecting-additional-fonts)
   - [Printing](#printing)
   - [Finding documents](#finding-documents)
   - [Changing document title](#changing-document-title)
@@ -167,9 +169,21 @@ To change the filter setting, click Chrome's extension button in the toolbar the
 
 ![Extension menu](doc/img/extension-menu-1.jpg)
 
-Conradish's option pane will open up in a new tab:
+Conradish's options page will open up in a new tab:
 
 ![Options](doc/img/options-1.jpg)
+
+## Permitting large headings
+
+By default, Conradish reduces H1 headings in articles to H2, a size more suitable for the printed page. If you wish to leave them as-is, uncheck the **Limit heading size** checkbox.
+
+![Options](doc/img/options-2.jpg)
+
+## Selecting additional fonts
+
+To make additional fonts available, click **Fonts** in the side-bar, then the name of the applicable script (e.g. Arabic). Check the checkbox beside the font that you want to be able to use. Uncheck the checkbox if you don't want to see it listed. You can find a font using the search box at the top of the page if you know the name.
+
+![Options](doc/img/options-3.jpg)
 
 ## Printing
 
@@ -199,8 +213,8 @@ If you're in the middle of annotating a document, right click on the page margin
 
 # Limitations
 
-* Font selection has no impact on the display of East-Asian languages.
 * User interface not yet optimized for touch screens.
+* No way to select an alternative translation.
 
 These issues will be addressed in future versions.
 

@@ -50,7 +50,7 @@ BODY {
 .toolbar-left, .toolbar-right {
   flex-grow: 1;
   flex-shrink: 0;
-  flex-basis: 100px;
+  flex-basis: 200px;
   padding: 18px 24px 10px 24px;
   font-size: 16px;
   letter-spacing: 0.25px;
