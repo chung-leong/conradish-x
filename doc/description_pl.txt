@@ -1,0 +1,31 @@
+Conradish umożliwia tworzenie wersji drukowanej artykułów internetowych. Eliminuje reklamy i inne zbędne treści, formatując tekst do jednolitego, profesjonalnego wyglądu. Ponadto umożliwia dołączanie przypisów do słów i zdań.
+
+To rozszerzenie zostało zaprojektowane z myślą o nauczycielach, którzy chcą korzystać z materiałów internetowych w klasie. Jest szczególnie przydatne dla nauczycieli języków obcych, dzięki funkcji automatycznego tłumaczenia.
+
+Funkcje
+
+• Drukowanie wyłącznie wybranej części artykułu
+• Usuwanie reklam i obrazów
+• Uproszczenie układu strony
+• Edycja tekstu przed drukowaniem
+• Czyszczenie zawartości metodą „wskaż i kliknij”.
+• Dodanie przypisów
+• Integracja z Tłumaczem Google
+
+Podręcznik użytkownika
+
+By utworzyć wersję do druku artykułu najpierw wybierz fragment, który chcesz wydrukować. Nie martw się, jeśli wybór zawiera niepożądane elementy nawigacyjne — zostaną one odfiltrowane. Po dokonaniu wyboru kliknij go prawym przyciskiem myszy i wybierz „Utwórz wersję do druku”. Stworzony dokument otworzy się w nowej karcie przeglądarki.
+
+By dodać przypis do słowa, najpierw zaznacz słowo za pomocą myszy a następnie kliknij „Dodaj definicję” w pojawiającym się poniżej menu.
+
+By dodać przypis do całego zdania, zaznacz je a następnie kliknij „Dodaj tłumaczenie”.
+
+By usunąć przypis, usuń po prostu powiązany numer przypisu lub usuń wpis w stopce strony.
+
+Wszystkie akcje można cofnąć, naciskając Ctrl-Z.
+
+Aby uzyskać więcej instrukcji, zapoznaj się z wbudowaną instrukcją obsługi, klikając ikonę znaku zapytania w lewym dolnym rogu.
+
+Prywatność
+
+Conradish nie gromadzi żadnych informacji o użytkowniku. Nie monitoruje historii przeglądania. Wszystkie dane są przechowywane lokalnie. Rozszerzenie wysyła tekst do Google w celu tłumaczenia. Konsekwencje dotyczące prywatności są takie same, jak w przypadku korzystania z Tłumacza Google. Po zainstalowaniu rozszerzenia przeglądarka ostrzeże, że może uzyskać dostęp do „Twoich danych” na customers5.google.com. Dane, o których mowa, to tylko przetłumaczone frazy.
