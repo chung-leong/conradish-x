@@ -1,3 +1,12 @@
+# Version 1.3
+
+* Font availability based on script.
+* Options page replaces options pane.
+* Addition of font options.
+* Made heading size limit an option.
+* Localization for Chinese.
+* Fixed layout issue when switching to default margins.
+
 # Version 1.2
 
 * Added styling mode.
