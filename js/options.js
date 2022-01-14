@@ -188,6 +188,7 @@ function createFontSelectionCard(fontId, displayName, script) {
         list.splice(index, 1);
       }
     }
+    updateFontSelection();
     await saveSettings();
   });
   storageChange.addEventListener('settings', (evt) => {
