@@ -1039,7 +1039,7 @@ export function updateFootnoteContent(footnote, content, includeTerm) {
     const termElement = e('SPAN', { className: `term ${termScript}` }, term.text)
     itemElement.append(termElement, ` - ${translation.text}`);
   } else {
-    itemContent.append(translation.text);
+    itemElement.append(translation.text);
   }
   const translationScript = getLanguageScript(translation.lang);
   itemElement.classList.add(translationScript);
