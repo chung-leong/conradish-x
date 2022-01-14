@@ -35,7 +35,7 @@ async function processSection(sectionElement) {
   selection.removeAllRanges();
   selection.addRange(range);
   const expectedContent = JSON.parse(expectedElement.textContent);
-  const { content } = await captureSelection(selection);
+  const { content } = await captureSelection(selection, { heading: 'H2' });
   const json = JSON.stringify(content, undefined, 2);
   const expectedJSON = JSON.stringify(expectedContent, undefined, 2);
   const headingElement = e('H1', {}, [ ...titleElement.childNodes ]);
