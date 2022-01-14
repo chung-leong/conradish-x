@@ -917,10 +917,10 @@ function addSpacers(root, objectDossiers) {
       marginStart = 0;
       marginEnd = 0;
     }
-    const whiteStartStart = !!text && /^\s/.test(text);
+    const whiteSpaceStart = !!text && /^\s/.test(text);
     const whiteSpaceEnd = !!text && /\s$/.test(text);
-    return { marginStart, marginEnd, whiteStartStart, whiteSpaceEnd };
-    return { marginStart, marginEnd, whiteStartStart, whiteSpaceEnd };
+    return { marginStart, marginEnd, whiteSpaceStart, whiteSpaceEnd };
+    return { marginStart, marginEnd, whiteSpaceStart, whiteSpaceEnd };
   };
   const getPreviousObject = (object) => {
     let prevObject;
