@@ -494,7 +494,7 @@ function adjustLayout(options = {}) {
     pageIndex--;
   }
   const pageCount = pageIndex + 1;
-  while (pages.length > pageCount) {
+  while (pages.length > pageCount && pages.length !== 1) {
     const lastPage = pages.pop();
     const { paperElement, footer } = lastPage;
     paperElement.remove();

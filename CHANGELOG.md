@@ -6,6 +6,7 @@
 * Made heading size limit an option.
 * Localization for Chinese.
 * Fixed layout issue when switching to default margins.
+* Fixed interpretation of print stylesheet.
 
 # Version 1.2
 

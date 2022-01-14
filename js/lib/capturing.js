@@ -88,13 +88,33 @@ export function captureRangeContent(range, settings) {
       break;
     }
   }
-  // get "@media print" selectors from the page's CSS style sheet
-  // specifying elements that ought to be hidden when printing
-  const hiddenSelectors = getHiddenSelectors();
+  // get "@media print" selectors from the page's CSS style sheet and
+  // see how these rules impact the visibility of matching elements
+  const printRules = getPrintRules();
+  const printStyleMap = new Map;
+  for (const rule of printRules) {
+    const { display, visibility } = rule.style;
+    if (display || visibility) {
+      for (const node of rootNode.querySelectorAll(rule.selectorText)) {
+        let style = printStyleMap.get(node);
+        if (!style) {
+          style = {};
+          printStyleMap.set(node, style);
+        }
+        if (display) {
+          style.display = display;
+        }
+        if (visibility) {
+          style.visibility = visibility;
+        }
+      }
+    }
+  }
   const nodeHiddenStates = new WeakMap;
-  for (const selector of hiddenSelectors) {
-    // mark all the matching nodes (including their descendents) as hidden
-    for (const node of rootNode.querySelectorAll(selector)) {
+  for (const [ node, style ] of printStyleMap) {
+    const { display, visibility } = style;
+    if (display === 'none' || visibility === 'hidden') {
+      // mark node and descendents as hidden
       nodeHiddenStates.set(node, true);
       for (const child of node.getElementsByTagName('*')) {
         nodeHiddenStates.set(child, true);
@@ -172,9 +192,18 @@ export function captureRangeContent(range, settings) {
     }
     // make sure the node isn't hidden
     const style = getNodeStyle(node);
-    const { display, visibility } = style;
+    const { display, visibility, overflowX, overflowY } = style;
     if (!display || display === 'none' || visibility === 'hidden') {
       return true;
+    }
+    if (!canBeEmpty(node.tagName)) {
+      const hideX = (overflowX === 'hidden'), hideY = (overflowY === 'hidden');
+      if (hideX || hideY) {
+        const rect = getRect(node);
+        if ((rect.width === 0 && hideX) || (rect.height === 0 && hideY)) {
+          return true;
+        }
+      }
     }
     return false;
   };
@@ -361,12 +390,6 @@ export function captureRangeContent(range, settings) {
       if (isHidden(n) || isDisallowed(n)) {
         return;
       }
-      if (!canBeEmpty(n.tagName)) {
-        const rect = getRect(n);
-        if (rect.width === 0 || rect.height === 0) {
-          return;
-        }
-      }
     }
   };
   const topLevelTags = [ 'P', 'BLOCKQUOTE', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'UL', 'OL', 'TABLE' ];
@@ -420,12 +443,6 @@ export function captureRangeContent(range, settings) {
   const createObject = (node) => {
     if (isHidden(node)) {
       return;
-    }
-    const rect = getRect(node);
-    if (rect.width === 0 || rect.height === 0) {
-      if (!canBeEmpty(node.tagName)) {
-        return;
-      }
     }
     // remove <button>, <figcaption>, and such
     if (isDisallowed(node)) {
@@ -494,6 +511,7 @@ export function captureRangeContent(range, settings) {
       }
     }
     insertContent(parentObject, object);
+    const rect = getRect(node);
     const dossier = { node, style, rect, parent: parentObject, links: [] };
     objectDossiers.set(object, dossier);
     if (node.tagName === 'A') {
@@ -506,9 +524,9 @@ export function captureRangeContent(range, settings) {
   };
   const privateCharacters = /\p{Private_Use}/ug;
   const addText = (node, startOffset, endOffset) => {
+    const text = node.nodeValue.substring(startOffset, endOffset).replace(privateCharacters, '');
     const parentObject = getObject(node.parentNode);
     if (parentObject) {
-      const text = node.nodeValue.substring(startOffset, endOffset).replace(privateCharacters, '');
       insertContent(parentObject, text);
     }
   };
@@ -1160,17 +1178,14 @@ async function detectLanguage(text) {
   });
 }
 
-function getHiddenSelectors() {
+function getPrintRules() {
   const list = [];
   for (const styleSheet of document.styleSheets) {
     try {
       for (const rule of styleSheet.cssRules) {
         if (rule.media && [ ...rule.media ].includes('print')) {
           for (const printRule of rule.cssRules) {
-            const { display, visibility } = printRule.style;
-            if (display === 'none' || visibility === 'hidden') {
-              list.push(printRule.selectorText);
-            }
+            list.push(printRule);
           }
         }
       }
