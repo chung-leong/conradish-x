@@ -7,6 +7,7 @@
 * Localization for Chinese.
 * Fixed layout issue when switching to default margins.
 * Fixed interpretation of print stylesheet.
+* Fixed incorrect removal of capitalization.
 
 # Version 1.2
 

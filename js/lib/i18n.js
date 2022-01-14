@@ -144,11 +144,6 @@ export async function detectDirection(text) {
   return getLanguageDirection(lang);
 }
 
-export function canUseGenericFont(lang) {
-  const script = getLanguageScript(lang);
-  return genericFontScripts.includes(script);
-}
-
 export function getSourceLanguage(variant = false) {
   if (variant && sourceVariant) {
     return `${sourceLanguage}-${sourceVariant}`;
@@ -298,10 +293,6 @@ export async function translate(original, sourceLang, targetLang, singleWord) {
       const sentences = json.sentences.filter(s => !!s.trans);
       const trans = sentences.map(s => s.trans).join('');
       result.translation = { text: trans, lang: targetLang };
-      // return the lowercase version if the translation isn't in uppercase
-      if (lowerCaseAlt && !isCapitalized(trans)) {
-        result.term.text = lowerCaseAlt;
-      }
       if (json.alternative_translations) {
         const alternatives = [];
         for (const at of json.alternative_translations) {
@@ -313,6 +304,7 @@ export async function translate(original, sourceLang, targetLang, singleWord) {
           result.alternatives = alternatives;
         }
       }
+      let useLowerCase = false;
       if (json.query_inflections) {
         const inflections = {};
         for (const qi of json.query_inflections) {
@@ -320,17 +312,25 @@ export async function translate(original, sourceLang, targetLang, singleWord) {
           const features = qi.features;
           if (word && features) {
             inflections[word] = features;
+            if (!isCapitalized(word)) {
+              useLowerCase = true;
+            }
           }
         }
         if (Object.entries(inflections).length > 0) {
           result.inflections = inflections;
         }
-        if (result.term) {
-          // use inflection info to determine whether word should be capitalized
-          if (inflections[original]) {
-            result.term.text = original;
+      } else {
+        // use the lowercase version if the translation isn't in uppercase
+        const targetScript = getLanguageScript(targetLang);
+        if (mixedCaseScript.includes(targetScript)) {
+          if (!isCapitalized(trans)) {
+            useLowerCase = true;
           }
         }
+      }
+      if (lowerCaseAlt && useLowerCase) {
+        result.term.text = lowerCaseAlt;
       }
     }
   } catch (e) {
@@ -801,4 +801,4 @@ const languages = [
 
 const capitalizingLangs = [ 'de', 'lb' ];
 const rightToLeftScripts = [ 'Arab', 'Hebr' ];
-const genericFontScripts = [ 'Latn', 'Cyrl' ];
+const mixedCaseScript = [ 'Latn', 'Cyrl' ];
