@@ -1,0 +1,31 @@
+Conradish vám umožňuje vytvárať tlačenú verziu online spravodajských článkov. Odstraňuje reklamy a iné rušivé prvky a preformátuje text do jednotného profesionálneho vzhľadu. Okrem toho vám umožňuje pripojiť k slovám a vetám poznámky pod čiarou.
+
+Rozšírenie bolo navrhnuté s ohľadom na pedagógov, ktorí chcú v triede využívať webové materiály. Je to užitočné najmä pre učiteľov cudzích jazykov vďaka funkcii automatického prekladu.
+
+Vlastnosti
+
+• Tlač len vybranej časti článku
+• Odstránenie reklám a obrázkov
+• Zjednodušenie rozloženia stránky
+• Úprava textu pred tlačou
+• Čistenie obsahu kliknutím myšou.
+• Pridanie poznámok pod čiarou
+• Integrácia s Google Translate
+
+Užívateľská príručka
+
+Ak chcete vytvoriť tlačenú verziu článku, ktorý si prezeráte, najskôr vyberte časť, ktorú chcete vytlačiť. Nerobte si starosti, ak výber skončí vrátane nežiaducich navigačných prvkov – tie sa odfiltrujú. Po vykonaní výberu naň kliknite pravým tlačidlom myši a vyberte možnosť „Vytvoriť verziu pre tlač“. Verzia pre tlač sa otvorí na novej karte prehliadača.
+
+Ak si chcete všimnúť definíciu slova, najprv vyberte slovo pomocou myši a potom kliknite na „Pridať definíciu“ v kontextovej ponuke, ktorá sa zobrazí pod ním.
+
+Ak chcete zaznamenať celú vetu, vyberte ju a kliknite na „Pridať preklad“.
+
+Ak chcete odstrániť poznámku pod čiarou, jednoducho odstráňte priradené číslo poznámky pod čiarou alebo odstráňte položku v päte strany.
+
+Všetky akcie je možné vrátiť späť stlačením Ctrl-Z.
+
+Ďalšie pokyny nájdete v zabudovanej používateľskej príručke. Dostanete sa k nemu kliknutím na ikonu otáznika v ľavom dolnom rohu.
+
+Ochrana osobných údajov
+
+Conradish nezachytáva žiadne informácie o používateľovi. Nesleduje vašu históriu prehliadania. Všetky údaje sú uložené lokálne. Rozšírenie odosiela spoločnosti Google text na účely prekladu. Dôsledky ochrany osobných údajov sú rovnaké ako pri používaní Prekladača Google. Keď si rozšírenie nainštalujete, prehliadač vás upozorní, že má prístup k „vašim údajom“ na stránke client5.google.com. Predmetné údaje sú len preložené frázy.

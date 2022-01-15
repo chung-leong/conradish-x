@@ -1,0 +1,31 @@
+Conradish vám umožňuje vytvářet tištěné verze online zpravodajských článků. Odstraňuje reklamy a další rušivé prvky a přeformátuje text do jednotného profesionálního vzhledu. Kromě toho vám umožňuje připojit ke slovům a větám poznámky pod čarou.
+
+Rozšíření bylo navrženo s ohledem na pedagogy, kteří chtějí využívat webové materiály ve třídě. Díky funkci automatického překladu je užitečná zejména pro učitele cizích jazyků.
+
+Funkce
+
+• Tisk pouze vybrané části článku
+• Odstranění reklam a obrázků
+• Zjednodušení vzhledu stránky
+• Úprava textu před tiskem
+• Čištění obsahu ukažte a klikněte.
+• Přidání poznámek pod čarou
+• Integrace s Překladačem Google
+
+Uživatelská příručka
+
+Chcete-li vytvořit tištěnou verzi článku, který si prohlížíte, nejprve vyberte část, kterou chcete vytisknout. Nebojte se, pokud výběr skončí včetně nežádoucích navigačních prvků – ty budou odfiltrovány. Po provedení výběru na něj klikněte pravým tlačítkem a zvolte "Vytvořit verzi pro tisk". Verze pro tisk se otevře na nové kartě prohlížeče.
+
+Chcete-li poznamenat definici slova, nejprve vyberte slovo pomocí myši a poté klikněte na "Přidat definici" v místní nabídce, která se zobrazí pod ním.
+
+Chcete-li poznamenat celou větu, vyberte ji a klikněte na „Přidat překlad“.
+
+Chcete-li poznámku pod čarou odstranit, jednoduše odstraňte příslušné číslo poznámky pod čarou nebo odstraňte položku v zápatí stránky.
+
+Všechny akce lze vrátit zpět stisknutím Ctrl-Z.
+
+Další pokyny naleznete ve vestavěné uživatelské příručce. Dostanete se k němu kliknutím na ikonu otazníku v levém dolním rohu.
+
+Soukromí
+
+Conradish nezachycuje žádné uživatelské informace. Nesleduje vaši historii prohlížení. Všechna data jsou uložena lokálně. Rozšíření odesílá text do Googlu za účelem překladu. Důsledky ochrany soukromí jsou stejné jako při používání Překladače Google. Při instalaci rozšíření vás prohlížeč upozorní, že má přístup k „vašim datům“ na adrese client5.google.com. Dotyčná data jsou pouze přeložené fráze.
