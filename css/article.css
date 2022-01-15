@@ -517,6 +517,10 @@ BODY {
   padding-bottom: 0;
 }
 
+.footnote-item {
+  text-align: start;
+}
+
 .footnote-item.Arab {
   direction: rtl;
 }

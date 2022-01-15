@@ -272,7 +272,6 @@ function adjustLayout(options = {}) {
       totalFootnoteCount++;
     }
     adjustFooterPosition(page);
-    adjustFooterDirection(page);
   };
   const isSpilling = (rect) => {
     return rect.bottom > contentArea.bottom || rect.top < contentArea.top;
@@ -690,26 +689,6 @@ export function adjustFooterPosition(page) {
     return true;
   } else {
     return false;
-  }
-}
-
-function adjustFooterDirection(page) {
-  const { footer } = page;
-  const { listElement, footnotes } = footer;
-  let ltrCount = 0, rtlCount = 0;
-  for (const footnote of footnotes) {
-    const { lang } = footnote.extra || {};
-    if (lang) {
-      const targetLang = lang.split(',')[1];
-      if (targetLang) {
-        if (getLanguageDirection(targetLang) === 'ltr') {
-          ltrCount++;
-        } else {
-          rtlCount++;
-        }
-      }
-    }
-    listElement.classList.toggle('rtl', rtlCount > ltrCount);
   }
 }
 
@@ -1312,8 +1291,6 @@ function handleFootnoteChanges(mutationsList) {
       } else if (adjustFooterPosition(page)) {
         // the footer size has changed, lines (and hence footnotes) might need to be moved between pages
         adjustLayout();
-      } else if (footnotesChanged.get(listElement)) {
-        adjustFooterDirection(page);
       }
     }
   }
