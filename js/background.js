@@ -5,6 +5,7 @@ import { l, initializeLocalization } from './lib/i18n.js';
 async function start() {
   chrome.contextMenus.onClicked.addListener(handleMenuClick);
   chrome.runtime.onMessage.addListener(handleMessage);
+  chrome.runtime.onInstalled.addListener(handleInstalled);
   await initializeStorage();
   await initializeLocalization();
   updateContextMenu();
@@ -97,6 +98,13 @@ function handleMessage(request, sender, sendResponse) {
       break;
   }
   return false;
+}
+
+async function handleInstalled({ reason }) {
+  if (reason === 'install') {
+    const url = getPageURL('help');
+    await chrome.tabs.create({ url });
+  }
 }
 
 async function handleCreateDocument({ document }) {
