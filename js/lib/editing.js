@@ -249,7 +249,8 @@ async function addFootnote(includeTerm) {
     const result = await translate(selectedText, sourceLang, targetLang, includeTerm);
     updateFootnoteContent(footnote, result, includeTerm);
   } else {
-    const { listElement, itemElement } = footnote.page.footer;
+    const { itemElement } = footnote;
+    const { listElement } = footnote.page.footer;
     listElement.focus();
     const range = getSelectionRange();
     range.selectNode(itemElement.lastChild);
