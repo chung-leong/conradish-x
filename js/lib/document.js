@@ -1,7 +1,7 @@
 import { e, waitForRedraw } from './ui.js';
 import { applyStyles, getPageProperties } from './settings.js';
 import { setSourceLanguage, setSourceVariant, getSourceLanguage, getLanguageScript, getLanguageDirection } from './i18n.js';
-import { insertContent, replaceUselessElements, removeEmptyNodes } from './capturing.js';
+import { insertContent, replaceUselessElements, removeEmptyNodes, transverseRange } from './capturing.js';
 import { loadObject, saveObject, storageChange } from './storage.js';
 
 const articleElement = document.getElementById('article');
@@ -1072,6 +1072,166 @@ function extractContent(node) {
   replaceUselessElements(root);
   removeEmptyNodes(root);
   return root;
+}
+
+export function generateRangeHTML(range, container) {
+  const textTokens = [];
+  const footnoteTokens = [];
+  const styleMap = new Map;
+  const stack = [];
+  const encode = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  const getScriptCode = (classList) => {
+    for (const className of classList) {
+      if (/^[A-Z][a-z]{3}$/.test(className)) {
+        return className;
+      }
+    }
+  };
+  const captureTextStyle = (selector, element, extra) => {
+    if (!styleMap.get(selector)) {
+      const computed = getComputedStyle(element);
+      const names = [ 'font-family', 'font-size' ];
+      if (computed.display !== 'inline') {
+        names.push('text-align', 'line-height', 'direction');
+      }
+      const style = {};
+      for (const name of names) {
+        style[name] = computed[name];
+      }
+      Object.assign(style, extra);
+      styleMap.set(selector, style);
+    }
+  };
+  const addFootnoteContent = (element, srcLang) => {
+    for (const childNode of element.childNodes) {
+      if (childNode.nodeType === Node.TEXT_NODE) {
+        footnoteTokens.push(encode(childNode.nodeValue));
+      } else if (childNode.nodeType === Node.ELEMENT_NODE) {
+        const tag = childNode.tagName.toLowerCase();
+        const attributes = [];
+        if (childNode.classList.contains('term')) {
+          const script = getScriptCode(childNode.classList);
+          captureTextStyle(`${tag}.conradishFootnote${script}`, childNode);
+          attributes.push(`lang="${srcLang}"`, `class="conradishFootnote${script}"`);
+        }
+        footnoteTokens.push(`<${tag} ${attributes.join(' ')}>`);
+        addFootnoteContent(childNode, srcLang);
+        footnoteTokens.push(`</${tag}>`);
+      }
+    }
+  };
+  let footnoteCount = 0;
+  const addTag = (node) => {
+    if (node.classList.contains('footnote-number')) {
+      const footnote = footnotes.find((f) => f.supElement === node);
+      if (footnote) {
+        const n = footnote.number;
+        textTokens.push(
+          `<a style="mso-footnote-id:ftn${n}" href="#_ftn${n}" name="_ftnref${n}">`,
+          '<span class="conradishFootnoteReference">',
+          '<span style="mso-special-character:footnote">',
+          '<![if !supportFootnotes]>',
+          '[',
+        );
+        if (footnoteTokens.length === 0) {
+          footnoteTokens.push(`<div style="mso-element:footnote-list">`);
+        }
+        const [ srcLang, targetLang ] = footnote.extra.lang.split(',');
+        const script = getScriptCode(footnote.itemElement.classList);
+        footnoteTokens.push(
+          `<div style="mso-element:footnote" id="ftn${n}">`,
+          `<p class="conradishFootnote${script}" lang="${targetLang}">`,
+          `<a style="mso-footnote-id:ftn${n}" href="#_ftnref${n}" name="_ftn${n}">`,
+          `<span class=conradishFootnoteReference>`,
+          `<span style='mso-special-character:footnote'>`,
+          `<![if !supportFootnotes]>`,
+          `[${n}]`,
+          `<![endif]>`,
+          `</span>`,
+          `</span>`,
+          `</a>`,
+          ' ',
+        );
+        captureTextStyle(`p.conradishFootnote${script}`, footnote.itemElement, { 'margin': '0mm', 'margin-bottom': '.0001pt' });
+        addFootnoteContent(footnote.itemElement, srcLang);
+        footnoteTokens.push(
+          `</p>`,
+          `</div>`
+        );
+      }
+      footnoteCount++;
+    } else {
+      const tag = node.tagName.toLowerCase();
+      const attributes = [];
+      if (node.parentNode === container) {
+        captureTextStyle(`${tag}.conradishNormal`, node);
+        attributes.push('class="conradishNormal"');
+      }
+      textTokens.push(`<${tag} ${attributes.join(' ')}>`);
+    }
+  };
+  const addEndTag = (node) => {
+    if (node.classList.contains('footnote-number')) {
+      const footnote = footnotes.find((f) => f.supElement === node);
+      if (footnote) {
+        textTokens.push(
+          ']',
+          '<![endif]>',
+          '</span>',
+          '</span>',
+          '</a>'
+        );
+      }
+    } else {
+      const tag = node.tagName.toLowerCase();
+      textTokens.push(`</${tag}>`);
+    }
+  };
+  const addText = (text) => {
+    textTokens.push(encode(text));
+  };
+  transverseRange(range, (node, startOffset, endOffset, endTag) => {
+    if (node.nodeType === Node.TEXT_NODE) {
+      if (stack.length === 0) {
+        for (let p = node.parentNode; p !== container; p = p.parentNode) {
+          stack.unshift(p);
+        }
+        for (const parentNode of stack) {
+          addTag(parentNode);
+        }
+      }
+      const text = node.nodeValue.substring(startOffset, endOffset);
+      addText(text);
+    } else if (node.nodeType === Node.ELEMENT_NODE) {
+      if (endTag) {
+        addEndTag(node);
+        stack.pop();
+      } else {
+        addTag(node);
+        stack.push(node);
+      }
+    }
+  });
+  while (stack.length > 0) {
+    addEndTag(stack.pop());
+  }
+  if (footnoteTokens.length === 0) {
+    footnoteTokens.push(`</div>`);
+  }
+  if (footnoteCount > 0) {
+    styleMap.set('span.conradishFootnoteReference', { 'vertical-align': 'super' });
+  }
+  const styleLines = [];
+  for (const [ selector, style ] of styleMap) {
+    const stylePairs = [];
+    for (const [ name, value ] of Object.entries(style)) {
+      stylePairs.push(`${name}: ${value};`);
+    }
+    styleLines.push(`${selector} { ${stylePairs.join(' ') }}`);
+  }
+  const style = `\n${styleLines.join('\n')}\n`;
+  const fragment = textTokens.join('') + footnoteTokens.join('');
+  return `<html><head><style><!--${style}--></style></head><body><!--StartFragment-->${fragment}<!--EndFragment--></body></html>`;
 }
 
 function splitContent(item, sep) {

@@ -1,5 +1,6 @@
 import { e, separateWords } from './ui.js';
-import { findDeletedFootnote, annotateRange, updateFootnoteContent, setFilterMode, getTitle, setTitle } from './document.js';
+import { findDeletedFootnote, annotateRange, updateFootnoteContent,
+  setFilterMode, getTitle, setTitle, generateRangeHTML } from './document.js';
 import { transverseRange } from './capturing.js';
 import { l, translate, getSourceLanguage, getTargetLanguage, getLanguageDirection, detectDirection } from './i18n.js';
 
@@ -20,6 +21,7 @@ export function attachEditingHandlers() {
   document.addEventListener('beforeinput', handleBeforeInput);
   document.addEventListener('input', handleInput);
   document.addEventListener('paste', handlePaste);
+  document.addEventListener('copy', handleCopy);
   document.addEventListener('dragstart', handleDragStart);
   document.addEventListener('dragend', handleDragEnd);
   document.addEventListener('drop', handleDrop);
@@ -657,7 +659,7 @@ function getRangeContainer(range) {
 }
 
 function getEditableContainer(node) {
-  for (let n = node; n; n = n .parentNode) {
+  for (let n = node; n; n = n.parentNode) {
     if (n.contentEditable === 'true') {
       return n;
     }
@@ -893,6 +895,18 @@ function handlePaste(evt) {
       const element = findParent(range.endContainer, n => n.nodeType === Node.ELEMENT_NODE);
       element.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
     }
+    evt.preventDefault();
+    evt.stopPropagation();
+  }
+}
+
+function handleCopy(evt) {
+  const range = getSelectionRange();
+  const container = getRangeContainer(range);
+  if (isArticleEditor(container)) {
+    const html = generateRangeHTML(range, container);
+    evt.clipboardData.setData('text/html', html);
+    console.log(html);
     evt.preventDefault();
     evt.stopPropagation();
   }
