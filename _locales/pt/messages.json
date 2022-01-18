@@ -1,22 +1,22 @@
 {
   "ext_description": {
-    "message": "Crea versiones impresas de artículos con notas al pie",
+    "message": "Crie versões impressas de artigos com notas de rodapé",
     "description": "Description of the extension, used in manifest"
   },
   "keep_all": {
-    "message": "mantener todo",
+    "message": "manter tudo",
     "description": "Tooltip text of scrubbing mode keep all button"
   },
   "create_print_version": {
-    "message": "Crear versión impresa",
+    "message": "Criar versão para impressão",
     "description": "Label for menu item in browser context menu and extension pop-up menu"
   },
   "selection_portion_of_document": {
-    "message": "seleccione la parte del documento que desea imprimir primero",
+    "message": "selecione a parte do documento que deseja imprimir primeiro",
     "description": "Text for tooltip in pop-up menu, when there's no selection"
   },
   "created_on": {
-    "message": "creado el $DATE$",
+    "message": "criado em $DATE$",
     "description": "Text for tooltip of recent documents in pop-up menu",
     "placeholders": {
       "date": {
@@ -26,43 +26,43 @@
     }
   },
   "show_all_documents": {
-    "message": "Mostrar todos los documentos",
+    "message": "Mostrar todos os documentos",
     "description": "Label for menu item in pop-up menu"
   },
   "add_definition": {
-    "message": "Añadir definición",
+    "message": "Adicionar definição",
     "description": "Label for item in annotation menu"
   },
   "show_term_and_definition": {
-    "message": "mostrar tanto el término como la definición en la nota al pie",
+    "message": "mostrar o termo e a definição na nota de rodapé",
     "description": "Text for tooltip of item in annotation menu"
   },
   "add_translation": {
-    "message": "Añadir traducción",
+    "message": "Adicionar tradução",
     "description": "Label for item in annotation menu"
   },
   "show_translation_only": {
-    "message": "mostrar solo la oración traducida en la nota al pie",
+    "message": "mostrar apenas a frase traduzida na nota de rodapé",
     "description": "Text for tooltip of item in annotation menu"
   },
   "add_explanation": {
-    "message": "Añadir explicación",
+    "message": "Adicionar explicação",
     "description": "Label for item in annotation menu"
   },
   "show_explanation": {
-    "message": "mostrar explicación en nota al pie",
+    "message": "mostrar explicação na nota de rodapé",
     "description": "Text for tooltip of item in annotation menu"
   },
   "style_bold": {
-    "message": "negrita",
+    "message": "negrito",
     "description": "Text for tooltip of button in style menu"
   },
   "style_italic": {
-    "message": "cursiva",
+    "message": "itálico",
     "description": "Text for tooltip of button in style menu"
   },
   "style_underline": {
-    "message": "subrayar",
+    "message": "sublinhar",
     "description": "Text for tooltip of button in style menu"
   },
   "style_strikethrough": {
@@ -70,15 +70,15 @@
     "description": "Text for tooltip of button in style menu"
   },
   "style_subscript": {
-    "message": "subíndice",
+    "message": "subscrito",
     "description": "Text for tooltip of button in style menu"
   },
   "style_superscript": {
-    "message": "superíndice",
+    "message": "sobrescrito",
     "description": "Text for tooltip of button in style menu"
   },
   "style_remove": {
-    "message": "borrar formato",
+    "message": "limpar formatação",
     "description": "Text for tooltip of button in style menu"
   },
   "style_heading": {
@@ -92,27 +92,27 @@
     }
   },
   "style_paragraph": {
-    "message": "párrafo",
+    "message": "parágrafo",
     "description": "Text for tooltip of button in style menu"
   },
   "extension_options": {
-    "message": "Opciones de extensión",
+    "message": "Opções de extensão",
     "description": "Title in options page"
   },
   "basic_options": {
-    "message": "Opciones básicas",
+    "message": "Opções básicas",
     "description": "Title of basic option card"
   },
   "add_context_menu_item": {
-    "message": "Agregar elemento al menú contextual del navegador",
+    "message": "Adicionar item ao menu de contexto do navegador",
     "description": "Label for checkbox in options"
   },
   "filter_page_content": {
-    "message": "Filtrar el contenido de la página",
+    "message": "Filtrar conteúdo da página",
     "description": "Label for checkbox in options"
   },
   "filter_automatic": {
-    "message": "Automáticamente",
+    "message": "Automaticamente",
     "description": "Label for filter drop-down in options"
   },
   "filter_manual": {
@@ -120,15 +120,15 @@
     "description": "Label for filter drop-down in options"
   },
   "limit_heading_size": {
-    "message": "Limite el tamaño de los títulos",
+    "message": "Limitar de tamanho de títulos",
     "description": "Label for checkbox in options"
   },
   "fonts": {
-    "message": "Fuentes",
+    "message": "Fontes",
     "description": "Used in section navigation in option page"
   },
   "search_font": {
-    "message": "Buscar fuente",
+    "message": "Localizar fonte",
     "description": "Placeholder of search box and icon tooltip in document list"
   },
   "script_arab": {
@@ -136,11 +136,11 @@
     "description": "Name of script, used in option page"
   },
   "script_armn": {
-    "message": "Armenio",
+    "message": "Armênio",
     "description": "Name of script, used in option page"
   },
   "script_beng": {
-    "message": "Bengalí",
+    "message": "Bengali",
     "description": "Name of script, used in option page"
   },
   "script_cyrl": {
@@ -160,7 +160,7 @@
     "description": "Name of script, used in option page"
   },
   "script_grek": {
-    "message": "Griego",
+    "message": "Grego",
     "description": "Name of script, used in option page"
   },
   "script_gujr": {
@@ -176,27 +176,27 @@
     "description": "Name of script, used in option page"
   },
   "script_hans": {
-    "message": "Chino (simplificado)",
+    "message": "Chinês (simplificado)",
     "description": "Name of script, used in option page"
   },
   "script_hant": {
-    "message": "Chino (tradicional)",
+    "message": "Chinês (tradicional)",
     "description": "Name of script, used in option page"
   },
   "script_hebr": {
-    "message": "Hebreo",
+    "message": "Hebraico",
     "description": "Name of script, used in option page"
   },
   "script_jpan": {
-    "message": "Japonés",
+    "message": "Japonês",
     "description": "Name of script, used in option page"
   },
   "script_khmr": {
-    "message": "Jemer",
+    "message": "Khmer",
     "description": "Name of script, used in option page"
   },
   "script_knda": {
-    "message": "Canadá",
+    "message": "Canarés",
     "description": "Name of script, used in option page"
   },
   "script_laoo": {
@@ -208,35 +208,35 @@
     "description": "Name of script, used in option page"
   },
   "script_mlym": {
-    "message": "Malayalam",
+    "message": "Malaiala",
     "description": "Name of script, used in option page"
   },
   "script_mymr": {
-    "message": "Birmano",
+    "message": "Birmanês",
     "description": "Name of script, used in option page"
   },
   "script_orya": {
-    "message": "Orya",
+    "message": "Oriá",
     "description": "Name of script, used in option page"
   },
   "script_sinh": {
-    "message": "Cingalés",
+    "message": "Cingalês",
     "description": "Name of script, used in option page"
   },
   "script_taml": {
-    "message": "Tamil",
+    "message": "Tâmil",
     "description": "Name of script, used in option page"
   },
   "script_telu": {
-    "message": "Telugu",
+    "message": "Telugo",
     "description": "Name of script, used in option page"
   },
   "script_thai": {
-    "message": "Tailandés",
+    "message": "Tailandês",
     "description": "Name of script, used in option page"
   },
   "action": {
-    "message": "Acción",
+    "message": "Açao",
     "description": "Label for drop-down in side-bar"
   },
   "editing": {
@@ -252,43 +252,43 @@
     "description": "Item in action drop-down"
   },
   "scrubbing": {
-    "message": "Depurando",
+    "message": "Limpando",
     "description": "Item in action drop-down"
   },
   "from_language": {
-    "message": "Del",
+    "message": "Do",
     "description": "Label for drop-down in side-bar"
   },
   "to_language": {
-    "message": "Al",
+    "message": "Para o",
     "description": "Label for drop-down in side-bar"
   },
   "article_font_family": {
-    "message": "Fuente",
+    "message": "Fonte",
     "description": "Label for drop-down in side-bar"
   },
   "article_font_size": {
-    "message": "Tamaño de fuente",
+    "message": "Tamanho da fonte",
     "description": "Label for drop-down in side-bar"
   },
   "article_justification": {
-    "message": "Justificación",
+    "message": "Justificação",
     "description": "Label for drop-down in side-bar"
   },
   "justification_none": {
-    "message": "Sin",
+    "message": "Nenhum",
     "description": "Item in justification drop-down in side-bar"
   },
   "justification_text": {
-    "message": "Texto solamente",
+    "message": "Texto apenas",
     "description": "Item in justification drop-down in side-bar"
   },
   "justification_text_and_headings": {
-    "message": "Texto y títulos",
+    "message": "Texto e títulos",
     "description": "Item in justification drop-down in side-bar"
   },
   "article_spacing": {
-    "message": "Interlineado",
+    "message": "Espaçamento",
     "description": "Label for drop-down in side-bar"
   },
   "spacing_normal": {
@@ -296,27 +296,27 @@
     "description": "Item in line-spacing drop-down in side-bar"
   },
   "footnote_font_family": {
-    "message": "Fuente de la nota al pie",
+    "message": "Fonte da nota de rodapé",
     "description": "Label for drop-down in side-bar"
   },
   "footnote_font_size": {
-    "message": "Tamaño de fuente de nota al pie",
+    "message": "Tamanho da fonte da nota de rodapé",
     "description": "Label for drop-down in side-bar"
   },
   "paper_size": {
-    "message": "Tamaño de papel",
+    "message": "Tamanho do papel",
     "description": "Label for drop-down in side-bar"
   },
   "margins": {
-    "message": "Márgenes",
+    "message": "Margens",
     "description": "Label for drop-down in side-bar"
   },
   "margins_default": {
-    "message": "Predeterminados",
+    "message": "Padrão",
     "description": "Item in margins drop-down in side-bar"
   },
   "margins_custom": {
-    "message": "Personalizados",
+    "message": "Personalizadas",
     "description": "Item in margins drop-down in side-bar"
   },
   "print": {
@@ -328,7 +328,7 @@
     "description": "Label for button in side-bar"
   },
   "check_paper_size": {
-    "message": "En la ventana de impresión, asegúrese de que el **Tamaño del papel** coincida con lo especificado anteriormente y que los **Márgenes** estén configurados como “Predeterminado”",
+    "message": "Na janela de impressão, verifique se **Tamanho do papel** corresponde ao especificado acima e se **Margens** está definido como ”Padrão”",
     "description": "Message in speech bubble over print button in side-bar (Markdown)"
   },
   "documents": {
@@ -336,11 +336,11 @@
     "description": "Title in document list"
   },
   "selected_document_sg": {
-    "message": "Documentos seleccionados: 1",
+    "message": "1 selecionado",
     "description": "For displaying the number of selected documents (singular)"
   },
   "selected_document_pl": {
-    "message": "Documentos seleccionados: $NUMBER$",
+    "message": "$NUMBER$ selecionados",
     "description": "For displaying the number of selected documents (plural)",
     "placeholders": {
       "number": {
@@ -350,23 +350,23 @@
     }
   },
   "no_documents": {
-    "message": "No hay documentos",
+    "message": "Não há documentos",
     "description": "Message in document list when there aren't any documents"
   },
   "no_search_results": {
-    "message": "No se han encontraron resultados de búsqueda",
+    "message": "Nenhum resultado de pesquisa encontrado",
     "description": "Message in document list when a search yields no results"
   },
   "search_documents": {
-    "message": "Buscar documentos",
+    "message": "Pesquisar documentos",
     "description": "Placeholder of search box and icon tooltip in document list"
   },
   "search_result_sg": {
-    "message": "1 resultado de búsqueda",
+    "message": " 1 resultado de pesquisa",
     "description": "For displaying the number of search results (singular)"
   },
   "search_result_pl": {
-    "message": "$NUMBER$ resultados de búsqueda",
+    "message": "$NUMBER$ resultados de pesquisa",
     "description": "For displaying the number of search results (plural)",
     "placeholders": {
       "number": {
@@ -376,7 +376,7 @@
     }
   },
   "for_query": {
-    "message": "Se han encontrado $RESULTS$ de $QUERY$",
+    "message": "Localizados $RESULTS$ para ”$QUERY$”",
     "description": "Text for card heading in document list",
     "placeholders": {
       "results": {
@@ -390,7 +390,7 @@
     }
   },
   "today_being": {
-    "message": "Hoy - $DATE$",
+    "message": "Hoje - $DATE$",
     "description": "Text for card heading in document list",
     "placeholders": {
       "date": {
@@ -400,7 +400,7 @@
     }
   },
   "yesterday_being": {
-    "message": "Ayer - $DATE$",
+    "message": "Ontem - $DATE$",
     "description": "Text for card heading in document list",
     "placeholders": {
       "date": {
@@ -410,11 +410,11 @@
     }
   },
   "clear_search": {
-    "message": "Borrar búsqueda",
+    "message": "Limpar pesquisa",
     "description": "Tooltip of search box x button in document list"
   },
   "delete": {
-    "message": "Eliminar",
+    "message": "Excluir",
     "description": "Label for delete button in document list"
   },
   "cancel": {
@@ -422,47 +422,47 @@
     "description": "Label for x button used to clear selection in document list"
   },
   "change_title": {
-    "message": "Cambiar título",
+    "message": "Alterar título",
     "description": "Label for menu item in document list"
   },
   "open_original_page": {
-    "message": "Ir a la página original",
+    "message": "Ir para a página original",
     "description": "Label for menu item in document list"
   },
   "language_none": {
-    "message": "Ninguno",
+    "message": "Nenhum",
     "description": "For top item in To language dropdown in side-bar"
   },
   "language_unknown": {
-    "message": "Desconocido",
+    "message": "Desconhecido",
     "description": "For top item in From language dropdown in side-bar"
   },
   "language_af": {
-    "message": "Afrikáans"
+    "message": "Africâner"
   },
   "language_am": {
-    "message": "Amhárico"
+    "message": "Amárico"
   },
   "language_ar": {
     "message": "Árabe"
   },
   "language_az": {
-    "message": "Azerí"
+    "message": "Azerbaijano"
   },
   "language_be": {
-    "message": "Bielorruso"
+    "message": "Bielo-russo"
   },
   "language_bg": {
     "message": "Búlgaro"
   },
   "language_bn": {
-    "message": "Bengalí"
+    "message": "Bengali"
   },
   "language_bs": {
-    "message": "Bosnio"
+    "message": "Bósnio"
   },
   "language_ca": {
-    "message": "Catalán"
+    "message": "Catalão"
   },
   "language_ceb": {
     "message": "Cebuano"
@@ -471,64 +471,64 @@
     "message": "Corso"
   },
   "language_cs": {
-    "message": "Checo"
+    "message": "Tcheco"
   },
   "language_cy": {
-    "message": "Galés"
+    "message": "Galês"
   },
   "language_da": {
-    "message": "Danés"
+    "message": "Dinamarquês"
   },
   "language_de": {
-    "message": "Alemán"
+    "message": "Alemão"
   },
   "language_el": {
-    "message": "Griego"
+    "message": "Grego"
   },
   "language_en": {
-    "message": "Inglés"
+    "message": "Inglês"
   },
   "language_eo": {
     "message": "Esperanto"
   },
   "language_es": {
-    "message": "Español"
+    "message": "Espanhol"
   },
   "language_et": {
-    "message": "Estonio"
+    "message": "Estoniano"
   },
   "language_eu": {
-    "message": "Euskera"
+    "message": "Basco"
   },
   "language_fa": {
     "message": "Persa"
   },
   "language_fi": {
-    "message": "Finlandés"
+    "message": "Finlandês"
   },
   "language_fr": {
-    "message": "Francés"
+    "message": "Francês"
   },
   "language_fy": {
-    "message": "Frisio"
+    "message": "Frísio"
   },
   "language_ga": {
-    "message": "Irlandés"
+    "message": "Irlandês"
   },
   "language_gd": {
-    "message": "Gaélico escocés"
+    "message": "Gaélico escocês"
   },
   "language_gl": {
-    "message": "Gallego"
+    "message": "Galego"
   },
   "language_gu": {
-    "message": "Gujarati"
+    "message": "Guzerate"
   },
   "language_ha": {
-    "message": "Hausa"
+    "message": "Hauçá"
   },
   "language_haw": {
-    "message": "Hawaiano"
+    "message": "Havaiano"
   },
   "language_hi": {
     "message": "Hindi"
@@ -540,139 +540,139 @@
     "message": "Croata"
   },
   "language_ht": {
-    "message": "Criollo haitiano"
+    "message": "Crioulo haitiano"
   },
   "language_hu": {
     "message": "Húngaro"
   },
   "language_hy": {
-    "message": "Armenio"
+    "message": "Armênio"
   },
   "language_id": {
-    "message": "Indonesio"
+    "message": "Indonésio"
   },
   "language_ig": {
     "message": "Igbo"
   },
   "language_is": {
-    "message": "Islandés"
+    "message": "Islandês"
   },
   "language_it": {
     "message": "Italiano"
   },
   "language_iw": {
-    "message": "Hebreo"
+    "message": "Hebraico"
   },
   "language_ja": {
-    "message": "Japonés"
+    "message": "Japonês"
   },
   "language_jw": {
-    "message": "Javanés"
+    "message": "Javanês"
   },
   "language_ka": {
     "message": "Georgiano"
   },
   "language_kk": {
-    "message": "Kazajo"
+    "message": "Cazaque"
   },
   "language_km": {
-    "message": "Camboyano"
+    "message": "Khmer"
   },
   "language_kn": {
-    "message": "Canarés"
+    "message": "Canarês"
   },
   "language_ko": {
     "message": "Coreano"
   },
   "language_ku": {
-    "message": "Kurdo"
+    "message": "Curdo"
   },
   "language_ky": {
-    "message": "Kirguís"
+    "message": "Quirguiz"
   },
   "language_la": {
-    "message": "Latín"
+    "message": "Latim"
   },
   "language_lb": {
-    "message": "Luxemburgués"
+    "message": "Luxemburguês"
   },
   "language_lo": {
-    "message": "Lao"
+    "message": "Laosiano"
   },
   "language_lt": {
     "message": "Lituano"
   },
   "language_lv": {
-    "message": "Letón"
+    "message": "Letão"
   },
   "language_mg": {
-    "message": "Malgache"
+    "message": "Malgaxe"
   },
   "language_mi": {
-    "message": "Maorí"
+    "message": "Maori"
   },
   "language_mk": {
-    "message": "Macedonio"
+    "message": "Macedônio"
   },
   "language_ml": {
-    "message": "Malayalam"
+    "message": "Malaiala"
   },
   "language_mn": {
     "message": "Mongol"
   },
   "language_mr": {
-    "message": "Maratí"
+    "message": "Marata"
   },
   "language_ms": {
-    "message": "Malayo"
+    "message": "Malaio"
   },
   "language_mt": {
-    "message": "Maltés"
+    "message": "Maltês"
   },
   "language_my": {
-    "message": "Birmano"
+    "message": "Birmanês"
   },
   "language_ne": {
-    "message": "Nepalí"
+    "message": "Nepalês"
   },
   "language_nl": {
-    "message": "Neerlandés"
+    "message": "Holandês"
   },
   "language_no": {
-    "message": "Noruego"
+    "message": "Norueguês"
   },
   "language_ny": {
-    "message": "Chichewa"
+    "message": "Chicheua"
   },
   "language_or": {
-    "message": "Oriya"
+    "message": "Oriá"
   },
   "language_pa": {
-    "message": "Panyabí"
+    "message": "Punjabi"
   },
   "language_pl": {
-    "message": "Polaco"
+    "message": "Polonês"
   },
   "language_ps": {
-    "message": "Pastún"
+    "message": "Pachto"
   },
   "language_pt": {
-    "message": "Portugués"
+    "message": "Português"
   },
   "language_ro": {
-    "message": "Rumano"
+    "message": "Romeno"
   },
   "language_ru": {
-    "message": "Ruso"
+    "message": "Russo"
   },
   "language_rw": {
     "message": "Kinyarwanda"
   },
   "language_sd": {
-    "message": "Sindhi"
+    "message": "Sindi"
   },
   "language_si": {
-    "message": "Cingalés"
+    "message": "Cingalês"
   },
   "language_sk": {
     "message": "Eslovaco"
@@ -684,46 +684,46 @@
     "message": "Samoano"
   },
   "language_sn": {
-    "message": "Shona"
+    "message": "Chona"
   },
   "language_so": {
-    "message": "Somalí"
+    "message": "Somali"
   },
   "language_sq": {
-    "message": "Albanés"
+    "message": "Albanês"
   },
   "language_sr": {
-    "message": "Serbio"
+    "message": "Sérvio"
   },
   "language_st": {
-    "message": "Sesoto"
+    "message": "Sessoto"
   },
   "language_su": {
-    "message": "Sundanés"
+    "message": "Sundanês"
   },
   "language_sv": {
     "message": "Sueco"
   },
   "language_sw": {
-    "message": "Suajili"
+    "message": "Suaíle"
   },
   "language_ta": {
-    "message": "Tamil"
+    "message": "Tâmil"
   },
   "language_te": {
-    "message": "Telugu"
+    "message": "Telugo"
   },
   "language_tg": {
-    "message": "Tayiko"
+    "message": "Tadjique"
   },
   "language_th": {
-    "message": "Tailandés"
+    "message": "Tailandês"
   },
   "language_tk": {
-    "message": "Turkmeno"
+    "message": "Turcomano"
   },
   "language_tl": {
-    "message": "Tagalo"
+    "message": "Filipino"
   },
   "language_tr": {
     "message": "Turco"
@@ -741,7 +741,7 @@
     "message": "Urdu"
   },
   "language_uz": {
-    "message": "Uzbeco"
+    "message": "Uzbeque"
   },
   "language_vi": {
     "message": "Vietnamita"
@@ -750,21 +750,21 @@
     "message": "Xhosa"
   },
   "language_yi": {
-    "message": "Yidis"
+    "message": "Iídiche"
   },
   "language_yo": {
-    "message": "Yoruba"
+    "message": "Ioruba"
   },
   "language_zh": {
-    "message": "Chino"
+    "message": "Chinês"
   },
   "language_zh_cn": {
-    "message": "Chino (simplificado)"
+    "message": "Chinês (simplificado)"
   },
   "language_zh_tw": {
-    "message": "Chino (tradicional)"
+    "message": "Chinês (tradicional)"
   },
   "language_zu": {
-    "message": "Zulú"
+    "message": "Zulu"
   }
 }
