@@ -1,6 +1,14 @@
 {
+  "ext_name": {
+    "message": "Конрадиш",
+    "description": "Name of the extension, used in manifest"
+  },
+  "ext_description": {
+    "message": "Создавайте печатную версию новости со сносками",
+    "description": "Description of the extension, used in manifest"
+  },
   "keep_all": {
-    "message": "храните все",
+    "message": "хранить все",
     "description": "Tooltip text of scrubbing mode keep all button"
   },
   "create_print_version": {

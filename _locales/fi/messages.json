@@ -1,4 +1,8 @@
 {
+  "ext_description": {
+    "message": "Luo painetut versiot uutisartikkeleista alaviitteineen",
+    "description": "Description of the extension, used in manifest"
+  },
   "keep_all": {
     "message": "pidä kaikki",
     "description": "Tooltip text of scrubbing mode keep all button"

@@ -1,4 +1,8 @@
 {
+  "ext_description": {
+    "message": "Tvorba tlačenej verzie článkov s poznámkami pod čiarou",
+    "description": "Description of the extension, used in manifest"
+  },
   "keep_all": {
     "message": "ponechať všetky",
     "description": "Tooltip text of scrubbing mode keep all button"

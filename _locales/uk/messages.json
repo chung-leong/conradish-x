@@ -1,4 +1,12 @@
 {
+  "ext_name": {
+    "message": "Конрадіш",
+    "description": "Name of the extension, used in manifest"
+  },
+  "ext_description": {
+    "message": "Створюйте друковану версію статей з примітками",
+    "description": "Description of the extension, used in manifest"
+  },
   "keep_all": {
     "message": "зберігати всі",
     "description": "Tooltip text of scrubbing mode keep all button"

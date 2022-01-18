@@ -1,4 +1,8 @@
 {
+  "ext_description": {
+    "message": "Skapa tryckt version av nyhetsartiklar med fotnoter",
+    "description": "Description of the extension, used in manifest"
+  },
   "keep_all": {
     "message": "behåll alla",
     "description": "Tooltip text of scrubbing mode keep all button"

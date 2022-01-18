@@ -1,4 +1,8 @@
 {
+  "ext_description": {
+    "message": "創建新聞文章印刷版和添加定義",
+    "description": "Description of the extension, used in manifest"
+  },
   "keep_all": {
     "message": "保留全部",
     "description": "Tooltip text of scrubbing mode keep all button"

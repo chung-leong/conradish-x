@@ -1,4 +1,8 @@
 {
+  "ext_description": {
+    "message": "Lag trykt versjon av nyhetsartikler med fotnoter",
+    "description": "Description of the extension, used in manifest"
+  },
   "keep_all": {
     "message": "behold alt",
     "description": "Tooltip text of scrubbing mode keep all button"

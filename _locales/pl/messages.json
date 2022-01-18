@@ -1,4 +1,8 @@
 {
+  "ext_description": {
+    "message": "Twórz drukowaną wersję artykułów z przypisami",
+    "description": "Description of the extension, used in manifest"
+  },
   "keep_all": {
     "message": "zachowaj wszystkie",
     "description": "Tooltip text of scrubbing mode keep all button"
