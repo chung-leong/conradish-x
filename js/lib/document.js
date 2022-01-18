@@ -1502,6 +1502,8 @@ function handleArticleChanges(mutationsList) {
       }
     } else if (type === 'characterData') {
       articleTextChanged = true;
+    } else if (type === 'attributes' && attributeName === 'style') {
+      articleTextChanged = true;
     } else if (type === 'attributes' && attributeName === 'class') {
       classChanged = true;
     }
@@ -1530,7 +1532,7 @@ function handleFootnoteChanges(mutationsList) {
     }
     map.set(listElement, value);
   };
-  for (const { type, target, addedNodes, removedNodes } of mutationsList) {
+  for (const { type, target, addedNodes, removedNodes, attributeName } of mutationsList) {
     if (type === 'childList') {
       if (target.classList.contains('footer-content')) {
         set(footnotesChanged, target, true);
@@ -1539,6 +1541,8 @@ function handleFootnoteChanges(mutationsList) {
         set(footnoteTextChanged, target, true);
       }
     } else if (type === 'characterData') {
+      set(footnoteTextChanged, target, true);
+    } else if (type === 'attributes' && attributeName === 'style') {
       set(footnoteTextChanged, target, true);
     }
   }
