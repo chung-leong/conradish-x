@@ -1,0 +1,770 @@
+{
+  "ext_description": {
+    "message": "Creați versiuni tipărite ale articolelor cu note de subsol",
+    "description": "Description of the extension, used in manifest"
+  },
+  "keep_all": {
+    "message": "păstrează tot",
+    "description": "Tooltip text of scrubbing mode keep all button"
+  },
+  "create_print_version": {
+    "message": "Creează versiunea tipărită",
+    "description": "Label for menu item in browser context menu and extension pop-up menu"
+  },
+  "selection_portion_of_document": {
+    "message": "selectați porțiunea de document pe care doriți să o imprimați mai întâi",
+    "description": "Text for tooltip in pop-up menu, when there's no selection"
+  },
+  "created_on": {
+    "message": "creat la $DATE$",
+    "description": "Text for tooltip of recent documents in pop-up menu",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "11/28/2021, 10:01:35 PM"
+      }
+    }
+  },
+  "show_all_documents": {
+    "message": "Arată toate documentele",
+    "description": "Label for menu item in pop-up menu"
+  },
+  "add_definition": {
+    "message": "Adaugă definiție",
+    "description": "Label for item in annotation menu"
+  },
+  "show_term_and_definition": {
+    "message": "afișează atât termenul, cât și definiția în nota de subsol",
+    "description": "Text for tooltip of item in annotation menu"
+  },
+  "add_translation": {
+    "message": "Adaugă traducerea",
+    "description": "Label for item in annotation menu"
+  },
+  "show_translation_only": {
+    "message": "afișează numai propoziția tradusă în nota de subsol",
+    "description": "Text for tooltip of item in annotation menu"
+  },
+  "add_explanation": {
+    "message": "Adaugă explicatie",
+    "description": "Label for item in annotation menu"
+  },
+  "show_explanation": {
+    "message": "afișează explicația în nota de subsol",
+    "description": "Text for tooltip of item in annotation menu"
+  },
+  "style_bold": {
+    "message": "aldin",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_italic": {
+    "message": "cursiv",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_underline": {
+    "message": "subliniază",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_strikethrough": {
+    "message": "taie cu o linie",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_subscript": {
+    "message": "indice",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_superscript": {
+    "message": "exponant",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_remove": {
+    "message": "anulează formatarea",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_heading": {
+    "message": "titlu $NUMBER$",
+    "description": "Text for tooltip of button in style menu",
+    "placeholders": {
+      "number": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "style_paragraph": {
+    "message": "paragraf",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "extension_options": {
+    "message": "Opțiuni pentru extensie",
+    "description": "Title in options page"
+  },
+  "basic_options": {
+    "message": "Opțiuni de bază",
+    "description": "Title of basic option card"
+  },
+  "add_context_menu_item": {
+    "message": "Adaugă element în meniul contextual al browserului",
+    "description": "Label for checkbox in options"
+  },
+  "filter_page_content": {
+    "message": "Filtrează conținutul paginii",
+    "description": "Label for checkbox in options"
+  },
+  "filter_automatic": {
+    "message": "Automat",
+    "description": "Label for filter drop-down in options"
+  },
+  "filter_manual": {
+    "message": "Manual",
+    "description": "Label for filter drop-down in options"
+  },
+  "limit_heading_size": {
+    "message": "Limitează dimensiunea titlurilor",
+    "description": "Label for checkbox in options"
+  },
+  "fonts": {
+    "message": "Fonturi",
+    "description": "Used in section navigation in option page"
+  },
+  "search_font": {
+    "message": "Găsește font",
+    "description": "Placeholder of search box and icon tooltip in document list"
+  },
+  "script_arab": {
+    "message": "Arab",
+    "description": "Name of script, used in option page"
+  },
+  "script_armn": {
+    "message": "Armean",
+    "description": "Name of script, used in option page"
+  },
+  "script_beng": {
+    "message": "Bengalez",
+    "description": "Name of script, used in option page"
+  },
+  "script_cyrl": {
+    "message": "Chirilic",
+    "description": "Name of script, used in option page"
+  },
+  "script_deva": {
+    "message": "Devanagari",
+    "description": "Name of script, used in option page"
+  },
+  "script_ethi": {
+    "message": "Etiopic",
+    "description": "Name of script, used in option page"
+  },
+  "script_geor": {
+    "message": "Georgian",
+    "description": "Name of script, used in option page"
+  },
+  "script_grek": {
+    "message": "Grecesc",
+    "description": "Name of script, used in option page"
+  },
+  "script_gujr": {
+    "message": "Gujurati",
+    "description": "Name of script, used in option page"
+  },
+  "script_guru": {
+    "message": "Gurmukhi",
+    "description": "Name of script, used in option page"
+  },
+  "script_hang": {
+    "message": "Coreean",
+    "description": "Name of script, used in option page"
+  },
+  "script_hans": {
+    "message": "Chinezesc (Simplificată)",
+    "description": "Name of script, used in option page"
+  },
+  "script_hant": {
+    "message": "Chinezesc (Tradițional)",
+    "description": "Name of script, used in option page"
+  },
+  "script_hebr": {
+    "message": "Ebraic",
+    "description": "Name of script, used in option page"
+  },
+  "script_jpan": {
+    "message": "Japonez",
+    "description": "Name of script, used in option page"
+  },
+  "script_khmr": {
+    "message": "Khmer",
+    "description": "Name of script, used in option page"
+  },
+  "script_knda": {
+    "message": "Kannada",
+    "description": "Name of script, used in option page"
+  },
+  "script_laoo": {
+    "message": "Laoțian",
+    "description": "Name of script, used in option page"
+  },
+  "script_latn": {
+    "message": "Latin",
+    "description": "Name of script, used in option page"
+  },
+  "script_mlym": {
+    "message": "Malayalam",
+    "description": "Name of script, used in option page"
+  },
+  "script_mymr": {
+    "message": "Birmanez",
+    "description": "Name of script, used in option page"
+  },
+  "script_orya": {
+    "message": "Odia",
+    "description": "Name of script, used in option page"
+  },
+  "script_sinh": {
+    "message": "Singhalez",
+    "description": "Name of script, used in option page"
+  },
+  "script_taml": {
+    "message": "Tamil",
+    "description": "Name of script, used in option page"
+  },
+  "script_telu": {
+    "message": "Telugu",
+    "description": "Name of script, used in option page"
+  },
+  "script_thai": {
+    "message": "Thailandez",
+    "description": "Name of script, used in option page"
+  },
+  "action": {
+    "message": "Acțiune",
+    "description": "Label for drop-down in side-bar"
+  },
+  "editing": {
+    "message": "Editând",
+    "description": "Item in action drop-down"
+  },
+  "styling": {
+    "message": "Formatând",
+    "description": "Item in action drop-down"
+  },
+  "annotating": {
+    "message": "Adnotând",
+    "description": "Item in action drop-down"
+  },
+  "scrubbing": {
+    "message": "Curățând",
+    "description": "Item in action drop-down"
+  },
+  "from_language": {
+    "message": "Din",
+    "description": "Label for drop-down in side-bar"
+  },
+  "to_language": {
+    "message": "În",
+    "description": "Label for drop-down in side-bar"
+  },
+  "article_font_family": {
+    "message": "Font",
+    "description": "Label for drop-down in side-bar"
+  },
+  "article_font_size": {
+    "message": "Mărimea fontului",
+    "description": "Label for drop-down in side-bar"
+  },
+  "article_justification": {
+    "message": "Justificarea",
+    "description": "Label for drop-down in side-bar"
+  },
+  "justification_none": {
+    "message": "Fără",
+    "description": "Item in justification drop-down in side-bar"
+  },
+  "justification_text": {
+    "message": "Doar a textului",
+    "description": "Item in justification drop-down in side-bar"
+  },
+  "justification_text_and_headings": {
+    "message": "Textului și a titlurilor",
+    "description": "Item in justification drop-down in side-bar"
+  },
+  "article_spacing": {
+    "message": "Spațiere între linii",
+    "description": "Label for drop-down in side-bar"
+  },
+  "spacing_normal": {
+    "message": "Normală",
+    "description": "Item in line-spacing drop-down in side-bar"
+  },
+  "footnote_font_family": {
+    "message": "Font pentru notele de subsol",
+    "description": "Label for drop-down in side-bar"
+  },
+  "footnote_font_size": {
+    "message": "Mărimea fontului pentru notele de subsol",
+    "description": "Label for drop-down in side-bar"
+  },
+  "paper_size": {
+    "message": "Dimensiunea hârtiei",
+    "description": "Label for drop-down in side-bar"
+  },
+  "margins": {
+    "message": "Margini",
+    "description": "Label for drop-down in side-bar"
+  },
+  "margins_default": {
+    "message": "Prestabilită",
+    "description": "Item in margins drop-down in side-bar"
+  },
+  "margins_custom": {
+    "message": "Personalizată",
+    "description": "Item in margins drop-down in side-bar"
+  },
+  "print": {
+    "message": "Printează",
+    "description": "Label for button in side-bar"
+  },
+  "finish": {
+    "message": "Finalizează",
+    "description": "Label for button in side-bar"
+  },
+  "check_paper_size": {
+    "message": "În fereastra de printare, asigurați-vă că **Dimensiunea hârtiei** se potrivește cu cele specificate mai sus și că **Margini** sunt setate la „Prestabilită”",
+    "description": "Message in speech bubble over print button in side-bar (Markdown)"
+  },
+  "documents": {
+    "message": "Documente",
+    "description": "Title in document list"
+  },
+  "selected_document_sg": {
+    "message": "1 selectat",
+    "description": "For displaying the number of selected documents (singular)"
+  },
+  "selected_document_pl": {
+    "message": "$NUMBER$ selectate",
+    "description": "For displaying the number of selected documents (plural)",
+    "placeholders": {
+      "number": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "no_documents": {
+    "message": "Nu există documente",
+    "description": "Message in document list when there aren't any documents"
+  },
+  "no_search_results": {
+    "message": "Nu s-au găsit rezultate de căutare",
+    "description": "Message in document list when a search yields no results"
+  },
+  "search_documents": {
+    "message": "Caută documente",
+    "description": "Placeholder of search box and icon tooltip in document list"
+  },
+  "search_result_sg": {
+    "message": "1 rezultat al căutarii",
+    "description": "For displaying the number of search results (singular)"
+  },
+  "search_result_pl": {
+    "message": "$NUMBER$ rezultate ale căutarii",
+    "description": "For displaying the number of search results (plural)",
+    "placeholders": {
+      "number": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "for_query": {
+    "message": "S-au găsit $RESULTS$ pentru „$QUERY$”",
+    "description": "Text for card heading in document list",
+    "placeholders": {
+      "results": {
+        "content": "$1",
+        "example": "2 results"
+      },
+      "query": {
+        "content": "$2",
+        "example": "CNN"
+      }
+    }
+  },
+  "today_being": {
+    "message": "Astăzi - $DATE$",
+    "description": "Text for card heading in document list",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "Sunday, November 13, 2001"
+      }
+    }
+  },
+  "yesterday_being": {
+    "message": "Ieri - $DATE$",
+    "description": "Text for card heading in document list",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "Sunday, November 13, 2001"
+      }
+    }
+  },
+  "clear_search": {
+    "message": "Şterge căutarea",
+    "description": "Tooltip of search box x button in document list"
+  },
+  "delete": {
+    "message": "Șterge",
+    "description": "Label for delete button in document list"
+  },
+  "cancel": {
+    "message": "Anulează",
+    "description": "Label for x button used to clear selection in document list"
+  },
+  "change_title": {
+    "message": "Modifică titlul",
+    "description": "Label for menu item in document list"
+  },
+  "open_original_page": {
+    "message": "Accesează pagina originală",
+    "description": "Label for menu item in document list"
+  },
+  "language_none": {
+    "message": "Nicio",
+    "description": "For top item in To language dropdown in side-bar"
+  },
+  "language_unknown": {
+    "message": "Necunoscută",
+    "description": "For top item in From language dropdown in side-bar"
+  },
+  "language_af": {
+    "message": "Afrikaans"
+  },
+  "language_am": {
+    "message": "Amharică"
+  },
+  "language_ar": {
+    "message": "Arabă"
+  },
+  "language_az": {
+    "message": "Azerbaidjană"
+  },
+  "language_be": {
+    "message": "Bielorusă"
+  },
+  "language_bg": {
+    "message": "Bulgară"
+  },
+  "language_bn": {
+    "message": "Bengali"
+  },
+  "language_bs": {
+    "message": "Bosniacă"
+  },
+  "language_ca": {
+    "message": "Catalană"
+  },
+  "language_ceb": {
+    "message": "Cebuană"
+  },
+  "language_co": {
+    "message": "Corsicană"
+  },
+  "language_cs": {
+    "message": "Cehă"
+  },
+  "language_cy": {
+    "message": "Galeză"
+  },
+  "language_da": {
+    "message": "Daneză"
+  },
+  "language_de": {
+    "message": "Germană"
+  },
+  "language_el": {
+    "message": "Greacă"
+  },
+  "language_en": {
+    "message": "Engleză"
+  },
+  "language_eo": {
+    "message": "Esperanto"
+  },
+  "language_es": {
+    "message": "Spaniolă"
+  },
+  "language_et": {
+    "message": "Estonă"
+  },
+  "language_eu": {
+    "message": "Bască"
+  },
+  "language_fa": {
+    "message": "Persană"
+  },
+  "language_fi": {
+    "message": "Finlandeză"
+  },
+  "language_fr": {
+    "message": "Franceză"
+  },
+  "language_fy": {
+    "message": "Frizonă"
+  },
+  "language_ga": {
+    "message": "Irlandeză"
+  },
+  "language_gd": {
+    "message": "Galica scoțiană"
+  },
+  "language_gl": {
+    "message": "Galiciană"
+  },
+  "language_gu": {
+    "message": "Gujarati"
+  },
+  "language_ha": {
+    "message": "Hausa"
+  },
+  "language_haw": {
+    "message": "Hawaiiană"
+  },
+  "language_hi": {
+    "message": "Hindi"
+  },
+  "language_hmn": {
+    "message": "Hmong"
+  },
+  "language_hr": {
+    "message": "Croată"
+  },
+  "language_ht": {
+    "message": "Creolă haitiană"
+  },
+  "language_hu": {
+    "message": "Maghiară"
+  },
+  "language_hy": {
+    "message": "Armeană"
+  },
+  "language_id": {
+    "message": "Indoneziană"
+  },
+  "language_ig": {
+    "message": "Igbo"
+  },
+  "language_is": {
+    "message": "Islandeză"
+  },
+  "language_it": {
+    "message": "Italiană"
+  },
+  "language_iw": {
+    "message": "Ebraică"
+  },
+  "language_ja": {
+    "message": "Japoneză"
+  },
+  "language_jw": {
+    "message": "Javaneză"
+  },
+  "language_ka": {
+    "message": "Gruzină"
+  },
+  "language_kk": {
+    "message": "Kazahă"
+  },
+  "language_km": {
+    "message": "Khmeră"
+  },
+  "language_kn": {
+    "message": "Kannada"
+  },
+  "language_ko": {
+    "message": "Coreeană"
+  },
+  "language_ku": {
+    "message": "Kurdă"
+  },
+  "language_ky": {
+    "message": "Kirghiză"
+  },
+  "language_la": {
+    "message": "Latină"
+  },
+  "language_lb": {
+    "message": "Luxemburgheză"
+  },
+  "language_lo": {
+    "message": "Laoțiană"
+  },
+  "language_lt": {
+    "message": "Lituaniană"
+  },
+  "language_lv": {
+    "message": "Letonă"
+  },
+  "language_mg": {
+    "message": "Malgașă"
+  },
+  "language_mi": {
+    "message": "Maori"
+  },
+  "language_mk": {
+    "message": "Macedoneană"
+  },
+  "language_ml": {
+    "message": "Malayalam"
+  },
+  "language_mn": {
+    "message": "Mongolă"
+  },
+  "language_mr": {
+    "message": "Marathi"
+  },
+  "language_ms": {
+    "message": "Malaeză"
+  },
+  "language_mt": {
+    "message": "Malteză"
+  },
+  "language_my": {
+    "message": "Birmană"
+  },
+  "language_ne": {
+    "message": "Nepaleză"
+  },
+  "language_nl": {
+    "message": "Neerlandeză"
+  },
+  "language_no": {
+    "message": "Norvegiană"
+  },
+  "language_ny": {
+    "message": "Chichewa"
+  },
+  "language_or": {
+    "message": "Odia (Oriya)"
+  },
+  "language_pa": {
+    "message": "Punjabi"
+  },
+  "language_pl": {
+    "message": "Poloneză"
+  },
+  "language_ps": {
+    "message": "Pashto"
+  },
+  "language_pt": {
+    "message": "Portugheză"
+  },
+  "language_ro": {
+    "message": "Română"
+  },
+  "language_ru": {
+    "message": "Rusă"
+  },
+  "language_rw": {
+    "message": "Kinyarwanda"
+  },
+  "language_sd": {
+    "message": "Sindhi"
+  },
+  "language_si": {
+    "message": "Singhaleză"
+  },
+  "language_sk": {
+    "message": "Slovacă"
+  },
+  "language_sl": {
+    "message": "Slovenă"
+  },
+  "language_sm": {
+    "message": "Samoană"
+  },
+  "language_sn": {
+    "message": "Shonă"
+  },
+  "language_so": {
+    "message": "Somali"
+  },
+  "language_sq": {
+    "message": "Albaneză"
+  },
+  "language_sr": {
+    "message": "Sârbă"
+  },
+  "language_st": {
+    "message": "Sesotho"
+  },
+  "language_su": {
+    "message": "Sundaneză"
+  },
+  "language_sv": {
+    "message": "Suedeză"
+  },
+  "language_sw": {
+    "message": "Swahili"
+  },
+  "language_ta": {
+    "message": "Tamilă"
+  },
+  "language_te": {
+    "message": "Telugu"
+  },
+  "language_tg": {
+    "message": "Tadjică"
+  },
+  "language_th": {
+    "message": "Thailandeză"
+  },
+  "language_tk": {
+    "message": "Turkmenă"
+  },
+  "language_tl": {
+    "message": "Filipineză"
+  },
+  "language_tr": {
+    "message": "Turcă"
+  },
+  "language_tt": {
+    "message": "Tătară"
+  },
+  "language_ug": {
+    "message": "Uigură"
+  },
+  "language_uk": {
+    "message": "Ucraineană"
+  },
+  "language_ur": {
+    "message": "Urdu"
+  },
+  "language_uz": {
+    "message": "Uzbecă"
+  },
+  "language_vi": {
+    "message": "Vietnameză"
+  },
+  "language_xh": {
+    "message": "Xhosa"
+  },
+  "language_yi": {
+    "message": "Idiș"
+  },
+  "language_yo": {
+    "message": "Yoruba"
+  },
+  "language_zh": {
+    "message": "Chineză"
+  },
+  "language_zh_cn": {
+    "message": "Chineză (Simplificată)"
+  },
+  "language_zh_tw": {
+    "message": "Chineză (Tradițională)"
+  },
+  "language_zu": {
+    "message": "Zulu"
+  }
+}
