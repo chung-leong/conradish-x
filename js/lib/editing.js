@@ -906,7 +906,6 @@ function handleCopy(evt) {
   if (isArticleEditor(container)) {
     const html = generateRangeHTML(range, container);
     evt.clipboardData.setData('text/html', html);
-    console.log(html);
     evt.preventDefault();
     evt.stopPropagation();
   }

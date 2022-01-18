@@ -1080,6 +1080,17 @@ export function generateRangeHTML(range, container) {
   const styleMap = new Map;
   const stack = [];
   const encode = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  const isVisible = (node) => {
+    if (node === container) {
+      return true;
+    } else if (node.nodeType === Node.ELEMENT_NODE) {
+      const { display } = getComputedStyle(node);
+      if (display === 'none') {
+        return false;
+      }
+    }
+    return isVisible(node.parentNode);
+  };
   const getScriptCode = (classList) => {
     for (const className of classList) {
       if (/^[A-Z][a-z]{3}$/.test(className)) {
@@ -1087,7 +1098,7 @@ export function generateRangeHTML(range, container) {
       }
     }
   };
-  const captureTextStyle = (selector, element, extra) => {
+  const createClassStyle = (selector, element, extra) => {
     if (!styleMap.get(selector)) {
       const computed = getComputedStyle(element);
       const names = [ 'font-family', 'font-size' ];
@@ -1102,6 +1113,24 @@ export function generateRangeHTML(range, container) {
       styleMap.set(selector, style);
     }
   };
+  const insertInlineStyle = (attributes, element) => {
+    const stylePairs = [];
+    const styleNames = [ 'font-weight', 'font-style', 'font-size', 'text-decoration-line', 'vertical-align' ];
+    for (const name of styleNames) {
+      const value = element.style[name];
+      if (value) {
+        if (name === 'text-decoration-line') {
+          // Word 2007 doesn't recognize text-decoration-line
+          stylePairs.push(`text-decoration: ${value}`);
+        } else {
+          stylePairs.push(`${name}: ${value};`);
+        }
+      }
+    }
+    if (stylePairs.length > 0) {
+      attributes.push(`style="${stylePairs.join(' ')}"`);
+    }
+  };
   const addFootnoteContent = (element, srcLang) => {
     for (const childNode of element.childNodes) {
       if (childNode.nodeType === Node.TEXT_NODE) {
@@ -1111,20 +1140,21 @@ export function generateRangeHTML(range, container) {
         const attributes = [];
         if (childNode.classList.contains('term')) {
           const script = getScriptCode(childNode.classList);
-          captureTextStyle(`${tag}.conradishFootnote${script}`, childNode);
           attributes.push(`lang="${srcLang}"`, `class="conradishFootnote${script}"`);
+          createClassStyle(`${tag}.conradishFootnote${script}`, childNode);
         }
+        insertInlineStyle(attributes, childNode);
         footnoteTokens.push(`<${tag} ${attributes.join(' ')}>`);
         addFootnoteContent(childNode, srcLang);
         footnoteTokens.push(`</${tag}>`);
       }
     }
   };
-  let footnoteCount = 0;
   const addTag = (node) => {
     if (node.classList.contains('footnote-number')) {
       const footnote = footnotes.find((f) => f.supElement === node);
       if (footnote) {
+        // insert tags for footnote number
         const n = footnote.number;
         textTokens.push(
           `<a style="mso-footnote-id:ftn${n}" href="#_ftn${n}" name="_ftnref${n}">`,
@@ -1134,8 +1164,16 @@ export function generateRangeHTML(range, container) {
           '[',
         );
         if (footnoteTokens.length === 0) {
-          footnoteTokens.push(`<div style="mso-element:footnote-list">`);
+          // add footnote list
+          footnoteTokens.push(
+            `<div style="mso-element:footnote-list">`,
+            `<![if !supportFootnotes]>`,
+            `<br clear="all">`,
+            `<hr size="1" width="33%">`,
+            `<![endif]>`
+          );
         }
+        // insert footnote
         const [ srcLang, targetLang ] = footnote.extra.lang.split(',');
         const script = getScriptCode(footnote.itemElement.classList);
         footnoteTokens.push(
@@ -1152,21 +1190,22 @@ export function generateRangeHTML(range, container) {
           `</a>`,
           ' ',
         );
-        captureTextStyle(`p.conradishFootnote${script}`, footnote.itemElement, { 'margin': '0mm', 'margin-bottom': '.0001pt' });
+        // create style class for footnote in target script
+        createClassStyle(`p.conradishFootnote${script}`, footnote.itemElement, { 'margin': '0mm', 'margin-bottom': '.0001pt' });
         addFootnoteContent(footnote.itemElement, srcLang);
         footnoteTokens.push(
           `</p>`,
           `</div>`
         );
       }
-      footnoteCount++;
     } else {
       const tag = node.tagName.toLowerCase();
       const attributes = [];
       if (node.parentNode === container) {
-        captureTextStyle(`${tag}.conradishNormal`, node);
         attributes.push('class="conradishNormal"');
+        createClassStyle(`${tag}.conradishNormal`, node);
       }
+      insertInlineStyle(attributes, node);
       textTokens.push(`<${tag} ${attributes.join(' ')}>`);
     }
   };
@@ -1191,8 +1230,12 @@ export function generateRangeHTML(range, container) {
     textTokens.push(encode(text));
   };
   transverseRange(range, (node, startOffset, endOffset, endTag) => {
+    if (!isVisible(node)) {
+      return;
+    }
     if (node.nodeType === Node.TEXT_NODE) {
       if (stack.length === 0) {
+        // push parent nodes into the stack, if the start container is a text node
         for (let p = node.parentNode; p !== container; p = p.parentNode) {
           stack.unshift(p);
         }
@@ -1212,13 +1255,14 @@ export function generateRangeHTML(range, container) {
       }
     }
   });
+  // close any remaining opened tags
   while (stack.length > 0) {
     addEndTag(stack.pop());
   }
-  if (footnoteTokens.length === 0) {
+  // close footnote list (if there's one)
+  if (footnoteTokens.length > 0) {
     footnoteTokens.push(`</div>`);
-  }
-  if (footnoteCount > 0) {
+    // add class for footnote number
     styleMap.set('span.conradishFootnoteReference', { 'vertical-align': 'super' });
   }
   const styleLines = [];
