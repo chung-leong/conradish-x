@@ -40,7 +40,7 @@ async function start() {
         className: `document ${direction}`,
         dataset: { command: 'open' + type, arg: key },
         title: l('created_on', date.toLocaleString()),
-      }, doc.title);
+      }, doc.title || '\u00a0');
       list.appendChild(open);
     }
     // add another separator

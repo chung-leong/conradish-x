@@ -908,8 +908,6 @@ function handleCopy(evt) {
     const text = generateRangeText(range, container);
     evt.clipboardData.setData('text/html', html);
     evt.clipboardData.setData('text/plain', text);
-    console.log(html);
-    console.log(text);
     evt.preventDefault();
     evt.stopPropagation();
   }

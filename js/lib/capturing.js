@@ -1,5 +1,9 @@
 export function transverseRange(range, cb) {
   const { startContainer, endContainer, commonAncestorContainer } = range;
+  // in case range doesn't belong to the current document (i.e. from an IFRAME)
+  const document = commonAncestorContainer.ownerDocument;
+  const window = document.defaultView;
+  const NodeList = window.NodeList;
   const { startOffset, endOffset } = range;
   let inside = false, finished = false;
   const scan = (node) => {
@@ -35,18 +39,40 @@ export function transverseRange(range, cb) {
   scan(commonAncestorContainer);
 }
 
-export async function captureSelection(selection, settings) {
-  const range = selection.getRangeAt(0);
+export async function captureSelections(selections, settings) {
   const url = document.location.href;
   const title = getTitle();
   const image = getImage();
-  const content = captureRangeContent(range, settings);
-  const lang = await getLanguage(content, range);
+  const results = selections.map((selection) => {
+    const range = selection.getRangeAt(0);
+    return captureRangeContent(range, settings);
+  });
+  const content = mergeContents(results);
+  const lang = await getLanguage(content);
   const doc = { url, title, image, lang, content, raw: true };
   return doc;
 }
 
+function mergeContents(list) {
+  if (list.length === 1) {
+    return list[0];
+  }
+  const combined = [];
+  for (const result of list) {
+    if (result instanceof Array) {
+      combined.push(...result);
+    } else if (result) {
+      combined.push(result);
+    }
+  }
+  return combined;
+}
+
 export function captureRangeContent(range, settings) {
+  // in case range does not belong to current document
+  const document = range.commonAncestorContainer.ownerDocument;
+  const window = document.defaultView;
+  const getComputedStyle = window.getComputedStyle;
   const { heading } = settings;
   const nodeStyles = new WeakMap;
   const getNodeStyle = (node) => {
@@ -90,7 +116,7 @@ export function captureRangeContent(range, settings) {
   }
   // get "@media print" selectors from the page's CSS style sheet and
   // see how these rules impact the visibility of matching elements
-  const printRules = getPrintRules();
+  const printRules = getPrintRules(document);
   const printStyleMap = new Map;
   for (const rule of printRules) {
     const { display, visibility } = rule.style;
@@ -1135,23 +1161,11 @@ function getImage() {
   return getMeta('og:image');
 }
 
-async function getLanguage(content, range) {
+async function getLanguage(content) {
   const text = getPlainText(content);
   let lang = await detectLanguage(text);
-  if (!lang) {
-    lang = getMeta('og:locale')
-  }
-  if (!lang) {
-    const { commonAncestorContainer } = range;
-    for (let n = commonAncestorContainer; n; n = n.parentNode) {
-      if (n.lang) {
-        lang = n.lang;
-        break;
-      }
-    }
-  }
   lang = lang.substr(0, 2).toLowerCase();
-  return lang;
+  return lang || 'en';
 }
 
 function getMeta(propName) {
@@ -1178,7 +1192,7 @@ async function detectLanguage(text) {
   });
 }
 
-function getPrintRules() {
+function getPrintRules(document) {
   const list = [];
   for (const styleSheet of document.styleSheets) {
     try {

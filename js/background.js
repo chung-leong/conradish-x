@@ -56,15 +56,22 @@ async function createDocument(tab) {
   await initializeLocalization();
   const settings = getSettings();
   await chrome.scripting.executeScript({
-    target: { allFrames: true, tabId: tab.id },
+    target: { tabId: tab.id },
     args: [ codeURL, settings ],
     func: async (codeURL, settings) => {
-      const selection = getSelection();
-      if (!selection.isCollapsed) {
-        // load the code for capturing only if the frame has selection
-        const { captureSelection } = await import(codeURL);
-        const doc = await captureSelection(selection, settings);
+      const selections = [ getSelection() ];
+      for (const iframe of document.getElementsByTagName('IFRAME')) {
         try {
+          selections.push(iframe.contentWindow.getSelection());
+        } catch (e) {
+        }
+      }
+      const list = selections.filter(s => !s.isCollapsed);
+      if (list.length > 0) {
+        try {
+          // load the code for capturing only if the frame has selection
+          const { captureSelections } = await import(codeURL);
+          const doc = await captureSelections(list, settings);
           chrome.runtime.sendMessage({ type: 'create', document: doc });
         } catch (err) {
           chrome.runtime.sendMessage({ type: 'error', message: err.message });
@@ -87,12 +94,9 @@ function handleMessage(request, sender, sendResponse) {
       handleCapture();
       break;
     case 'query':
-      handleSelectionQuery(sendResponse);
+      handleSelectionQuery().then(sendResponse);
       // keep sendResponse alive by returning true
       return true;
-    case 'response':
-      handleSelectionResponse(true);
-      break;
     case 'error':
       console.error(request.message);
       break;
@@ -118,34 +122,26 @@ async function handleCapture() {
   return createDocument(tab);
 }
 
-let responseFunc = null;
-
 async function handleSelectionQuery(sendResponse) {
   let [ tab ] = await chrome.tabs.query({ active: true, currentWindow: true });
   const url = new URL(tab.url);
   if ([ 'http:', 'https:', 'file:' ].includes(url.protocol)) {
-    responseFunc = sendResponse;
-    // ask all frames if they have selection
-    chrome.scripting.executeScript({
-      target: { allFrames: true, tabId: tab.id },
+    const frames = await chrome.scripting.executeScript({
+      target: { tabId: tab.id },
       func: () => {
-        const selection = getSelection();
-        if (!selection.isCollapsed) {
-          chrome.runtime.sendMessage({ type: 'response' });
+        const selections = [ getSelection() ];
+        for (const iframe of document.getElementsByTagName('IFRAME')) {
+          try {
+            selections.push(iframe.contentWindow.getSelection());
+          } catch (e) {
+          }
         }
+        return selections.filter(s => !s.isCollapsed).length > 0;
       }
     });
-    // call the response function after a while if not frame responded
-    setTimeout(handleSelectionResponse, 500, false);
+    return frames[0].result;
   } else {
-    sendResponse(null);
-  }
-}
-
-function handleSelectionResponse(state) {
-  if (responseFunc) {
-    responseFunc(state);
-    responseFunc = null;
+    return null;
   }
 }
 
