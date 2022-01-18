@@ -1150,9 +1150,9 @@ export function generateRangeHTML(range, container) {
       }
     }
   };
-  const addTag = (node) => {
-    if (node.classList.contains('footnote-number')) {
-      const footnote = footnotes.find((f) => f.supElement === node);
+  const addTag = (element) => {
+    if (element.classList.contains('footnote-number')) {
+      const footnote = footnotes.find((f) => f.supElement === element);
       if (footnote) {
         // insert tags for footnote number
         const n = footnote.number;
@@ -1199,19 +1199,21 @@ export function generateRangeHTML(range, container) {
         );
       }
     } else {
-      const tag = node.tagName.toLowerCase();
-      const attributes = [];
-      if (node.parentNode === container) {
-        attributes.push('class="conradishNormal"');
-        createClassStyle(`${tag}.conradishNormal`, node);
+      if (element.childNodes.length > 0) {
+        const tag = element.tagName.toLowerCase();
+        const attributes = [];
+        if (element.parentNode === container) {
+          attributes.push('class="conradishNormal"');
+          createClassStyle(`${tag}.conradishNormal`, element, { 'white-space': 'pre' });
+        }
+        insertInlineStyle(attributes, element);
+        textTokens.push(`<${tag} ${attributes.join(' ')}>`);
       }
-      insertInlineStyle(attributes, node);
-      textTokens.push(`<${tag} ${attributes.join(' ')}>`);
     }
   };
-  const addEndTag = (node) => {
-    if (node.classList.contains('footnote-number')) {
-      const footnote = footnotes.find((f) => f.supElement === node);
+  const addEndTag = (element) => {
+    if (element.classList.contains('footnote-number')) {
+      const footnote = footnotes.find((f) => f.supElement === element);
       if (footnote) {
         textTokens.push(
           ']',
@@ -1222,8 +1224,10 @@ export function generateRangeHTML(range, container) {
         );
       }
     } else {
-      const tag = node.tagName.toLowerCase();
-      textTokens.push(`</${tag}>`);
+      if (element.childNodes.length > 0) {
+        const tag = element.tagName.toLowerCase();
+        textTokens.push(`</${tag}>`);
+      }
     }
   };
   const addText = (text) => {
@@ -1276,6 +1280,59 @@ export function generateRangeHTML(range, container) {
   const style = `\n${styleLines.join('\n')}\n`;
   const fragment = textTokens.join('') + footnoteTokens.join('');
   return `<html><head><style><!--${style}--></style></head><body><!--StartFragment-->${fragment}<!--EndFragment--></body></html>`;
+}
+
+export function generateRangeText(range, container) {
+  const textTokens = [];
+  const isVisible = (node) => {
+    if (node === container) {
+      return true;
+    } else if (node.nodeType === Node.ELEMENT_NODE) {
+      const { display } = getComputedStyle(node);
+      if (display === 'none') {
+        return false;
+      }
+    }
+    return isVisible(node.parentNode);
+  };
+  transverseRange(range, (node, startOffset, endOffset, endTag) => {
+    if (!isVisible(node)) {
+      return;
+    }
+    if (node.nodeType === Node.TEXT_NODE) {
+      const text = node.nodeValue.substring(startOffset, endOffset);
+      textTokens.push(text);
+    } else if (node.nodeType === Node.ELEMENT_NODE) {
+      if (node.childNodes.length > 0) {
+        switch (node.tagName) {
+          case 'H1':
+          case 'H2':
+          case 'H3':
+          case 'H4':
+          case 'H5':
+          case 'H6':
+          case 'P':
+          case 'UL':
+          case 'OL':
+          case 'TABLE':
+            textTokens.push('\n');
+            break;
+          case 'TD':
+            if (endTag && node.nextSibling) {
+              textTokens.push('\t');
+            }
+            break;
+          case 'TR':
+          case 'LI':
+            if (endTag) {
+              textTokens.push('\n');
+            }
+            break;
+        }
+      }
+    }
+  });
+  return textTokens.join('');
 }
 
 function splitContent(item, sep) {

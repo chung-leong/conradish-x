@@ -1,6 +1,6 @@
 import { e, separateWords } from './ui.js';
-import { findDeletedFootnote, annotateRange, updateFootnoteContent,
-  setFilterMode, getTitle, setTitle, generateRangeHTML } from './document.js';
+import { findDeletedFootnote, annotateRange, updateFootnoteContent, setFilterMode, getTitle, setTitle,
+  generateRangeHTML, generateRangeText } from './document.js';
 import { transverseRange } from './capturing.js';
 import { l, translate, getSourceLanguage, getTargetLanguage, getLanguageDirection, detectDirection } from './i18n.js';
 
@@ -905,7 +905,11 @@ function handleCopy(evt) {
   const container = getRangeContainer(range);
   if (isArticleEditor(container)) {
     const html = generateRangeHTML(range, container);
+    const text = generateRangeText(range, container);
     evt.clipboardData.setData('text/html', html);
+    evt.clipboardData.setData('text/plain', text);
+    console.log(html);
+    console.log(text);
     evt.preventDefault();
     evt.stopPropagation();
   }
