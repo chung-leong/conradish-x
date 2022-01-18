@@ -689,7 +689,7 @@ function showAnnotationMenu(range) {
   return false;
 }
 
-function showStylingMenu(range) {
+function showStylingMenu(range, types) {
   const inEffect = {};
   const noteEffect = (name, state) => {
     const status = inEffect[name];
@@ -713,6 +713,9 @@ function showStylingMenu(range) {
     }
   };
   if (!range.collapsed) {
+    if (!types.includes('inline')) {
+      return false;
+    }
     // get the styling of the selected text
     transverseRange(range, (node, startOffset, endOffset) => {
       if (node.nodeType === Node.TEXT_NODE && endOffset > startOffset) {
@@ -731,6 +734,9 @@ function showStylingMenu(range) {
     toggle(articleMenuElement, true);
     return true;
   } else {
+    if (!types.includes('block')) {
+      return false;
+    }
     const blockElement = findParent(range.commonAncestorContainer, n => n.parentNode.id === 'article-text');
     if (blockElement) {
       const { tagName } = blockElement;
@@ -802,10 +808,12 @@ function updateArticleMenu() {
       if (editMode === 'annotate') {
         hideMenu = !showAnnotationMenu(range);
       } else if (editMode === 'style') {
-        hideMenu = !showStylingMenu(range);
+        hideMenu = !showStylingMenu(range, [ 'inline', 'block' ]);
       }
       // remember the range
       lastSelectedRange = range;
+    } else if (isFootnoteEditor(container)) {
+      hideMenu = !showStylingMenu(range, [ 'inline' ]);
     }
   }
   if (hideMenu) {
