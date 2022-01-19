@@ -1203,7 +1203,8 @@ export function generateRangeHTML(range, container) {
         const tag = element.tagName.toLowerCase();
         const attributes = [];
         if (element.parentNode === container) {
-          attributes.push('class="conradishNormal"');
+          attributes.push(`class="conradishNormal"`);
+          attributes.push(`lang="${currentDocument.lang}"`);
           createClassStyle(`${tag}.conradishNormal`, element, { 'white-space': 'pre' });
         }
         insertInlineStyle(attributes, element);
