@@ -50,9 +50,12 @@ function createSearchToolbar() {
 
 function createSectionNavigation() {
   const basicElement = e('LI', { className: 'basic selected' }, l('basic_options'));
-  const scripts = getScripts();
-  const scriptElements = scripts.map((script) => {
-    return e('LI', { dataset: { script } }, l(`script_${script.toLowerCase()}`));
+  const scriptCodes = getScripts();
+  const scripts = scriptCodes.map((script) => {
+    return { script, label: l(`script_${script.toLowerCase()}`) };
+  }).sort((a, b) => a.label.localeCompare(b.label) );
+  const scriptElements = scripts.map(({ script, label }) => {
+    return e('LI', { dataset: { script } }, label);
   });
   const scriptListElement = e('UL', { className: 'script-list hidden' }, scriptElements);
   const fontElement = e('LI', { className: 'fonts' }, [ l('fonts'), scriptListElement ]);
