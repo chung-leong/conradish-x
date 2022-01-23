@@ -967,8 +967,8 @@ function removeSeparationNode(supElement) {
   }
 }
 
-export function annotateRange(range, content, includeTerm) {
-  const { term, translation } = content;
+export function annotateRange(range, footnoteContent, includeTerm) {
+  const { term, translation } = footnoteContent;
   const id = `footnote-${nextFootnoteId++}`;
   // figure out what number it should have
   let number = 1;
@@ -1003,8 +1003,9 @@ export function annotateRange(range, content, includeTerm) {
     lang: `${term.lang},${translation.lang}`,
     incl: includeTerm,
   };
+  const content = (includeTerm) ? `${term.text} - ` : '';
   const footnote = { id, number, page, supElement, itemElement, height, content, extra };
-  updateFootnoteContent(footnote, content, includeTerm);
+  updateFootnoteContent(footnote, footnoteContent, includeTerm);
   footnotes.splice(number - 1, 0, footnote);
   // manual handle the change records so footnote will already be attached to a page
   // when this function returns
@@ -1012,8 +1013,8 @@ export function annotateRange(range, content, includeTerm) {
   return footnote;
 }
 
-export function updateFootnoteContent(footnote, content, includeTerm) {
-  const { term, translation, ...extra } = content;
+export function updateFootnoteContent(footnote, footnoteContent, includeTerm) {
+  const { term, translation, ...extra } = footnoteContent;
   const { itemElement } = footnote;
   while (itemElement.firstChild) {
     itemElement.firstChild.remove();
