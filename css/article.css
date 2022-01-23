@@ -306,11 +306,6 @@ BODY {
   margin-top: 0;
 }
 
-#article-text SUP {
-  font-size: 10pt;
-  font-weight: 400;
-}
-
 #article-text.rtl {
   direction: rtl;
 }
@@ -485,6 +480,16 @@ BODY {
   height: 0;
   overflow: hidden;
   visibility: hidden;
+}
+
+.footnote-number {
+  font-size: 10pt;
+  font-weight: 400;
+  vertical-align: super;
+}
+
+TABLE .footnote-number {
+  font-size: 9pt;
 }
 
 .footer-pusher {

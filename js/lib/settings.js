@@ -14,9 +14,7 @@ export function applyStyles() {
         const { selectorText, cssText } = rule;
         if (selectorText && selectorText.startsWith('#article-text')) {
           let m;
-          if (selectorText === '#article-text sup') {
-            rule.style.fontSize = `calc(${settings.article.fontSize} * 5 / 6)`;
-          } else if (selectorText === '#article-text table') {
+          if (selectorText === '#article-text table') {
             const { top, bottom, left, right } = page.margins;
             const { width, height } = page;
             rule.style.width = `calc(${width} - ${left} - ${right} - 2mm)`;
@@ -35,6 +33,10 @@ export function applyStyles() {
               rule.style.textAlign = (justify) ? 'justify' : 'start';
             }
           }
+        } else if (selectorText === '.footnote-number') {
+          rule.style.fontSize = `calc(${settings.article.fontSize} * 5 / 6)`;
+        } else if (selectorText === 'table .footnote-number') {
+          rule.style.fontSize = `calc(${settings.article.fontSize} * 5 / 6 * 0.8)`;
         } else if (selectorText && selectorText.startsWith('.footnote-item')) {
           let m;
           if (m = /\.footnote\-item\.([A-Z][a-z]{3})/.exec(selectorText)) {

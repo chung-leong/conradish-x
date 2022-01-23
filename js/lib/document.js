@@ -851,52 +851,57 @@ export function findDeletedFootnote(id) {
 let nextFootnoteId = Math.round(Math.random() * 0x00FFFFFF) * 1000;
 
 function addElement(element, { tag, style, content, footnote, junk }) {
-  const child = e(tag, { style, className: 'conradish' });
-  addContent(child, content);
-  if (junk > 0) {
-    if (junk === 1) {
-      child.classList.add('likely-junk');
-    } else {
-      child.classList.add('possibly-junk');
+  if (footnote instanceof Object) {
+    const id = `footnote-${nextFootnoteId++}`;
+    const supElement = e('SPAN', { style, id, className: 'conradish footnote-number' });
+    addContent(supElement, content);
+    addFootnoteListItem(footnote, id, supElement);
+    element.append(supElement);
+  } else {
+    const child = e(tag, { style, className: 'conradish' });
+    addContent(child, content);
+    if (junk > 0) {
+      if (junk === 1) {
+        child.classList.add('likely-junk');
+      } else {
+        child.classList.add('possibly-junk');
+      }
+    }
+    element.append(child);
+  }
+}
+
+function addFootnoteListItem(footnote, id, supElement) {
+  const { content, ...extra } = footnote;
+  const [ termLang, translationLang ] = (extra.lang || 'en,en').split(',');
+  const termScript = getLanguageScript(termLang);
+  const translationScript = getLanguageScript(translationLang);
+  const number = footnotes.length + 1;
+  const itemElement = e('LI', { className: `footnote-item ${translationScript}` });
+  // stick the item into the list backstage so we can obtain its dimensions
+  backstageElement.append(itemElement);
+  const page = null, height = '';
+  let includeTerm = extra.incl;
+  if (includeTerm === undefined) {
+    const plainText = getPlainText(footnote.content);
+    if (plainText.includes(extra.term)) {
+      includeTerm = true;
     }
   }
-  if (footnote instanceof Object) {
-    const { content, ...extra } = footnote;
-    const [ termLang, translationLang ] = (extra.lang || 'en,en').split(',');
-    const termScript = getLanguageScript(termLang);
-    const translationScript = getLanguageScript(translationLang);
-    const number = footnotes.length + 1;
-    const supElement = child;
-    const id = `footnote-${nextFootnoteId++}`;
-    supElement.id = id;
-    supElement.classList.add('footnote-number');
-    const itemElement = e('LI', { className: `footnote-item ${translationScript}` });
-    // stick the item into the list backstage so we can obtain its dimensions
-    backstageElement.append(itemElement);
-    const page = null, height = '';
-    let includeTerm = extra.incl;
-    if (includeTerm === undefined) {
-      const plainText = getPlainText(content);
-      if (plainText.includes(extra.term)) {
-        includeTerm = true;
-      }
-    }
-    if (includeTerm) {
-      const parts = splitContent(content, ' - ');
-      if (parts.length === 2) {
-        const spanElement = e('SPAN', { className: `term ${termScript}` });
-        itemElement.append(spanElement);
-        addContent(spanElement, parts[0]);
-        addContent(itemElement, parts[1]);
-      } else {
-        addContent(itemElement, content);
-      }
+  if (includeTerm) {
+    const parts = splitContent(content, ' - ');
+    if (parts.length === 2) {
+      const spanElement = e('SPAN', { className: `term ${termScript}` });
+      itemElement.append(spanElement);
+      addContent(spanElement, parts[0]);
+      addContent(itemElement, parts[1]);
     } else {
       addContent(itemElement, content);
     }
-    footnotes.push({ id, number, page, supElement, itemElement, height, content, extra });
+  } else {
+    addContent(itemElement, content);
   }
-  element.append(child);
+  footnotes.push({ id, number, page, supElement, itemElement, height, content, extra });
 }
 
 function insertSupElement(supElement, container, script) {
@@ -976,7 +981,7 @@ export function annotateRange(range, content, includeTerm) {
   }
   const script = getLanguageScript(term.lang);
   const className = 'conradish footnote-number pending';
-  const tempSupElement = e('SUP', { id, className }, number);
+  const tempSupElement = e('SPAN', { id, className }, number);
   const fragment = range.cloneContents();
   const fragmentDIV = e('DIV', {}, fragment);
   insertSupElement(tempSupElement, fragmentDIV, script);
@@ -1032,14 +1037,19 @@ function extractContent(node) {
     if (nodeType === Node.TEXT_NODE) {
       return nodeValue;
     } else if (nodeType === Node.ELEMENT_NODE) {
-      const { tagName, classList, childNodes, style } = node;
+      const { classList, childNodes, style } = node;
       if (filterMode === 'automatic' && classList.contains('likely-junk')) {
         return;
       }
       if (classList.contains('hidden')) {
         return;
       }
-      const object = { tag: tagName, content: undefined };
+      let footnote;
+      if (classList.contains('footnote-number')) {
+        footnote = footnotes.find((f) => f.supElement === node);
+      }
+      const tag = (footnote) ? 'SUP' : node.tagName;
+      const object = { tag, content: undefined };
       for (const child of childNodes) {
         const content = extractFromNode(child);
         insertContent(object, content);
@@ -1055,15 +1065,10 @@ function extractContent(node) {
       if (Object.entries(newStyle).length > 0) {
         object.style = newStyle;
       }
-      if (includeFootnotes) {
-        if (classList.contains('footnote-number')) {
-          const footnote = footnotes.find((f) => f.supElement === node);
-          if (footnote) {
-            const { content, extra } = footnote;
-            object.footnote = { content };
-            Object.assign(object.footnote, extra)
-          }
-        }
+      if (includeFootnotes && footnote) {
+        const { content, extra } = footnote;
+        object.footnote = { content };
+        Object.assign(object.footnote, extra)
       }
       return object;
     }
