@@ -269,72 +269,89 @@ function getDeclensionFunction() {
 export async function translate(original, sourceLang, targetLang, singleWord) {
   const result = {
     term: { text: original, lang: sourceLang },
+    translation: { text: '', lang: targetLang },
   };
-  try {
-    const url = new URL('https://clients5.google.com/translate_a/t');
-    let lowerCaseAlt;
-    // unless the language is German, query the word in lowercase
-    if (!capitalizingLangs.includes(sourceLang)) {
-      if (singleWord && isCapitalized(original, sourceLang)) {
-        try {
-          lowerCaseAlt = original.toLocaleLowerCase(sourceLang);
-        } catch (e) {
+  const url = new URL('https://clients5.google.com/translate_a/t');
+  let lowerCaseAlt;
+  // unless the language is German, query the word in lowercase
+  if (!capitalizingLangs.includes(sourceLang)) {
+    if (singleWord && isCapitalized(original, sourceLang)) {
+      try {
+        lowerCaseAlt = original.toLocaleLowerCase(sourceLang);
+      } catch (e) {
+      }
+    }
+  }
+  const query = lowerCaseAlt || original;
+  url.searchParams.set('client', 'dict-chrome-ex');
+  url.searchParams.set('q', query);
+  url.searchParams.set('sl', sourceLang);
+  url.searchParams.set('tl', targetLang);
+  const retrieve = async () => {
+    let retrievalCount = 0;
+    let delay = 250;
+    do {
+      retrievalCount++;
+      try {
+        const response = await fetch(url);
+        if (response.status !== 200) {
+          throw new Error(response.statusText);
+        }
+        const json = await response.json();
+        if (!(json.sentences instanceof Array)) {
+          throw new Error('Unexpected response');
+        }
+        return json;
+      } catch (e) {
+        console.error(e.message);
+        await new Promise(r => setTimeout(r, delay));
+        delay *= 2;
+      }
+    } while (retrievalCount <= 10);
+    return { sentences: [] };
+  };
+  const json = await retrieve();
+  const sentences = json.sentences.filter(s => !!s.trans);
+  const trans = sentences.map(s => s.trans).join('');
+  result.translation.text = trans;
+  if (json.alternative_translations) {
+    const alternatives = [];
+    for (const at of json.alternative_translations) {
+      for (const item of at.alternative.slice(1)) {
+        alternatives.push(item.word_postproc);
+      }
+    }
+    if (alternatives.length > 0) {
+      result.alternatives = alternatives;
+    }
+  }
+  let useLowerCase = false;
+  if (json.query_inflections) {
+    const inflections = {};
+    for (const qi of json.query_inflections) {
+      const word = qi.written_form;
+      const features = qi.features;
+      if (word && features) {
+        inflections[word] = features;
+        if (!isCapitalized(word)) {
+          useLowerCase = true;
         }
       }
     }
-    const query = lowerCaseAlt || original;
-    url.searchParams.set('client', 'dict-chrome-ex');
-    url.searchParams.set('q', query);
-    url.searchParams.set('sl', sourceLang);
-    url.searchParams.set('tl', targetLang);
-    const response = await fetch(url);
-    const json = await response.json();
-    if (json.sentences instanceof Array) {
-      const sentences = json.sentences.filter(s => !!s.trans);
-      const trans = sentences.map(s => s.trans).join('');
-      result.translation = { text: trans, lang: targetLang };
-      if (json.alternative_translations) {
-        const alternatives = [];
-        for (const at of json.alternative_translations) {
-          for (const item of at.alternative.slice(1)) {
-            alternatives.push(item.word_postproc);
-          }
-        }
-        if (alternatives.length > 0) {
-          result.alternatives = alternatives;
-        }
-      }
-      let useLowerCase = false;
-      if (json.query_inflections) {
-        const inflections = {};
-        for (const qi of json.query_inflections) {
-          const word = qi.written_form;
-          const features = qi.features;
-          if (word && features) {
-            inflections[word] = features;
-            if (!isCapitalized(word)) {
-              useLowerCase = true;
-            }
-          }
-        }
-        if (Object.entries(inflections).length > 0) {
-          result.inflections = inflections;
-        }
-      } else {
-        // use the lowercase version if the translation isn't in uppercase
-        const targetScript = getLanguageScript(targetLang);
-        if (mixedCaseScript.includes(targetScript)) {
-          if (!isCapitalized(trans)) {
-            useLowerCase = true;
-          }
-        }
-      }
-      if (lowerCaseAlt && useLowerCase) {
-        result.term.text = lowerCaseAlt;
+    if (Object.entries(inflections).length > 0) {
+      result.inflections = inflections;
+    }
+  } else {
+    // use the lowercase version if the translation isn't in uppercase
+    const targetScript = getLanguageScript(targetLang);
+    if (mixedCaseScript.includes(targetScript)) {
+      if (!isCapitalized(trans)) {
+        useLowerCase = true;
       }
     }
-  } catch (e) {
-    console.error(e);
+  }
+  if (lowerCaseAlt && useLowerCase) {
+    result.term.text = lowerCaseAlt;
   }
   return result;
 }
