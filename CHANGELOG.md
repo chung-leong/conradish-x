@@ -1,3 +1,14 @@
+# Version 1.4
+
+* Copying of text with footnotes to clipboard.
+* Improved error-handling when retrieving translation.
+* Localization for French, Spanish, Portuguese, Italian, and Romanian.
+* Fixed deletion of footnotes when clear formatting is performed.
+* Fixed non-appearance of style toolbar when footnote text is selected.
+* Fixed non-saving of style changes to footnotes.
+* Fixed footnoting of table cell content.
+* Fixed order of scripts in options page.
+
 # Version 1.3
 
 * Font availability based on script.

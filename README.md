@@ -22,6 +22,7 @@ The extension was designed with educators in mind, those who wish to make use we
   - [Printing](#printing)
   - [Finding documents](#finding-documents)
   - [Changing document title](#changing-document-title)
+  - [Copying article to Microsoft Word](#copying-article-to-microsoft-word)
 * [Limitations](#limitations)
 * [Privacy](#privacy)
 * [Support](#support)
@@ -210,6 +211,26 @@ To change the title of a document, click on the "kebab" button beside the title 
 If you're in the middle of annotating a document, right click on the page margin (or anywhere else outside the text) and choose **Change title**:
 
 ![Context menu](doc/img/change-title-2.jpg)
+
+## Copying article to Microsoft Word
+
+To copy article to Microsoft Word, right click on the document and choose "Select All" (or press **Ctrl-A**):
+
+![Context menu](doc/img/copy-paste-1.jpg)
+
+Right click again and choose "Copy" (or press **Ctrl-C**):
+
+![Context menu](doc/img/copy-paste-2.jpg)
+
+In Word, create a new document then click the Paste icon in the tool bar (or press **Ctrl-V**):
+
+![Microsoft Word](doc/img/microsoft-word-1.jpg)
+
+The text of the article, along with footnotes you've added, will now appear in Word:
+
+![Microsoft Word](doc/img/microsoft-word-2.jpg)
+
+Note that the online version of Word currently does not correctly handle the attached footnotes. Only the offline version of Microsoft Word works. WPS Office Writer does as well.
 
 # Limitations
 
