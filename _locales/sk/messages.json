@@ -1,6 +1,6 @@
 {
   "ext_description": {
-    "message": "Tvorba tlačenej verzie článkov s poznámkami pod čiarou",
+    "message": "Tvorba tlačených verzií článkov s poznámkami pod čiarou",
     "description": "Description of the extension, used in manifest"
   },
   "keep_all": {

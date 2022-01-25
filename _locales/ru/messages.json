@@ -4,7 +4,7 @@
     "description": "Name of the extension, used in manifest"
   },
   "ext_description": {
-    "message": "Создавайте печатную версию новости со сносками",
+    "message": "Создавайте печатные версии статей со сносками",
     "description": "Description of the extension, used in manifest"
   },
   "keep_all": {

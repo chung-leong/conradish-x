@@ -4,7 +4,7 @@
     "description": "Name of the extension, used in manifest"
   },
   "ext_description": {
-    "message": "Створюйте друковану версію статей з примітками",
+    "message": "Створюйте друковані версії статей з примітками",
     "description": "Description of the extension, used in manifest"
   },
   "keep_all": {
