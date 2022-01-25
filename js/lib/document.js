@@ -853,12 +853,12 @@ let nextFootnoteId = Math.round(Math.random() * 0x00FFFFFF) * 1000;
 function addElement(element, { tag, style, content, footnote, junk }) {
   if (footnote instanceof Object) {
     const id = `footnote-${nextFootnoteId++}`;
-    const supElement = e('SPAN', { style, id, className: 'conradish footnote-number' });
+    const supElement = e('SPAN', { style, id, className: 'footnote-number' });
     addContent(supElement, content);
     addFootnoteListItem(footnote, id, supElement);
     element.append(supElement);
   } else {
-    const child = e(tag, { style, className: 'conradish' });
+    const child = e(tag, { style });
     addContent(child, content);
     if (junk > 0) {
       if (junk === 1) {
@@ -980,7 +980,7 @@ export function annotateRange(range, footnoteContent, includeTerm) {
     }
   }
   const script = getLanguageScript(term.lang);
-  const className = 'conradish footnote-number pending';
+  const className = 'footnote-number pending';
   const tempSupElement = e('SPAN', { id, className }, number);
   const fragment = range.cloneContents();
   const fragmentDIV = e('DIV', {}, fragment);
@@ -1162,17 +1162,18 @@ export function generateRangeHTML(range, container) {
       if (footnote) {
         // insert tags for footnote number
         const n = footnote.number;
+        const id = footnote.id;
         textTokens.push(
           `<a style="mso-footnote-id:ftn${n}" href="#_ftn${n}" name="_ftnref${n}">`,
-          '<span class="conradishFootnoteReference">',
-          '<span style="mso-special-character:footnote">',
-          '<![if !supportFootnotes]>',
-          '[',
+          `<span class="conradishFootnoteReference" id="${id}">`,
+          `<span style="mso-special-character:footnote">`,
+          `<![if !supportFootnotes]>`,
+          `[`,
         );
         if (footnoteTokens.length === 0) {
           // add footnote list
           footnoteTokens.push(
-            `<div style="mso-element:footnote-list">`,
+            `<div class="conradishFootnoteList" style="mso-element:footnote-list">`,
             `<![if !supportFootnotes]>`,
             `<br clear="all">`,
             `<hr size="1" width="33%">`,
@@ -1286,7 +1287,7 @@ export function generateRangeHTML(range, container) {
   }
   const style = `\n${styleLines.join('\n')}\n`;
   const fragment = textTokens.join('') + footnoteTokens.join('');
-  return `<html><head><style><!--${style}--></style></head><body><!--StartFragment-->${fragment}<!--EndFragment--></body></html>`;
+  return `<style><!--${style}--></style>${fragment}`;
 }
 
 export function generateRangeText(range, container) {

@@ -22,6 +22,7 @@ export function attachEditingHandlers() {
   document.addEventListener('input', handleInput);
   document.addEventListener('paste', handlePaste);
   document.addEventListener('copy', handleCopy);
+  document.addEventListener('cut', handleCut);
   document.addEventListener('dragstart', handleDragStart);
   document.addEventListener('dragend', handleDragEnd);
   document.addEventListener('drop', handleDrop);
@@ -399,14 +400,9 @@ function isWithinCell(range) {
   return false;
 }
 
-function adjustAttributes(container, addIdentifyingClass = false) {
+function adjustAttributes(container) {
   const scan = (node) => {
     const { classList, style, children } = node;
-    if (addIdentifyingClass) {
-      if (!classList.contains('conradish')) {
-        classList.add('conradish');
-      }
-    }
     if (!isTableCell(node)) {
       const styleAttr = node.getAttribute('style');
       if (styleAttr) {
@@ -450,8 +446,8 @@ function adjustAttributes(container, addIdentifyingClass = false) {
 function handleInput(evt) {
   const { target } = evt;
   if (isArticleEditor(target)) {
-    // clean up the tags, making sure they all have the "conradish" class
-    adjustAttributes(target, true);
+    // clean up the tags
+    adjustAttributes(target);
   } else if (isFootnoteEditor(target)) {
     // clean up the tags
     adjustAttributes(target);
@@ -588,9 +584,8 @@ function handleKeyPress(evt) {
 }
 
 function filterHTML(html) {
-  // tags in the article editor always have the "conradish" class
-  //
-  if (!html.includes('conradish')) {
+  // HTML from the article editor always have the "conradishNormal" class
+  if (!html.includes('conradishNormal')) {
     return;
   }
   // extract the actual fragment
@@ -602,13 +597,34 @@ function filterHTML(html) {
   }
   const div = e('DIV');
   div.innerHTML = html;
-  if (div.getElementsByClassName('conradish').length > 0) {
+  const normalElements = div.getElementsByClassName('conradishNormal');
+  if (normalElements.length > 0) {
+    // remove class name
+    for (const normalElement of [ ...normalElements ]) {
+      normalElement.removeAttribute('class');
+      normalElement.removeAttribute('lang');
+    }
+    // remove style element
+    const styleElement = div.getElementsByTagName('STYLE')[0];
+    if (styleElement) {
+      styleElement.remove();
+    }
+    // remove footnote list
+    const listElement = div.getElementsByClassName('conradishFootnoteList')[0];
+    if (listElement) {
+      listElement.remove();
+    }
     // remove footnote numbers that don't correspond to a footnote that
     // was deleted earlier
-    const supElements = [ ...div.getElementsByClassName('footnote-number') ];
-    for (const supElement of supElements) {
-      if (!findDeletedFootnote(supElement.id)) {
-        supElement.remove();
+    const refElements = [ ...div.getElementsByClassName('conradishFootnoteReference') ];
+    for (const refElement of refElements) {
+      const { parentNode, id } = refElement;
+      if (findDeletedFootnote(id)) {
+        const number = parentNode.name.replace(/\D+/g, '');
+        const supElement = e('SPAN', { id, className: 'footnote-number' }, number);
+        parentNode.replaceWith(supElement);
+      } else {
+        parentNode.remove();
       }
     }
     // replace BR with empty P element so DIV don't get created
@@ -906,6 +922,13 @@ function handleCopy(evt) {
     evt.clipboardData.setData('text/plain', text);
     evt.preventDefault();
     evt.stopPropagation();
+  }
+}
+
+function handleCut(evt) {
+  handleCopy(evt);
+  if (evt.defaultPrevented) {
+    document.execCommand('delete', false);
   }
 }
 
