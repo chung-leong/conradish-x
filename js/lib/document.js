@@ -1292,6 +1292,7 @@ export function generateRangeHTML(range, container) {
 
 export function generateRangeText(range, container) {
   const textTokens = [];
+  const footnoteTokens = [];
   const isVisible = (node) => {
     if (node === container) {
       return true;
@@ -1303,6 +1304,7 @@ export function generateRangeText(range, container) {
     }
     return isVisible(node.parentNode);
   };
+
   transverseRange(range, (node, startOffset, endOffset, endTag) => {
     if (!isVisible(node)) {
       return;
@@ -1311,36 +1313,58 @@ export function generateRangeText(range, container) {
       const text = node.nodeValue.substring(startOffset, endOffset);
       textTokens.push(text);
     } else if (node.nodeType === Node.ELEMENT_NODE) {
-      if (node.childNodes.length > 0) {
-        switch (node.tagName) {
-          case 'H1':
-          case 'H2':
-          case 'H3':
-          case 'H4':
-          case 'H5':
-          case 'H6':
-          case 'P':
-          case 'UL':
-          case 'OL':
-          case 'TABLE':
-            textTokens.push('\n');
-            break;
-          case 'TD':
-            if (endTag && node.nextSibling) {
-              textTokens.push('\t');
+      if (node.classList.contains('footnote-number')) {
+        const footnote = footnotes.find((f) => f.supElement === node);
+        if (footnote) {
+          if (!endTag) {
+            textTokens.push('[');
+            if (footnoteTokens.length === 0) {
+              footnoteTokens.push('\n\n----------------------------------------\n');
             }
-            break;
-          case 'TR':
-          case 'LI':
-            if (endTag) {
+            const footnoteText = getPlainText(footnote);
+            footnoteTokens.push(`[${footnote.number}] ${footnoteText}\n`);
+          } else {
+            textTokens.push(']');
+          }
+        }
+      } else {
+        if (node.childNodes.length > 0) {
+          switch (node.tagName) {
+            case 'H1':
+            case 'H2':
+            case 'H3':
+            case 'H4':
+            case 'H5':
+            case 'H6':
+            case 'P':
+            case 'UL':
+            case 'OL':
+            case 'TABLE':
+              if (endTag) {
+                // see if the content isn't already ending with a linefeed
+                if (/\n$/.test(textTokens[textTokens.length - 1])) {
+                  break;
+                }
+              }
               textTokens.push('\n');
-            }
-            break;
+              break;
+            case 'TD':
+              if (endTag && node.nextSibling) {
+                textTokens.push('\t');
+              }
+              break;
+            case 'TR':
+            case 'LI':
+              if (endTag) {
+                textTokens.push('\n');
+              }
+              break;
+          }
         }
       }
     }
   });
-  return textTokens.join('');
+  return textTokens.join('') + footnoteTokens.join('');
 }
 
 function splitContent(item, sep) {
