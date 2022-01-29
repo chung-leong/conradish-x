@@ -1,5 +1,5 @@
 import { e, attachCustomCheckboxHandlers } from './lib/ui.js';
-import { l, getUILanguage, getTargetLanguage, getLanguageScript, getScriptDirection } from './lib/i18n.js';
+import { l, getUILanguage, getLanguageScript, getScriptDirection } from './lib/i18n.js';
 import { initializeStorage, getSettings, saveSettings, storageChange } from './lib/storage.js';
 import { setWindowName } from './lib/navigation.js';
 import { createTopBar, attachShadowHandlers } from './lib/top-bar.js';
@@ -72,7 +72,7 @@ function createSectionNavigation() {
   fontElement.addEventListener('click', (evt) => {
     activeCardType = 'font';
     if (!activeScript) {
-      const lang = getTargetLanguage();
+      const lang = getUILanguage();
       activeScript = getLanguageScript(lang);
       const selectedElement = scriptElements.find(e => e.dataset.script === activeScript);
       selectedElement.classList.add('selected');
