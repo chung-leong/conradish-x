@@ -214,7 +214,7 @@ If you're in the middle of annotating a document, right click on the page margin
 
 ## Copying article to Microsoft Word
 
-To copy article to Microsoft Word, right click on the document and choose "Select All" (or press **Ctrl-A**):
+To copy an article to Microsoft Word, right click on the document and choose "Select All" (or press **Ctrl-A**):
 
 ![Context menu](doc/img/copy-paste-1.jpg)
 
