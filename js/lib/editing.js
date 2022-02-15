@@ -744,13 +744,15 @@ function showStylingMenu(range, types) {
     // get the styling of the selected text
     transverseRange(range, (node, startOffset, endOffset) => {
       if (node.nodeType === Node.TEXT_NODE && endOffset > startOffset) {
-        const { fontWeight, fontStyle, textDecorationLine, verticalAlign } = getComputedStyle(node.parentNode);
-        noteEffect('bold', fontWeight >= 600);
-        noteEffect('italic', fontStyle === 'italic');
-        noteEffect('underline', textDecorationLine.includes('underline'));
-        noteEffect('strikeThrough', textDecorationLine.includes('line-through'));
-        noteEffect('subscript', verticalAlign === 'sub');
-        noteEffect('superscript', verticalAlign === 'super');
+        if (!node.parentNode.classList.contains('footnote-number')) {
+          const { fontWeight, fontStyle, textDecorationLine, verticalAlign } = getComputedStyle(node.parentNode);
+          noteEffect('bold', fontWeight >= 600);
+          noteEffect('italic', fontStyle === 'italic');
+          noteEffect('underline', textDecorationLine.includes('underline'));
+          noteEffect('strikeThrough', textDecorationLine.includes('line-through'));
+          noteEffect('subscript', verticalAlign === 'sub');
+          noteEffect('superscript', verticalAlign === 'super');
+        }
       }
     });
     setButtonStatus();
