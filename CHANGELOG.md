@@ -1,6 +1,7 @@
 # Version 1.4
 
 * Copying of text with footnotes to clipboard.
+* Switched to more official Google Translate API endpoint.
 * Improved error-handling when retrieving translation.
 * Localization for French, Spanish, Portuguese, Italian, and Romanian.
 * Fixed deletion of footnotes when clear formatting is performed.

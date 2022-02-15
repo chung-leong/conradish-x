@@ -226,6 +226,24 @@ function getSelectedRange() {
 
 async function addFootnote(includeTerm) {
   const range = getSelectedRange();
+  const cellGuards = [];
+  const cell = findParent(range.endContainer, isTableCell);
+  if (cell) {
+    // Chrome for some reason would add the SUP element outside the TD if the
+    // selection is at the beginnging or end a table cell; we need to stick
+    // a zero-width string around the cell content to guard against this
+    const { startContainer, startOffset, endContainer, endOffset } = range;
+    cellGuards.push(e('I', {}, '\u2060'), e('I', {}, '\u2060'));
+    cell.prepend(cellGuards[0]);
+    cell.append(cellGuards[1]);
+    // restore the selection, taking into consideration the additional node at the beginning
+    if (cell === startContainer) {
+      range.setStart(cell, startOffset + 1);
+    }
+    if (cell === endContainer) {
+      range.setEnd(cell, endOffset + 1);
+    }
+  }
   const selectedText = getSelectedText(range);
   const sourceLang = getSourceLanguage();
   const targetLang = getTargetLanguage();
@@ -236,6 +254,9 @@ async function addFootnote(includeTerm) {
     translation: { text: (translating) ? '...' : '', lang: targetLang },
   };
   const footnote = annotateRange(range, initialContent, includeTerm);
+  for (const cellGuard of cellGuards) {
+    cellGuard.remove();
+  }
   if (translating) {
     const result = await translate(selectedText, sourceLang, targetLang, includeTerm);
     updateFootnoteContent(footnote, result, includeTerm);
