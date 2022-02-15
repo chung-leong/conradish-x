@@ -9,7 +9,7 @@
     "type": "module"
   },
   "permissions": [ "storage", "activeTab", "scripting", "contextMenus", "unlimitedStorage", "fontSettings" ],
-  "host_permissions": [ "https://clients5.google.com/*" ],
+  "host_permissions": [ "https://translate.googleapis.com/*" ],
   "action": {
     "default_popup": "popup.html",
     "default_icon": {

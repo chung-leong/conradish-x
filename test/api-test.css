@@ -1,0 +1,12 @@
+#url {
+  width: 800px;
+}
+
+#output {
+  width: 800px;
+  height: 80vh;
+}
+
+#output.error {
+  color: red;
+}

@@ -271,7 +271,7 @@ export async function translate(original, sourceLang, targetLang, singleWord) {
     term: { text: original, lang: sourceLang },
     translation: { text: '', lang: targetLang },
   };
-  const url = new URL('https://clients5.google.com/translate_a/t');
+  const url = new URL('https://translate.googleapis.com/translate_a/single');
   let lowerCaseAlt;
   // unless the language is German, query the word in lowercase
   if (!capitalizingLangs.includes(sourceLang)) {
@@ -283,10 +283,16 @@ export async function translate(original, sourceLang, targetLang, singleWord) {
     }
   }
   const query = lowerCaseAlt || original;
-  url.searchParams.set('client', 'dict-chrome-ex');
-  url.searchParams.set('q', query);
-  url.searchParams.set('sl', sourceLang);
-  url.searchParams.set('tl', targetLang);
+  const sp = url.searchParams;
+  sp.append('client', 'gtx');
+  sp.append('source', 'input');
+  sp.append('dt', 't'); // translation
+  sp.append('dt', 'at'); // alternative translations
+  sp.append('dt', 'in'); // query inflections
+  sp.append('dj', '1');
+  sp.append('q', query);
+  sp.append('sl', sourceLang);
+  sp.append('tl', targetLang);
   const retrieve = async () => {
     let retrievalCount = 0;
     let delay = 250;
