@@ -1502,6 +1502,11 @@ function removeChangeRecords() {
   articleObserver.takeRecords();
 }
 
+export function processArticleChanges() {
+  const mutationsList = articleObserver.takeRecords();
+  handleArticleChanges(mutationsList);
+}
+
 function handleArticleChanges(mutationsList) {
   let footnoteNumbersChanged = false;
   let articleTextChanged = false;

@@ -1,6 +1,6 @@
 import { e, separateWords } from './ui.js';
 import { findDeletedFootnote, annotateRange, updateFootnoteContent, setFilterMode, getTitle, setTitle,
-  generateRangeHTML, generateRangeText } from './document.js';
+  generateRangeHTML, generateRangeText, processArticleChanges } from './document.js';
 import { transverseRange } from './capturing.js';
 import { l, translate, getSourceLanguage, getTargetLanguage, getLanguageDirection, detectDirection } from './i18n.js';
 
@@ -958,13 +958,20 @@ function handleCut(evt) {
 let dropSource = null;
 
 function handleDragStart(evt) {
-  const { target } = evt;
+  const { target, dataTransfer } = evt;
   dropSource = target;
   hideArticleMenu();
+  const range = getSelectionRange();
+  const container = getRangeContainer(range);
+  if (isArticleEditor(container)) {
+    const html = generateRangeHTML(range, container);
+    const text = generateRangeText(range, container);
+    dataTransfer.setData('text/html', html);
+    dataTransfer.setData('text/plain', text);
+  }
 }
 
 function handleDragEnd(evt) {
-  const { target } = evt;
   dropSource = null;
 }
 
@@ -973,17 +980,13 @@ function handleDrop(evt) {
   const range = document.caretRangeFromPoint(evt.clientX, evt.clientY);
   const container = getEditableContainer(target);
   const sourceContainer = getEditableContainer(dropSource);
-  if (container === sourceContainer && !evt.ctrlKey) {
-    // a move within the container, let chrome take case of it
-    return;
-  }
   if (sourceContainer && !evt.ctrlKey) {
     // delete the content from the source container
     // unfortunately, this introduces a second op in the undo stack
-    // drag-and-drop between article text and footnotes should be
-    // pretty rare so this isn't too bad
     sourceContainer.focus();
     document.execCommand('delete', false);
+    // ensure that footnotes are in the recylcing bins when we process the HTML
+    processArticleChanges();
   }
   container.focus();
   const selection = getSelection();
