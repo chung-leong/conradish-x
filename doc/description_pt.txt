@@ -1,0 +1,31 @@
+Conradish permite que você crie uma versão impressa de artigos de notícias online. Ele elimina anúncios e outras distrações, reformatando o texto para uma aparência uniforme e profissional. Além disso, permite anexar notas de rodapé a palavras e frases.
+
+A extensão foi pensada para os educadores, aqueles que desejam fazer uso de materiais da web em sala de aula. É especialmente útil para professores de línguas estrangeiras graças ao seu recurso de tradução automática.
+
+Recursos
+
+• Imprimindo apenas parte selecionada de um artigo
+• Remoção de anúncios e imagens
+• Simplificação do layout da página
+• Edição de texto antes da impressão
+• Depuração de conteúdo do tipo apontar e clicar.
+• Adição de notas de rodapé
+• Integração com o Google Tradutor
+
+Guia de usuario
+
+Para criar uma versão impressa do artigo que você está visualizando, primeiro selecione a parte que deseja imprimir. Não se preocupe se a seleção acabar incluindo elementos de navegação indesejados - eles serão filtrados. Após fazer a seleção, clique com o botão direito do mouse e escolha "Criar versão para impressão". A versão impressa será aberta em uma nova guia do navegador.
+
+Para anotar a definição de uma palavra, primeiro selecione a palavra usando o mouse e clique em "Adicionar definição" no menu pop-up que aparece abaixo.
+
+Para anotar uma frase inteira, selecione-a e clique em "Adicionar tradução".
+
+Para remover uma nota de rodapé, basta excluir o número da nota de rodapé associada ou excluir a entrada no rodapé da página.
+
+Todas as ações podem ser revertidas pressionando Ctrl-Z.
+
+Para obter mais instruções, consulte o guia do usuário integrado. Você pode acessá-lo clicando no ícone de ponto de interrogação no canto inferior esquerdo.
+
+Privacidade
+
+Conradish não captura nenhuma informação do usuário. Ele não monitora seu histórico de navegação. Todos os dados são armazenados localmente. A extensão envia texto ao Google para fins de tradução. As implicações de privacidade são as mesmas do uso do Google Tradutor. Ao instalar a extensão, o navegador avisará que pode acessar "seus dados" em translate.googleapis.com. Os dados em questão são apenas frases traduzidas.
