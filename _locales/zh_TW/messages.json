@@ -1,4 +1,8 @@
 {
+  "ext_name": {
+    "message": "Conradish",
+    "description": "Name of the extension, used in manifest"
+  },
   "ext_description": {
     "message": "創建新聞文章印刷版和添加定義",
     "description": "Description of the extension, used in manifest"

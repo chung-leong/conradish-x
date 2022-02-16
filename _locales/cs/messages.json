@@ -1,4 +1,8 @@
 {
+  "ext_name": {
+    "message": "Conradish",
+    "description": "Name of the extension, used in manifest"
+  },
   "ext_description": {
     "message": "Vytvářejte tiskové verze článků s poznámkami pod čarou",
     "description": "Description of the extension, used in manifest"

@@ -1,4 +1,8 @@
 {
+  "ext_name": {
+    "message": "Conradish",
+    "description": "Name of the extension, used in manifest"
+  },
   "ext_description": {
     "message": "Crea versioni stampate di articoli con note a piè di pagina",
     "description": "Description of the extension, used in manifest"
