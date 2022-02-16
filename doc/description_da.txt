@@ -1,0 +1,31 @@
+Conradish lader dig oprette trykte versioner af online nyhedsartikler. Den fjerner annoncer og andre distraktioner og omformaterer tekst til et ensartet, professionelt udseende. Derudover giver det dig mulighed for at vedhæfte fodnoter til ord og sætninger.
+
+Udvidelsen er designet med undervisere i tankerne, dem der ønsker at bruge webmaterialer i klasseværelset. Det er især nyttigt for lærere i fremmedsprog takket være dens automatiske oversættelsesfunktion.
+
+Funktioner
+
+• Udskrivning af kun udvalgt del af en artikel
+• Fjernelse af annoncer og billeder
+• Forenkling af sidelayout
+• Redigering af tekst før udskrivning
+• Peg-og-klik indholdsscrubbing.
+• Tilføjelse af fodnoter
+• Integration med Google Translate
+
+Brugervejledning
+
+For at oprette en trykt version af den artikel, du ser, skal du først vælge den del, du ønsker at udskrive. Bare rolig, hvis valget ender med at inkludere uønskede navigationselementer - disse vil blive filtreret fra. Når du har foretaget valget, skal du højreklikke på det og vælge "Opret printversion". Udskriftsversionen åbnes i en ny browserfane.
+
+For at notere definitionen af ​​et ord, skal du først vælge ordet med musen og derefter klikke på "Tilføj definition" i pop op-menuen, der vises nedenunder.
+
+For at notere en hel sætning, skal du vælge den og derefter klikke på "Tilføj oversættelse".
+
+For at fjerne en fodnote skal du blot slette det tilhørende fodnotenummer eller slette posten i sidefoden.
+
+Alle handlinger kan vendes ved at trykke Ctrl-Z.
+
+For flere instruktioner, se venligst den indbyggede brugervejledning. Du kan få adgang til det ved at klikke på spørgsmålstegn-ikonet i nederste venstre hjørne.
+
+Privatliv
+
+Conradish fanger ingen brugeroplysninger. Den overvåger ikke din browserhistorik. Alle data gemmes lokalt. Udvidelsen sender tekst til Google med henblik på oversættelse. Indvirkningerne på privatlivets fred er de samme som ved at bruge Google Oversæt. Når du installerer udvidelsen, vil browseren advare om, at den kan få adgang til "dine data" på translate.googleapis.com. De pågældende data er blot oversatte sætninger.

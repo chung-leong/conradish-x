@@ -1,0 +1,31 @@
+Conradish lar deg lage trykt versjon av nyhetsartikler på nettet. Den fjerner annonser og andre distraksjoner, og formaterer tekst til et enhetlig, profesjonelt utseende. I tillegg lar den deg legge ved fotnoter til ord og setninger.
+
+Utvidelsen ble designet med tanke på lærere, de som ønsker å bruke nettmateriell i klasserommet. Det er spesielt nyttig for lærere i fremmedspråk takket være dens automatiske oversettelsesfunksjon.
+
+Funksjoner
+
+• Skriver kun ut valgt del av en artikkel
+• Fjerning av annonser og bilder
+• Forenkling av sidelayout
+• Redigering av tekst før utskrift
+• Pek-og-klikk skrubbing av innhold.
+• Tilføyelse av fotnoter
+• Integrasjon med Google Translate
+
+Brukerhåndboken
+
+For å lage en utskriftsversjon av artikkelen du ser på, velg først delen du ønsker å skrive ut. Ikke bekymre deg hvis utvalget ender opp med å inkludere uønskede navigasjonselementer – disse vil bli filtrert ut. Etter å ha gjort valget, høyreklikk på det og velg "Opprett utskriftsversjon". Utskriftsversjonen åpnes i en ny nettleserfane.
+
+For å fotnote definisjonen av et ord, velg først ordet med musen, og klikk deretter "Legg til definisjon" i hurtigmenyen som vises under.
+
+For å fotnote en hel setning, velg den og klikk "Legg til oversettelse".
+
+For å fjerne en fotnote, slett bare det tilhørende fotnotenummeret eller slett oppføringen i bunnteksten på siden.
+
+Alle handlinger kan reverseres ved å trykke Ctrl-Z.
+
+For flere instruksjoner, se den innebygde brukerveiledningen. Du får tilgang til den ved å klikke på spørsmålstegnikonet nederst i venstre hjørne.
+
+Personvern
+
+Conradish fanger ikke opp noen brukerinformasjon. Den overvåker ikke nettleserloggen din. Alle data lagres lokalt. Utvidelsen sender tekst til Google for oversettelsesformål. Personvernkonsekvensene er de samme som ved bruk av Google Translate. Når du installerer utvidelsen, vil nettleseren advare om at den kan få tilgang til "dine data" på translate.googleapis.com. Dataene det er snakk om er bare oversatte setninger.

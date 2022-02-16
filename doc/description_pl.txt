@@ -28,4 +28,4 @@ Aby uzyskać więcej instrukcji, zapoznaj się z wbudowaną instrukcją obsługi
 
 Prywatność
 
-Conradish nie gromadzi żadnych informacji o użytkowniku. Nie monitoruje historii przeglądania. Wszystkie dane są przechowywane lokalnie. Rozszerzenie wysyła tekst do Google w celu tłumaczenia. Konsekwencje dotyczące prywatności są takie same, jak w przypadku korzystania z Tłumacza Google. Po zainstalowaniu rozszerzenia przeglądarka ostrzeże, że może uzyskać dostęp do „Twoich danych” na customers5.google.com. Dane, o których mowa, to tylko przetłumaczone frazy.
+Conradish nie gromadzi żadnych informacji o użytkowniku. Nie monitoruje historii przeglądania. Wszystkie dane są przechowywane lokalnie. Rozszerzenie wysyła tekst do Google w celu tłumaczenia. Konsekwencje dotyczące prywatności są takie same, jak w przypadku korzystania z Tłumacza Google. Po zainstalowaniu rozszerzenia przeglądarka ostrzeże, że może uzyskać dostęp do „Twoich danych” na translate.googleapis.com. Dane, o których mowa, to tylko przetłumaczone frazy.

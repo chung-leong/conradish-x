@@ -1,0 +1,31 @@
+Conradish le permite crear una versión impresa de artículos de noticias en línea. Elimina los anuncios y otras distracciones, reformateando el texto para que tenga un aspecto uniforme y profesional. Además, te permite adjuntar notas a pie de página a palabras y oraciones.
+
+La extensión se diseñó pensando en los educadores, aquellos que desean utilizar materiales web en el aula. Es especialmente útil para profesores de lenguas extranjeras gracias a su función de traducción automática.
+
+Características
+
+• Imprimir solo una parte seleccionada de un artículo
+• Eliminación de anuncios e imágenes
+• Simplificación del diseño de página
+• Edición de texto antes de la impresión
+• Depuración de contenido apuntando y haciendo clic.
+• Adición de notas al pie
+• Integración con el Traductor de Google
+
+Guía del usuario
+
+Para crear una versión impresa del artículo que está viendo, primero seleccione la parte que desea imprimir. No se preocupe si la selección termina incluyendo elementos de navegación no deseados, estos se filtrarán. Después de hacer la selección, haz clic derecho sobre ella y elige "Crear versión de impresión". La versión impresa se abrirá en una nueva pestaña del navegador.
+
+Para anotar al pie de página la definición de una palabra, primero seleccione la palabra con el mouse, luego haga clic en "Agregar definición" en el menú emergente que aparece debajo.
+
+Para poner una nota al pie de página en una oración completa, selecciónela y luego haga clic en "Agregar traducción".
+
+Para eliminar una nota al pie, simplemente elimine el número de nota al pie asociado o elimine la entrada en el pie de página.
+
+Todas las acciones se pueden revertir presionando Ctrl-Z.
+
+Para obtener más instrucciones, consulte la guía del usuario integrada. Puede acceder a él haciendo clic en el icono del signo de interrogación en la esquina inferior izquierda.
+
+Intimidad
+
+Conradish no captura ninguna información del usuario. No supervisa su historial de navegación. Todos los datos se almacenan localmente. La extensión envía texto a Google con el fin de traducirlo. Las implicaciones de privacidad son las mismas que las del uso de Google Translate. Cuando instale la extensión, el navegador le advertirá que puede acceder a "sus datos" en translate.googleapis.com. Los datos en cuestión son solo frases traducidas.

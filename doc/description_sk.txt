@@ -28,4 +28,4 @@ Všetky akcie je možné vrátiť späť stlačením Ctrl-Z.
 
 Ochrana osobných údajov
 
-Conradish nezachytáva žiadne informácie o používateľovi. Nesleduje vašu históriu prehliadania. Všetky údaje sú uložené lokálne. Rozšírenie odosiela spoločnosti Google text na účely prekladu. Dôsledky ochrany osobných údajov sú rovnaké ako pri používaní Prekladača Google. Keď si rozšírenie nainštalujete, prehliadač vás upozorní, že má prístup k „vašim údajom“ na stránke client5.google.com. Predmetné údaje sú len preložené frázy.
+Conradish nezachytáva žiadne informácie o používateľovi. Nesleduje vašu históriu prehliadania. Všetky údaje sú uložené lokálne. Rozšírenie odosiela spoločnosti Google text na účely prekladu. Dôsledky ochrany osobných údajov sú rovnaké ako pri používaní Prekladača Google. Keď si rozšírenie nainštalujete, prehliadač vás upozorní, že má prístup k „vašim údajom“ na stránke translate.googleapis.com. Predmetné údaje sú len preložené frázy.

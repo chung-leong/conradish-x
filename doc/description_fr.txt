@@ -1,0 +1,31 @@
+Conradish vous permet de créer une version imprimée d'articles de presse en ligne. Il supprime les publicités et autres distractions, reformatant le texte pour un aspect uniforme et professionnel. De plus, il vous permet d'attacher des notes de bas de page aux mots et aux phrases.
+
+L'extension a été conçue pour les éducateurs, ceux qui souhaitent utiliser du matériel Web en classe. Il est particulièrement utile pour les professeurs de langues étrangères grâce à sa fonction de traduction automatique.
+
+Caractéristiques
+
+• Imprimer uniquement la partie sélectionnée d'un article
+• Suppression des publicités et des images
+• Simplification de la mise en page
+• Modification du texte avant l'impression
+• Nettoyage du contenu par pointer-cliquer.
+• Ajout de notes de bas de page
+• Intégration avec Google Traduction
+
+Mode d'emploi
+
+Pour créer une version imprimée de l'article que vous consultez, sélectionnez d'abord la partie que vous souhaitez imprimer. Ne vous inquiétez pas si la sélection finit par inclure des éléments de navigation indésirables, ceux-ci seront filtrés. Après avoir fait la sélection, faites un clic droit dessus et choisissez "Créer une version imprimable". La version imprimée s'ouvrira dans un nouvel onglet du navigateur.
+
+Pour annoter la définition d'un mot, sélectionnez d'abord le mot à l'aide de votre souris, puis cliquez sur "Ajouter une définition" dans le menu contextuel qui apparaît en dessous.
+
+Pour annoter une phrase entière, sélectionnez-la puis cliquez sur "Ajouter une traduction".
+
+Pour supprimer une note de bas de page, supprimez simplement le numéro de note de bas de page associé ou supprimez l'entrée dans le pied de page.
+
+Toutes les actions peuvent être annulées en appuyant sur Ctrl-Z.
+
+Pour plus d'instructions, veuillez consulter le guide de l'utilisateur intégré. Vous pouvez y accéder en cliquant sur l'icône de point d'interrogation dans le coin inférieur gauche.
+
+Vie privée
+
+Conradish ne capture aucune information sur l'utilisateur. Il ne surveille pas votre historique de navigation. Toutes les données sont stockées localement. L'extension envoie du texte à Google à des fins de traduction. Les implications en matière de confidentialité sont les mêmes que celles de l'utilisation de Google Translate. Lorsque vous installez l'extension, le navigateur avertit qu'il peut accéder à "vos données" sur translate.googleapis.com. Les données en question ne sont que des phrases traduites.

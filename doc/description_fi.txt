@@ -1,0 +1,31 @@
+Conradishilla voit luoda painetun version online-uutisartikkeleista. Se poistaa mainokset ja muut häiriötekijät ja muotoilee tekstin yhtenäiseksi, ammattimaiseksi. Lisäksi sen avulla voit liittää alaviitteitä sanoihin ja lauseisiin.
+
+Laajennus suunniteltiin opettajia ajatellen, ne, jotka haluavat käyttää verkkomateriaaleja luokkahuoneessa. Se on erityisen hyödyllinen vieraiden kielten opettajille automaattisen käännösominaisuuden ansiosta.
+
+ominaisuudet
+
+• Vain valitun osan tulostaminen artikkelista
+• Mainosten ja kuvien poistaminen
+• Sivun asettelun yksinkertaistaminen
+• Tekstin muokkaaminen ennen tulostusta
+• Osoita ja napsauta sisällön puhdistamista.
+• Alaviitteiden lisääminen
+• Integrointi Google-kääntäjän kanssa
+
+Käyttöohjeet
+
+Jos haluat luoda tulostettavan version tarkastelemastasi artikkelista, valitse ensin osa, jonka haluat tulostaa. Älä huoli, jos valinta sisältää ei-toivottuja navigointielementtejä – ne suodatetaan pois. Kun olet tehnyt valinnan, napsauta sitä hiiren kakkospainikkeella ja valitse "Luo tulostusversio". Painettu versio avautuu uudelle selaimen välilehdelle.
+
+Jos haluat merkitä sanan määritelmän alaviitteeksi, valitse sana ensin hiirellä ja napsauta sitten "Lisää määritelmä" alla näkyvästä ponnahdusvalikosta.
+
+Jos haluat merkitä koko lauseen alaviitteen, valitse se ja napsauta "Lisää käännös".
+
+Voit poistaa alaviitteen poistamalla siihen liittyvän alaviitteen numeron tai poistamalla merkinnän sivun alatunnisteessa.
+
+Kaikki toiminnot voidaan peruuttaa painamalla Ctrl-Z.
+
+Lisäohjeita saat sisäänrakennetusta käyttöoppaasta. Pääset siihen napsauttamalla vasemmassa alakulmassa olevaa kysymysmerkkikuvaketta.
+
+Yksityisyys
+
+Conradish ei tallenna mitään käyttäjätietoja. Se ei valvo selaushistoriaasi. Kaikki tiedot tallennetaan paikallisesti. Laajennus lähettää tekstiä Googlelle käännöstä varten. Tietosuojavaikutukset ovat samat kuin Google-kääntäjän käytöllä. Kun asennat laajennuksen, selain varoittaa, että se voi käyttää "tietojasi" osoitteessa translate.googleapis.com. Kyseiset tiedot ovat vain käännettyjä lauseita.

@@ -1,0 +1,31 @@
+Conradish låter dig skapa tryckta versioner av nyhetsartiklar online. Den tar bort annonser och andra distraktioner och formaterar om text till ett enhetligt, professionellt utseende. Dessutom låter den dig bifoga fotnoter till ord och meningar.
+
+Tillägget utformades med tanke på pedagoger, de som vill använda webbmaterial i klassrummet. Det är särskilt användbart för lärare i främmande språk tack vare dess automatiska översättningsfunktion.
+
+Funktioner
+
+• Skriver endast ut vald del av en artikel
+• Borttagning av annonser och bilder
+• Förenkling av sidlayout
+• Redigering av text före utskrift
+• Peka-och-klicka på innehållsskrubbning.
+• Tillägg av fotnoter
+• Integration med Google Translate
+
+Användarguide
+
+För att skapa en tryckt version av artikeln du tittar på, välj först den del du vill skriva ut. Oroa dig inte om urvalet kommer att innehålla oönskade navigeringselement – ​​dessa kommer att filtreras bort. När du har gjort valet högerklickar du på det och väljer "Skapa utskriftsversion". Utskriftsversionen öppnas i en ny webbläsarflik.
+
+För att fotnotera definitionen av ett ord, välj först ordet med musen och klicka sedan på "Lägg till definition" i popup-menyn som visas nedanför.
+
+För att fotnota en hel mening, välj den och klicka sedan på "Lägg till översättning".
+
+För att ta bort en fotnot, radera helt enkelt det tillhörande fotnotsnumret eller radera posten i sidfoten.
+
+Alla åtgärder kan vändas genom att trycka på Ctrl-Z.
+
+Mer information finns i den inbyggda användarhandboken. Du kommer åt den genom att klicka på frågetecknet i det nedre vänstra hörnet.
+
+Integritet
+
+Conradish fångar ingen användarinformation. Den övervakar inte din webbhistorik. All data lagras lokalt. Tillägget skickar text till Google i översättningssyfte. Integritetskonsekvenserna är desamma som för att använda Google Översätt. När du installerar tillägget kommer webbläsaren att varna att den kan komma åt "din data" på translate.googleapis.com. Uppgifterna i fråga är bara översatta fraser.

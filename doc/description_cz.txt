@@ -28,4 +28,4 @@ Další pokyny naleznete ve vestavěné uživatelské příručce. Dostanete se 
 
 Soukromí
 
-Conradish nezachycuje žádné uživatelské informace. Nesleduje vaši historii prohlížení. Všechna data jsou uložena lokálně. Rozšíření odesílá text do Googlu za účelem překladu. Důsledky ochrany soukromí jsou stejné jako při používání Překladače Google. Při instalaci rozšíření vás prohlížeč upozorní, že má přístup k „vašim datům“ na adrese client5.google.com. Dotyčná data jsou pouze přeložené fráze.
+Conradish nezachycuje žádné uživatelské informace. Nesleduje vaši historii prohlížení. Všechna data jsou uložena lokálně. Rozšíření odesílá text do Googlu za účelem překladu. Důsledky ochrany soukromí jsou stejné jako při používání Překladače Google. Při instalaci rozšíření vás prohlížeč upozorní, že má přístup k „vašim datům“ na adrese translate.googleapis.com. Dotyčná data jsou pouze přeložené fráze.

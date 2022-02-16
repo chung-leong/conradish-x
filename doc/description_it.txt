@@ -1,0 +1,31 @@
+Conradish ti consente di creare una versione stampata di articoli di notizie online. Elimina gli annunci e altre distrazioni, riformattando il testo in modo da ottenere un aspetto uniforme e professionale. Inoltre, ti consente di allegare note a piè di pagina a parole e frasi.
+
+L'estensione è stata progettata pensando agli educatori, coloro che desiderano utilizzare i materiali web in classe. È particolarmente utile per gli insegnanti di lingue straniere grazie alla sua funzione di traduzione automatica.
+
+Caratteristiche
+
+• Stampa solo parte selezionata di un articolo
+• Rimozione di annunci e immagini
+• Semplificazione dell'impaginazione
+• Modifica del testo prima della stampa
+• Pulizia dei contenuti punta e clicca.
+• Aggiunta di note a piè di pagina
+• Integrazione con Google Translate
+
+Guida utente
+
+Per creare una versione stampata dell'articolo che stai visualizzando, seleziona prima la parte che desideri stampare. Non preoccuparti se la selezione finisce per includere elementi di navigazione indesiderati: questi verranno filtrati. Dopo aver effettuato la selezione, fai clic destro su di esso e scegli "Crea versione di stampa". La versione stampata si aprirà in una nuova scheda del browser.
+
+Per annotare a piè di pagina la definizione di una parola, seleziona prima la parola usando il mouse, quindi fai clic su "Aggiungi definizione" nel menu a comparsa che appare sotto.
+
+Per annotare un'intera frase, selezionala, quindi fai clic su "Aggiungi traduzione".
+
+Per rimuovere una nota a piè di pagina, è sufficiente eliminare il numero di nota a piè di pagina associato o eliminare la voce nel piè di pagina della pagina.
+
+Tutte le azioni possono essere annullate premendo Ctrl-Z.
+
+Per ulteriori istruzioni, consultare la guida utente integrata. Puoi accedervi facendo clic sull'icona del punto interrogativo nell'angolo in basso a sinistra.
+
+Privacy
+
+Conradish non acquisisce alcuna informazione sull'utente. Non monitora la cronologia di navigazione. Tutti i dati vengono archiviati localmente. L'estensione invia il testo a Google ai fini della traduzione. Le implicazioni sulla privacy sono le stesse dell'utilizzo di Google Translate. Quando installi l'estensione, il browser avviserà che può accedere ai "tuoi dati" su translate.googleapis.com. I dati in questione sono solo frasi tradotte.

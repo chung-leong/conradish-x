@@ -1,0 +1,31 @@
+Conradish vă permite să creați o versiune tipărită a articolelor de știri online. Elimină reclamele și alte distrageri, reformatând textul într-un aspect uniform și profesional. În plus, vă permite să atașați note de subsol la cuvinte și propoziții.
+
+Extensia a fost concepută având în vedere educatorii, cei care doresc să folosească materiale web în sala de clasă. Este util în special pentru profesorii de limbi străine datorită funcției de traducere automată.
+
+Caracteristici
+
+• Imprimarea numai a unei părți selectate a unui articol
+• Eliminarea reclamelor și imaginilor
+• Simplificarea aspectului paginii
+• Editarea textului înainte de imprimare
+• Curăţarea conţinutului prin punctare şi clic.
+• Adăugarea de note de subsol
+• Integrare cu Google Translate
+
+Manualul utilizatorului
+
+Pentru a crea o versiune tipărită a articolului pe care îl vizualizați, selectați mai întâi porțiunea pe care doriți să o tipăriți. Nu vă faceți griji dacă selecția ajunge să includă elemente de navigare nedorite - acestea vor fi filtrate. După ce ați făcut selecția, faceți clic dreapta pe el și alegeți „Creare versiune de tipărire”. Versiunea tipărită se va deschide într-o nouă filă de browser.
+
+Pentru a nota de subsol definiția unui cuvânt, mai întâi selectați cuvântul folosind mouse-ul, apoi faceți clic pe „Adăugați definiție” în meniul pop-up care apare dedesubt.
+
+Pentru a nota o propoziție întreagă, selectați-o apoi faceți clic pe „Adăugați traducere”.
+
+Pentru a elimina o notă de subsol, pur și simplu ștergeți numărul notei de subsol asociat sau ștergeți intrarea din subsolul paginii.
+
+Toate acțiunile pot fi inversate apăsând Ctrl-Z.
+
+Pentru mai multe instrucțiuni, consultați ghidul de utilizare încorporat. Îl puteți accesa făcând clic pe pictograma semn de întrebare din colțul din stânga jos.
+
+Confidențialitate
+
+Conradish nu captează nicio informație despre utilizator. Nu vă monitorizează istoricul de navigare. Toate datele sunt stocate local. Extensia trimite text la Google în scopul traducerii. Implicațiile privind confidențialitatea sunt aceleași cu cele ale utilizării Google Translate. Când instalați extensia, browserul vă va avertiza că poate accesa „datele dumneavoastră” la translate.googleapis.com. Datele în cauză sunt doar expresii traduse.
