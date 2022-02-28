@@ -381,58 +381,72 @@ const languages = [
   { // Afrikaans
     code: 'af',
     script: 'Latn',
+    inflections: 'available',
   },
   { // Albanian
     code: 'sq',
     script: 'Latn',
+    inflections: 'unavailable',
   },
   { // Amharic
     code: 'am',
     script: 'Ethi',
+    inflections: 'unavailable',
   },
   { // Arabic
     code: 'ar',
     script: 'Arab',
+    inflections: 'available',
   },
   { // Armenian
     code: 'hy',
     script: 'Armn',
+    inflections: 'unavailable',
   },
   { // Azerbaijani
     code: 'az',
     script: 'Latn',
+    inflections: 'available',
   },
   { // Basque
     code: 'eu',
     script: 'Latn',
+    inflections: 'unavailable',
   },
   { // Belarusian
     code: 'be',
     script: 'Cyrl',
+    inflections: 'available',
   },
   { // Bengali
     code: 'bn',
     script: 'Beng',
+    inflections: 'unavailable',
   },
   { // Bosnian
     code: 'bs',
     script: 'Latn',
+    inflections: 'unavailable',
   },
   { // Bulgarian
     code: 'bg',
     script: 'Cyrl',
+    inflections: 'available',
   },
   { // Catalan
     code: 'ca',
     script: 'Latn',
+    inflections: 'available',
   },
   { // Cebuano
     code: 'ceb',
     script: 'Latn',
+    inflections: 'unavailable',
   },
   { // Chichewa
     code: 'ny',
     script: 'Latn',
+    inflections: 'unavailable',
   },
   { // Chinese
     code: 'zh',
@@ -446,379 +460,473 @@ const languages = [
         code: 'zh-TW',
         script: 'Hant',
       },
-    ]
+    ],
+    inflections: 'unavailable',
   },
   { // Corsican
     code: 'co',
     script: 'Latn',
+    inflections: 'unavailable',
   },
   { // Croatian
     code: 'hr',
     script: 'Latn',
+    inflections: 'available',
   },
   { // Czech
     code: 'cs',
     script: 'Latn',
+    inflections: 'unavailable',
   },
   { // Danish
     code: 'da',
     script: 'Latn',
+    inflections: 'available',
   },
   { // Dutch
     code: 'nl',
     script: 'Latn',
+    inflections: 'available',
   },
   { // English
     code: 'en',
     script: 'Latn',
+    inflections: 'available',
   },
   { // Esperanto
     code: 'eo',
     script: 'Latn',
+    inflections: 'available',
   },
   { // Estonian
     code: 'et',
     script: 'Latn',
+    inflections: 'unavailable',
   },
   { // Filipino
     code: 'tl',
     script: 'Latn',
+    inflections: 'available',
   },
   { // Finnish
     code: 'fi',
     script: 'Latn',
+    inflections: 'available',
   },
   { // French
     code: 'fr',
     script: 'Latn',
+    inflections: 'available',
   },
   { // Frisian
     code: 'fy',
     script: 'Latn',
+    inflections: 'unavailable',
   },
   { // Galician
     code: 'gl',
     script: 'Latn',
+    inflections: 'available',
   },
   { // Georgian
     code: 'ka',
     script: 'Geor',
+    inflections: 'unavailable',
   },
   { // German
     code: 'de',
     script: 'Latn',
+    inflections: 'available',
   },
   { // Greek
     code: 'el',
     script: 'Grek',
+    inflections: 'unavailable',
   },
   { // Gujarati
     code: 'gu',
-    script: 'Gujr'
+    script: 'Gujr',
+    inflections: 'available',
   },
   { // Haitian Creole
     code: 'ht',
     script: 'Latn',
+    inflections: 'unavailable',
   },
   { // Hausa
     code: 'ha',
     script: 'Latn',
+    inflections: 'unavailable',
   },
   { // Hawaiian
     code: 'haw',
     script: 'Latn',
+    inflections: 'unavailable',
   },
   { // Hebrew
     code: 'iw',
     script: 'Hebr',
+    inflections: 'available',
   },
   { // Hindi
     code: 'hi',
     script: 'Deva',
+    inflections: 'available',
   },
   { // Hmong
     code: 'hmn',
     script: 'Latn',
+    inflections: 'unavailable',
   },
   { // Hungarian
     code: 'hu',
     script: 'Latn',
+    inflections: 'unavailable',
   },
   { // Icelandic
     code: 'is',
     script: 'Latn',
+    inflections: 'available',
   },
   { // Igbo
     code: 'ig',
     script: 'Latn',
+    inflections: 'unavailable',
   },
   { // Indonesian
     code: 'id',
     script: 'Latn',
+    inflections: 'available',
   },
   { // Irish
     code: 'ga',
     script: 'Latn',
+    inflections: 'unavailable',
   },
   { // Italian
     code: 'it',
     script: 'Latn',
+    inflections: 'available',
   },
   { // Japanese
     code: 'ja',
     script: 'Jpan',
+    inflections: 'unavailable',
   },
   { // Javanese
     code: 'jw',
     script: 'Latn',
+    inflections: 'unavailable',
   },
   { // Kannada
     code: 'kn',
     script: 'Knda',
+    inflections: 'available',
   },
   { // Kazakh
     code: 'kk',
     script: 'Cyrl',
+    inflections: 'unavailable',
   },
   { // Khmer
     code: 'km',
     script: 'Khmr',
+    inflections: 'unavailable',
   },
   { // Kinyarwanda
     code: 'rw',
     script: 'Latn',
+    inflections: 'unavailable',
   },
   { // Korean
     code: 'ko',
     script: 'Hang',
+    inflections: 'unavailable',
   },
   { // Kurdish (Kurmanji)
     code: 'ku',
     script: 'Latn',
+    inflections: 'unavailable',
   },
   { // Kyrgyz
     code: 'ky',
     script: 'Cyrl',
+    inflections: 'available',
   },
   { // Lao
     code: 'lo',
     script: 'Laoo',
+    inflections: 'unavailable',
   },
   { // Latin
     code: 'la',
     script: 'Latn',
+    inflections: 'unavailable',
   },
   { // Latvian
     code: 'lv',
     script: 'Latn',
+    inflections: 'unavailable',
   },
   { // Lithuanian
     code: 'lt',
     script: 'Latn',
+    inflections: 'unavailable',
   },
   { // Luxembourgish
     code: 'lb',
     script: 'Latn',
+    inflections: 'unavailable',
   },
   { // Macedonian
     code: 'mk',
     script: 'Cyrl',
+    inflections: 'available',
   },
   { // Malagasy
     code: 'mg',
     script: 'Latn',
+    inflections: 'unavailable',
   },
   { // Malay
     code: 'ms',
     script: 'Latn',
+    inflections: 'available',
   },
   { // Malayalam
     code: 'ml',
     script: 'Mlym',
+    inflections: 'available',
   },
   { // Maltese
     code: 'mt',
     script: 'Latn',
+    inflections: 'unavailable',
   },
   { // Maori
     code: 'mi',
     script: 'Latn',
+    inflections: 'unavailable',
   },
   { // Marathi
     code: 'mr',
     script: 'Deva',
+    inflections: 'unavailable',
   },
   { // Mongolian
     code: 'mn',
     script: 'Cyrl',
+    inflections: 'available',
   },
   { // Myanmar (Burmese)
     code: 'my',
     script: 'Mymr',
+    inflections: 'unavailable',
   },
   { // Nepali
     code: 'ne',
     script: 'Deva',
+    inflections: 'unavailable',
   },
   { // Norwegian
     code: 'no',
     script: 'Latn',
+    inflections: 'available',
   },
   { // Odia (Oriya)
     code: 'or',
     script: 'Orya',
+    inflections: 'unavailable',
   },
   { // Pashto
     code: 'ps',
     script: 'Arab',
+    inflections: 'unavailable',
   },
   { // Persian
     code: 'fa',
     script: 'Arab',
+    inflections: 'available',
   },
   { // Polish
     code: 'pl',
     script: 'Latn',
+    inflections: 'unavailable',
   },
   { // Portuguese
     code: 'pt',
     script: 'Latn',
+    inflections: 'available',
   },
   { // Punjabi
     code: 'pa',
     script: 'Guru',
+    inflections: 'available',
   },
   { // Romanian
     code: 'ro',
     script: 'Latn',
+    inflections: 'unavailable',
   },
   { // Russian
     code: 'ru',
     script: 'Cyrl',
+    inflections: 'available',
   },
   { // Samoan
     code: 'sm',
     script: 'Latn',
+    inflections: 'unavailable',
   },
   { // Scots Gaelic
     code: 'gd',
     script: 'Latn',
+    inflections: 'unavailable',
   },
   { // Serbian
     code: 'sr',
     script: 'Cyrl',
+    inflections: 'available',
   },
   { // Sesotho
     code: 'st',
     script: 'Latn',
+    inflections: 'unavailable',
   },
   { // Shona
     code: 'sn',
     script: 'Latn',
+    inflections: 'unavailable',
   },
   { // Sindhi
     code: 'sd',
     script: 'Arab',
+    inflections: 'unavailable',
   },
   { // Sinhala
     code: 'si',
     script: 'Sinh',
+    inflections: 'unavailable',
   },
   { // Slovak
     code: 'sk',
     script: 'Latn',
+    inflections: 'available',
   },
   { // Slovenian
     code: 'sl',
     script: 'Latn',
+    inflections: 'unavailable',
   },
   { // Somali
     code: 'so',
     script: 'Latn',
+    inflections: 'unavailable',
   },
   { // Spanish
     code: 'es',
     script: 'Latn',
+    inflections: 'available',
   },
   { // Sundanese
     code: 'su',
     script: 'Latn',
+    inflections: 'unavailable',
   },
   { // Swahili
     code: 'sw',
     script: 'Latn',
+    inflections: 'available',
   },
   { // Swedish
     code: 'sv',
     script: 'Latn',
+    inflections: 'available',
   },
   { // Tajik
     code: 'tg',
     script: 'Cyrl',
+    inflections: 'unavailable',
   },
   { // Tamil
     code: 'ta',
-    script: 'Taml'
+    script: 'Taml',
+    inflections: 'unavailable',
   },
   { // Tatar
     code: 'tt',
     script: 'Cyrl',
+    inflections: 'unavailable',
   },
   { // Telugu
     code: 'te',
     script: 'Telu',
+    inflections: 'unavailable',
   },
   { // Thai
     code: 'th',
     script: 'Thai',
+    inflections: 'unavailable',
   },
   { // Turkish
     code: 'tr',
     script: 'Latn',
+    inflections: 'unavailable',
   },
   { // Turkmen
     code: 'tk',
     script: 'Cyrl',
+    inflections: 'unavailable',
   },
   { // Ukrainian
     code: 'uk',
     script: 'Cyrl',
+    inflections: 'available',
   },
   { // Urdu
     code: 'ur',
     script: 'Arab',
+    inflections: 'available',
   },
   { // Uyghur
     code: 'ug',
     script: 'Arab',
+    inflections: 'unavailable',
   },
   { // Uzbek
     code: 'uz',
     script: 'Cyrl',
+    inflections: 'available',
   },
   { // Vietnamese
     code: 'vi',
     script: 'Latn',
+    inflections: 'available',
   },
   { // Welsh
     code: 'cy',
     script: 'Latn',
+    inflections: 'unavailable',
   },
   { // Xhosa
     code: 'xh',
     script: 'Latn',
+    inflections: 'unavailable',
   },
   { // Yiddish
     code: 'yi',
     script: 'Hebr',
+    inflections: 'unavailable',
   },
   { // Yoruba
     code: 'yo',
     script: 'Latn',
+    inflections: 'unavailable',
   },
   { // Zulu
     code: 'zu',
     script: 'Latn',
+    inflections: 'available',
   },
 ];
 
