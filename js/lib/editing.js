@@ -840,7 +840,9 @@ function updateArticleMenu() {
       // remember the range
       lastSelectedRange = range;
     } else if (isFootnoteEditor(container)) {
-      hideMenu = !showStylingMenu(range, [ 'inline' ]);
+      if (editMode === 'style') {
+        hideMenu = !showStylingMenu(range, [ 'inline' ]);
+      }
     }
   }
   if (hideMenu) {
