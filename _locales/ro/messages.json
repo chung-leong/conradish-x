@@ -433,6 +433,58 @@
     "message": "Accesează pagina originală",
     "description": "Label for menu item in document list"
   },
+  "nominative": {
+    "message": "Nominativul",
+    "description": "Column heading for inflection table"
+  },
+  "genitive": {
+    "message": "Genitivul",
+    "description": "Column heading for inflection table"
+  },
+  "accusative": {
+    "message": "Acuzativul",
+    "description": "Column heading for inflection table"
+  },
+  "dative": {
+    "message": "Dativul",
+    "description": "Column heading for inflection table"
+  },
+  "locative": {
+    "message": "Locative",
+    "description": "Column heading for inflection table"
+  },
+  "prepositional": {
+    "message": "Prepozițional",
+    "description": "Column heading for inflection table"
+  },
+  "instrumental": {
+    "message": "Instrumental",
+    "description": "Column heading for inflection table"
+  },
+  "vocative": {
+    "message": "Vocativul",
+    "description": "Column heading for inflection table"
+  },
+  "singular": {
+    "message": "Singular",
+    "description": "Row label for inflection table"
+  },
+  "plural": {
+    "message": "Plural",
+    "description": "Row label for inflection table"
+  },
+  "masculine": {
+    "message": "Masculin",
+    "description": "Row label for inflection table"
+  },
+  "feminine": {
+    "message": "Feminin",
+    "description": "Row label for inflection table"
+  },
+  "neuter": {
+    "message": "Neutru",
+    "description": "Row label for inflection table"
+  },
   "language_none": {
     "message": "Nicio",
     "description": "For top item in To language dropdown in side-bar"

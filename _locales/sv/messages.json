@@ -433,7 +433,7 @@
     "message": "Gå till originalsidan",
     "description": "Label for menu item in document list"
   },
-  "normative": {
+  "nominative": {
     "message": "Nominativ",
     "description": "Column heading for inflection table"
   },
@@ -454,7 +454,7 @@
     "description": "Column heading for inflection table"
   },
   "prepositional": {
-    "message": "Lokativ",
+    "message": "Prepositionalis",
     "description": "Column heading for inflection table"
   },
   "instrumental": {

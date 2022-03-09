@@ -453,7 +453,7 @@
     "message": "Přejít na původní stránku",
     "description": "Label for menu item in document list"
   },
-  "normative": {
+  "nominative": {
     "message": "Nominativ",
     "description": "Column heading for inflection table"
   },

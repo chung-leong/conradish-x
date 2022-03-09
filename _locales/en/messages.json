@@ -441,8 +441,8 @@
     "message": "Go to original page",
     "description": "Label for menu item in document list"
   },
-  "normative": {
-    "message": "Normative",
+  "nominative": {
+    "message": "Nominative",
     "description": "Column heading for inflection table"
   },
   "genitive": {

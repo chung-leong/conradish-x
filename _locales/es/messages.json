@@ -433,6 +433,58 @@
     "message": "Ir a la página original",
     "description": "Label for menu item in document list"
   },
+  "nominative": {
+    "message": "Nominativo",
+    "description": "Column heading for inflection table"
+  },
+  "genitive": {
+    "message": "Genitivo",
+    "description": "Column heading for inflection table"
+  },
+  "accusative": {
+    "message": "Acusativo",
+    "description": "Column heading for inflection table"
+  },
+  "dative": {
+    "message": "Dativo",
+    "description": "Column heading for inflection table"
+  },
+  "locative": {
+    "message": "Locativo",
+    "description": "Column heading for inflection table"
+  },
+  "prepositional": {
+    "message": "Preposicional",
+    "description": "Column heading for inflection table"
+  },
+  "instrumental": {
+    "message": "Instrumental",
+    "description": "Column heading for inflection table"
+  },
+  "vocative": {
+    "message": "Vocativo",
+    "description": "Column heading for inflection table"
+  },
+  "singular": {
+    "message": "Singular",
+    "description": "Row label for inflection table"
+  },
+  "plural": {
+    "message": "Plural",
+    "description": "Row label for inflection table"
+  },
+  "masculine": {
+    "message": "Masculino",
+    "description": "Row label for inflection table"
+  },
+  "feminine": {
+    "message": "Feminino",
+    "description": "Row label for inflection table"
+  },
+  "neuter": {
+    "message": "Neutro",
+    "description": "Row label for inflection table"
+  },
   "language_none": {
     "message": "Ninguno",
     "description": "For top item in To language dropdown in side-bar"

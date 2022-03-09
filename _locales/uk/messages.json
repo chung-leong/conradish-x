@@ -453,7 +453,7 @@
     "message": "Перейти на оригінальну сторінку",
     "description": "Label for menu item in document list"
   },
-  "normative": {
+  "nominative": {
     "message": "Називний",
     "description": "Column heading for inflection table"
   },

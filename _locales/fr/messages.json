@@ -433,6 +433,58 @@
     "message": "Aller à la page d'origine",
     "description": "Label for menu item in document list"
   },
+  "nominative": {
+    "message": "Nominatif",
+    "description": "Column heading for inflection table"
+  },
+  "genitive": {
+    "message": "Génitif",
+    "description": "Column heading for inflection table"
+  },
+  "accusative": {
+    "message": "Accusatif",
+    "description": "Column heading for inflection table"
+  },
+  "dative": {
+    "message": "Datif",
+    "description": "Column heading for inflection table"
+  },
+  "locative": {
+    "message": "Locatif",
+    "description": "Column heading for inflection table"
+  },
+  "prepositional": {
+    "message": "Prépositionnel",
+    "description": "Column heading for inflection table"
+  },
+  "instrumental": {
+    "message": "Instrumental",
+    "description": "Column heading for inflection table"
+  },
+  "vocative": {
+    "message": "Vocatif",
+    "description": "Column heading for inflection table"
+  },
+  "singular": {
+    "message": "Singulier",
+    "description": "Row label for inflection table"
+  },
+  "plural": {
+    "message": "Pluriel",
+    "description": "Row label for inflection table"
+  },
+  "masculine": {
+    "message": "Masculin",
+    "description": "Row label for inflection table"
+  },
+  "feminine": {
+    "message": "Féminin",
+    "description": "Row label for inflection table"
+  },
+  "neuter": {
+    "message": "Neutre",
+    "description": "Row label for inflection table"
+  },
   "language_none": {
     "message": "Aucune",
     "description": "For top item in To language dropdown in side-bar"

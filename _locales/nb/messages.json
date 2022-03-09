@@ -433,8 +433,8 @@
     "message": "Gå til originalsiden",
     "description": "Label for menu item in document list"
   },
-  "normative": {
-    "message": "Normativ",
+  "nominative": {
+    "message": "Nominativ",
     "description": "Column heading for inflection table"
   },
   "genitive": {

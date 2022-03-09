@@ -453,7 +453,7 @@
     "message": "Przejdź do oryginalnej strony",
     "description": "Label for menu item in document list"
   },
-  "normative": {
+  "nominative": {
     "message": "Mianownik",
     "description": "Column heading for inflection table"
   },

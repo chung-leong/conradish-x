@@ -433,6 +433,58 @@
     "message": "Siirry alkuperäiselle sivulle",
     "description": "Label for menu item in document list"
   },
+  "nominative": {
+    "message": "Nominatiivi",
+    "description": "Column heading for inflection table"
+  },
+  "genitive": {
+    "message": "Genetiivi",
+    "description": "Column heading for inflection table"
+  },
+  "accusative": {
+    "message": "Akkusatiivi",
+    "description": "Column heading for inflection table"
+  },
+  "dative": {
+    "message": "Datiivi",
+    "description": "Column heading for inflection table"
+  },
+  "locative": {
+    "message": "Lokatiivi",
+    "description": "Column heading for inflection table"
+  },
+  "prepositional": {
+    "message": "Prepositionaali",
+    "description": "Column heading for inflection table"
+  },
+  "instrumental": {
+    "message": "Instrumentaali",
+    "description": "Column heading for inflection table"
+  },
+  "vocative": {
+    "message": "Vokatiivi",
+    "description": "Column heading for inflection table"
+  },
+  "singular": {
+    "message": "Singulaari",
+    "description": "Row label for inflection table"
+  },
+  "plural": {
+    "message": "Pluraali",
+    "description": "Row label for inflection table"
+  },
+  "masculine": {
+    "message": "Maskuliini",
+    "description": "Row label for inflection table"
+  },
+  "feminine": {
+    "message": "Feminiini",
+    "description": "Row label for inflection table"
+  },
+  "neuter": {
+    "message": "Neutri",
+    "description": "Row label for inflection table"
+  },
   "language_none": {
     "message": "Ei minkään",
     "description": "For top item in To language dropdown in side-bar"

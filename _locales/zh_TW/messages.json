@@ -433,7 +433,7 @@
     "message": "轉到原始頁面",
     "description": "Label for menu item in document list"
   },
-  "normative": {
+  "nominative": {
     "message": "主格",
     "description": "Column heading for inflection table"
   },
