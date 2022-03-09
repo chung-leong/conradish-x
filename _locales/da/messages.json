@@ -433,6 +433,58 @@
     "message": "Gå til den originale side",
     "description": "Label for menu item in document list"
   },
+  "normative": {
+    "message": "Normativ",
+    "description": "Column heading for inflection table"
+  },
+  "genitive": {
+    "message": "Genitiv",
+    "description": "Column heading for inflection table"
+  },
+  "accusative": {
+    "message": "Accusativ",
+    "description": "Column heading for inflection table"
+  },
+  "dative": {
+    "message": "Dativ",
+    "description": "Column heading for inflection table"
+  },
+  "locative": {
+    "message": "Lokativ",
+    "description": "Column heading for inflection table"
+  },
+  "prepositional": {
+    "message": "Lokativ",
+    "description": "Column heading for inflection table"
+  },
+  "instrumental": {
+    "message": "Instrumentalis",
+    "description": "Column heading for inflection table"
+  },
+  "vocative": {
+    "message": "Vokativ",
+    "description": "Column heading for inflection table"
+  },
+  "singular": {
+    "message": "Singularis",
+    "description": "Row label for inflection table"
+  },
+  "plural": {
+    "message": "Pluralis",
+    "description": "Row label for inflection table"
+  },
+  "masculine": {
+    "message": "Maskulinum",
+    "description": "Row label for inflection table"
+  },
+  "feminine": {
+    "message": "Femininum",
+    "description": "Row label for inflection table"
+  },
+  "neuter": {
+    "message": "Neutrum",
+    "description": "Row label for inflection table"
+  },
   "language_none": {
     "message": "Inget",
     "description": "For top item in To language dropdown in side-bar"
