@@ -433,6 +433,58 @@
     "message": "轉到原始頁面",
     "description": "Label for menu item in document list"
   },
+  "normative": {
+    "message": "主格",
+    "description": "Column heading for inflection table"
+  },
+  "genitive": {
+    "message": "屬格",
+    "description": "Column heading for inflection table"
+  },
+  "accusative": {
+    "message": "賓格",
+    "description": "Column heading for inflection table"
+  },
+  "dative": {
+    "message": "與格",
+    "description": "Column heading for inflection table"
+  },
+  "locative": {
+    "message": "方位格",
+    "description": "Column heading for inflection table"
+  },
+  "prepositional": {
+    "message": "前置格",
+    "description": "Column heading for inflection table"
+  },
+  "instrumental": {
+    "message": "工具格",
+    "description": "Column heading for inflection table"
+  },
+  "vocative": {
+    "message": "呼格",
+    "description": "Column heading for inflection table"
+  },
+  "singular": {
+    "message": "單數",
+    "description": "Row label for inflection table"
+  },
+  "plural": {
+    "message": "複數",
+    "description": "Row label for inflection table"
+  },
+  "masculine": {
+    "message": "陽性",
+    "description": "Row label for inflection table"
+  },
+  "feminine": {
+    "message": "陰性",
+    "description": "Row label for inflection table"
+  },
+  "neuter": {
+    "message": "中性",
+    "description": "Row label for inflection table"
+  },
   "language_none": {
     "message": "不適用",
     "description": "For top item in To language dropdown in side-bar"

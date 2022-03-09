@@ -453,6 +453,58 @@
     "message": "Перейти на исходную страницу",
     "description": "Label for menu item in document list"
   },
+  "normative": {
+    "message": "Именительный",
+    "description": "Column heading for inflection table"
+  },
+  "genitive": {
+    "message": "Родительный",
+    "description": "Column heading for inflection table"
+  },
+  "accusative": {
+    "message": "Винительный",
+    "description": "Column heading for inflection table"
+  },
+  "dative": {
+    "message": "Дательный",
+    "description": "Column heading for inflection table"
+  },
+  "locative": {
+    "message": "Местный",
+    "description": "Column heading for inflection table"
+  },
+  "prepositional": {
+    "message": "Предложный",
+    "description": "Column heading for inflection table"
+  },
+  "instrumental": {
+    "message": "Творительный",
+    "description": "Column heading for inflection table"
+  },
+  "vocative": {
+    "message": "Звательный",
+    "description": "Column heading for inflection table"
+  },
+  "singular": {
+    "message": "Ед. число",
+    "description": "Row label for inflection table"
+  },
+  "plural": {
+    "message": "Мн. число",
+    "description": "Row label for inflection table"
+  },
+  "masculine": {
+    "message": "М. род",
+    "description": "Row label for inflection table"
+  },
+  "feminine": {
+    "message": "Ж. род",
+    "description": "Row label for inflection table"
+  },
+  "neuter": {
+    "message": "Ср. род",
+    "description": "Row label for inflection table"
+  },
   "language_none": {
     "message": "Никакой",
     "description": "For top item in To language dropdown in side-bar"

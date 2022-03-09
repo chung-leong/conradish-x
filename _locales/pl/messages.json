@@ -453,6 +453,58 @@
     "message": "Przejdź do oryginalnej strony",
     "description": "Label for menu item in document list"
   },
+  "normative": {
+    "message": "Mianownik",
+    "description": "Column heading for inflection table"
+  },
+  "genitive": {
+    "message": "Dopełniacz",
+    "description": "Column heading for inflection table"
+  },
+  "accusative": {
+    "message": "Accusative",
+    "description": "Column heading for inflection table"
+  },
+  "dative": {
+    "message": "Celownik",
+    "description": "Column heading for inflection table"
+  },
+  "locative": {
+    "message": "Miejscownik",
+    "description": "Column heading for inflection table"
+  },
+  "prepositional": {
+    "message": "Miejscownik",
+    "description": "Column heading for inflection table"
+  },
+  "instrumental": {
+    "message": "Narzędnik",
+    "description": "Column heading for inflection table"
+  },
+  "vocative": {
+    "message": "Wołacz",
+    "description": "Column heading for inflection table"
+  },
+  "singular": {
+    "message": "L. pojedyncza",
+    "description": "Row label for inflection table"
+  },
+  "plural": {
+    "message": "L. mnoga",
+    "description": "Row label for inflection table"
+  },
+  "masculine": {
+    "message": "R. męski",
+    "description": "Row label for inflection table"
+  },
+  "feminine": {
+    "message": "R. żeński",
+    "description": "Row label for inflection table"
+  },
+  "neuter": {
+    "message": "R. nijaki",
+    "description": "Row label for inflection table"
+  },
   "language_transform_from": {
     "message": "([csz]k)i(?=\\P{L}|$$) => $$1iego",
     "description": "RegExp replacements that yield the genitive case"

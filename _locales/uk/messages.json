@@ -453,6 +453,58 @@
     "message": "Перейти на оригінальну сторінку",
     "description": "Label for menu item in document list"
   },
+  "normative": {
+    "message": "Називний",
+    "description": "Column heading for inflection table"
+  },
+  "genitive": {
+    "message": "Родовий",
+    "description": "Column heading for inflection table"
+  },
+  "accusative": {
+    "message": "Знахідний",
+    "description": "Column heading for inflection table"
+  },
+  "dative": {
+    "message": "Давальний",
+    "description": "Column heading for inflection table"
+  },
+  "locative": {
+    "message": "Місцевий",
+    "description": "Column heading for inflection table"
+  },
+  "prepositional": {
+    "message": "Місцевий",
+    "description": "Column heading for inflection table"
+  },
+  "instrumental": {
+    "message": "Орудний",
+    "description": "Column heading for inflection table"
+  },
+  "vocative": {
+    "message": "Кличний",
+    "description": "Column heading for inflection table"
+  },
+  "singular": {
+    "message": "Однина",
+    "description": "Row label for inflection table"
+  },
+  "plural": {
+    "message": "Множина",
+    "description": "Row label for inflection table"
+  },
+  "masculine": {
+    "message": "Чоловічий",
+    "description": "Row label for inflection table"
+  },
+  "feminine": {
+    "message": "Жіночий",
+    "description": "Row label for inflection table"
+  },
+  "neuter": {
+    "message": "Середній",
+    "description": "Row label for inflection table"
+  },
   "language_transform_from": {
     "message": "ька(?=\\P{L}|$$) => ької, на(?=\\P{L}|$$) => ної",
     "description": "RegExp replacements that yield the genitive case"
