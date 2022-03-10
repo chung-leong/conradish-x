@@ -333,15 +333,11 @@ export async function translate(original, sourceLang, targetLang, singleWord) {
   }
   let useLowerCase = false;
   if (json.query_inflections) {
-    const inflections = {};
-    for (const qi of json.query_inflections) {
-      const word = qi.written_form;
-      const features = qi.features;
-      if (word && features) {
-        inflections[word] = features;
-        if (!isCapitalized(word)) {
-          useLowerCase = true;
-        }
+    const inflections = [];
+    for (const qi of filterInflections(json.query_inflections, sourceLang)) {
+      inflections.push({ written_form: qi.written_form, ...qi.features });
+      if (!useLowerCase && !isCapitalized(qi.written_form)) {
+        useLowerCase = true;
       }
     }
     if (Object.entries(inflections).length > 0) {
@@ -360,6 +356,27 @@ export async function translate(original, sourceLang, targetLang, singleWord) {
     result.term.text = lowerCaseAlt;
   }
   return result;
+}
+
+function filterInflections(qis, sourceLang) {
+  qis = qis.filter(q => q.written_form && q.features);
+  if (sourceLang === 'sk') {
+    if (qis.find(q => q.features.hasOwnProperty('tense'))) {
+      for (let i = 0; i < qis.length; i++) {
+        const w = qis[i].written_form;
+        if (w.startsWith('ne')) {
+          // might be negative--look for positive form
+          const p = w.substr(2);
+          if (qis.find(q => q.written_form === p)) {
+            // remove it
+            qis.splice(i, 1);
+            i--;
+          }
+        }
+      }
+    }
+  }
+  return qis;
 }
 
 export function capitalize(word, lang) {
