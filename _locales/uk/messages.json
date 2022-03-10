@@ -454,55 +454,55 @@
     "description": "Label for menu item in document list"
   },
   "nominative": {
-    "message": "Називний",
+    "message": "називний",
     "description": "Column heading for inflection table"
   },
   "genitive": {
-    "message": "Родовий",
+    "message": "родовий",
     "description": "Column heading for inflection table"
   },
   "accusative": {
-    "message": "Знахідний",
+    "message": "знахідний",
     "description": "Column heading for inflection table"
   },
   "dative": {
-    "message": "Давальний",
+    "message": "давальний",
     "description": "Column heading for inflection table"
   },
   "locative": {
-    "message": "Місцевий",
+    "message": "місцевий",
     "description": "Column heading for inflection table"
   },
   "prepositional": {
-    "message": "Місцевий",
+    "message": "місцевий",
     "description": "Column heading for inflection table"
   },
   "instrumental": {
-    "message": "Орудний",
+    "message": "орудний",
     "description": "Column heading for inflection table"
   },
   "vocative": {
-    "message": "Кличний",
+    "message": "кличний",
     "description": "Column heading for inflection table"
   },
   "singular": {
-    "message": "Однина",
+    "message": "однина",
     "description": "Row label for inflection table"
   },
   "plural": {
-    "message": "Множина",
+    "message": "множина",
     "description": "Row label for inflection table"
   },
   "masculine": {
-    "message": "Чоловічий",
+    "message": "чоловічий",
     "description": "Row label for inflection table"
   },
   "feminine": {
-    "message": "Жіночий",
+    "message": "жіночий",
     "description": "Row label for inflection table"
   },
   "neuter": {
-    "message": "Середній",
+    "message": "середній",
     "description": "Row label for inflection table"
   },
   "language_transform_from": {

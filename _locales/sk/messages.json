@@ -454,55 +454,55 @@
     "description": "Label for menu item in document list"
   },
   "nominative": {
-    "message": "Nominatív",
+    "message": "nominatív",
     "description": "Column heading for inflection table"
   },
   "genitive": {
-    "message": "Genitív",
+    "message": "genitív",
     "description": "Column heading for inflection table"
   },
   "accusative": {
-    "message": "Akuzatív",
+    "message": "akuzatív",
     "description": "Column heading for inflection table"
   },
   "dative": {
-    "message": "Datív",
+    "message": "datív",
     "description": "Column heading for inflection table"
   },
   "locative": {
-    "message": "Lokál",
+    "message": "lokál",
     "description": "Column heading for inflection table"
   },
   "prepositional": {
-    "message": "Lokál",
+    "message": "lokál",
     "description": "Column heading for inflection table"
   },
   "instrumental": {
-    "message": "Inštrumentál",
+    "message": "inštrumentál",
     "description": "Column heading for inflection table"
   },
   "vocative": {
-    "message": "Vokatív",
+    "message": "vokatív",
     "description": "Column heading for inflection table"
   },
   "singular": {
-    "message": "Jednotné č.",
+    "message": "jednotné č.",
     "description": "Row label for inflection table"
   },
   "plural": {
-    "message": "Množné č.",
+    "message": "množné č.",
     "description": "Row label for inflection table"
   },
   "masculine": {
-    "message": "Mužský r.",
+    "message": "mužský r.",
     "description": "Row label for inflection table"
   },
   "feminine": {
-    "message": "Ženský r.",
+    "message": "ženský r.",
     "description": "Row label for inflection table"
   },
   "neuter": {
-    "message": "Stredný r.",
+    "message": "stredný r.",
     "description": "Row label for inflection table"
   },
   "language_none": {

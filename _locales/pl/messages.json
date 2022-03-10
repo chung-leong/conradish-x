@@ -454,15 +454,15 @@
     "description": "Label for menu item in document list"
   },
   "nominative": {
-    "message": "Mianownik",
+    "message": "mianownik",
     "description": "Column heading for inflection table"
   },
   "genitive": {
-    "message": "Dopełniacz",
+    "message": "dopełniacz",
     "description": "Column heading for inflection table"
   },
   "accusative": {
-    "message": "Accusative",
+    "message": "accusative",
     "description": "Column heading for inflection table"
   },
   "dative": {
@@ -470,39 +470,39 @@
     "description": "Column heading for inflection table"
   },
   "locative": {
-    "message": "Miejscownik",
+    "message": "miejscownik",
     "description": "Column heading for inflection table"
   },
   "prepositional": {
-    "message": "Miejscownik",
+    "message": "miejscownik",
     "description": "Column heading for inflection table"
   },
   "instrumental": {
-    "message": "Narzędnik",
+    "message": "narzędnik",
     "description": "Column heading for inflection table"
   },
   "vocative": {
-    "message": "Wołacz",
+    "message": "wołacz",
     "description": "Column heading for inflection table"
   },
   "singular": {
-    "message": "L. pojedyncza",
+    "message": "l. pojedyncza",
     "description": "Row label for inflection table"
   },
   "plural": {
-    "message": "L. mnoga",
+    "message": "l. mnoga",
     "description": "Row label for inflection table"
   },
   "masculine": {
-    "message": "R. męski",
+    "message": "r. męski",
     "description": "Row label for inflection table"
   },
   "feminine": {
-    "message": "R. żeński",
+    "message": "r. żeński",
     "description": "Row label for inflection table"
   },
   "neuter": {
-    "message": "R. nijaki",
+    "message": "r. nijaki",
     "description": "Row label for inflection table"
   },
   "language_transform_from": {

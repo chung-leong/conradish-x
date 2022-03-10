@@ -442,55 +442,55 @@
     "description": "Label for menu item in document list"
   },
   "nominative": {
-    "message": "Nominative",
+    "message": "nominative",
     "description": "Column heading for inflection table"
   },
   "genitive": {
-    "message": "Genitive",
+    "message": "genitive",
     "description": "Column heading for inflection table"
   },
   "accusative": {
-    "message": "Accusative",
+    "message": "accusative",
     "description": "Column heading for inflection table"
   },
   "dative": {
-    "message": "Dative",
+    "message": "dative",
     "description": "Column heading for inflection table"
   },
   "locative": {
-    "message": "Locative",
+    "message": "locative",
     "description": "Column heading for inflection table"
   },
   "prepositional": {
-    "message": "Prepositional",
+    "message": "prepositional",
     "description": "Column heading for inflection table"
   },
   "instrumental": {
-    "message": "Instrumental",
+    "message": "instrumental",
     "description": "Column heading for inflection table"
   },
   "vocative": {
-    "message": "Vocative",
+    "message": "vocative",
     "description": "Column heading for inflection table"
   },
   "singular": {
-    "message": "Singular",
+    "message": "singular",
     "description": "Row label for inflection table"
   },
   "plural": {
-    "message": "Plural",
+    "message": "plural",
     "description": "Row label for inflection table"
   },
   "masculine": {
-    "message": "Masculine",
+    "message": "masculine",
     "description": "Row label for inflection table"
   },
   "feminine": {
-    "message": "Feminine",
+    "message": "feminine",
     "description": "Row label for inflection table"
   },
   "neuter": {
-    "message": "Neuter",
+    "message": "neuter",
     "description": "Row label for inflection table"
   },
   "language_none": {

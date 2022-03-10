@@ -454,55 +454,55 @@
     "description": "Label for menu item in document list"
   },
   "nominative": {
-    "message": "Именительный",
+    "message": "именительный",
     "description": "Column heading for inflection table"
   },
   "genitive": {
-    "message": "Родительный",
+    "message": "родительный",
     "description": "Column heading for inflection table"
   },
   "accusative": {
-    "message": "Винительный",
+    "message": "винительный",
     "description": "Column heading for inflection table"
   },
   "dative": {
-    "message": "Дательный",
+    "message": "дательный",
     "description": "Column heading for inflection table"
   },
   "locative": {
-    "message": "Местный",
+    "message": "местный",
     "description": "Column heading for inflection table"
   },
   "prepositional": {
-    "message": "Предложный",
+    "message": "предложный",
     "description": "Column heading for inflection table"
   },
   "instrumental": {
-    "message": "Творительный",
+    "message": "творительный",
     "description": "Column heading for inflection table"
   },
   "vocative": {
-    "message": "Звательный",
+    "message": "звательный",
     "description": "Column heading for inflection table"
   },
   "singular": {
-    "message": "Ед. число",
+    "message": "ед. число",
     "description": "Row label for inflection table"
   },
   "plural": {
-    "message": "Мн. число",
+    "message": "мн. число",
     "description": "Row label for inflection table"
   },
   "masculine": {
-    "message": "М. род",
+    "message": "м. род",
     "description": "Row label for inflection table"
   },
   "feminine": {
-    "message": "Ж. род",
+    "message": "ж. род",
     "description": "Row label for inflection table"
   },
   "neuter": {
-    "message": "Ср. род",
+    "message": "ср. род",
     "description": "Row label for inflection table"
   },
   "language_none": {

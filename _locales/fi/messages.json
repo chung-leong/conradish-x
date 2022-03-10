@@ -434,55 +434,55 @@
     "description": "Label for menu item in document list"
   },
   "nominative": {
-    "message": "Nominatiivi",
+    "message": "nominatiivi",
     "description": "Column heading for inflection table"
   },
   "genitive": {
-    "message": "Genetiivi",
+    "message": "genetiivi",
     "description": "Column heading for inflection table"
   },
   "accusative": {
-    "message": "Akkusatiivi",
+    "message": "akkusatiivi",
     "description": "Column heading for inflection table"
   },
   "dative": {
-    "message": "Datiivi",
+    "message": "datiivi",
     "description": "Column heading for inflection table"
   },
   "locative": {
-    "message": "Lokatiivi",
+    "message": "lokatiivi",
     "description": "Column heading for inflection table"
   },
   "prepositional": {
-    "message": "Prepositionaali",
+    "message": "prepositionaali",
     "description": "Column heading for inflection table"
   },
   "instrumental": {
-    "message": "Instrumentaali",
+    "message": "instrumentaali",
     "description": "Column heading for inflection table"
   },
   "vocative": {
-    "message": "Vokatiivi",
+    "message": "vokatiivi",
     "description": "Column heading for inflection table"
   },
   "singular": {
-    "message": "Singulaari",
+    "message": "singulaari",
     "description": "Row label for inflection table"
   },
   "plural": {
-    "message": "Pluraali",
+    "message": "pluraali",
     "description": "Row label for inflection table"
   },
   "masculine": {
-    "message": "Maskuliini",
+    "message": "maskuliini",
     "description": "Row label for inflection table"
   },
   "feminine": {
-    "message": "Feminiini",
+    "message": "feminiini",
     "description": "Row label for inflection table"
   },
   "neuter": {
-    "message": "Neutri",
+    "message": "neutri",
     "description": "Row label for inflection table"
   },
   "language_none": {
