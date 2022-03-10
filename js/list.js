@@ -3,6 +3,7 @@ import { e, attachCustomCheckboxHandlers, attachRippleEffectHandlers, separateWo
 import { setWindowName, openPage } from './lib/navigation.js';
 import { createTopBar, attachShadowHandlers } from './lib/top-bar.js';
 import { l, lc, detectDirection, capitalize } from './lib/i18n.js';
+import { getInflectionTables } from './lib/inflection.js';
 
 const listContainer = document.getElementById('list-container');
 const toolbarContainer = document.getElementById('toolbar-container');
@@ -141,6 +142,7 @@ async function loadItem(item) {
     item.url = url;
     item.title = title;
     item.searchStrings = findSearchStrings(doc);
+    item.inflectionTables = getInflectionTables(doc);
   } catch (err) {
   }
 }
