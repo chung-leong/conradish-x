@@ -10,9 +10,17 @@ export function getInflectionTables(doc) {
         item.forEach(scan);
       } else if (item instanceof Object) {
         const { footnote, content } = item;
+        let inflections, term;
         if (footnote && footnote.inflections instanceof Array) {
-          const [ type, table ] = generator.process(footnote.inflections, footnote.term);
-          if (type) {
+          inflections = footnote.inflections;
+          term = footnote.term;
+        } else if (item.inflections instanceof Array) {
+          inflections = item.inflections;
+          term = item.term;
+        }
+        if (inflections) {
+          const [ type, table ] = generator.process(inflections, term);
+          if (type && table) {
             let list = tables[type];
             if (!list) {
               list = tables[type] = [];
@@ -25,37 +33,64 @@ export function getInflectionTables(doc) {
     };
     scan(content);
   }
-  return Object.keys(tables) > 0 ? tables : null;
+  return (Object.keys(tables).length > 0) ? tables : null;
+}
+
+export function mergeInflectionTables(tableLists, lang) {
+  const result = {};
+  for (const tables of tableLists) {
+    for (const [ type, list ] of Object.entries(tables)) {
+      if (!result[type]) {
+        result[type] = [];
+      }
+      result[type].push(...list);
+    }
+  }
+  for (const [ type, list ] of Object.entries(result)) {
+    list.sort((a, b) => {
+      const captionA = a.content[0].content;
+      const captionB = b.content[0].content;
+      return captionA.localeCompare(captionB, lang);
+    });
+  }
+  return result;
+}
+
+class TableHeader {
+  constructor(label) {
+    this.label = label;
+  }
 }
 
 class TableGenerator {
   process(inflections, term) {
     try {
+      let type, table;
       if (this.has(inflections, [ 'tense' ])) {
-        const v = this.buildVerbTable(inflections, term);
-        if (v) {
-          return [ 'verb', v ];
-        }
+        table = this.processVerb(inflections, term);
+        type = 'verb';
       } else if (this.has(inflections, [ 'degree' ])) {
-        const a = this.buildAdjectiveTable(inflections, term);
-        if (a) {
-          return [ 'adjective', a ];
-        }
+        table = this.processAdjective(inflections, term);
+        type = 'adjective';
       } else if (this.has(inflections, [ 'number' ])) {
-        const n = this.buildNounTable(inflections, term);
-        if (n) {
-          return [ 'noun', n ];
-        }
+        table = this.processNoun(inflections, term);
+        type = 'noun';
       }
-      return [];
+      if (table) {
+        table.inflections = inflections;
+        table.term = term;
+        return [ type, table ];
+      } else {
+        return [];
+      }
     } catch (err) {
       console.error(err);
     }
   }
 
-  buildNounTable(inf, term) {}
-  buildAdjectiveTable(inf, term) {}
-  buildVerbTable(inf, term) {}
+  processNoun(inf, term) {}
+  processAdjective(inf, term) {}
+  processVerb(inf, term) {}
 
   find(inflections, criteria) {
     for (const inflection of inflections) {
@@ -67,6 +102,14 @@ class TableGenerator {
     return '';
   }
 
+  header(label) {
+    return new TableHeader(label);
+  }
+
+  headers(labels) {
+    return labels.map(l => new TableHeader(l));
+  }
+
   has(inflections, names) {
     for (const inflection of inflections) {
       if (names.every(n => inflection.hasOwnProperty(n))) {
@@ -76,16 +119,39 @@ class TableGenerator {
     return false;
   }
 
-  build(caption, columns, rows, cells) {
-    console.log({ caption, columns, rows, cells });
+  build(title, cells) {
+    const trs = [];
+    for (const row of cells) {
+      const tds = [];
+      for (const cell of row) {
+        if (cell instanceof TableHeader) {
+          tds.push({ tag: 'TH', content: cell.label });
+        } else {
+          tds.push({ tag: 'TD', content: cell });
+        }
+      }
+      trs.push({ tag: 'TR', content: tds })
+    }
+    const caption = { tag: 'CAPTION', content: title };
+    const tbody = { tag: 'TBODY', content: trs };
+    return {
+      tag: 'TABLE',
+      class: 'inflection',
+      content: [ caption, tbody ]
+    };
   }
 
-  clean(cells, rows) {
+  clean(cells) {
     for (let i = cells.length - 1; i >= 0; i--) {
-      if (cells[i].every(c => !c)) {
-        cells.splice(i, 1);
-        if (rows) {
-          rows.splice(i, 1);
+      const row = cells[i];
+      if (row.every(c => c instanceof TableHeader)) {
+        const nextRow = cells[i + 1];
+        if (!nextRow || nextRow.every(c => c instanceof TableHeader)) {
+          cells.splice(i, 1);
+        }
+      } else {
+        if (row.every(c => c instanceof TableHeader || !c )) {
+          cells.splice(i, 1);
         }
       }
     }
@@ -124,11 +190,10 @@ const PREPOSITIONAL = 18;
 const VOCATIVE = 20;
 
 class Slovak extends TableGenerator {
-  buildVerbTable(inf) {
+  processVerb(inf) {
     const mt = { tense: PRESENT1 };
-    const columns = [ 'ja', 'ty', 'on/ona/ono', 'my', 'vy', 'oni/ony' ];
-    const rows = null;
     const cells = [
+      this.headers([ 'ja', 'ty', 'on/ona/ono', 'my', 'vy', 'oni/ony' ]),
       [
         this.find(inf, { person: FIRST,  number: SINGULAR, ...mt }),
         this.find(inf, { person: SECOND, number: SINGULAR, ...mt }),
@@ -138,18 +203,18 @@ class Slovak extends TableGenerator {
         this.find(inf, { person: THIRD,  number: PLURAL, ...mt }),
       ]
     ];
-    const infinitive = this.find(inf, { person: undefined,  number: undefined, mood: undefined, tense: undefined });
+    const infinitive = this.find(inf, { person: undefined,  number: undefined, tense: undefined });
     this.clean(cells);
-    if (infinitive && cells.length > 0) {
-      return this.build(infinitive, columns, rows, cells);
+    if (infinitive && cells.length > 1) {
+      return this.build(infinitive, cells);
     }
   }
 
-  buildNounTable(inf) {
-    const columns = [ l('nominative'), l('accusative'), l('genitive'), l('dative'), l('instrumental'), l('locative') ];
-    const rows = [ l('singular'), l('plural') ];
+  processNoun(inf) {
     const cells = [
+      this.headers([ '', l('nominative'), l('accusative'), l('genitive'), l('dative'), l('instrumental'), l('locative') ]),
       [
+        this.header(l('singular')),
         this.find(inf, { grammatical_case: NOMINATIVE,  number: SINGULAR }),
         this.find(inf, { grammatical_case: ACCUSATIVE,  number: SINGULAR }),
         this.find(inf, { grammatical_case: GENITIVE,  number: SINGULAR }),
@@ -159,6 +224,7 @@ class Slovak extends TableGenerator {
         this.find(inf, { grammatical_case: VOCATIVE,  number: SINGULAR }),
       ],
       [
+        this.header(l('plural')),
         this.find(inf, { grammatical_case: NOMINATIVE,  number: PLURAL }),
         this.find(inf, { grammatical_case: ACCUSATIVE,  number: PLURAL }),
         this.find(inf, { grammatical_case: GENITIVE,  number: PLURAL }),
@@ -168,18 +234,18 @@ class Slovak extends TableGenerator {
         this.find(inf, { grammatical_case: VOCATIVE,  number: PLURAL }),
       ],
     ];
-    this.clean(cells, rows);
-    if (cells.length > 0) {
-      const nomSg = cells[0][0];
-      return this.build(nomSg, columns, rows, cells);
+    this.clean(cells);
+    if (cells.length > 1) {
+      const nomSg = cells[1][1];
+      return this.build(nomSg, cells);
     }
   }
 
-  buildAdjectiveTable(inf) {
-    const columns = [ l('nominative'), l('accusative'), l('genitive'), l('dative'), l('instrumental'), l('locative') ];
-    const rows = [ l('masculine'), l('feminine'), l('neuter'), l('plural') ];
+  processAdjective(inf) {
     const cells = [
+      this.headers([ '', l('nominative'), l('accusative'), l('genitive'), l('dative'), l('instrumental'), l('locative') ]),
       [
+        this.header(l('masculine')),
         this.find(inf, { grammatical_case: NOMINATIVE,  number: SINGULAR, gender: MASCULINE }),
         this.find(inf, { grammatical_case: ACCUSATIVE,  number: SINGULAR, gender: MASCULINE }),
         this.find(inf, { grammatical_case: GENITIVE,  number: SINGULAR, gender: MASCULINE }),
@@ -188,6 +254,7 @@ class Slovak extends TableGenerator {
         this.find(inf, { grammatical_case: LOCATIVE,  number: SINGULAR, gender: MASCULINE }),
       ],
       [
+        this.header(l('feminine')),
         this.find(inf, { grammatical_case: NOMINATIVE,  number: SINGULAR, gender: FEMININE }),
         this.find(inf, { grammatical_case: ACCUSATIVE,  number: SINGULAR, gender: FEMININE }),
         this.find(inf, { grammatical_case: GENITIVE,  number: SINGULAR, gender: FEMININE }),
@@ -196,6 +263,7 @@ class Slovak extends TableGenerator {
         this.find(inf, { grammatical_case: LOCATIVE,  number: SINGULAR, gender: FEMININE }),
       ],
       [
+        this.header(l('neuter')),
         this.find(inf, { grammatical_case: NOMINATIVE,  number: SINGULAR, gender: NEUTER }),
         this.find(inf, { grammatical_case: ACCUSATIVE,  number: SINGULAR, gender: NEUTER }),
         this.find(inf, { grammatical_case: GENITIVE,  number: SINGULAR, gender: NEUTER }),
@@ -204,6 +272,7 @@ class Slovak extends TableGenerator {
         this.find(inf, { grammatical_case: LOCATIVE,  number: SINGULAR, gender: NEUTER }),
       ],
       [
+        this.header(l('plural')),
         this.find(inf, { grammatical_case: NOMINATIVE,  number: PLURAL }),
         this.find(inf, { grammatical_case: ACCUSATIVE,  number: PLURAL }),
         this.find(inf, { grammatical_case: GENITIVE,  number: PLURAL }),
@@ -212,21 +281,20 @@ class Slovak extends TableGenerator {
         this.find(inf, { grammatical_case: LOCATIVE,  number: PLURAL }),
       ],
     ];
-    this.clean(cells, rows);
-    if (cells.length > 0) {
-      const nomSg = cells[0][0];
-      return this.build(nomSg, columns, rows, cells);
+    this.clean(cells);
+    if (cells.length > 1) {
+      const nomSg = cells[1][1];
+      return this.build(nomSg, cells);
     }
   }
 }
 
 class SerboCroatian extends TableGenerator {
-  buildVerbTable(inf, term) {
+  processVerb(inf, term) {
     const cyr = this.isCyrillic(term);
     const mt = { tense: PRESENT1 };
-    const columns = [ 'ja', 'ti', 'on/ona/ono', 'mi', 'vi', 'oni/one/ona' ].map(s => cyr ? this.toCyrillic(s) : s);
-    const rows = null;
     const cells = [
+      this.headers([ 'ja', 'ti', 'on/ona/ono', 'mi', 'vi', 'oni/one/ona' ], cyr),
       [
         this.find(inf, { person: FIRST,  number: SINGULAR, ...mt }, cyr),
         this.find(inf, { person: SECOND, number: SINGULAR, ...mt }, cyr),
@@ -236,19 +304,19 @@ class SerboCroatian extends TableGenerator {
         this.find(inf, { person: THIRD,  number: PLURAL, ...mt }, cyr),
       ]
     ];
-    const infinitive = this.find(inf, { person: undefined,  number: undefined, mood: undefined, tense: undefined }, cyr);
+    const infinitive = this.find(inf, { person: undefined,  number: undefined, tense: undefined }, cyr);
     this.clean(cells);
-    if (infinitive && cells.length > 0) {
-      return this.build(infinitive, columns, rows, cells);
+    if (infinitive && cells.length > 1) {
+      return this.build(infinitive, cells);
     }
   }
 
-  buildNounTable(inf, term) {
+  processNoun(inf, term) {
     const cyr = this.isCyrillic(term);
-    const columns = [ l('nominative'), l('accusative'), l('genitive'), l('dative'), l('instrumental'), l('locative') ];
-    const rows = [ l('singular'), l('plural') ];
     const cells = [
+      this.headers([ '', l('nominative'), l('accusative'), l('genitive'), l('dative'), l('instrumental'), l('locative'), l('vocative') ]),
       [
+        this.header(l('singular')),
         this.find(inf, { grammatical_case: NOMINATIVE,  number: SINGULAR }, cyr),
         this.find(inf, { grammatical_case: ACCUSATIVE,  number: SINGULAR }, cyr),
         this.find(inf, { grammatical_case: GENITIVE,  number: SINGULAR }, cyr),
@@ -258,6 +326,7 @@ class SerboCroatian extends TableGenerator {
         this.find(inf, { grammatical_case: VOCATIVE,  number: SINGULAR }, cyr),
       ],
       [
+        this.header(l('plural')),
         this.find(inf, { grammatical_case: NOMINATIVE,  number: PLURAL }, cyr),
         this.find(inf, { grammatical_case: ACCUSATIVE,  number: PLURAL }, cyr),
         this.find(inf, { grammatical_case: GENITIVE,  number: PLURAL }, cyr),
@@ -267,19 +336,19 @@ class SerboCroatian extends TableGenerator {
         this.find(inf, { grammatical_case: VOCATIVE,  number: PLURAL }, cyr),
       ],
     ];
-    this.clean(cells, rows);
-    if (cells.length > 0) {
-      const nomSg = cells[0][0];
-      return this.build(nomSg, columns, rows, cells);
+    this.clean(cells);
+    if (cells.length > 1) {
+      const nomSg = cells[1][1];
+      return this.build(nomSg, cells);
     }
   }
 
-  buildAdjectiveTable(inf, term) {
+  processAdjective(inf, term) {
     const cyr = this.isCyrillic(term);
-    const columns = [ l('nominative'), l('accusative'), l('genitive'), l('dative'), l('instrumental'), l('locative') ];
-    const rows = [ l('masculine'), l('feminine'), l('neuter'), l('plural') ];
     const cells = [
+      this.headers([ '', l('nominative'), l('accusative'), l('genitive'), l('dative'), l('instrumental'), l('locative') ], cyr),
       [
+        this.header(l('masculine')),
         this.find(inf, { grammatical_case: NOMINATIVE,  number: SINGULAR, gender: MASCULINE }, cyr),
         this.find(inf, { grammatical_case: ACCUSATIVE,  number: SINGULAR, gender: MASCULINE }, cyr),
         this.find(inf, { grammatical_case: GENITIVE,  number: SINGULAR, gender: MASCULINE }, cyr),
@@ -288,6 +357,7 @@ class SerboCroatian extends TableGenerator {
         this.find(inf, { grammatical_case: LOCATIVE,  number: SINGULAR, gender: MASCULINE }, cyr),
       ],
       [
+        this.header(l('feminine')),
         this.find(inf, { grammatical_case: NOMINATIVE,  number: SINGULAR, gender: FEMININE }, cyr),
         this.find(inf, { grammatical_case: ACCUSATIVE,  number: SINGULAR, gender: FEMININE }, cyr),
         this.find(inf, { grammatical_case: GENITIVE,  number: SINGULAR, gender: FEMININE }, cyr),
@@ -296,6 +366,7 @@ class SerboCroatian extends TableGenerator {
         this.find(inf, { grammatical_case: LOCATIVE,  number: SINGULAR, gender: FEMININE }, cyr),
       ],
       [
+        this.header(l('neuter')),
         this.find(inf, { grammatical_case: NOMINATIVE,  number: SINGULAR, gender: NEUTER }, cyr),
         this.find(inf, { grammatical_case: ACCUSATIVE,  number: SINGULAR, gender: NEUTER }, cyr),
         this.find(inf, { grammatical_case: GENITIVE,  number: SINGULAR, gender: NEUTER }, cyr),
@@ -304,6 +375,7 @@ class SerboCroatian extends TableGenerator {
         this.find(inf, { grammatical_case: LOCATIVE,  number: SINGULAR, gender: NEUTER }, cyr),
       ],
       [
+        this.header(l('plural')),
         this.find(inf, { grammatical_case: NOMINATIVE,  number: PLURAL }, cyr),
         this.find(inf, { grammatical_case: ACCUSATIVE,  number: PLURAL }, cyr),
         this.find(inf, { grammatical_case: GENITIVE,  number: PLURAL }, cyr),
@@ -312,16 +384,23 @@ class SerboCroatian extends TableGenerator {
         this.find(inf, { grammatical_case: LOCATIVE,  number: PLURAL }, cyr),
       ],
     ];
-    this.clean(cells, rows);
+    this.clean(cells);
     if (cells.length > 0) {
-      const nomSg = cells[0][0];
-      return this.build(nomSg, columns, rows, cells);
+      const nomSg = cells[1][1];
+      return this.build(nomSg, cells);
     }
   }
 
   find(inflections, criteria, cyr) {
     const s = super.find(inflections, criteria);
     return (cyr) ? this.toCyrillic(s) : s;
+  }
+
+  headers(labels, cyr = false) {
+    if (cyr) {
+      labels = labels.map(l => this.toCyrillic(l));
+    }
+    return super.headers(labels);
   }
 
   isCyrillic(s) {
@@ -359,11 +438,10 @@ class SerboCroatian extends TableGenerator {
 }
 
 class Bulgarian extends TableGenerator {
-  buildVerbTable(inf) {
+  processVerb(inf) {
     const mt = { tense: PRESENT2 };
-    const columns = [ 'аз', 'ти', 'той/тя/то', 'ние', 'вие', 'те' ];
-    const rows = null;
     const cells = [
+      this.headers([ 'аз', 'ти', 'той/тя/то', 'ние', 'вие', 'те' ]),
       [
         this.find(inf, { person: FIRST,  number: SINGULAR, ...mt }),
         this.find(inf, { person: SECOND, number: SINGULAR, ...mt }),
@@ -373,20 +451,19 @@ class Bulgarian extends TableGenerator {
         this.find(inf, { person: THIRD,  number: PLURAL, ...mt }),
       ]
     ];
-    const firstPerSg = cells[0][0];
+    const firstPerSg = cells[1][0];
     this.clean(cells);
-    if (firstPerSg && cells.length > 0) {
-      return this.build(firstPerSg, columns, rows, cells);
+    if (firstPerSg && cells.length > 1) {
+      return this.build(firstPerSg, cells);
     }
   }
 }
 
 class Macedonian extends TableGenerator {
-  buildVerbTable(inf) {
+  processVerb(inf) {
     const mt = { tense: PRESENT2 };
-    const columns = [ 'јас', 'ти', 'той/таа/тоа', 'ние', 'вие', 'тие' ];
-    const rows = null;
     const cells = [
+      this.headers([ 'јас', 'ти', 'той/таа/тоа', 'ние', 'вие', 'тие' ]),
       [
         this.find(inf, { person: FIRST,  number: SINGULAR, ...mt }),
         this.find(inf, { person: SECOND, number: SINGULAR, ...mt }),
@@ -396,20 +473,19 @@ class Macedonian extends TableGenerator {
         this.find(inf, { person: THIRD,  number: PLURAL, ...mt }),
       ]
     ];
-    const thirdPerSg = cells[0][2];
+    const thirdPerSg = cells[1][2];
     this.clean(cells);
-    if (thirdPerSg && cells.length > 0) {
-      return this.build(thirdPerSg, columns, rows, cells);
+    if (thirdPerSg && cells.length > 1) {
+      return this.build(thirdPerSg, cells);
     }
   }
 }
 
 class Russian extends TableGenerator {
-  buildVerbTable(inf) {
+  processVerb(inf) {
     const mt = { mood: INDICATIVE, tense: PRESENT2 };
-    const columns = [ 'я', 'ты', 'он/она/оно', 'мы', 'вы', 'они' ];
-    const rows = null;
     const cells = [
+      this.headers([ 'я', 'ты', 'он/она/оно', 'мы', 'вы', 'они' ]),
       [
         this.find(inf, { person: FIRST,  number: SINGULAR, ...mt }),
         this.find(inf, { person: SECOND, number: SINGULAR, ...mt }),
@@ -421,16 +497,16 @@ class Russian extends TableGenerator {
     ];
     const infinitive = this.find(inf, { person: undefined,  number: undefined, mood: undefined, tense: undefined });
     this.clean(cells);
-    if (infinitive && cells.length > 0) {
-      return this.build(infinitive, columns, rows, cells);
+    if (infinitive && cells.length > 1) {
+      return this.build(infinitive, cells);
     }
   }
 
-  buildNounTable(inf) {
-    const columns = [ l('nominative'), l('accusative'), l('genitive'), l('dative'), l('instrumental'), l('prepositional') ];
-    const rows = [ l('singular'), l('plural') ];
+  processNoun(inf) {
     const cells = [
+      this.headers([ '', l('nominative'), l('accusative'), l('genitive'), l('dative'), l('instrumental'), l('prepositional') ]),
       [
+        this.header(l('singular')),
         this.find(inf, { grammatical_case: NOMINATIVE,  number: SINGULAR }),
         this.find(inf, { grammatical_case: ACCUSATIVE,  number: SINGULAR }),
         this.find(inf, { grammatical_case: GENITIVE,  number: SINGULAR }),
@@ -439,6 +515,7 @@ class Russian extends TableGenerator {
         this.find(inf, { grammatical_case: PREPOSITIONAL,  number: SINGULAR }),
       ],
       [
+        this.header(l('plural')),
         this.find(inf, { grammatical_case: NOMINATIVE,  number: PLURAL }),
         this.find(inf, { grammatical_case: ACCUSATIVE,  number: PLURAL }),
         this.find(inf, { grammatical_case: GENITIVE,  number: PLURAL }),
@@ -447,18 +524,18 @@ class Russian extends TableGenerator {
         this.find(inf, { grammatical_case: PREPOSITIONAL,  number: PLURAL }),
       ],
     ];
-    this.clean(cells, rows);
-    if (cells.length > 0) {
-      const nomSg = cells[0][0];
-      return this.build(nomSg, columns, rows, cells);
+    this.clean(cells);
+    if (cells.length > 1) {
+      const nomSg = cells[1][1];
+      return this.build(nomSg, cells);
     }
   }
 
-  buildAdjectiveTable(inf) {
-    const columns = [ l('nominative'), l('accusative'), l('genitive'), l('dative'), l('instrumental'), l('prepositional') ];
-    const rows = [ l('masculine'), l('feminine'), l('neuter'), l('plural') ];
+  processAdjective(inf) {
     const cells = [
+      this.headers([ '', l('nominative'), l('accusative'), l('genitive'), l('dative'), l('instrumental'), l('prepositional') ]),
       [
+        this.header(l('masculine')),
         this.find(inf, { grammatical_case: NOMINATIVE,  number: SINGULAR, gender: MASCULINE }),
         this.find(inf, { grammatical_case: ACCUSATIVE,  number: SINGULAR, gender: MASCULINE }),
         this.find(inf, { grammatical_case: GENITIVE,  number: SINGULAR, gender: MASCULINE }),
@@ -467,6 +544,7 @@ class Russian extends TableGenerator {
         this.find(inf, { grammatical_case: PREPOSITIONAL,  number: SINGULAR, gender: MASCULINE }),
       ],
       [
+        this.header(l('feminine')),
         this.find(inf, { grammatical_case: NOMINATIVE,  number: SINGULAR, gender: FEMININE }),
         this.find(inf, { grammatical_case: ACCUSATIVE,  number: SINGULAR, gender: FEMININE }),
         this.find(inf, { grammatical_case: GENITIVE,  number: SINGULAR, gender: FEMININE }),
@@ -475,6 +553,7 @@ class Russian extends TableGenerator {
         this.find(inf, { grammatical_case: PREPOSITIONAL,  number: SINGULAR, gender: FEMININE }),
       ],
       [
+        this.header(l('neuter')),
         this.find(inf, { grammatical_case: NOMINATIVE,  number: SINGULAR, gender: NEUTER }),
         this.find(inf, { grammatical_case: ACCUSATIVE,  number: SINGULAR, gender: NEUTER }),
         this.find(inf, { grammatical_case: GENITIVE,  number: SINGULAR, gender: NEUTER }),
@@ -483,6 +562,7 @@ class Russian extends TableGenerator {
         this.find(inf, { grammatical_case: PREPOSITIONAL,  number: SINGULAR, gender: NEUTER }),
       ],
       [
+        this.header(l('plural')),
         this.find(inf, { grammatical_case: NOMINATIVE,  number: PLURAL }),
         this.find(inf, { grammatical_case: ACCUSATIVE,  number: PLURAL }),
         this.find(inf, { grammatical_case: GENITIVE,  number: PLURAL }),
@@ -491,20 +571,19 @@ class Russian extends TableGenerator {
         this.find(inf, { grammatical_case: PREPOSITIONAL,  number: PLURAL }),
       ],
     ];
-    this.clean(cells, rows);
-    if (cells.length > 0) {
-      const nomSg = cells[0][0];
-      return this.build(nomSg, columns, rows, cells);
+    this.clean(cells);
+    if (cells.length > 1) {
+      const nomSg = cells[1][1];
+      return this.build(nomSg, cells);
     }
   }
 }
 
 class Belarusian extends Russian {
-  buildVerbTable(inf) {
+  processVerb(inf) {
     const mt = { mood: INDICATIVE, tense: PRESENT2 };
-    const columns = [ 'я', 'ты', 'ён/яна/яно', 'мы', 'вы', 'яны' ];
-    const rows = null;
     const cells = [
+      this.headers([ 'я', 'ты', 'ён/яна/яно', 'мы', 'вы', 'яны' ]),
       [
         this.find(inf, { person: FIRST,  number: SINGULAR, ...mt }),
         this.find(inf, { person: SECOND, number: SINGULAR, ...mt }),
@@ -516,18 +595,17 @@ class Belarusian extends Russian {
     ];
     const infinitive = this.find(inf, { person: undefined,  number: undefined, mood: undefined, tense: undefined });
     this.clean(cells);
-    if (infinitive && cells.length > 0) {
-      return this.build(infinitive, columns, rows, cells);
+    if (infinitive && cells.length > 1) {
+      return this.build(infinitive, cells);
     }
   }
 }
 
 class Ukrainian extends TableGenerator {
-  buildVerbTable(inf) {
+  processVerb(inf) {
     const mt = { mood: INDICATIVE, tense: PRESENT2 };
-    const columns = [ 'я', 'ти', 'він/вона/воно', 'ми', 'ви', 'вони' ];
-    const rows = null;
     const cells = [
+      this.headers([ 'я', 'ти', 'він/вона/воно', 'ми', 'ви', 'вони' ]),
       [
         this.find(inf, { person: FIRST,  number: SINGULAR, ...mt }),
         this.find(inf, { person: SECOND, number: SINGULAR, ...mt }),
@@ -539,16 +617,16 @@ class Ukrainian extends TableGenerator {
     ];
     const infinitive = this.find(inf, { person: undefined,  number: undefined, mood: undefined, tense: undefined });
     this.clean(cells);
-    if (infinitive && cells.length > 0) {
-      return this.build(infinitive, columns, rows, cells);
+    if (infinitive && cells.length > 1) {
+      return this.build(infinitive, cells);
     }
   }
 
-  buildNounTable(inf) {
-    const columns = [ l('nominative'), l('accusative'), l('genitive'), l('dative'), l('instrumental'), l('locative'), l('vocative') ];
-    const rows = [ l('singular'), l('plural') ];
+  processNoun(inf) {
     const cells = [
+      this.headers([ '', l('nominative'), l('accusative'), l('genitive'), l('dative'), l('instrumental'), l('locative'), l('vocative') ]),
       [
+        this.header(l('singular')),
         this.find(inf, { grammatical_case: NOMINATIVE,  number: SINGULAR }),
         this.find(inf, { grammatical_case: ACCUSATIVE,  number: SINGULAR }),
         this.find(inf, { grammatical_case: GENITIVE,  number: SINGULAR }),
@@ -558,6 +636,7 @@ class Ukrainian extends TableGenerator {
         this.find(inf, { grammatical_case: VOCATIVE,  number: SINGULAR }),
       ],
       [
+        this.header(l('plural')),
         this.find(inf, { grammatical_case: NOMINATIVE,  number: PLURAL }),
         this.find(inf, { grammatical_case: ACCUSATIVE,  number: PLURAL }),
         this.find(inf, { grammatical_case: GENITIVE,  number: PLURAL }),
@@ -567,18 +646,18 @@ class Ukrainian extends TableGenerator {
         this.find(inf, { grammatical_case: VOCATIVE,  number: PLURAL }),
       ],
     ];
-    this.clean(cells, rows);
-    if (cells.length > 0) {
-      const nomSg = cells[0][0];
-      return this.build(nomSg, columns, rows, cells);
+    this.clean(cells);
+    if (cells.length > 1) {
+      const nomSg = cells[1][1];
+      return this.build(nomSg, cells);
     }
   }
 
-  buildAdjectiveTable(inf) {
-    const columns = [ l('nominative'), l('accusative'), l('genitive'), l('dative'), l('instrumental'), l('locative') ];
-    const rows = [ l('masculine'), l('feminine'), l('neuter'), l('plural') ];
+  processAdjective(inf) {
     const cells = [
+      this.headers([ '', l('nominative'), l('accusative'), l('genitive'), l('dative'), l('instrumental'), l('locative') ]),
       [
+        this.header(l('masculine')),
         this.find(inf, { grammatical_case: NOMINATIVE,  number: SINGULAR, gender: MASCULINE }),
         this.find(inf, { grammatical_case: ACCUSATIVE,  number: SINGULAR, gender: MASCULINE }),
         this.find(inf, { grammatical_case: GENITIVE,  number: SINGULAR, gender: MASCULINE }),
@@ -587,6 +666,7 @@ class Ukrainian extends TableGenerator {
         this.find(inf, { grammatical_case: LOCATIVE,  number: SINGULAR, gender: MASCULINE }),
       ],
       [
+        this.header(l('feminine')),
         this.find(inf, { grammatical_case: NOMINATIVE,  number: SINGULAR, gender: FEMININE }),
         this.find(inf, { grammatical_case: ACCUSATIVE,  number: SINGULAR, gender: FEMININE }),
         this.find(inf, { grammatical_case: GENITIVE,  number: SINGULAR, gender: FEMININE }),
@@ -595,6 +675,7 @@ class Ukrainian extends TableGenerator {
         this.find(inf, { grammatical_case: LOCATIVE,  number: SINGULAR, gender: FEMININE }),
       ],
       [
+        this.header(l('neuter')),
         this.find(inf, { grammatical_case: NOMINATIVE,  number: SINGULAR, gender: NEUTER }),
         this.find(inf, { grammatical_case: ACCUSATIVE,  number: SINGULAR, gender: NEUTER }),
         this.find(inf, { grammatical_case: GENITIVE,  number: SINGULAR, gender: NEUTER }),
@@ -603,6 +684,7 @@ class Ukrainian extends TableGenerator {
         this.find(inf, { grammatical_case: LOCATIVE,  number: SINGULAR, gender: NEUTER }),
       ],
       [
+        this.header(l('plural')),
         this.find(inf, { grammatical_case: NOMINATIVE,  number: PLURAL }),
         this.find(inf, { grammatical_case: ACCUSATIVE,  number: PLURAL }),
         this.find(inf, { grammatical_case: GENITIVE,  number: PLURAL }),
@@ -611,10 +693,10 @@ class Ukrainian extends TableGenerator {
         this.find(inf, { grammatical_case: LOCATIVE,  number: PLURAL }),
       ],
     ];
-    this.clean(cells, rows);
-    if (cells.length > 0) {
-      const nomSg = cells[0][0];
-      return this.build(nomSg, columns, rows, cells);
+    this.clean(cells);
+    if (cells.length > 1) {
+      const nomSg = cells[1][1];
+      return this.build(nomSg, cells);
     }
   }
 }

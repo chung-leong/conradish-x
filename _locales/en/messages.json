@@ -429,6 +429,10 @@
     "message": "Delete",
     "description": "Label for delete button in document list"
   },
+  "create_inflection_tables": {
+    "message": "Create inflection tables",
+    "description": "Label for create inflection tables button in document list"
+  },
   "cancel": {
     "message": "Cancel",
     "description": "Label for x button used to clear selection in document list"

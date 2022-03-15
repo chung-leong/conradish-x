@@ -3,14 +3,15 @@ import { e, attachCustomCheckboxHandlers, attachRippleEffectHandlers, separateWo
 import { setWindowName, openPage } from './lib/navigation.js';
 import { createTopBar, attachShadowHandlers } from './lib/top-bar.js';
 import { l, lc, detectDirection, capitalize } from './lib/i18n.js';
-import { getInflectionTables } from './lib/inflection.js';
+import { getInflectionTables, mergeInflectionTables } from './lib/inflection.js';
 
 const listContainer = document.getElementById('list-container');
 const toolbarContainer = document.getElementById('toolbar-container');
 const cards = [];
 let kebabMenu;
-let selection;
+let selection = [];
 let selectedItem;
+let selectedInflectionTables;
 let searching = false;
 
 async function start() {
@@ -51,6 +52,8 @@ function createSearchToolbar() {
   createTopBar('toolbar-search', { left: l('documents'), center: searchElement });
 }
 
+let createInflectionTableButton;
+
 function createCommandToolbar() {
   const xButtonElement = e('SPAN', { className: 'x-button', title: l('cancel') });
   xButtonElement.addEventListener('click', handleCancelClick);
@@ -58,7 +61,10 @@ function createCommandToolbar() {
   const centerLeftElement = e('DIV', { id: 'toolbar-commands-left' }, [ xButtonElement, spanElement ]);
   const deleteButtonElement = e('BUTTON', {}, l('delete'));
   deleteButtonElement.addEventListener('click', handleDeleteClick);
-  const centerRightElement = e('DIV', { id: 'toolbar-commands-lright' }, [ deleteButtonElement ]);
+  const createButtonElement = e('BUTTON', {}, l('create_inflection_tables'))
+  createButtonElement.addEventListener('click', handleCreateInflectionClick);
+  createInflectionTableButton = createButtonElement;
+  const centerRightElement = e('DIV', { id: 'toolbar-commands-right' }, [ createButtonElement, deleteButtonElement ]);
   createTopBar('toolbar-commands', { center: [ centerLeftElement, centerRightElement ] });
 }
 
@@ -224,6 +230,22 @@ function updateCards() {
 function updateSelection() {
   const checkboxes = getSelectedCheckboxes();
   selection = checkboxes.map(cb => cb.parentNode.dataset.key);
+  const items = getItems(selection);
+  const withInflection = {};
+  const tableLists = [];
+  for (const { lang, inflectionTables } of items) {
+    if (inflectionTables) {
+      withInflection[lang] = true;
+      tableLists.push(inflectionTables)
+    }
+  }
+  const langs = Object.keys(withInflection);
+  if (langs.length === 1) {
+    selectedInflectionTables = mergeInflectionTables(tableLists, langs[0])
+  } else {
+    selectedInflectionTables = null;
+  }
+  createInflectionTableButton.classList.toggle('hidden', !selectedInflectionTables);
 }
 
 function updateToolbar() {
@@ -288,6 +310,18 @@ function removeItems(keys) {
     updateCards();
     updateSelection();
   }
+}
+
+function getItems(keys) {
+  const list = [];
+  for (const card of cards) {
+    for (const item of card.items) {
+      if (keys.includes(item.key)) {
+        list.push(item);
+      }
+    }
+  }
+  return list;
 }
 
 function toLower(s, lang) {
@@ -429,6 +463,10 @@ async function handleDeleteClick(evt) {
   updateToolbar();
   updateCardTitles();
   await deleteObjects(keys);
+}
+
+function handleCreateInflectionClick(evt) {
+  console.log(selectedInflectionTables);
 }
 
 async function handleCreate(evt) {
