@@ -147,7 +147,7 @@ async function createCards() {
 async function loadItem(item) {
   try {
     const doc = await loadObject(item.key);
-    const { url, title, lang } = doc;
+    const { url, title, lang, type } = doc;
     await adjustTextDirection(item.titleElement, title);
     item.titleElement.textContent = title;
     item.titleElement.title = url || '';
@@ -156,6 +156,9 @@ async function loadItem(item) {
     item.title = title;
     item.searchStrings = findSearchStrings(doc);
     item.inflectionTables = getInflectionTables(doc);
+    if (type) {
+      item.titleElement.classList.add(type);
+    }
   } catch (err) {
   }
 }

@@ -24,6 +24,10 @@
   background-image: url('../img/document.svg');
 }
 
+.title.inflection {
+  background-image: url('../img/document-tbl.svg');
+}
+
 .title.rtl {
   direction: rtl;
 }
