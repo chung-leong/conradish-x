@@ -142,7 +142,7 @@ let lastCheckbox;
 function toggleCheckbox(checkbox, shiftKey) {
   let range;
   if (shiftKey) {
-    const checkboxes = [ ...document.getElementsByClassName('checkbox') ];
+    const checkboxes = [ ...document.getElementsByClassName('checkbox') ].filter(c => !c.classList.contains('disabled'));
     const index = checkboxes.indexOf(checkbox);
     const lastIndex = checkboxes.indexOf(lastCheckbox);
     if (index !== -1 && lastIndex !== -1 && index !== lastIndex) {
@@ -166,9 +166,12 @@ function toggleCheckbox(checkbox, shiftKey) {
 
 function handleCustomCheckboxClick(evt) {
   const { target, shiftKey } = evt;
-  if (target.classList.contains('checkbox')) {
-    toggleCheckbox(target, shiftKey);
-    setTimeout(() => target.classList.add('clicked'), 200);
+  const { classList } = target;
+  if (classList.contains('checkbox')) {
+    if (!classList.contains('disabled')) {
+      toggleCheckbox(target, shiftKey);
+      setTimeout(() => target.classList.add('clicked'), 200);
+    }
   } else if (target.tagName === 'LABEL') {
     // focus the checkbox and toggle it
     const [ checkbox ] = target.parentNode.getElementsByClassName('checkbox');
@@ -182,7 +185,8 @@ function handleCustomCheckboxClick(evt) {
 
 function handleCustomCheckboxKeyPress(evt) {
   const { target, key, shiftKey } = evt;
-  if (target.classList.contains('checkbox')) {
+  const { classList } = target;
+  if (classList.contains('checkbox') && !classList.contains('disabled')) {
     if (key === ' ' || key === 'Enter') {
       toggleCheckbox(target, shiftKey);
       evt.preventDefault();
@@ -192,7 +196,8 @@ function handleCustomCheckboxKeyPress(evt) {
 
 function handleCustomCheckboxKeyDown(evt) {
   const { target, key } = evt;
-  if (target.classList.contains('checkbox')) {
+  const { classList } = target;
+  if (classList.contains('checkbox') && !classList.contains('disabled')) {
     if (key === 'ArrowDown' || key === 'ArrowUp') {
       const checkboxes = [ ...document.getElementsByClassName('checkbox') ];
       const index = checkboxes.indexOf(target);
@@ -202,21 +207,23 @@ function handleCustomCheckboxKeyDown(evt) {
         nextTarget.focus();
       }
     }
-    target.classList.remove('clicked');
+    classList.remove('clicked');
   }
 }
 
 function handleCustomCheckboxFocusIn(evt) {
   const { target } = evt;
-  if (target.classList.contains('checkbox')) {
-    target.classList.remove('clicked');
+  const { classList } = target;
+  if (classList.contains('checkbox')) {
+    classList.remove('clicked');
   }
 }
 
 function handleCustomCheckboxMouseDown(evt) {
   const { target } = evt;
-  if (target.classList.contains('checkbox')) {
-    target.classList.remove('clicked');
+  const { classList } = target;
+  if (classList.contains('checkbox')) {
+    classList.remove('clicked');
   }
 }
 
