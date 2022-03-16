@@ -120,7 +120,16 @@ class TableGenerator {
   find(inflections, criteria) {
     for (const inflection of inflections) {
       const names = Object.keys(criteria);
-      if (names.every(n => inflection[n] === criteria[n])) {
+      const match = (n) => {
+        const value1 = inflection[n];
+        const value2 = criteria[n];
+        if (value2 instanceof Array) {
+          return value2.includes(value1);
+        } else {
+          return value2 === value1;
+        }
+      };
+      if (names.every(match)) {
         return inflection.written_form;
       }
     }
@@ -164,8 +173,8 @@ class TableGenerator {
 }
 
 // tense
-const PRESENT1 = 1;
-const PRESENT2 = 5;
+const FUTURE = 1;
+const PRESENT = 5;
 
 // mood
 const INDICATIVE = 3;
@@ -196,8 +205,8 @@ const VOCATIVE = 20;
 
 class Slovak extends TableGenerator {
   processVerb(inf) {
-    const sg = (person) => this.find(inf, { tense: PRESENT1, number: SINGULAR, person });
-    const pl = (person) => this.find(inf, { tense: PRESENT1, number: PLURAL, person });
+    const sg = (person) => this.find(inf, { tense: [ PRESENT, FUTURE ], number: SINGULAR, person });
+    const pl = (person) => this.find(inf, { tense: [ PRESENT, FUTURE ], number: PLURAL, person });
     const h = (name, col) => this.header(l(name), col);
     const p = (text) => this.header(text);
     const cells = [
@@ -256,8 +265,8 @@ class Slovak extends TableGenerator {
 class SerboCroatian extends TableGenerator {
   processVerb(inf, term) {
     const cyr = this.isCyrillic(term);
-    const sg = (person) => this.find(inf, { tense: PRESENT1, number: SINGULAR, person }, cyr);
-    const pl = (person) => this.find(inf, { tense: PRESENT1, number: PLURAL, person }, cyr);
+    const sg = (person) => this.find(inf, { tense: [ PRESENT, FUTURE ], number: SINGULAR, person }, cyr);
+    const pl = (person) => this.find(inf, { tense: [ PRESENT, FUTURE ], number: PLURAL, person }, cyr);
     const h = (name, col) => this.header(l(name), col);
     const p = (text) => this.header(text);
     const cells = [
@@ -356,8 +365,8 @@ class SerboCroatian extends TableGenerator {
 
 class Bulgarian extends TableGenerator {
   processVerb(inf) {
-    const sg = (person) => this.find(inf, { tense: PRESENT2, number: SINGULAR, person });
-    const pl = (person) => this.find(inf, { tense: PRESENT2, number: PLURAL, person });
+    const sg = (person) => this.find(inf, { tense: [ PRESENT, FUTURE ], number: SINGULAR, person });
+    const pl = (person) => this.find(inf, { tense: [ PRESENT, FUTURE ], number: PLURAL, person });
     const h = (name, col) => this.header(l(name), col);
     const p = (text) => this.header(text);
     const cells = [
@@ -375,8 +384,8 @@ class Bulgarian extends TableGenerator {
 
 class Macedonian extends TableGenerator {
   processVerb(inf) {
-    const sg = (person) => this.find(inf, { tense: PRESENT2, number: SINGULAR, person });
-    const pl = (person) => this.find(inf, { tense: PRESENT2, number: PLURAL, person });
+    const sg = (person) => this.find(inf, { tense: [ PRESENT, FUTURE ], number: SINGULAR, person });
+    const pl = (person) => this.find(inf, { tense: [ PRESENT, FUTURE ], number: PLURAL, person });
     const h = (name, col) => this.header(l(name), col);
     const p = (text) => this.header(text);
     const cells = [
@@ -394,8 +403,8 @@ class Macedonian extends TableGenerator {
 
 class Russian extends TableGenerator {
   processVerb(inf) {
-    const sg = (person) => this.find(inf, { mood: INDICATIVE, tense: PRESENT2, number: SINGULAR, person });
-    const pl = (person) => this.find(inf, { mood: INDICATIVE, tense: PRESENT2, number: PLURAL, person });
+    const sg = (person) => this.find(inf, { mood: INDICATIVE, tense: [ PRESENT, FUTURE ], number: SINGULAR, person });
+    const pl = (person) => this.find(inf, { mood: INDICATIVE, tense: [ PRESENT, FUTURE ], number: PLURAL, person });
     const h = (name, col) => this.header(l(name), col);
     const p = (text) => this.header(text);
     const cells = [
@@ -405,7 +414,9 @@ class Russian extends TableGenerator {
       [ p('он/она/оно'), sg(THIRD), p('они'), pl(THIRD) ],
     ];
     const infinitive = this.find(inf, { person: undefined,  number: undefined, mood: undefined, tense: undefined });
-    console.log(infinitive, inf);
+    if (cells.flat().some(c => c === '-')) {
+      console.log(infinitive, cells, inf)
+    }
     if (infinitive !== '-') {
       return this.build(infinitive, cells);
     }
@@ -454,8 +465,8 @@ class Russian extends TableGenerator {
 
 class Belarusian extends Russian {
   processVerb(inf) {
-    const sg = (person) => this.find(inf, { mood: INDICATIVE, tense: PRESENT2, number: SINGULAR, person });
-    const pl = (person) => this.find(inf, { mood: INDICATIVE, tense: PRESENT2, number: PLURAL, person });
+    const sg = (person) => this.find(inf, { mood: INDICATIVE, tense: [ PRESENT, FUTURE ], number: SINGULAR, person });
+    const pl = (person) => this.find(inf, { mood: INDICATIVE, tense: [ PRESENT, FUTURE ], number: PLURAL, person });
     const h = (name, col) => this.header(l(name), col);
     const p = (text) => this.header(text);
     const cells = [
@@ -473,8 +484,8 @@ class Belarusian extends Russian {
 
 class Ukrainian extends TableGenerator {
   processVerb(inf) {
-    const sg = (person) => this.find(inf, { mood: INDICATIVE, tense: PRESENT2, number: SINGULAR, person });
-    const pl = (person) => this.find(inf, { mood: INDICATIVE, tense: PRESENT2, number: PLURAL, person });
+    const sg = (person) => this.find(inf, { mood: INDICATIVE, tense: [ PRESENT, FUTURE ], number: SINGULAR, person });
+    const pl = (person) => this.find(inf, { mood: INDICATIVE, tense: [ PRESENT, FUTURE ], number: PLURAL, person });
     const h = (name, col) => this.header(l(name), col);
     const p = (text) => this.header(text);
     const cells = [
