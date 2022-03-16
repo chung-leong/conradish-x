@@ -453,6 +453,30 @@
     "message": "Перейти на оригінальну сторінку",
     "description": "Label for menu item in document list"
   },
+  "create_inflection_tables": {
+    "message": "Створіть таблиці словозміни",
+    "description": "Label for create inflection tables button in document list"
+  },
+  "inflection_tables": {
+    "message": "Таблиці словозміни",
+    "description": "Title of dialog box"
+  },
+  "include_nouns": {
+    "message": "Включіть іменники",
+    "description": "Label of checkbox in dialog box"
+  },
+  "include_adjectives": {
+    "message": "Включіть прикметники",
+    "description": "Label of checkbox in dialog box"
+  },
+  "include_verbs": {
+    "message": "Включіть дієслова",
+    "description": "Label of checkbox in dialog box"
+  },
+  "create": {
+    "message": "Створіть",
+    "description": "Label for button in dialog box"
+  },
   "nominative": {
     "message": "називний",
     "description": "Column heading for inflection table"

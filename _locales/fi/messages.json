@@ -433,6 +433,30 @@
     "message": "Siirry alkuperäiselle sivulle",
     "description": "Label for menu item in document list"
   },
+  "create_inflection_tables": {
+    "message": "Luo taivutustaulukoita",
+    "description": "Label for create inflection tables button in document list"
+  },
+  "inflection_tables": {
+    "message": "Taivutustaulukot",
+    "description": "Title of dialog box"
+  },
+  "include_nouns": {
+    "message": "Sisällytä substantiivit",
+    "description": "Label of checkbox in dialog box"
+  },
+  "include_adjectives": {
+    "message": "Sisällytä adjektiivit",
+    "description": "Label of checkbox in dialog box"
+  },
+  "include_verbs": {
+    "message": "Luo",
+    "description": "Label of checkbox in dialog box"
+  },
+  "create": {
+    "message": "Create",
+    "description": "Label for button in dialog box"
+  },
   "nominative": {
     "message": "nominatiivi",
     "description": "Column heading for inflection table"

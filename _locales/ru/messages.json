@@ -453,6 +453,30 @@
     "message": "Перейти на исходную страницу",
     "description": "Label for menu item in document list"
   },
+  "create_inflection_tables": {
+    "message": "Создать таблицы словоизменения",
+    "description": "Label for create inflection tables button in document list"
+  },
+  "inflection_tables": {
+    "message": "Таблицы словоизменения",
+    "description": "Title of dialog box"
+  },
+  "include_nouns": {
+    "message": "Включить существительные",
+    "description": "Label of checkbox in dialog box"
+  },
+  "include_adjectives": {
+    "message": "Включить прилагательные",
+    "description": "Label of checkbox in dialog box"
+  },
+  "include_verbs": {
+    "message": "Включить глаголы",
+    "description": "Label of checkbox in dialog box"
+  },
+  "create": {
+    "message": "Создать",
+    "description": "Label for button in dialog box"
+  },
   "nominative": {
     "message": "именительный",
     "description": "Column heading for inflection table"

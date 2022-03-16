@@ -433,6 +433,30 @@
     "message": "转到原始页面",
     "description": "Label for menu item in document list"
   },
+  "create_inflection_tables": {
+    "message": "创建词形变形表",
+    "description": "Label for create inflection tables button in document list"
+  },
+  "inflection_tables": {
+    "message": "词形变形表",
+    "description": "Title of dialog box"
+  },
+  "include_nouns": {
+    "message": "包括名词",
+    "description": "Label of checkbox in dialog box"
+  },
+  "include_adjectives": {
+    "message": "包括形容词",
+    "description": "Label of checkbox in dialog box"
+  },
+  "include_verbs": {
+    "message": "包括动词",
+    "description": "Label of checkbox in dialog box"
+  },
+  "create": {
+    "message": "创建",
+    "description": "Label for button in dialog box"
+  },
   "nominative": {
     "message": "主格",
     "description": "Column heading for inflection table"

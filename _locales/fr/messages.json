@@ -433,6 +433,30 @@
     "message": "Aller à la page d'origine",
     "description": "Label for menu item in document list"
   },
+  "create_inflection_tables": {
+    "message": "Créer des tables d'inflexion",
+    "description": "Label for create inflection tables button in document list"
+  },
+  "inflection_tables": {
+    "message": "Tables de flexion",
+    "description": "Title of dialog box"
+  },
+  "include_nouns": {
+    "message": "Inclure les noms",
+    "description": "Label of checkbox in dialog box"
+  },
+  "include_adjectives": {
+    "message": "Inclure les adjectifs",
+    "description": "Label of checkbox in dialog box"
+  },
+  "include_verbs": {
+    "message": "Inclure les verbes",
+    "description": "Label of checkbox in dialog box"
+  },
+  "create": {
+    "message": "Créer",
+    "description": "Label for button in dialog box"
+  },
   "nominative": {
     "message": "nominatif",
     "description": "Column heading for inflection table"

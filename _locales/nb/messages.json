@@ -433,6 +433,30 @@
     "message": "Gå til originalsiden",
     "description": "Label for menu item in document list"
   },
+  "create_inflection_tables": {
+    "message": "Lag bøyningstabeller",
+    "description": "Label for create inflection tables button in document list"
+  },
+  "inflection_tables": {
+    "message": "Bøyningstabeller",
+    "description": "Title of dialog box"
+  },
+  "include_nouns": {
+    "message": "Ta med substantiv",
+    "description": "Label of checkbox in dialog box"
+  },
+  "include_adjectives": {
+    "message": "Ta med adjektiver",
+    "description": "Label of checkbox in dialog box"
+  },
+  "include_verbs": {
+    "message": "Ta med verb",
+    "description": "Label of checkbox in dialog box"
+  },
+  "create": {
+    "message": "Lag",
+    "description": "Label for button in dialog box"
+  },
   "nominative": {
     "message": "nominativ",
     "description": "Column heading for inflection table"

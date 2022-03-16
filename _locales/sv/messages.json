@@ -433,6 +433,30 @@
     "message": "Gå till originalsidan",
     "description": "Label for menu item in document list"
   },
+  "create_inflection_tables": {
+    "message": "Skapa böjningstabeller",
+    "description": "Label for create inflection tables button in document list"
+  },
+  "inflection_tables": {
+    "message": "Böjningstabeller",
+    "description": "Title of dialog box"
+  },
+  "include_nouns": {
+    "message": "Inkludera substantiv",
+    "description": "Label of checkbox in dialog box"
+  },
+  "include_adjectives": {
+    "message": "Inkludera adjektiv",
+    "description": "Label of checkbox in dialog box"
+  },
+  "include_verbs": {
+    "message": "Inkludera verb",
+    "description": "Label of checkbox in dialog box"
+  },
+  "create": {
+    "message": "Skapa",
+    "description": "Label for button in dialog box"
+  },
   "nominative": {
     "message": "nominativ",
     "description": "Column heading for inflection table"

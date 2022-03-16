@@ -433,6 +433,30 @@
     "message": "Accesează pagina originală",
     "description": "Label for menu item in document list"
   },
+  "create_inflection_tables": {
+    "message": "Creează tabele de inflexiune",
+    "description": "Label for create inflection tables button in document list"
+  },
+  "inflection_tables": {
+    "message": "Tabele de inflexiune",
+    "description": "Title of dialog box"
+  },
+  "include_nouns": {
+    "message": "Include substantive",
+    "description": "Label of checkbox in dialog box"
+  },
+  "include_adjectives": {
+    "message": "Include adjective",
+    "description": "Label of checkbox in dialog box"
+  },
+  "include_verbs": {
+    "message": "Include verbe",
+    "description": "Label of checkbox in dialog box"
+  },
+  "create": {
+    "message": "Creează",
+    "description": "Label for button in dialog box"
+  },
   "nominative": {
     "message": "nominativul",
     "description": "Column heading for inflection table"

@@ -433,6 +433,30 @@
     "message": "Gå til den originale side",
     "description": "Label for menu item in document list"
   },
+  "create_inflection_tables": {
+    "message": "Opret bøjningstabeller",
+    "description": "Label for create inflection tables button in document list"
+  },
+  "inflection_tables": {
+    "message": "Bøjningstabeller",
+    "description": "Title of dialog box"
+  },
+  "include_nouns": {
+    "message": "Inkluder navneord",
+    "description": "Label of checkbox in dialog box"
+  },
+  "include_adjectives": {
+    "message": "Inkluder adjektiver",
+    "description": "Label of checkbox in dialog box"
+  },
+  "include_verbs": {
+    "message": "Inkluder verber",
+    "description": "Label of checkbox in dialog box"
+  },
+  "create": {
+    "message": "Opret",
+    "description": "Label for button in dialog box"
+  },
   "nominative": {
     "message": "nominativ",
     "description": "Column heading for inflection table"

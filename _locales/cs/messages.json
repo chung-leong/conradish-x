@@ -453,6 +453,30 @@
     "message": "Přejít na původní stránku",
     "description": "Label for menu item in document list"
   },
+  "create_inflection_tables": {
+    "message": "Vytvořit inflexní tabulky",
+    "description": "Label for create inflection tables button in document list"
+  },
+  "inflection_tables": {
+    "message": "Inflexní tabulky",
+    "description": "Title of dialog box"
+  },
+  "include_nouns": {
+    "message": "Zahrňte podstatná jména",
+    "description": "Label of checkbox in dialog box"
+  },
+  "include_adjectives": {
+    "message": "Zahrňte přídavná jména",
+    "description": "Label of checkbox in dialog box"
+  },
+  "include_verbs": {
+    "message": "Zahrňte slovesa",
+    "description": "Label of checkbox in dialog box"
+  },
+  "create": {
+    "message": "Vytvořit",
+    "description": "Label for button in dialog box"
+  },
   "nominative": {
     "message": "nominativ",
     "description": "Column heading for inflection table"
