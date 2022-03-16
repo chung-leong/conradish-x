@@ -204,10 +204,7 @@ function createFontSelectionCard(fontId, displayName, script) {
 
 function addCheckbox(container, label, checked) {
   const rippleElement = e('SPAN', { className: 'ripple' });
-  const checkboxElement = e('SPAN', {
-     className: 'checkbox',
-     tabIndex: 0
-   }, rippleElement);
+  const checkboxElement = e('SPAN', { className: 'checkbox', tabIndex: 0 }, rippleElement);
   const labelElement = e('LABEL', {}, label);
   const sectionElement = e('SECTION', {}, [ checkboxElement, labelElement ]);
   if (checked) {

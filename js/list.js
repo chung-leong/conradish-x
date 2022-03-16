@@ -3,15 +3,19 @@ import { e, attachCustomCheckboxHandlers, attachRippleEffectHandlers, separateWo
 import { setWindowName, openPage } from './lib/navigation.js';
 import { createTopBar, attachShadowHandlers } from './lib/top-bar.js';
 import { l, lc, detectDirection, capitalize } from './lib/i18n.js';
-import { getInflectionTables, mergeInflectionTables } from './lib/inflection.js';
+import { getInflectionTables, mergeInflectionTables, saveInflectionTables } from './lib/inflection.js';
 
 const listContainer = document.getElementById('list-container');
 const toolbarContainer = document.getElementById('toolbar-container');
+const dialogBoxContainer = document.getElementById('dialog-box-container');
+const dialogBoxTitle = document.getElementById('dialog-box-title');
+const dialogBoxContent = document.getElementById('dialog-box-content');
+
 const cards = [];
 let kebabMenu;
 let selection = [];
 let selectedItem;
-let selectedInflectionTables;
+let selectedInflection;
 let searching = false;
 
 async function start() {
@@ -231,21 +235,20 @@ function updateSelection() {
   const checkboxes = getSelectedCheckboxes();
   selection = checkboxes.map(cb => cb.parentNode.dataset.key);
   const items = getItems(selection);
-  const withInflection = {};
-  const tableLists = [];
-  for (const { lang, inflectionTables } of items) {
-    if (inflectionTables) {
-      withInflection[lang] = true;
-      tableLists.push(inflectionTables)
-    }
+  const langSelected = {};
+  for (const { lang } of items) {
+    langSelected[lang] = true;
   }
-  const langs = Object.keys(withInflection);
+  const langs = Object.keys(langSelected);
   if (langs.length === 1) {
-    selectedInflectionTables = mergeInflectionTables(tableLists, langs[0])
+    const tableLists = items.map(i => i.inflectionTables).filter(t => !!t);
+    const lang = langs[0];
+    const tables = mergeInflectionTables(tableLists, lang);
+    selectedInflection = { tables, lang };
   } else {
-    selectedInflectionTables = null;
+    selectedInflection = null;
   }
-  createInflectionTableButton.classList.toggle('hidden', !selectedInflectionTables);
+  createInflectionTableButton.classList.toggle('hidden', !selectedInflection);
 }
 
 function updateToolbar() {
@@ -258,6 +261,62 @@ function updateToolbar() {
     toolbar.classList.remove('active');
   }
 }
+
+function openInflectionDialogBox() {
+  const selection = [];
+  const { tables, lang } = selectedInflection;
+  [ 'noun', 'adjective', 'verb' ].forEach((type) => {
+    const rippleElement = e('SPAN', { className: 'ripple' });
+    const checkboxElement = e('SPAN', { className: 'checkbox', tabIndex: 0 }, rippleElement);
+    const labelElement = e('LABEL', {}, l(`include_${type}s`));
+    const sectionElement = e('SECTION', {}, [ checkboxElement, labelElement ]);
+    dialogBoxContent.append(sectionElement);
+    const available  = !!tables[type];
+    checkboxElement.classList.toggle('checked', available);
+    checkboxElement.classList.toggle('disabled', !available);
+    labelElement.classList.toggle('disabled', !available);
+    if (available) {
+      selection.push(type);
+    }
+    checkboxElement.addEventListener('change', (evt) => {
+      const { classList } = evt.target;
+      if (classList.contains('checked')) {
+        selection.push(type);
+      } else {
+        const index = selection.indexOf(type);
+        if (index !== -1) {
+          selection.splice(index, 1);
+        }
+      }
+      createButton.disabled = (selection.length === 0);
+    });
+  });
+  const cancelButton = e('BUTTON', {}, l('cancel'));
+  cancelButton.addEventListener('click', (evt) => {
+    closeDialogBox();
+  });
+  const createButton = e('BUTTON', { className: 'default' }, l('create'));
+  createButton.addEventListener('click', async (evt) => {
+    await saveInflectionTables(tables, selection, lang);
+    closeDialogBox();
+  });
+  const buttonContainer = e('DIV', { className: 'button-container' }, [ cancelButton, createButton ]);
+  dialogBoxContent.append(buttonContainer);
+  dialogBoxTitle.append(l('inflection_tables'));
+  dialogBoxContainer.classList.remove('hidden');
+  createButton.focus();
+}
+
+function closeDialogBox() {
+  while(dialogBoxTitle.firstChild) {
+    dialogBoxTitle.firstChild.remove();
+  }
+  while(dialogBoxContent.firstChild) {
+    dialogBoxContent.firstChild.remove();
+  }
+  dialogBoxContainer.classList.add('hidden');
+}
+
 
 function search(query) {
   const searchCard = cards[0];
@@ -466,7 +525,7 @@ async function handleDeleteClick(evt) {
 }
 
 function handleCreateInflectionClick(evt) {
-  console.log(selectedInflectionTables);
+  openInflectionDialogBox();
 }
 
 async function handleCreate(evt) {

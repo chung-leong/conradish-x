@@ -281,7 +281,7 @@ BODY {
 }
 
 #dialog-box-container {
-  display: none;
+  display: flex;
   position: absolute;
   justify-content: center;
   align-items: center;
@@ -289,10 +289,6 @@ BODY {
   right: 0;
   top: 0;
   bottom: 0;
-}
-
-#dialog-box-container.shown {
-  display: flex;
 }
 
 #dialog-box-overlay {
@@ -310,8 +306,8 @@ BODY {
   background-color: rgb(255, 255, 255);
   border-radius: 8px;
   box-shadow: rgba(60, 64, 67, 0.3) -1px 1px 2px 0px, rgba(60, 64, 67, 0.3) 1px 1px 2px 0px;
-  min-width: 100px;
-  min-height: 50px;
+  min-width: 350px;
+  min-height: 150px;
   z-index: 2;
 }
 
@@ -326,4 +322,24 @@ BODY {
   list-style-type: none;
   padding: 12px 12px 12px 24px;
   min-width: 0;
+}
+
+#dialog-box-content SECTION {
+  display: flex;
+  align-items: center;
+  padding: 4px 4px 4px 4px;
+  margin: 12px 0 12px 0;
+}
+
+#dialog-box-content .checkbox {
+  margin-inline-end: 12px;
+}
+
+#dialog-box-content BUTTON {
+  margin-inline-start: 8px;
+}
+
+#dialog-box-content .button-container {
+  padding-top: 20px;
+  text-align: right;
 }

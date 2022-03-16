@@ -1,4 +1,5 @@
 import { l } from './i18n.js';
+import { storeObject } from './storage.js';
 
 export function getInflectionTables(doc) {
   const { lang, content } = doc;
@@ -48,12 +49,31 @@ export function mergeInflectionTables(tableLists, lang) {
   }
   for (const [ type, list ] of Object.entries(result)) {
     list.sort((a, b) => {
-      const captionA = a.content[0].content;
-      const captionB = b.content[0].content;
+      const captionA = getCaption(a);
+      const captionB = getCaption(b);
       return captionA.localeCompare(captionB, lang);
     });
   }
   return result;
+}
+
+export async function saveInflectionTables(tables, selection, lang) {
+  const content = [];
+  for (const [ type, list ] of Object.entries(tables)) {
+    if (selection.includes(type)) {
+      content.push(...list);
+    }
+  }
+  const captions = content.map(t => getCaption(t));
+  const title = `${l('inflection_tables')}: ${captions.join(', ')}`;
+  const type = 'inflection';
+  const doc = { lang, type, title, content };
+  console.log(doc);
+  return storeObject('DOC', doc);
+}
+
+function getCaption(table) {
+  return table.content[0].content;
 }
 
 class TableHeader {

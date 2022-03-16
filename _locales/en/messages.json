@@ -429,10 +429,6 @@
     "message": "Delete",
     "description": "Label for delete button in document list"
   },
-  "create_inflection_tables": {
-    "message": "Create inflection tables",
-    "description": "Label for create inflection tables button in document list"
-  },
   "cancel": {
     "message": "Cancel",
     "description": "Label for x button used to clear selection in document list"
@@ -444,6 +440,30 @@
   "open_original_page": {
     "message": "Go to original page",
     "description": "Label for menu item in document list"
+  },
+  "create_inflection_tables": {
+    "message": "Create inflection tables",
+    "description": "Label for create inflection tables button in document list"
+  },
+  "inflection_tables": {
+    "message": "Inflection tables",
+    "description": "Title of dialog box"
+  },
+  "include_nouns": {
+    "message": "Include nouns",
+    "description": "Label of checkbox in dialog box"
+  },
+  "include_adjectives": {
+    "message": "Include adjectives",
+    "description": "Label of checkbox in dialog box"
+  },
+  "include_verbs": {
+    "message": "Include verbs",
+    "description": "Label of checkbox in dialog box"
+  },
+  "create": {
+    "message": "Create",
+    "description": "Label for button in dialog box"
   },
   "nominative": {
     "message": "nominative",
