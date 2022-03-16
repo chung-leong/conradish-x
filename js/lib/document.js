@@ -800,7 +800,8 @@ function decomposeTables() {
       // make it appear temporarily
       table.style.display = 'table';
     }
-    if (!table.classList.contains('decomposed')) {
+    const { classList } = table;
+    if (!classList.contains('decomposed') && !classList.contains('inflections')) {
       const cells = table.querySelectorAll('TH,TD');
       const cellWidths = new WeakMap;
       // get all the widths first before setting them
@@ -810,7 +811,7 @@ function decomposeTables() {
       for (const cell of cells) {
         cell.style.width = cellWidths.get(cell) + 'px';
       }
-      table.classList.add('decomposed');
+      classList.add('decomposed');
     }
     if (display === 'none') {
       table.style.removeProperty('display');
@@ -850,7 +851,8 @@ export function findDeletedFootnote(id) {
 
 let nextFootnoteId = Math.round(Math.random() * 0x00FFFFFF) * 1000;
 
-function addElement(element, { tag, style, content, footnote, junk }) {
+function addElement(element, info) {
+  const { tag, style, content, footnote, junk } = info;
   if (footnote instanceof Object) {
     const id = `footnote-${nextFootnoteId++}`;
     const supElement = e('SPAN', { style, id, className: 'footnote-number' });
@@ -859,6 +861,17 @@ function addElement(element, { tag, style, content, footnote, junk }) {
     element.append(supElement);
   } else {
     const child = e(tag, { style });
+    if (tag === 'TABLE') {
+      const { inflections, type } = info;
+      if (inflections) {
+        child.className = `inflections ${type}`;
+      }
+    } else if (tag === 'TH' || tag === 'TD') {
+      const { colSpan } = info;
+      if (colSpan) {
+        child.colSpan = colSpan;
+      }
+    }
     addContent(child, content);
     if (junk > 0) {
       if (junk === 1) {

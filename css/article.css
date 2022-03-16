@@ -260,6 +260,21 @@ BODY {
   padding: 1px 2px 0 2px;
 }
 
+#article-text TABLE.inflections {
+  table-layout: fixed;
+  width: calc(100% - 2px);
+  font-size: inherit;
+}
+
+#article-text TABLE.inflections CAPTION {
+  text-align: start;
+  font-size: 150%;
+}
+
+#article-text TABLE.inflections TD {
+  padding-inline-start: 4px;
+}
+
 #article-text TABLE.decomposed {
   display: block;
   width: fit-content;

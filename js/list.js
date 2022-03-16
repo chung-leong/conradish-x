@@ -147,7 +147,7 @@ async function loadItem(item) {
     const { url, title, lang } = doc;
     await adjustTextDirection(item.titleElement, title);
     item.titleElement.textContent = title;
-    item.titleElement.title = url;
+    item.titleElement.title = url || '';
     item.lang = lang;
     item.url = url;
     item.title = title;
@@ -297,7 +297,8 @@ function openInflectionDialogBox() {
   });
   const createButton = e('BUTTON', { className: 'default' }, l('create'));
   createButton.addEventListener('click', async (evt) => {
-    await saveInflectionTables(tables, selection, lang);
+    const key = await saveInflectionTables(tables, selection, lang);
+    openPage('article', { t: key });
     closeDialogBox();
   });
   const buttonContainer = e('DIV', { className: 'button-container' }, [ cancelButton, createButton ]);
