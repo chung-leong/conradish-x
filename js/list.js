@@ -77,6 +77,9 @@ function openKebabMenu() {
   const changeElement = e('LI', {}, l('change_title'));
   changeElement.addEventListener('click', handleChangeTitleClick);
   const openElement = e('A', { href: url, target: '_blank' }, l('open_original_page'));
+  if (!url) {
+    openElement.style.display = 'none';
+  }
   const listElement = e('UL', {}, [ changeElement, openElement ]);
   const menuElement = e('DIV', { id: 'kebab-menu' }, listElement);
   menuElement.append(listElement);
