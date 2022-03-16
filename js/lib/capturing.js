@@ -1165,6 +1165,11 @@ async function getLanguage(content) {
   const text = getPlainText(content);
   let lang = await detectLanguage(text);
   lang = lang.substr(0, 2).toLowerCase();
+  if (lang === 'bs' || lang === 'hr') {
+    if (/\.(rs|ko)$/.test(location.hostname)) {
+      lang = 'sr';
+    }
+  }
   return lang || 'en';
 }
 
