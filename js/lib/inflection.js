@@ -124,7 +124,7 @@ class TableGenerator {
         return inflection.written_form;
       }
     }
-    return '';
+    return '-';
   }
 
   header(label, cols) {
@@ -160,22 +160,6 @@ class TableGenerator {
       class: 'inflection',
       content: [ caption, tbody ]
     };
-  }
-
-  clean(cells) {
-    for (let i = cells.length - 1; i >= 0; i--) {
-      const row = cells[i];
-      if (row.every(c => c instanceof TableHeader)) {
-        const nextRow = cells[i + 1];
-        if (!nextRow || nextRow.every(c => c instanceof TableHeader)) {
-          cells.splice(i, 1);
-        }
-      } else {
-        if (row.every(c => c instanceof TableHeader || !c )) {
-          cells.splice(i, 1);
-        }
-      }
-    }
   }
 }
 
@@ -223,8 +207,7 @@ class Slovak extends TableGenerator {
       [ p('on/ona/ono'), sg(THIRD), p('oni/ony'), pl(THIRD) ],
     ];
     const infinitive = this.find(inf, { person: undefined,  number: undefined, tense: undefined });
-    this.clean(cells);
-    if (infinitive && cells.length > 1) {
+    if (infinitive !== '-') {
       return this.build(infinitive, cells);
     }
   }
@@ -242,9 +225,8 @@ class Slovak extends TableGenerator {
       [ h('instrumental'), sg(INSTRUMENTAL), pl(INSTRUMENTAL) ],
       [ h('locative'), sg(LOCATIVE), pl(LOCATIVE) ],
     ];
-    this.clean(cells);
-    if (cells.length > 1) {
-      const nomSg = cells[1][1];
+    const nomSg = cells[1][1];
+    if (nomSg !== '-') {
       return this.build(nomSg, cells);
     }
   }
@@ -264,9 +246,8 @@ class Slovak extends TableGenerator {
       [ h('instrumental'), m(INSTRUMENTAL), f(INSTRUMENTAL), n(INSTRUMENTAL), pl(INSTRUMENTAL) ],
       [ h('locative'), m(LOCATIVE), f(LOCATIVE), n(LOCATIVE), pl(LOCATIVE) ],
     ];
-    this.clean(cells);
-    if (cells.length > 1) {
-      const nomSg = cells[1][1];
+    const nomSg = cells[1][1];
+    if (nomSg !== '-') {
       return this.build(nomSg, cells);
     }
   }
@@ -286,8 +267,7 @@ class SerboCroatian extends TableGenerator {
       [ p('on/ona/ono'), sg(THIRD), p('oni/one/ona'), pl(THIRD) ],
     ];
     const infinitive = this.find(inf, { person: undefined,  number: undefined, tense: undefined }, cyr);
-    this.clean(cells);
-    if (infinitive && cells.length > 1) {
+    if (infinitive !== '-') {
       return this.build(infinitive, cells);
     }
   }
@@ -307,9 +287,8 @@ class SerboCroatian extends TableGenerator {
       [ h('locative'), sg(LOCATIVE), pl(LOCATIVE) ],
       [ h('vocative'), sg(VOCATIVE), pl(VOCATIVE) ],
     ];
-    this.clean(cells);
-    if (cells.length > 1) {
-      const nomSg = cells[1][1];
+    const nomSg = cells[1][1];
+    if (nomSg !== '-') {
       return this.build(nomSg, cells);
     }
   }
@@ -330,9 +309,8 @@ class SerboCroatian extends TableGenerator {
       [ h('instrumental'), m(INSTRUMENTAL), f(INSTRUMENTAL), n(INSTRUMENTAL), pl(INSTRUMENTAL) ],
       [ h('locative'), m(LOCATIVE), f(LOCATIVE), n(LOCATIVE), pl(LOCATIVE) ],
     ];
-    this.clean(cells);
-    if (cells.length > 0) {
-      const nomSg = cells[1][1];
+    const nomSg = cells[1][1];
+    if (nomSg !== '-') {
       return this.build(nomSg, cells);
     }
   }
@@ -389,8 +367,7 @@ class Bulgarian extends TableGenerator {
       [ p('той/тя/то'), sg(THIRD), p('те'), pl(THIRD) ],
     ];
     const firstPerSg = cells[1][1];
-    this.clean(cells);
-    if (firstPerSg && cells.length > 1) {
+    if (firstPerSg !== '-') {
       return this.build(firstPerSg, cells);
     }
   }
@@ -409,8 +386,7 @@ class Macedonian extends TableGenerator {
       [ p('той/таа/тоа'), sg(THIRD), p('тие'), pl(THIRD) ],
     ];
     const thirdPerSg = cells[3][1];
-    this.clean(cells);
-    if (thirdPerSg && cells.length > 1) {
+    if (thirdPerSg !== '-') {
       return this.build(thirdPerSg, cells);
     }
   }
@@ -429,8 +405,8 @@ class Russian extends TableGenerator {
       [ p('он/она/оно'), sg(THIRD), p('они'), pl(THIRD) ],
     ];
     const infinitive = this.find(inf, { person: undefined,  number: undefined, mood: undefined, tense: undefined });
-    this.clean(cells);
-    if (infinitive && cells.length > 1) {
+    console.log(infinitive, inf);
+    if (infinitive !== '-') {
       return this.build(infinitive, cells);
     }
   }
@@ -448,9 +424,8 @@ class Russian extends TableGenerator {
       [ h('instrumental'), sg(INSTRUMENTAL), pl(INSTRUMENTAL) ],
       [ h('prepositional'), sg(PREPOSITIONAL), pl(PREPOSITIONAL) ],
     ];
-    this.clean(cells);
-    if (cells.length > 1) {
-      const nomSg = cells[1][1];
+    const nomSg = cells[1][1];
+    if (nomSg !== '-') {
       return this.build(nomSg, cells);
     }
   }
@@ -470,9 +445,8 @@ class Russian extends TableGenerator {
       [ h('instrumental'), m(INSTRUMENTAL), f(INSTRUMENTAL), n(INSTRUMENTAL), pl(INSTRUMENTAL) ],
       [ h('prepositional'), m(PREPOSITIONAL), f(PREPOSITIONAL), n(PREPOSITIONAL), pl(PREPOSITIONAL) ],
     ];
-    this.clean(cells);
-    if (cells.length > 1) {
-      const nomSg = cells[1][1];
+    const nomSg = cells[1][1];
+    if (nomSg !== '-') {
       return this.build(nomSg, cells);
     }
   }
@@ -491,8 +465,7 @@ class Belarusian extends Russian {
       [ p('ён/яна/яно'), sg(THIRD), p('яны'), pl(THIRD) ],
     ];
     const infinitive = this.find(inf, { person: undefined,  number: undefined, mood: undefined, tense: undefined });
-    this.clean(cells);
-    if (infinitive && cells.length > 1) {
+    if (infinitive !== '-') {
       return this.build(infinitive, cells);
     }
   }
@@ -511,8 +484,7 @@ class Ukrainian extends TableGenerator {
       [ p('він/вона/воно'), sg(THIRD), p('вони'), pl(THIRD) ],
     ];
     const infinitive = this.find(inf, { person: undefined,  number: undefined, mood: undefined, tense: undefined });
-    this.clean(cells);
-    if (infinitive && cells.length > 1) {
+    if (infinitive !== '-') {
       return this.build(infinitive, cells);
     }
   }
@@ -531,9 +503,8 @@ class Ukrainian extends TableGenerator {
       [ h('locative'), sg(LOCATIVE), pl(LOCATIVE) ],
       [ h('vocative'), sg(VOCATIVE), pl(VOCATIVE) ],
     ];
-    this.clean(cells);
-    if (cells.length > 1) {
-      const nomSg = cells[1][1];
+    const nomSg = cells[1][1];
+    if (nomSg !== '-') {
       return this.build(nomSg, cells);
     }
   }
@@ -553,9 +524,8 @@ class Ukrainian extends TableGenerator {
       [ h('instrumental'), m(INSTRUMENTAL), f(INSTRUMENTAL), n(INSTRUMENTAL), pl(INSTRUMENTAL) ],
       [ h('locative'), m(LOCATIVE), f(LOCATIVE), n(LOCATIVE), pl(LOCATIVE) ],
     ];
-    this.clean(cells);
-    if (cells.length > 1) {
-      const nomSg = cells[1][1];
+    const nomSg = cells[1][1];
+    if (nomSg !== '-') {
       return this.build(nomSg, cells);
     }
   }
