@@ -40,16 +40,22 @@ export function getInflectionTables(doc) {
 
 export function mergeInflectionTables(tableLists, lang) {
   const result = {};
-  for (const tables of tableLists) {
-    for (const [ type, list ] of Object.entries(tables)) {
-      if (!result[type]) {
-        result[type] = [];
+  for (const type of [ 'noun', 'adjective', 'verb' ]) {
+    const included = {};
+    const dstList = result[type] = [];
+    for (const tables of tableLists) {
+      const srcList = tables[type];
+      if (srcList) {
+        for (const table of srcList) {
+          const caption = getCaption(table);
+          if (!included[caption]) {
+            dstList.push(table);
+            included[caption] = true;
+          }
+        }
       }
-      result[type].push(...list);
     }
-  }
-  for (const [ type, list ] of Object.entries(result)) {
-    list.sort((a, b) => {
+    dstList.sort((a, b) => {
       const captionA = getCaption(a);
       const captionB = getCaption(b);
       return captionA.localeCompare(captionB, lang);
@@ -61,9 +67,8 @@ export function mergeInflectionTables(tableLists, lang) {
 export async function saveInflectionTables(tables, selection, lang) {
   const content = [];
   const div = { type: 'DIV', content: '\u200c' };
-  for (const type of [ 'noun', 'adjective', 'verb' ]) {
-    const list = tables[type];
-    if (list && selection.includes(type)) {
+  for (const [ type, list ] of Object.entries(tables)) {
+    if (selection.includes(type)) {
       for (const table of list) {
         content.push(table);
         content.push(div);
