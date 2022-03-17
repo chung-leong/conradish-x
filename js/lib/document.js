@@ -15,6 +15,7 @@ const overlayContainerElement = document.getElementById('overlays');
 const pages = [];
 const footnotes = [];
 const footnoteRecylclingBin = [];
+const inflectionMap = new WeakMap;
 
 const articleObserver = new MutationObserver(handleArticleChanges);
 const footnoteObserver = new MutationObserver(handleFootnoteChanges);
@@ -866,6 +867,7 @@ function addElement(element, info) {
       if (inflections) {
         child.className = `inflections ${type}`;
       }
+      inflectionMap.set(child, { inflections, type });
     } else if (tag === 'TH' || tag === 'TD') {
       const { colSpan } = info;
       if (colSpan) {
@@ -1083,6 +1085,16 @@ function extractContent(node) {
         const { content, extra } = footnote;
         object.footnote = { content };
         Object.assign(object.footnote, extra)
+      }
+      if (tag === 'TABLE') {
+        const inflectionInfo = inflectionMap.get(node);
+        if (inflectionInfo) {
+          Object.assign(object, inflectionInfo);
+        }
+      } else if (tag === 'TD' || tag === 'TH') {
+        if (node.colSpan > 1) {
+          object.colSpan = node.colSpan;
+        }
       }
       return object;
     }
