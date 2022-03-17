@@ -27,6 +27,10 @@
   padding: 8px 8px 8px 8px;
 }
 
+.toolbar-center {
+  display: none;
+}
+
 .user-guide {
   padding-bottom: 1em;
   font-size: 12pt;
@@ -97,5 +101,23 @@ TABLE {
 
   TABLE {
     font-size: 90%;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  #list-container, .toolbar-left {
+    flex-shrink: 1;
+  }
+
+  .toolbar-right {
+    flex-shrink: 2;
+  }
+
+  #right-side-bar, #left-side-bar {
+    display: none;
+  }
+
+  IMG {
+    width: 100%;
   }
 }

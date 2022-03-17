@@ -1,3 +1,7 @@
+.toolbar-left {
+  flex-basis: 220px;
+}
+
 #left-side-bar {
   min-width: 220px;
   overflow: auto;
@@ -5,10 +9,6 @@
 
 #right-side-bar {
   flex-shrink: 1;
-}
-
-#list-container {
-  min-width: 400px;
 }
 
 .checkbox {
@@ -25,16 +25,6 @@
   align-items: center;
   padding: 4px 4px 4px 4px;
   margin: 12px 12px 12px 12px;
-}
-
-.input-container LABEL {
-  white-space: nowrap;
-}
-
-.input-container LABEL SELECT {
-  margin-top: -12px;
-  margin-bottom: -12px;
-  margin-left: 4px;
 }
 
 .preview-container {
@@ -123,4 +113,10 @@
   font-family: "Adobe NotDef";
   font-display: block;
   src: url("../fnt/AND-Regular.otf") format("opentype");
+}
+
+@media screen and (max-width: 1024px) {
+  .toolbar-right, #right-side-bar {
+    flex-shrink: 2;
+  }
 }

@@ -7,7 +7,6 @@ BODY {
   flex-direction: column;
   margin: 0;
   height: 100vh;
-  min-width: 600px;
   overflow-y: hidden;
   font-size: 13px;
   font-family: Roboto, Segoe UI, Tahoma, sans-serif;

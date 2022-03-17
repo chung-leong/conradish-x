@@ -54,3 +54,15 @@
 .title-input.rtl {
   direction: rtl;
 }
+
+@media screen and (max-width: 1024px) {
+  .toolbar-left, .toolbar-right, #right-side-bar, #left-side-bar {
+    flex-shrink: 2;
+  }
+}
+
+@media screen and (max-width: 580px) {
+  .toolbar-left, .toolbar-right, #right-side-bar, #left-side-bar {
+    display: none;
+  }
+}
