@@ -246,8 +246,8 @@ function updateSelection() {
     langSelected[lang] = true;
   }
   const langs = Object.keys(langSelected);
-  if (langs.length === 1) {
-    const tableLists = items.map(i => i.inflectionTables).filter(t => !!t);
+  const tableLists = items.map(i => i.inflectionTables).filter(t => !!t);
+  if (langs.length === 1 && tableLists.length > 0) {
     const lang = langs[0];
     const tables = mergeInflectionTables(tableLists, lang);
     selectedInflection = { tables, lang };
