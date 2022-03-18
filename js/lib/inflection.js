@@ -309,7 +309,7 @@ class SerboCroatian extends TableGenerator {
 
   processAdjective(inf, term) {
     const cyr = this.isCyrillic(term);
-    const m = (decl) => this.find(inf, { grammatical_case: decl,  number: SINGULAR, gender: MASCULINE }, cyr);
+    const m = (decl) => this.find(inf, { grammatical_case: decl,  number: SINGULAR, gender: [ MASCULINE, undefined ] }, cyr);
     const f = (decl) => this.find(inf, { grammatical_case: decl,  number: SINGULAR, gender: FEMININE }, cyr);
     const n = (decl) => this.find(inf, { grammatical_case: decl,  number: SINGULAR, gender: NEUTER }, cyr);
     const pl = (decl) => this.find(inf, { grammatical_case: decl,  number: PLURAL }, cyr);
@@ -419,9 +419,6 @@ class Russian extends TableGenerator {
       [ p('он/она/оно'), sg(THIRD), p('они'), pl(THIRD) ],
     ];
     const infinitive = this.find(inf, { person: undefined,  number: undefined, mood: undefined, tense: undefined });
-    if (cells.flat().some(c => c === '-')) {
-      console.log(infinitive, cells, inf)
-    }
     if (infinitive !== '-') {
       return this.build(infinitive, cells);
     }
@@ -470,8 +467,8 @@ class Russian extends TableGenerator {
 
 class Belarusian extends Russian {
   processVerb(inf) {
-    const sg = (person) => this.find(inf, { mood: INDICATIVE, tense: [ PRESENT, FUTURE ], number: SINGULAR, person });
-    const pl = (person) => this.find(inf, { mood: INDICATIVE, tense: [ PRESENT, FUTURE ], number: PLURAL, person });
+    const sg = (person) => this.find(inf, { tense: [ PRESENT, FUTURE ], number: SINGULAR, person });
+    const pl = (person) => this.find(inf, { tense: [ PRESENT, FUTURE ], number: PLURAL, person });
     const h = (name, col) => this.header(l(name), col);
     const p = (text) => this.header(text);
     const cells = [
@@ -483,6 +480,46 @@ class Belarusian extends Russian {
     const infinitive = this.find(inf, { person: undefined,  number: undefined, mood: undefined, tense: undefined });
     if (infinitive !== '-') {
       return this.build(infinitive, cells);
+    }
+  }
+
+  processNoun(inf) {
+    const sg = (decl) => this.find(inf, { grammatical_case: decl,  number: SINGULAR });
+    const pl = (decl) => this.find(inf, { grammatical_case: decl,  number: PLURAL });
+    const h = (name) => this.header(l(name));
+    const cells = [
+      [ h(''), h('singular'), h('plural') ],
+      [ h('nominative'), sg(NOMINATIVE), pl(NOMINATIVE) ],
+      [ h('accusative'), sg(ACCUSATIVE), pl(ACCUSATIVE) ],
+      [ h('genitive'), sg(GENITIVE), pl(GENITIVE) ],
+      [ h('dative'), sg(DATIVE), pl(DATIVE) ],
+      [ h('instrumental'), sg(INSTRUMENTAL), pl(INSTRUMENTAL) ],
+      [ h('locative'), sg(LOCATIVE), pl(LOCATIVE) ],
+    ];
+    const nomSg = cells[1][1];
+    if (nomSg !== '-') {
+      return this.build(nomSg, cells);
+    }
+  }
+
+  processAdjective(inf) {
+    const m = (decl) => this.find(inf, { grammatical_case: decl,  number: SINGULAR, gender: MASCULINE });
+    const f = (decl) => this.find(inf, { grammatical_case: decl,  number: SINGULAR, gender: FEMININE });
+    const n = (decl) => this.find(inf, { grammatical_case: decl,  number: SINGULAR, gender: NEUTER });
+    const pl = (decl) => this.find(inf, { grammatical_case: decl,  number: PLURAL });
+    const h = (name) => this.header(l(name));
+    const cells = [
+      [ h(''), h('masculine'), h('feminine'), h('neuter'), h('plural') ],
+      [ h('nominative'), m(NOMINATIVE), f(NOMINATIVE), n(NOMINATIVE), pl(NOMINATIVE) ],
+      [ h('accusative'), m(ACCUSATIVE), f(ACCUSATIVE), n(ACCUSATIVE), pl(ACCUSATIVE) ],
+      [ h('genitive'), m(GENITIVE), f(GENITIVE), n(GENITIVE), pl(GENITIVE) ],
+      [ h('dative'), m(DATIVE), f(DATIVE), n(DATIVE), pl(DATIVE) ],
+      [ h('instrumental'), m(INSTRUMENTAL), f(INSTRUMENTAL), n(INSTRUMENTAL), pl(INSTRUMENTAL) ],
+      [ h('locative'), m(LOCATIVE), f(LOCATIVE), n(LOCATIVE), pl(LOCATIVE) ],
+    ];
+    const nomSg = cells[1][1];
+    if (nomSg !== '-') {
+      return this.build(nomSg, cells);
     }
   }
 }

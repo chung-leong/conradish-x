@@ -277,7 +277,7 @@ function openInflectionDialogBox() {
     const labelElement = e('LABEL', {}, l(`include_${type}s`));
     const sectionElement = e('SECTION', {}, [ checkboxElement, labelElement ]);
     dialogBoxContent.append(sectionElement);
-    const available  = !!tables[type];
+    const available  = (tables[type].length > 0);
     checkboxElement.classList.toggle('checked', available);
     checkboxElement.classList.toggle('disabled', !available);
     labelElement.classList.toggle('disabled', !available);
