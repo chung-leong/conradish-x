@@ -982,6 +982,29 @@ function removeSeparationNode(supElement) {
   }
 }
 
+function getFragment(range) {
+  let fragment = range.cloneContents()
+  let container = range.commonAncestorContainer;
+  if (container.nodeType === Node.TEXT_NODE) {
+    container = container.parentNode;
+  }
+  if (container.style.length > 0) {
+    const { display } = getComputedStyle(container);
+    if (display === 'inline') {
+      // insertSupElement() doesn't insert plain text directly into a inline container
+      // insert it create a new span, so styling in the container is lost
+      // we need to replicate it manually, therefore
+      fragment = e('SPAN', {}, fragment);
+      for (let i = 0; i < container.style.length; i++) {
+        const name = container.style[i];
+        const value = container.style.getPropertyValue(name);
+        fragment.style.setProperty(name, value);
+      }
+    }
+  }
+  return fragment;
+}
+
 export function annotateRange(range, footnoteContent, includeTerm) {
   const { term, translation } = footnoteContent;
   const id = `footnote-${nextFootnoteId++}`;
@@ -997,7 +1020,7 @@ export function annotateRange(range, footnoteContent, includeTerm) {
   const script = getLanguageScript(term.lang);
   const className = 'footnote-number pending';
   const tempSupElement = e('SPAN', { id, className }, number);
-  const fragment = range.cloneContents();
+  const fragment = getFragment(range);
   const fragmentDIV = e('DIV', {}, fragment);
   insertSupElement(tempSupElement, fragmentDIV, script);
   const html = fragmentDIV.innerHTML;
