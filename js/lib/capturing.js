@@ -1186,10 +1186,16 @@ function getMeta(propName) {
 async function detectLanguage(text) {
   return new Promise((resolve) => {
     chrome.i18n.detectLanguage(text, (result) => {
-      let lang;
+      let lang = '';
       for (const { language, percentage } of result.languages) {
         if (percentage >= 80) {
           lang = language;
+          break;
+        }
+      }
+      if (!lang) {
+        if (result.languages.length > 0) {
+          lang = result.languages[0].language;
         }
       }
       resolve(lang);
