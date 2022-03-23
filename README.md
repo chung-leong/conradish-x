@@ -22,6 +22,7 @@ The extension was designed with educators in mind, those who wish to make use we
   - [Printing](#printing)
   - [Finding documents](#finding-documents)
   - [Changing document title](#changing-document-title)
+  - [Creating inflection tables](#creating-inflection-tables)
   - [Copying article to Microsoft Word](#copying-article-to-microsoft-word)
 * [Limitations](#limitations)
 * [Privacy](#privacy)
@@ -211,6 +212,40 @@ To change the title of a document, click on the "kebab" button beside the title 
 If you're in the middle of annotating a document, right click on the page margin (or anywhere else outside the text) and choose **Change title**:
 
 ![Context menu](doc/img/change-title-2.jpg)
+
+## Creating inflection tables
+
+For selected languages, Conradish can create tables containing inflected forms of footnoted words. To create such a document, activate the extension's pop-up menu and choose **Show all documents**:
+
+![Pop-up menu](doc/img/pop-up-1.jpg)
+
+Select the documents from which words will be taken. You can select more than one.
+
+![Document list](doc/img/inflection-1.jpg)
+
+Then click the **Create inflection tables** button:
+
+![Document list](doc/img/inflection-2.jpg)
+
+A dialog box will appear, where you can select the word categories to include in the resulting document. Click **Create** to create it:
+
+![Document list](doc/img/inflection-3.jpg)
+
+The new document will appear in a new tab:
+
+![Inflection tables](doc/img/inflection-4.jpg)
+
+The following languages are supported currently:
+
+| Slavic     |
+|------------|
+| Bulgarian  |
+| Croatian   |
+| Macedonian |
+| Russian    |
+| Serbian    |
+| Slovak     |
+| Ukrainian  |
 
 ## Copying article to Microsoft Word
 
