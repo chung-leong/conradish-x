@@ -10,6 +10,7 @@ Funksjoner
 • Redigering av tekst før utskrift
 • Pek-og-klikk skrubbing av innhold.
 • Tilføyelse av fotnoter
+• Bøyningstabeller for utvalgte språk
 • Integrasjon med Google Translate
 
 Brukerhåndboken

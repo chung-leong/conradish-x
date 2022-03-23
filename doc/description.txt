@@ -10,6 +10,7 @@ Features
 • Editing of text prior to printing
 • Point-and-click content scrubbing.
 • Addition of footnotes
+• Inflection tables for selected languages
 • Integration with Google Translate
 
 User Guide

@@ -10,6 +10,7 @@ Caratteristiche
 • Modifica del testo prima della stampa
 • Pulizia dei contenuti punta e clicca.
 • Aggiunta di note a piè di pagina
+• Tabelle di flessione per le lingue selezionate
 • Integrazione con Google Translate
 
 Guida utente

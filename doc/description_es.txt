@@ -10,6 +10,7 @@ Características
 • Edición de texto antes de la impresión
 • Depuración de contenido apuntando y haciendo clic.
 • Adición de notas al pie
+• Tablas de inflexión para idiomas seleccionados
 • Integración con el Traductor de Google
 
 Guía del usuario

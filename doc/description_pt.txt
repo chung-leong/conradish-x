@@ -10,6 +10,7 @@ Recursos
 • Edição de texto antes da impressão
 • Depuração de conteúdo do tipo apontar e clicar.
 • Adição de notas de rodapé
+• Tabelas de inflexão para idiomas selecionados
 • Integração com o Google Tradutor
 
 Guia de usuario

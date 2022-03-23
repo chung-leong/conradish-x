@@ -10,6 +10,7 @@ Vlastnosti
 • Úprava textu pred tlačou
 • Čistenie obsahu kliknutím myšou.
 • Pridanie poznámok pod čiarou
+• Inflexné tabuľky pre vybrané jazyky
 • Integrácia s Google Translate
 
 Užívateľská príručka

@@ -10,6 +10,7 @@ Funktioner
 • Redigering af tekst før udskrivning
 • Peg-og-klik indholdsscrubbing.
 • Tilføjelse af fodnoter
+• Bøjningstabeller for udvalgte sprog
 • Integration med Google Translate
 
 Brugervejledning

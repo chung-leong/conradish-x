@@ -10,6 +10,7 @@ ominaisuudet
 • Tekstin muokkaaminen ennen tulostusta
 • Osoita ja napsauta sisällön puhdistamista.
 • Alaviitteiden lisääminen
+• Taivutustaulukot valituille kielille
 • Integrointi Google-kääntäjän kanssa
 
 Käyttöohjeet

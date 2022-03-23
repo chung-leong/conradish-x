@@ -10,6 +10,7 @@ Funkcje
 • Edycja tekstu przed drukowaniem
 • Czyszczenie zawartości metodą „wskaż i kliknij”.
 • Dodanie przypisów
+• Tabele fleksyjne dla wybranych języków
 • Integracja z Tłumaczem Google
 
 Podręcznik użytkownika

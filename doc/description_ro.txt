@@ -10,6 +10,7 @@ Caracteristici
 • Editarea textului înainte de imprimare
 • Curăţarea conţinutului prin punctare şi clic.
 • Adăugarea de note de subsol
+• Tabele de inflexiune pentru limbile selectate
 • Integrare cu Google Translate
 
 Manualul utilizatorului

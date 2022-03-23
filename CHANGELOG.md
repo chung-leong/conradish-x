@@ -1,3 +1,10 @@
+# Version 1.5
+
+* Enabled generation of inflection tables for Slavic languages
+* Fixed bug affecting annotation of formatted text.
+* Fixed bug causing styling options to appear when text in footnote is selected.
+* Fixed language detection for Serbian articles.
+
 # Version 1.4
 
 * Copying of text with footnotes to clipboard.

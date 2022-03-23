@@ -10,6 +10,7 @@ Funkce
 • Úprava textu před tiskem
 • Čištění obsahu ukažte a klikněte.
 • Přidání poznámek pod čarou
+• Inflexní tabulky pro vybrané jazyky
 • Integrace s Překladačem Google
 
 Uživatelská příručka

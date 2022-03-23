@@ -10,6 +10,7 @@ Funktioner
 • Redigering av text före utskrift
 • Peka-och-klicka på innehållsskrubbning.
 • Tillägg av fotnoter
+• Böjningstabeller för utvalda språk
 • Integration med Google Translate
 
 Användarguide

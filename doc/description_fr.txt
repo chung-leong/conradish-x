@@ -10,6 +10,7 @@ Caractéristiques
 • Modification du texte avant l'impression
 • Nettoyage du contenu par pointer-cliquer.
 • Ajout de notes de bas de page
+• Tables d'inflexion pour les langues sélectionnées
 • Intégration avec Google Traduction
 
 Mode d'emploi
