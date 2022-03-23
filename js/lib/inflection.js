@@ -568,7 +568,6 @@ class Ukrainian extends TableGenerator {
   }
 
   processAdjective(inf) {
-    console.log(inf);
     const m = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2, undefined ], grammatical_case: decl, number: SINGULAR, gender: MASCULINE });
     const f = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2, undefined ], grammatical_case: decl, number: SINGULAR, gender: FEMININE });
     const n = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2, undefined ], grammatical_case: decl, number: SINGULAR, gender: NEUTER });
