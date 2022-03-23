@@ -2,7 +2,7 @@ Conradishilla voit luoda painetun version online-uutisartikkeleista. Se poistaa 
 
 Laajennus suunniteltiin opettajia ajatellen, ne, jotka haluavat käyttää verkkomateriaaleja luokkahuoneessa. Se on erityisen hyödyllinen vieraiden kielten opettajille automaattisen käännösominaisuuden ansiosta.
 
-ominaisuudet
+Ominaisuudet
 
 • Vain valitun osan tulostaminen artikkelista
 • Mainosten ja kuvien poistaminen
