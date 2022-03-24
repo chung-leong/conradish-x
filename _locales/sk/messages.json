@@ -509,6 +509,54 @@
     "message": "vokatív",
     "description": "Column heading for inflection table"
   },
+  "abessive": {
+    "message": "abessív",
+    "description": "Column heading for inflection table"
+  },
+  "ablative": {
+    "message": "ablatív",
+    "description": "Column heading for inflection table"
+  },
+  "adessive": {
+    "message": "adessív",
+    "description": "Column heading for inflection table"
+  },
+  "allative": {
+    "message": "allatív",
+    "description": "Column heading for inflection table"
+  },
+  "comitative": {
+    "message": "komitatív",
+    "description": "Column heading for inflection table"
+  },
+  "elative": {
+    "message": "elatív",
+    "description": "Column heading for inflection table"
+  },
+  "essive": {
+    "message": "essív",
+    "description": "Column heading for inflection table"
+  },
+  "illative": {
+    "message": "illatív",
+    "description": "Column heading for inflection table"
+  },
+  "inessive": {
+    "message": "inessív",
+    "description": "Column heading for inflection table"
+  },
+  "instructive": {
+    "message": "instruktív",
+    "description": "Column heading for inflection table"
+  },
+  "partitive": {
+    "message": "partitív",
+    "description": "Column heading for inflection table"
+  },
+  "translative": {
+    "message": "translatív",
+    "description": "Column heading for inflection table"
+  },
   "singular": {
     "message": "jednotné č.",
     "description": "Row label for inflection table"

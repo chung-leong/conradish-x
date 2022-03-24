@@ -489,6 +489,50 @@
     "message": "vocatif",
     "description": "Column heading for inflection table"
   },
+  "abessive": {
+    "message": "abessif",
+    "description": "Column heading for inflection table"
+  },
+  "ablative": {
+    "message": "ablatif",
+    "description": "Column heading for inflection table"
+  },
+  "adessive": {
+    "message": "adessif",
+    "description": "Column heading for inflection table"
+  },
+  "allative": {
+    "message": "allatif",
+    "description": "Column heading for inflection table"
+  },
+  "comitative": {
+    "message": "comitatif",
+    "description": "Column heading for inflection table"
+  },
+  "elative": {
+    "message": "elatif",
+    "description": "Column heading for inflection table"
+  },
+  "essive": {
+    "message": "essif",
+    "description": "Column heading for inflection table"
+  },
+  "illative": {
+    "message": "illatif",
+    "description": "Column heading for inflection table"
+  },
+  "inessive": {
+    "message": "inessif",
+    "description": "Column heading for inflection table"
+  },
+  "partitive": {
+    "message": "partitif",
+    "description": "Column heading for inflection table"
+  },
+  "translative": {
+    "message": "translatif",
+    "description": "Column heading for inflection table"
+  },
   "singular": {
     "message": "singulier",
     "description": "Row label for inflection table"

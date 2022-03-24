@@ -509,6 +509,54 @@
     "message": "кличний",
     "description": "Column heading for inflection table"
   },
+  "abessive": {
+    "message": "абесивний",
+    "description": "Column heading for inflection table"
+  },
+  "ablative": {
+    "message": "аблятивний",
+    "description": "Column heading for inflection table"
+  },
+  "adessive": {
+    "message": "адесивний",
+    "description": "Column heading for inflection table"
+  },
+  "allative": {
+    "message": "алативний",
+    "description": "Column heading for inflection table"
+  },
+  "comitative": {
+    "message": "комітативний",
+    "description": "Column heading for inflection table"
+  },
+  "elative": {
+    "message": "елативний",
+    "description": "Column heading for inflection table"
+  },
+  "essive": {
+    "message": "есивний",
+    "description": "Column heading for inflection table"
+  },
+  "illative": {
+    "message": "ілативний",
+    "description": "Column heading for inflection table"
+  },
+  "inessive": {
+    "message": "інесивний",
+    "description": "Column heading for inflection table"
+  },
+  "instructive": {
+    "message": "інструктивний",
+    "description": "Column heading for inflection table"
+  },
+  "partitive": {
+    "message": "партитивний",
+    "description": "Column heading for inflection table"
+  },
+  "translative": {
+    "message": "транслативний",
+    "description": "Column heading for inflection table"
+  },
   "singular": {
     "message": "однина",
     "description": "Row label for inflection table"

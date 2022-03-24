@@ -489,6 +489,54 @@
     "message": "vocativo",
     "description": "Column heading for inflection table"
   },
+  "abessive": {
+    "message": "abessivo",
+    "description": "Column heading for inflection table"
+  },
+  "ablative": {
+    "message": "ablativo",
+    "description": "Column heading for inflection table"
+  },
+  "adessive": {
+    "message": "adesivo",
+    "description": "Column heading for inflection table"
+  },
+  "allative": {
+    "message": "allativo",
+    "description": "Column heading for inflection table"
+  },
+  "comitative": {
+    "message": "comitativo",
+    "description": "Column heading for inflection table"
+  },
+  "elative": {
+    "message": "elativo",
+    "description": "Column heading for inflection table"
+  },
+  "essive": {
+    "message": "essivo",
+    "description": "Column heading for inflection table"
+  },
+  "illative": {
+    "message": "illativo",
+    "description": "Column heading for inflection table"
+  },
+  "inessive": {
+    "message": "inessivo",
+    "description": "Column heading for inflection table"
+  },
+  "instructive": {
+    "message": "istruttivo",
+    "description": "Column heading for inflection table"
+  },
+  "partitive": {
+    "message": "partitivo",
+    "description": "Column heading for inflection table"
+  },
+  "translative": {
+    "message": "translativo",
+    "description": "Column heading for inflection table"
+  },
   "singular": {
     "message": "singolare",
     "description": "Row label for inflection table"
