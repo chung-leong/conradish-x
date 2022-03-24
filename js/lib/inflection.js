@@ -199,13 +199,25 @@ const FEMININE = 2;
 const NEUTER = 3;
 
 // case
-const NOMINATIVE = 16;
-const GENITIVE = 10;
-const DATIVE = 7;
+const ABESSIVE = 1;
+const ABLATIVE = 2;
 const ACCUSATIVE = 3;
+const ADESSIVE = 4;
+const ALLATIVE = 5;
+const COMITATIVE = 6;
+const DATIVE = 7;
+const ELATIVE = 8;
+const ESSIVE = 9;
+const GENITIVE = 10;
+const ILLATIVE = 11;
+const INESSIVE = 12;
+const INSTRUCTUVE = 13;
 const INSTRUMENTAL = 14;
 const LOCATIVE = 15;
+const NOMINATIVE = 16;
+const PARTITIVE = 17;
 const PREPOSITIONAL = 18;
+const TRANSLATIVE = 19;
 const VOCATIVE = 20;
 
 // degree (not sure about the difference between 1 and 2)
