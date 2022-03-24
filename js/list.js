@@ -3,7 +3,7 @@ import { e, attachCustomCheckboxHandlers, attachRippleEffectHandlers, separateWo
 import { setWindowName, openPage } from './lib/navigation.js';
 import { createTopBar, attachShadowHandlers } from './lib/top-bar.js';
 import { l, lc, detectDirection, capitalize } from './lib/i18n.js';
-import { getInflectionTables, mergeInflectionTables, saveInflectionTables } from './lib/inflection.js';
+import { getInflectionTables, getPossibleTypes, mergeInflectionTables, saveInflectionTables } from './lib/inflection.js';
 
 const listContainer = document.getElementById('list-container');
 const toolbarContainer = document.getElementById('toolbar-container');
@@ -271,7 +271,7 @@ function updateToolbar() {
 function openInflectionDialogBox() {
   const selection = [];
   const { tables, lang } = selectedInflection;
-  [ 'noun', 'adjective', 'verb' ].forEach((type) => {
+  getPossibleTypes(lang).forEach((type) => {
     const rippleElement = e('SPAN', { className: 'ripple' });
     const checkboxElement = e('SPAN', { className: 'checkbox', tabIndex: 0 }, rippleElement);
     const labelElement = e('LABEL', {}, l(`include_${type}s`));

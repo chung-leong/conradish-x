@@ -1,6 +1,11 @@
 import { l } from './i18n.js';
 import { storeObject } from './storage.js';
 
+export function getPossibleTypes(lang) {
+  const generator = generators[lang];
+  return (generator) ? generator.getPossibleTypes() : [];
+}
+
 export function getInflectionTables(doc) {
   const { lang, content } = doc;
   const tables = {};
@@ -40,7 +45,7 @@ export function getInflectionTables(doc) {
 
 export function mergeInflectionTables(tableLists, lang) {
   const result = {};
-  for (const type of [ 'noun', 'adjective', 'verb' ]) {
+  for (const type of [ 'noun', 'adjective', 'noun_adj', 'verb' ]) {
     const included = {};
     const dstList = result[type] = [];
     for (const tables of tableLists) {
@@ -97,15 +102,24 @@ class TableGenerator {
   process(inflections, term) {
     try {
       let type, table;
-      if (this.has(inflections, [ 'tense' ])) {
+      if (this.isVerb(inflections)) {
         table = this.processVerb(inflections, term);
         type = 'verb';
-      } else if (this.has(inflections, [ 'degree' ])) {
-        table = this.processAdjective(inflections, term);
-        type = 'adjective';
-      } else if (this.has(inflections, [ 'number' ])) {
-        table = this.processNoun(inflections, term);
-        type = 'noun';
+      } else {
+        if (this.isAdjectiveDistinct()) {
+          if (this.isAdjective(inflections)) {
+            table = this.processAdjective(inflections, term);
+            type = 'adjective';
+          } else if (this.isNoun(inflections)) {
+            table = this.processNoun(inflections, term);
+            type = 'noun';
+          }
+        } else {
+          if (this.isNounAdjective(inflections)) {
+            table = this.processNounAdjective(inflections, term);
+            type = 'noun_adj';
+          }
+        }
       }
       if (table) {
         table.inflections = inflections;
@@ -118,8 +132,33 @@ class TableGenerator {
     }
   }
 
+  getPossibleTypes() {
+    return [ 'noun', 'adjective', 'verb' ];
+  }
+
+  isAdjectiveDistinct() {
+    return true;
+  }
+
+  isVerb(inf) {
+    return this.has(inf, [ 'tense' ]);
+  }
+
+  isAdjective(inf) {
+    return this.has(inf, [ 'degree' ]);
+  }
+
+  isNoun(inf) {
+    return this.has(inf, [ 'number' ]);
+  }
+
+  isNounAdjective(inf) {
+    return this.isNoun(inf);
+  }
+
   processNoun(inf, term) {}
   processAdjective(inf, term) {}
+  processNounAdjective(inf, term) {}
   processVerb(inf, term) {}
 
   find(inflections, criteria) {
@@ -225,7 +264,10 @@ const POSITIVE1 = 1;
 const POSITIVE2 = 2;
 const COMPARATIVE = 3;
 
-class Slovak extends TableGenerator {
+class Slavic extends TableGenerator {
+}
+
+class Slovak extends Slavic {
   processVerb(inf) {
     const sg = (person) => this.find(inf, { tense: [ PRESENT, FUTURE ], number: SINGULAR, person });
     const pl = (person) => this.find(inf, { tense: [ PRESENT, FUTURE ], number: PLURAL, person });
@@ -284,7 +326,7 @@ class Slovak extends TableGenerator {
   }
 }
 
-class SerboCroatian extends TableGenerator {
+class SerboCroatian extends Slavic {
   processVerb(inf, term) {
     const cyr = this.isCyrillic(term);
     const sg = (person) => this.find(inf, { tense: [ PRESENT, FUTURE ], number: SINGULAR, person }, cyr);
@@ -385,7 +427,7 @@ class SerboCroatian extends TableGenerator {
   }
 }
 
-class Bulgarian extends TableGenerator {
+class Bulgarian extends Slavic {
   processVerb(inf) {
     const sg = (person) => this.find(inf, { tense: [ PRESENT, FUTURE ], number: SINGULAR, person });
     const pl = (person) => this.find(inf, { tense: [ PRESENT, FUTURE ], number: PLURAL, person });
@@ -404,7 +446,7 @@ class Bulgarian extends TableGenerator {
   }
 }
 
-class Macedonian extends TableGenerator {
+class Macedonian extends Slavic {
   processVerb(inf) {
     const sg = (person) => this.find(inf, { tense: [ PRESENT, FUTURE ], number: SINGULAR, person });
     const pl = (person) => this.find(inf, { tense: [ PRESENT, FUTURE ], number: PLURAL, person });
@@ -423,7 +465,7 @@ class Macedonian extends TableGenerator {
   }
 }
 
-class Russian extends TableGenerator {
+class Russian extends Slavic {
   processVerb(inf) {
     const sg = (person) => this.find(inf, { mood: INDICATIVE, tense: [ PRESENT, FUTURE ], number: SINGULAR, person });
     const pl = (person) => this.find(inf, { mood: INDICATIVE, tense: [ PRESENT, FUTURE ], number: PLURAL, person });
@@ -482,7 +524,7 @@ class Russian extends TableGenerator {
   }
 }
 
-class Belarusian extends TableGenerator {
+class Belarusian extends Slavic {
   processVerb(inf) {
     const sg = (person) => this.find(inf, { tense: [ PRESENT, FUTURE ], number: SINGULAR, person });
     const pl = (person) => this.find(inf, { tense: [ PRESENT, FUTURE ], number: PLURAL, person });
@@ -541,7 +583,7 @@ class Belarusian extends TableGenerator {
   }
 }
 
-class Ukrainian extends TableGenerator {
+class Ukrainian extends Slavic {
   processVerb(inf) {
     const sg = (person) => this.find(inf, { mood: INDICATIVE, tense: [ PRESENT, FUTURE ], number: SINGULAR, person });
     const pl = (person) => this.find(inf, { mood: INDICATIVE, tense: [ PRESENT, FUTURE ], number: PLURAL, person });
@@ -601,6 +643,63 @@ class Ukrainian extends TableGenerator {
   }
 }
 
+class Finnish extends TableGenerator {
+  isAdjectiveDistinct() {
+    return false;
+  }
+
+  getPossibleTypes() {
+    return [ 'noun_adj', 'verb' ];
+  }
+
+  processVerb(inf) {
+    const sg = (person) => this.find(inf, { mood: INDICATIVE, tense: PRESENT, number: SINGULAR, person });
+    const pl = (person) => this.find(inf, { mood: INDICATIVE, tense: PRESENT, number: PLURAL, person });
+    const h = (name, col) => this.header(l(name), col);
+    const p = (text) => this.header(text);
+    const cells = [
+      [ h('singular', 2), h('plural', 2) ],
+      [ p('minä'), sg(FIRST), p('me'), pl(FIRST) ],
+      [ p('sinä'), sg(SECOND), p('te'), pl(SECOND) ],
+      [ p('hän'), sg(THIRD), p('he'), pl(THIRD) ],
+    ];
+    let infinitive = this.find(inf, { person: undefined,  number: undefined, mood: undefined, tense: undefined });
+    if (infinitive.endsWith('kseen')) {
+      infinitive = infinitive.slice(0, -5);
+    }
+    if (infinitive !== '-') {
+      return this.build(infinitive, cells);
+    }
+  }
+
+  processNounAdjective(inf) {
+    const sg = (decl) => this.find(inf, { grammatical_case: decl, number: SINGULAR });
+    const pl = (decl) => this.find(inf, { grammatical_case: decl, number: PLURAL });
+    const h = (name) => this.header(l(name));
+    const cells = [
+      [ h(''), h('singular'), h('plural') ],
+      [ h('nominative'), sg(NOMINATIVE), pl(NOMINATIVE) ],
+      [ h('genitive'), sg(GENITIVE), pl(GENITIVE) ],
+      [ h('partitive'), sg(PARTITIVE), pl(PARTITIVE) ],
+      [ h('inessive'), sg(INESSIVE), pl(INESSIVE) ],
+      [ h('elative'), sg(ELATIVE), pl(ELATIVE) ],
+      [ h('illative'), sg(ILLATIVE), pl(ILLATIVE) ],
+      [ h('adessive'), sg(ADESSIVE), pl(ADESSIVE) ],
+      [ h('ablative'), sg(ABLATIVE), pl(ABLATIVE) ],
+      [ h('allative'), sg(ALLATIVE), pl(ALLATIVE) ],
+      [ h('essive'), sg(ADESSIVE), pl(ADESSIVE) ],
+      [ h('translative'), sg(TRANSLATIVE), pl(TRANSLATIVE) ],
+      [ h('instructive'), sg(INSTRUCTIVE), pl(INSTRUCTIVE) ],
+      [ h('abessive'), sg(ABESSIVE), pl(ABESSIVE) ],
+      [ h('comitative'), sg(COMITATIVE), pl(COMITATIVE) ],
+    ];
+    const nomSg = cells[1][1];
+    if (nomSg !== '-') {
+      return this.build(nomSg, cells);
+    }
+  }
+}
+
 const generators = {
   sk: new Slovak,
   sr: new SerboCroatian,
@@ -610,4 +709,5 @@ const generators = {
   ru: new Russian,
   be: new Belarusian,
   uk: new Ukrainian,
+  fi: new Finnish,
 };
