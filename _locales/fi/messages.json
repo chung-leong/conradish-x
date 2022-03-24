@@ -489,6 +489,54 @@
     "message": "vokatiivi",
     "description": "Column heading for inflection table"
   },
+  "abessive": {
+    "message": "abessiivi",
+    "description": "Column heading for inflection table"
+  },
+  "ablative": {
+    "message": "ablatiivi",
+    "description": "Column heading for inflection table"
+  },
+  "adessive": {
+    "message": "abessiivi",
+    "description": "Column heading for inflection table"
+  },
+  "allative": {
+    "message": "allatiivi",
+    "description": "Column heading for inflection table"
+  },
+  "comitative": {
+    "message": "komitatiivi",
+    "description": "Column heading for inflection table"
+  },
+  "elative": {
+    "message": "elatiivi",
+    "description": "Column heading for inflection table"
+  },
+  "essive": {
+    "message": "essiivi",
+    "description": "Column heading for inflection table"
+  },
+  "illative": {
+    "message": "illatiivi",
+    "description": "Column heading for inflection table"
+  },
+  "inessive": {
+    "message": "inessiivi",
+    "description": "Column heading for inflection table"
+  },
+  "instructive": {
+    "message": "instruktiivi",
+    "description": "Column heading for inflection table"
+  },
+  "partitive": {
+    "message": "partitiivi",
+    "description": "Column heading for inflection table"
+  },
+  "translative": {
+    "message": "translatiivi",
+    "description": "Column heading for inflection table"
+  },
   "singular": {
     "message": "singulaari",
     "description": "Row label for inflection table"

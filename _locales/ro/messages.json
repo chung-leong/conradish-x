@@ -489,6 +489,54 @@
     "message": "vocativul",
     "description": "Column heading for inflection table"
   },
+  "abessive": {
+    "message": "abesiv",
+    "description": "Column heading for inflection table"
+  },
+  "ablative": {
+    "message": "ablativ",
+    "description": "Column heading for inflection table"
+  },
+  "adessive": {
+    "message": "adesiv",
+    "description": "Column heading for inflection table"
+  },
+  "allative": {
+    "message": "alativ",
+    "description": "Column heading for inflection table"
+  },
+  "comitative": {
+    "message": "comitativ",
+    "description": "Column heading for inflection table"
+  },
+  "elative": {
+    "message": "elativ",
+    "description": "Column heading for inflection table"
+  },
+  "essive": {
+    "message": "esiv",
+    "description": "Column heading for inflection table"
+  },
+  "illative": {
+    "message": "ilativ",
+    "description": "Column heading for inflection table"
+  },
+  "inessive": {
+    "message": "inesiv",
+    "description": "Column heading for inflection table"
+  },
+  "instructive": {
+    "message": "instructiv",
+    "description": "Column heading for inflection table"
+  },
+  "partitive": {
+    "message": "partitiv",
+    "description": "Column heading for inflection table"
+  },
+  "translative": {
+    "message": "translativ",
+    "description": "Column heading for inflection table"
+  },
   "singular": {
     "message": "singular",
     "description": "Row label for inflection table"

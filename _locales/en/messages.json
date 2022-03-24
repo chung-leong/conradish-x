@@ -497,6 +497,54 @@
     "message": "vocative",
     "description": "Column heading for inflection table"
   },
+  "abessive": {
+    "message": "abessive",
+    "description": "Column heading for inflection table"
+  },
+  "ablative": {
+    "message": "ablative",
+    "description": "Column heading for inflection table"
+  },
+  "adessive": {
+    "message": "adessive",
+    "description": "Column heading for inflection table"
+  },
+  "allative": {
+    "message": "allative",
+    "description": "Column heading for inflection table"
+  },
+  "comitative": {
+    "message": "comitative",
+    "description": "Column heading for inflection table"
+  },
+  "elative": {
+    "message": "elative",
+    "description": "Column heading for inflection table"
+  },
+  "essive": {
+    "message": "essive",
+    "description": "Column heading for inflection table"
+  },
+  "illative": {
+    "message": "illative",
+    "description": "Column heading for inflection table"
+  },
+  "inessive": {
+    "message": "inessive",
+    "description": "Column heading for inflection table"
+  },
+  "instructive": {
+    "message": "instructive",
+    "description": "Column heading for inflection table"
+  },
+  "partitive": {
+    "message": "partitive",
+    "description": "Column heading for inflection table"
+  },
+  "translative": {
+    "message": "translative",
+    "description": "Column heading for inflection table"
+  },
   "singular": {
     "message": "singular",
     "description": "Row label for inflection table"

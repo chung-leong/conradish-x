@@ -490,7 +490,7 @@
     "description": "Column heading for inflection table"
   },
   "dative": {
-    "message": "Celownik",
+    "message": "celownik",
     "description": "Column heading for inflection table"
   },
   "locative": {
@@ -507,6 +507,54 @@
   },
   "vocative": {
     "message": "wołacz",
+    "description": "Column heading for inflection table"
+  },
+  "abessive": {
+    "message": "abessivus",
+    "description": "Column heading for inflection table"
+  },
+  "ablative": {
+    "message": "ablativus",
+    "description": "Column heading for inflection table"
+  },
+  "adessive": {
+    "message": "adessivus",
+    "description": "Column heading for inflection table"
+  },
+  "allative": {
+    "message": "allativus",
+    "description": "Column heading for inflection table"
+  },
+  "comitative": {
+    "message": "comitativus",
+    "description": "Column heading for inflection table"
+  },
+  "elative": {
+    "message": "elativus",
+    "description": "Column heading for inflection table"
+  },
+  "essive": {
+    "message": "essivus",
+    "description": "Column heading for inflection table"
+  },
+  "illative": {
+    "message": "illativus",
+    "description": "Column heading for inflection table"
+  },
+  "inessive": {
+    "message": "inessivus",
+    "description": "Column heading for inflection table"
+  },
+  "instructive": {
+    "message": "instructivus",
+    "description": "Column heading for inflection table"
+  },
+  "partitive": {
+    "message": "partitivus",
+    "description": "Column heading for inflection table"
+  },
+  "translative": {
+    "message": "translative",
     "description": "Column heading for inflection table"
   },
   "singular": {
