@@ -489,6 +489,54 @@
     "message": "呼格",
     "description": "Column heading for inflection table"
   },
+  "abessive": {
+    "message": "欠格",
+    "description": "Column heading for inflection table"
+  },
+  "ablative": {
+    "message": "离格",
+    "description": "Column heading for inflection table"
+  },
+  "adessive": {
+    "message": "接格",
+    "description": "Column heading for inflection table"
+  },
+  "allative": {
+    "message": "向格",
+    "description": "Column heading for inflection table"
+  },
+  "comitative": {
+    "message": "共格",
+    "description": "Column heading for inflection table"
+  },
+  "elative": {
+    "message": "出格",
+    "description": "Column heading for inflection table"
+  },
+  "essive": {
+    "message": "样格",
+    "description": "Column heading for inflection table"
+  },
+  "illative": {
+    "message": "入格",
+    "description": "Column heading for inflection table"
+  },
+  "inessive": {
+    "message": "內格",
+    "description": "Column heading for inflection table"
+  },
+  "instructive": {
+    "message": "手段格",
+    "description": "Column heading for inflection table"
+  },
+  "partitive": {
+    "message": "部分格",
+    "description": "Column heading for inflection table"
+  },
+  "translative": {
+    "message": "转移格",
+    "description": "Column heading for inflection table"
+  },
   "singular": {
     "message": "单数",
     "description": "Row label for inflection table"
