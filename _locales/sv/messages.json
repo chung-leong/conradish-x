@@ -445,6 +445,10 @@
     "message": "Inkludera substantiv",
     "description": "Label of checkbox in dialog box"
   },
+  "include_noun_adjs": {
+    "message": "Inkludera substantiv och adjektiv",
+    "description": "Label of checkbox in dialog box"
+  },
   "include_adjectives": {
     "message": "Inkludera adjektiv",
     "description": "Label of checkbox in dialog box"

@@ -465,6 +465,10 @@
     "message": "Включіть іменники",
     "description": "Label of checkbox in dialog box"
   },
+  "include_noun_adjs": {
+    "message": "Включіть іменники та прикметники",
+    "description": "Label of checkbox in dialog box"
+  },
   "include_adjectives": {
     "message": "Включіть прикметники",
     "description": "Label of checkbox in dialog box"

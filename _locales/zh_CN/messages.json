@@ -445,6 +445,10 @@
     "message": "包括名词",
     "description": "Label of checkbox in dialog box"
   },
+  "include_noun_adjs": {
+    "message": "包括名词和形容词",
+    "description": "Label of checkbox in dialog box"
+  },
   "include_adjectives": {
     "message": "包括形容词",
     "description": "Label of checkbox in dialog box"

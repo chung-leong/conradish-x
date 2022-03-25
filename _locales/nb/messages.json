@@ -445,6 +445,10 @@
     "message": "Ta med substantiv",
     "description": "Label of checkbox in dialog box"
   },
+  "include_noun_adjs": {
+    "message": "Ta med substantiv og adjektiver",
+    "description": "Label of checkbox in dialog box"
+  },
   "include_adjectives": {
     "message": "Ta med adjektiver",
     "description": "Label of checkbox in dialog box"

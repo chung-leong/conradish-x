@@ -465,6 +465,10 @@
     "message": "Zahrnúť podstatné mená",
     "description": "Label of checkbox in dialog box"
   },
+  "include_noun_adjs": {
+    "message": "Zahrňte podstatné mená a prídavné mená",
+    "description": "Label of checkbox in dialog box"
+  },
   "include_adjectives": {
     "message": "Zahrnúť prídavné mená",
     "description": "Label of checkbox in dialog box"

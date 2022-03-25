@@ -465,6 +465,10 @@
     "message": "Включить существительные",
     "description": "Label of checkbox in dialog box"
   },
+  "include_noun_adjs": {
+    "message": "Включить существительные и прилагательные",
+    "description": "Label of checkbox in dialog box"
+  },
   "include_adjectives": {
     "message": "Включить прилагательные",
     "description": "Label of checkbox in dialog box"

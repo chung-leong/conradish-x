@@ -465,6 +465,10 @@
     "message": "Dołącz rzeczowniki",
     "description": "Label of checkbox in dialog box"
   },
+  "include_noun_adjs": {
+    "message": "Dołącz rzeczowniki i przymiotniki",
+    "description": "Label of checkbox in dialog box"
+  },
   "include_adjectives": {
     "message": "Dołącz przymiotniki",
     "description": "Label of checkbox in dialog box"

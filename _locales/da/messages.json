@@ -445,6 +445,10 @@
     "message": "Inkluder navneord",
     "description": "Label of checkbox in dialog box"
   },
+  "include_noun_adjs": {
+    "message": "Inkluder navneord og adjektiver",
+    "description": "Label of checkbox in dialog box"
+  },
   "include_adjectives": {
     "message": "Inkluder adjektiver",
     "description": "Label of checkbox in dialog box"

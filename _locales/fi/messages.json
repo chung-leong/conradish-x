@@ -445,6 +445,10 @@
     "message": "Sisällytä substantiivit",
     "description": "Label of checkbox in dialog box"
   },
+  "include_noun_adjs": {
+    "message": "Sisällytä substantiivit ja adjektiivit",
+    "description": "Label of checkbox in dialog box"
+  },
   "include_adjectives": {
     "message": "Sisällytä adjektiivit",
     "description": "Label of checkbox in dialog box"
