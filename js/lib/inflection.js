@@ -286,8 +286,8 @@ class Slovak extends Slavic {
   }
 
   processNoun(inf) {
-    const sg = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2, undefined ], grammatical_case: decl, number: SINGULAR });
-    const pl = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2, undefined ], grammatical_case: decl, number: PLURAL });
+    const sg = (decl) => this.find(inf, { grammatical_case: decl, number: SINGULAR });
+    const pl = (decl) => this.find(inf, { grammatical_case: decl, number: PLURAL });
     const h = (name) => this.header(l(name));
     const cells = [
       [ h(''), h('singular'), h('plural') ],
@@ -305,10 +305,10 @@ class Slovak extends Slavic {
   }
 
   processAdjective(inf) {
-    const m = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2, undefined ], grammatical_case: decl, number: SINGULAR, gender: MASCULINE });
-    const f = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2, undefined ], grammatical_case: decl, number: SINGULAR, gender: FEMININE });
-    const n = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2, undefined ], grammatical_case: decl, number: SINGULAR, gender: NEUTER });
-    const pl = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2, undefined ], grammatical_case: decl, number: PLURAL });
+    const m = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2 ], grammatical_case: decl, number: SINGULAR, gender: MASCULINE });
+    const f = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2 ], grammatical_case: decl, number: SINGULAR, gender: FEMININE });
+    const n = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2 ], grammatical_case: decl, number: SINGULAR, gender: NEUTER });
+    const pl = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2 ], grammatical_case: decl, number: PLURAL });
     const h = (name) => this.header(l(name));
     const cells = [
       [ h(''), h('masculine'), h('feminine'), h('neuter'), h('plural') ],
@@ -347,8 +347,8 @@ class SerboCroatian extends Slavic {
 
   processNoun(inf, term) {
     const cyr = this.isCyrillic(term);
-    const sg = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2, undefined ], grammatical_case: decl, number: SINGULAR }, cyr);
-    const pl = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2, undefined ], grammatical_case: decl, number: PLURAL }, cyr);
+    const sg = (decl) => this.find(inf, { grammatical_case: decl, number: SINGULAR }, cyr);
+    const pl = (decl) => this.find(inf, { grammatical_case: decl, number: PLURAL }, cyr);
     const h = (name) => this.header(l(name));
     const cells = [
       [ h(''), h('singular'), h('plural') ],
@@ -368,10 +368,10 @@ class SerboCroatian extends Slavic {
 
   processAdjective(inf, term) {
     const cyr = this.isCyrillic(term);
-    const m = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2, undefined ], grammatical_case: decl, number: SINGULAR, gender: [ MASCULINE, undefined ] }, cyr);
-    const f = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2, undefined ], grammatical_case: decl, number: SINGULAR, gender: FEMININE }, cyr);
-    const n = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2, undefined ], grammatical_case: decl, number: SINGULAR, gender: NEUTER }, cyr);
-    const pl = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2, undefined ], grammatical_case: decl, number: PLURAL }, cyr);
+    const m = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2 ], grammatical_case: decl, number: SINGULAR, gender: [ MASCULINE, undefined ] }, cyr);
+    const f = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2 ], grammatical_case: decl, number: SINGULAR, gender: FEMININE }, cyr);
+    const n = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2 ], grammatical_case: decl, number: SINGULAR, gender: NEUTER }, cyr);
+    const pl = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2 ], grammatical_case: decl, number: PLURAL }, cyr);
     const h = (name) => this.header(l(name));
     const cells = [
       [ h(''), h('masculine'), h('feminine'), h('neuter'), h('plural') ],
@@ -484,8 +484,8 @@ class Russian extends Slavic {
   }
 
   processNoun(inf) {
-    const sg = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2, undefined ], grammatical_case: decl, number: SINGULAR });
-    const pl = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2, undefined ], grammatical_case: decl, number: PLURAL });
+    const sg = (decl) => this.find(inf, { grammatical_case: decl, number: SINGULAR });
+    const pl = (decl) => this.find(inf, { grammatical_case: decl, number: PLURAL });
     const h = (name) => this.header(l(name));
     const cells = [
       [ h(''), h('singular'), h('plural') ],
@@ -503,10 +503,10 @@ class Russian extends Slavic {
   }
 
   processAdjective(inf) {
-    const m = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2, undefined ], grammatical_case: decl, number: SINGULAR, gender: MASCULINE });
-    const f = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2, undefined ], grammatical_case: decl, number: SINGULAR, gender: FEMININE });
-    const n = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2, undefined ], grammatical_case: decl, number: SINGULAR, gender: NEUTER });
-    const pl = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2, undefined ], grammatical_case: decl, number: PLURAL });
+    const m = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2 ], grammatical_case: decl, number: SINGULAR, gender: MASCULINE });
+    const f = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2 ], grammatical_case: decl, number: SINGULAR, gender: FEMININE });
+    const n = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2 ], grammatical_case: decl, number: SINGULAR, gender: NEUTER });
+    const pl = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2 ], grammatical_case: decl, number: PLURAL });
     const h = (name) => this.header(l(name));
     const cells = [
       [ h(''), h('masculine'), h('feminine'), h('neuter'), h('plural') ],
@@ -562,10 +562,10 @@ class Belarusian extends Slavic {
   }
 
   processAdjective(inf) {
-    const m = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2, undefined ], grammatical_case: decl, number: SINGULAR, gender: MASCULINE });
-    const f = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2, undefined ], grammatical_case: decl, number: SINGULAR, gender: FEMININE });
-    const n = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2, undefined ], grammatical_case: decl, number: SINGULAR, gender: NEUTER });
-    const pl = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2, undefined ], grammatical_case: decl, number: PLURAL });
+    const m = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2 ], grammatical_case: decl, number: SINGULAR, gender: MASCULINE });
+    const f = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2 ], grammatical_case: decl, number: SINGULAR, gender: FEMININE });
+    const n = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2 ], grammatical_case: decl, number: SINGULAR, gender: NEUTER });
+    const pl = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2 ], grammatical_case: decl, number: PLURAL });
     const h = (name) => this.header(l(name));
     const cells = [
       [ h(''), h('masculine'), h('feminine'), h('neuter'), h('plural') ],
@@ -602,8 +602,8 @@ class Ukrainian extends Slavic {
   }
 
   processNoun(inf) {
-    const sg = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2, undefined ], grammatical_case: decl, number: SINGULAR });
-    const pl = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2, undefined ], grammatical_case: decl, number: PLURAL });
+    const sg = (decl) => this.find(inf, { grammatical_case: decl, number: SINGULAR });
+    const pl = (decl) => this.find(inf, { grammatical_case: decl, number: PLURAL });
     const h = (name) => this.header(l(name));
     const cells = [
       [ h(''), h('singular'), h('plural') ],
@@ -622,10 +622,10 @@ class Ukrainian extends Slavic {
   }
 
   processAdjective(inf) {
-    const m = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2, undefined ], grammatical_case: decl, number: SINGULAR, gender: MASCULINE });
-    const f = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2, undefined ], grammatical_case: decl, number: SINGULAR, gender: FEMININE });
-    const n = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2, undefined ], grammatical_case: decl, number: SINGULAR, gender: NEUTER });
-    const pl = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2, undefined ], grammatical_case: decl, number: PLURAL });
+    const m = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2 ], grammatical_case: decl, number: SINGULAR, gender: MASCULINE });
+    const f = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2 ], grammatical_case: decl, number: SINGULAR, gender: FEMININE });
+    const n = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2 ], grammatical_case: decl, number: SINGULAR, gender: NEUTER });
+    const pl = (decl) => this.find(inf, { degree: [ POSITIVE1, POSITIVE2 ], grammatical_case: decl, number: PLURAL });
     const h = (name) => this.header(l(name));
     const cells = [
       [ h(''), h('masculine'), h('feminine'), h('neuter'), h('plural') ],
