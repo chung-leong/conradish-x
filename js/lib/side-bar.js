@@ -207,7 +207,7 @@ function createPaperControls() {
     changeSettings((settings) => {
       const props = getPaperProperties(evt.target.value);
       settings.paper = evt.target.value;
-      settings.customMargins = Object.assign({}, props.defaultMargins);
+      settings.customMargins = { ...props.defaultMargins };
       const [ customMargins ] = document.getElementsByClassName('custom-margins');
       const inputs = customMargins.getElementsByTagName('INPUT');
       for (const input of inputs) {

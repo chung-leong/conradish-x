@@ -55,33 +55,37 @@ async function createDocument(tab) {
   const codeURL = chrome.runtime.getURL('js/lib/capturing.js');
   await initializeLocalization();
   const settings = getSettings();
-  await chrome.scripting.executeScript({
-    target: { tabId: tab.id },
-    args: [ codeURL, settings ],
-    func: async (codeURL, settings) => {
-      const selections = [ getSelection() ];
-      for (const iframe of document.getElementsByTagName('IFRAME')) {
-        try {
-          selections.push(iframe.contentWindow.getSelection());
-        } catch (e) {
+  try {
+    await chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      args: [ codeURL, settings ],
+      func: async (codeURL, settings) => {
+        const selections = [ getSelection() ];
+        for (const iframe of document.getElementsByTagName('IFRAME')) {
+          try {
+            selections.push(iframe.contentWindow.getSelection());
+          } catch (e) {
+          }
+        }
+        const list = selections.filter(s => !s.isCollapsed);
+        if (list.length > 0) {
+          try {
+            // load the code for capturing only if the frame has selection
+            const { captureSelections } = await import(codeURL);
+            const doc = await captureSelections(list, settings);
+            chrome.runtime.sendMessage({ type: 'create', document: doc });
+          } catch (err) {
+            chrome.runtime.sendMessage({ type: 'error', message: err.message });
+            throw err;
+          }
         }
       }
-      const list = selections.filter(s => !s.isCollapsed);
-      if (list.length > 0) {
-        try {
-          // load the code for capturing only if the frame has selection
-          const { captureSelections } = await import(codeURL);
-          const doc = await captureSelections(list, settings);
-          chrome.runtime.sendMessage({ type: 'create', document: doc });
-        } catch (err) {
-          chrome.runtime.sendMessage({ type: 'error', message: err.message });
-          throw err;
-        }
-      }
+    });
+    if (chrome.runtime.lastError) {
+      console.error(chrome.runtime.lastError.message);
     }
-  });
-  if (chrome.runtime.lastError) {
-    console.error(chrome.runtime.lastError.message);
+  } catch (err) {
+    console.error(err);
   }
 }
 

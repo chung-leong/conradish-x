@@ -178,7 +178,10 @@ async function handleChanged(changes, areaName) {
       if (key === '.settings') {
         if (!self) {
           // modified by another process--reload it
-          settings = await get('.settings');
+          const newSettings = await get('.settings');
+          if (newSettings) {
+            settings = newSettings;
+          }
         }
         const detail = { self };
         const evt = new CustomEvent('settings', { detail });
