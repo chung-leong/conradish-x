@@ -336,7 +336,7 @@ export async function translate(original, sourceLang, targetLang, singleWord) {
     const inflections = [];
     for (const qi of filterInflections(json.query_inflections, sourceLang)) {
       inflections.push({ written_form: qi.written_form, ...qi.features });
-      if (!useLowerCase && !isCapitalized(qi.written_form)) {
+      if (!useLowerCase && isLowerCase(qi.written_form, sourceLang)) {
         useLowerCase = true;
       }
     }
@@ -347,13 +347,14 @@ export async function translate(original, sourceLang, targetLang, singleWord) {
     // use the lowercase version if the translation isn't in uppercase
     const targetScript = getLanguageScript(targetLang);
     if (mixedCaseScript.includes(targetScript)) {
-      if (!isCapitalized(trans)) {
+      if (isLowerCase(trans, sourceLang)) {
         useLowerCase = true;
       }
     }
   }
-  if (lowerCaseAlt && useLowerCase) {
-    result.term.text = lowerCaseAlt;
+  if (useLowerCase) {
+    result.term.text = original.toLocaleLowerCase(sourceLang);
+    result.translation.text = trans.toLocaleLowerCase(targetLang);
   }
   return result;
 }
@@ -392,6 +393,10 @@ export function isCapitalized(word, lang) {
     }
   }
   return false;
+}
+
+function isLowerCase(word, lang) {
+  return (word.toLocaleLowerCase(lang) === word);
 }
 
 const languages = [
