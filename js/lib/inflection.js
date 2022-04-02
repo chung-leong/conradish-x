@@ -1,4 +1,4 @@
-import { l } from './i18n.js';
+import { initializeSpecificLocale, getLocaleMessage, getUILanguage } from './i18n.js';
 import { storeObject } from './storage.js';
 
 export function getPossibleTypes(lang) {
@@ -6,39 +6,48 @@ export function getPossibleTypes(lang) {
   return (generator) ? generator.getPossibleTypes() : [];
 }
 
-export function getInflectionTables(doc) {
+export async function getInflectionTables(doc) {
   const { lang, content } = doc;
-  const tables = {};
   const generator = generators[lang];
-  if (generator) {
-    const scan = (item) => {
-      if (item instanceof Array) {
-        item.forEach(scan);
-      } else if (item instanceof Object) {
-        const { footnote, content } = item;
-        let inflections, term;
-        if (footnote && footnote.inflections instanceof Array) {
-          inflections = footnote.inflections;
-          term = footnote.term;
-        } else if (item.inflections instanceof Array) {
-          inflections = item.inflections;
-          term = item.term;
-        }
-        if (inflections) {
-          const table = generator.process(inflections, term);
-          if (table) {
-            const { type } = table;
-            let list = tables[type];
-            if (!list) {
-              list = tables[type] = [];
-            }
-            list.push(table);
-          }
-        }
-        scan(content);
+  if (!generator) {
+    return null;
+  }
+  const entries = [];
+  const defaultLang = getUILanguage().split('-')[0];
+  const scan = (item) => {
+    if (item instanceof Array) {
+      item.forEach(scan);
+    } else if (item instanceof Object) {
+      const { footnote, content } = item;
+      if (footnote && footnote.inflections instanceof Array) {
+        entries.push({
+          inflections: footnote.inflections,
+          term: footnote.term,
+          target: (footnote.lang || '').split(',')[1] || defaultLang
+        });
+      } else if (item.inflections instanceof Array) {
+        entries.push({
+          inflections: item.inflections,
+          term: item.term,
+          target: item.lang || defaultLang
+        });
       }
-    };
-    scan(content);
+      scan(content);
+    }
+  };
+  scan(content);
+  const tables = {};
+  for (const { inflections, term, target } of entries) {
+    await initializeSpecificLocale(target);
+    const table = generator.process(inflections, target, term);
+    if (table) {
+      const { type } = table;
+      let list = tables[type];
+      if (!list) {
+        list = tables[type] = [];
+      }
+      list.push(table);
+    }
   }
   return (Object.keys(tables).length > 0) ? tables : null;
 }
@@ -72,16 +81,28 @@ export function mergeInflectionTables(tableLists, lang) {
 export async function saveInflectionTables(tables, selection, lang) {
   const content = [];
   const div = { type: 'DIV', content: '\u200c' };
+  const targets = [];
   for (const [ type, list ] of Object.entries(tables)) {
     if (selection.includes(type)) {
       for (const table of list) {
         content.push(table);
         content.push(div);
+        const { lang } = table;
+        const target = targets.find(t => t.lang === lang);
+        if (target) {
+          target.count++;
+        } else {
+          targets.push({ lang, count: 1 });
+        }
       }
     }
   }
+  // use the language with the largest number of footnotes
+  // (in normal usage there'd only be one)
+  const [ target ] = targets.sort((a, b) => b.count - a.count);
+  const name = getLocaleMessage('inflection_tables', target.lang);
   const captions = content.filter(t => t.tag === 'TABLE').map(t => getCaption(t));
-  const title = `${l('inflection_tables')}: ${captions.join(', ')}`;
+  const title = `${name}: ${captions.join(', ')}`;
   const type = 'inflection';
   const doc = { lang, type, title, content };
   return storeObject('DOC', doc);
@@ -99,24 +120,24 @@ class TableHeader {
 }
 
 class TableGenerator {
-  process(inflections, term) {
+  process(inflections, target, term) {
     try {
       let type, table;
       if (this.isVerb(inflections)) {
-        table = this.processVerb(inflections, term);
+        table = this.processVerb(inflections, target, term);
         type = 'verb';
       } else {
         if (this.isAdjectiveDistinct()) {
           if (this.isAdjective(inflections)) {
-            table = this.processAdjective(inflections, term);
+            table = this.processAdjective(inflections, target, term);
             type = 'adjective';
           } else if (this.isNoun(inflections)) {
-            table = this.processNoun(inflections, term);
+            table = this.processNoun(inflections, target, term);
             type = 'noun';
           }
         } else {
           if (this.isNounAdjective(inflections)) {
-            table = this.processNounAdjective(inflections, term);
+            table = this.processNounAdjective(inflections, target, term);
             type = 'noun_adj';
           }
         }
@@ -125,6 +146,7 @@ class TableGenerator {
         table.inflections = inflections;
         table.term = term;
         table.type = type;
+        table.lang = target;
         return table;
       }
     } catch (err) {
@@ -156,10 +178,10 @@ class TableGenerator {
     return this.isNoun(inf);
   }
 
-  processNoun(inf, term) {}
-  processAdjective(inf, term) {}
-  processNounAdjective(inf, term) {}
-  processVerb(inf, term) {}
+  processNoun(inf, target, term) {}
+  processAdjective(inf, target, term) {}
+  processNounAdjective(inf, target, term) {}
+  processVerb(inf, target, term) {}
 
   find(inflections, criteria) {
     const matches = this.findAll(inflections, criteria);
@@ -299,10 +321,10 @@ class Slavic extends TableGenerator {
 }
 
 class Slovak extends Slavic {
-  processVerb(inf) {
+  processVerb(inf, target) {
     const sg = (person) => this.find(inf, { tense: [ PRESENT, FUTURE ], number: SINGULAR, person });
     const pl = (person) => this.find(inf, { tense: [ PRESENT, FUTURE ], number: PLURAL, person });
-    const h = (name, col) => this.header(l(name), col);
+    const h = (name, col) => this.header(getLocaleMessage(name, target), col);
     const p = (text) => this.header(text);
     const cells = [
       [ h('singular', 2), h('plural', 2) ],
@@ -316,10 +338,10 @@ class Slovak extends Slavic {
     }
   }
 
-  processNoun(inf) {
+  processNoun(inf, target) {
     const sg = (decl) => this.find(inf, { grammatical_case: decl, number: SINGULAR });
     const pl = (decl) => this.find(inf, { grammatical_case: decl, number: PLURAL });
-    const h = (name) => this.header(l(name));
+    const h = (name) => this.header(getLocaleMessage(name, target));
     const cells = [
       [ h(''), h('singular'), h('plural') ],
       [ h('nominative'), sg(NOMINATIVE), pl(NOMINATIVE) ],
@@ -335,12 +357,12 @@ class Slovak extends Slavic {
     }
   }
 
-  processAdjective(inf) {
+  processAdjective(inf, target) {
     const m = (decl) => this.find(inf, { degree: [ GENERAL, TEMPORARY ], grammatical_case: decl, number: SINGULAR, gender: MASCULINE });
     const f = (decl) => this.find(inf, { degree: [ GENERAL, TEMPORARY ], grammatical_case: decl, number: SINGULAR, gender: FEMININE });
     const n = (decl) => this.find(inf, { degree: [ GENERAL, TEMPORARY ], grammatical_case: decl, number: SINGULAR, gender: NEUTER });
     const pl = (decl) => this.find(inf, { degree: [ GENERAL, TEMPORARY ], grammatical_case: decl, number: PLURAL });
-    const h = (name) => this.header(l(name));
+    const h = (name) => this.header(getLocaleMessage(name, target));
     const cells = [
       [ h(''), h('masculine'), h('feminine'), h('neuter'), h('plural') ],
       [ h('nominative'), m(NOMINATIVE), f(NOMINATIVE), n(NOMINATIVE), pl(NOMINATIVE) ],
@@ -358,11 +380,11 @@ class Slovak extends Slavic {
 }
 
 class SerboCroatian extends Slavic {
-  processVerb(inf, term) {
+  processVerb(inf, target, term) {
     const cyr = this.isCyrillic(term);
     const sg = (person) => this.find(inf, { tense: [ PRESENT, FUTURE ], number: SINGULAR, person }, cyr);
     const pl = (person) => this.find(inf, { tense: [ PRESENT, FUTURE ], number: PLURAL, person }, cyr);
-    const h = (name, col) => this.header(l(name), col);
+    const h = (name, col) => this.header(getLocaleMessage(name, target), col);
     const p = (text) => this.header(text);
     const cells = [
       [ h('singular', 2), h('plural', 2) ],
@@ -376,11 +398,11 @@ class SerboCroatian extends Slavic {
     }
   }
 
-  processNoun(inf, term) {
+  processNoun(inf, target, term) {
     const cyr = this.isCyrillic(term);
     const sg = (decl) => this.find(inf, { grammatical_case: decl, number: SINGULAR }, cyr);
     const pl = (decl) => this.find(inf, { grammatical_case: decl, number: PLURAL }, cyr);
-    const h = (name) => this.header(l(name));
+    const h = (name) => this.header(getLocaleMessage(name, target));
     const cells = [
       [ h(''), h('singular'), h('plural') ],
       [ h('nominative'), sg(NOMINATIVE), pl(NOMINATIVE) ],
@@ -397,13 +419,13 @@ class SerboCroatian extends Slavic {
     }
   }
 
-  processAdjective(inf, term) {
+  processAdjective(inf, target, term) {
     const cyr = this.isCyrillic(term);
     const m = (decl) => this.find(inf, { degree: [ GENERAL, TEMPORARY ], grammatical_case: decl, number: SINGULAR, gender: [ MASCULINE, undefined ] }, cyr);
     const f = (decl) => this.find(inf, { degree: [ GENERAL, TEMPORARY ], grammatical_case: decl, number: SINGULAR, gender: FEMININE }, cyr);
     const n = (decl) => this.find(inf, { degree: [ GENERAL, TEMPORARY ], grammatical_case: decl, number: SINGULAR, gender: NEUTER }, cyr);
     const pl = (decl) => this.find(inf, { degree: [ GENERAL, TEMPORARY ], grammatical_case: decl, number: PLURAL }, cyr);
-    const h = (name) => this.header(l(name));
+    const h = (name) => this.header(getLocaleMessage(name, target));
     const cells = [
       [ h(''), h('masculine'), h('feminine'), h('neuter'), h('plural') ],
       [ h('nominative'), m(NOMINATIVE), f(NOMINATIVE), n(NOMINATIVE), pl(NOMINATIVE) ],
@@ -459,10 +481,10 @@ class SerboCroatian extends Slavic {
 }
 
 class Bulgarian extends Slavic {
-  processVerb(inf) {
+  processVerb(inf, target) {
     const sg = (person) => this.find(inf, { tense: [ PRESENT, FUTURE ], number: SINGULAR, person });
     const pl = (person) => this.find(inf, { tense: [ PRESENT, FUTURE ], number: PLURAL, person });
-    const h = (name, col) => this.header(l(name), col);
+    const h = (name, col) => this.header(getLocaleMessage(name, target), col);
     const p = (text) => this.header(text);
     const cells = [
       [ h('singular', 2), h('plural', 2) ],
@@ -478,10 +500,10 @@ class Bulgarian extends Slavic {
 }
 
 class Macedonian extends Slavic {
-  processVerb(inf) {
+  processVerb(inf, target) {
     const sg = (person) => this.find(inf, { tense: [ PRESENT, FUTURE ], number: SINGULAR, person });
     const pl = (person) => this.find(inf, { tense: [ PRESENT, FUTURE ], number: PLURAL, person });
-    const h = (name, col) => this.header(l(name), col);
+    const h = (name, col) => this.header(getLocaleMessage(name, target), col);
     const p = (text) => this.header(text);
     const cells = [
       [ h('singular', 2), h('plural', 2) ],
@@ -497,10 +519,10 @@ class Macedonian extends Slavic {
 }
 
 class Russian extends Slavic {
-  processVerb(inf) {
+  processVerb(inf, target) {
     const sg = (person) => this.find(inf, { mood: INDICATIVE, tense: [ PRESENT, FUTURE ], number: SINGULAR, person });
     const pl = (person) => this.find(inf, { mood: INDICATIVE, tense: [ PRESENT, FUTURE ], number: PLURAL, person });
-    const h = (name, col) => this.header(l(name), col);
+    const h = (name, col) => this.header(getLocaleMessage(name, target), col);
     const p = (text) => this.header(text);
     const cells = [
       [ h('singular', 2), h('plural', 2) ],
@@ -514,10 +536,10 @@ class Russian extends Slavic {
     }
   }
 
-  processNoun(inf) {
+  processNoun(inf, target) {
     const sg = (decl) => this.find(inf, { grammatical_case: decl, number: SINGULAR });
     const pl = (decl) => this.find(inf, { grammatical_case: decl, number: PLURAL });
-    const h = (name) => this.header(l(name));
+    const h = (name) => this.header(getLocaleMessage(name, target));
     const cells = [
       [ h(''), h('singular'), h('plural') ],
       [ h('nominative'), sg(NOMINATIVE), pl(NOMINATIVE) ],
@@ -533,12 +555,12 @@ class Russian extends Slavic {
     }
   }
 
-  processAdjective(inf) {
+  processAdjective(inf, target) {
     const m = (decl) => this.find(inf, { degree: [ GENERAL, TEMPORARY ], grammatical_case: decl, number: SINGULAR, gender: MASCULINE });
     const f = (decl) => this.find(inf, { degree: [ GENERAL, TEMPORARY ], grammatical_case: decl, number: SINGULAR, gender: FEMININE });
     const n = (decl) => this.find(inf, { degree: [ GENERAL, TEMPORARY ], grammatical_case: decl, number: SINGULAR, gender: NEUTER });
     const pl = (decl) => this.find(inf, { degree: [ GENERAL, TEMPORARY ], grammatical_case: decl, number: PLURAL });
-    const h = (name) => this.header(l(name));
+    const h = (name) => this.header(getLocaleMessage(name, target));
     const cells = [
       [ h(''), h('masculine'), h('feminine'), h('neuter'), h('plural') ],
       [ h('nominative'), m(NOMINATIVE), f(NOMINATIVE), n(NOMINATIVE), pl(NOMINATIVE) ],
@@ -556,10 +578,10 @@ class Russian extends Slavic {
 }
 
 class Belarusian extends Slavic {
-  processVerb(inf) {
+  processVerb(inf, target) {
     const sg = (person) => this.find(inf, { tense: [ PRESENT, FUTURE ], number: SINGULAR, person });
     const pl = (person) => this.find(inf, { tense: [ PRESENT, FUTURE ], number: PLURAL, person });
-    const h = (name, col) => this.header(l(name), col);
+    const h = (name, col) => this.header(getLocaleMessage(name, target), col);
     const p = (text) => this.header(text);
     const cells = [
       [ h('singular', 2), h('plural', 2) ],
@@ -573,10 +595,10 @@ class Belarusian extends Slavic {
     }
   }
 
-  processNoun(inf) {
+  processNoun(inf, target) {
     const sg = (decl) => this.find(inf, { grammatical_case: decl,  number: SINGULAR });
     const pl = (decl) => this.find(inf, { grammatical_case: decl,  number: PLURAL });
-    const h = (name) => this.header(l(name));
+    const h = (name) => this.header(getLocaleMessage(name, target));
     const cells = [
       [ h(''), h('singular'), h('plural') ],
       [ h('nominative'), sg(NOMINATIVE), pl(NOMINATIVE) ],
@@ -592,12 +614,12 @@ class Belarusian extends Slavic {
     }
   }
 
-  processAdjective(inf) {
+  processAdjective(inf, target) {
     const m = (decl) => this.find(inf, { degree: [ GENERAL, TEMPORARY ], grammatical_case: decl, number: SINGULAR, gender: MASCULINE });
     const f = (decl) => this.find(inf, { degree: [ GENERAL, TEMPORARY ], grammatical_case: decl, number: SINGULAR, gender: FEMININE });
     const n = (decl) => this.find(inf, { degree: [ GENERAL, TEMPORARY ], grammatical_case: decl, number: SINGULAR, gender: NEUTER });
     const pl = (decl) => this.find(inf, { degree: [ GENERAL, TEMPORARY ], grammatical_case: decl, number: PLURAL });
-    const h = (name) => this.header(l(name));
+    const h = (name) => this.header(getLocaleMessage(name, target));
     const cells = [
       [ h(''), h('masculine'), h('feminine'), h('neuter'), h('plural') ],
       [ h('nominative'), m(NOMINATIVE), f(NOMINATIVE), n(NOMINATIVE), pl(NOMINATIVE) ],
@@ -615,10 +637,10 @@ class Belarusian extends Slavic {
 }
 
 class Ukrainian extends Slavic {
-  processVerb(inf) {
+  processVerb(inf, target) {
     const sg = (person) => this.find(inf, { mood: INDICATIVE, tense: [ PRESENT, FUTURE ], number: SINGULAR, person });
     const pl = (person) => this.find(inf, { mood: INDICATIVE, tense: [ PRESENT, FUTURE ], number: PLURAL, person });
-    const h = (name, col) => this.header(l(name), col);
+    const h = (name, col) => this.header(getLocaleMessage(name, target), col);
     const p = (text) => this.header(text);
     const cells = [
       [ h('singular', 2), h('plural', 2) ],
@@ -632,10 +654,10 @@ class Ukrainian extends Slavic {
     }
   }
 
-  processNoun(inf) {
+  processNoun(inf, target) {
     const sg = (decl) => this.find(inf, { grammatical_case: decl, number: SINGULAR });
     const pl = (decl) => this.find(inf, { grammatical_case: decl, number: PLURAL });
-    const h = (name) => this.header(l(name));
+    const h = (name) => this.header(getLocaleMessage(name, target));
     const cells = [
       [ h(''), h('singular'), h('plural') ],
       [ h('nominative'), sg(NOMINATIVE), pl(NOMINATIVE) ],
@@ -652,12 +674,12 @@ class Ukrainian extends Slavic {
     }
   }
 
-  processAdjective(inf) {
+  processAdjective(inf, target) {
     const m = (decl) => this.find(inf, { degree: [ GENERAL, TEMPORARY ], grammatical_case: decl, number: SINGULAR, gender: MASCULINE });
     const f = (decl) => this.find(inf, { degree: [ GENERAL, TEMPORARY ], grammatical_case: decl, number: SINGULAR, gender: FEMININE });
     const n = (decl) => this.find(inf, { degree: [ GENERAL, TEMPORARY ], grammatical_case: decl, number: SINGULAR, gender: NEUTER });
     const pl = (decl) => this.find(inf, { degree: [ GENERAL, TEMPORARY ], grammatical_case: decl, number: PLURAL });
-    const h = (name) => this.header(l(name));
+    const h = (name) => this.header(getLocaleMessage(name, target));
     const cells = [
       [ h(''), h('masculine'), h('feminine'), h('neuter'), h('plural') ],
       [ h('nominative'), m(NOMINATIVE), f(NOMINATIVE), n(NOMINATIVE), pl(NOMINATIVE) ],
@@ -683,10 +705,10 @@ class Finnish extends TableGenerator {
     return [ 'noun_adj', 'verb' ];
   }
 
-  processVerb(inf) {
+  processVerb(inf, target) {
     const sg = (person) => this.find(inf, { mood: INDICATIVE, tense: PRESENT, number: SINGULAR, person });
     const pl = (person) => this.find(inf, { mood: INDICATIVE, tense: PRESENT, number: PLURAL, person });
-    const h = (name, col) => this.header(l(name), col);
+    const h = (name, col) => this.header(getLocaleMessage(name, target), col);
     const p = (text) => this.header(text);
     const cells = [
       [ h('singular', 2), h('plural', 2) ],
@@ -703,10 +725,10 @@ class Finnish extends TableGenerator {
     }
   }
 
-  processNounAdjective(inf) {
+  processNounAdjective(inf, target) {
     const sg = (decl) => this.find(inf, { grammatical_case: decl, number: SINGULAR });
     const pl = (decl) => this.find(inf, { grammatical_case: decl, number: PLURAL });
-    const h = (name) => this.header(l(name));
+    const h = (name) => this.header(getLocaleMessage(name, target));
     const cells = [
       [ h(''), h('singular'), h('plural') ],
       [ h('nominative'), sg(NOMINATIVE), pl(NOMINATIVE) ],

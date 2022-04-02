@@ -155,7 +155,7 @@ async function loadItem(item) {
     item.url = url;
     item.title = title;
     item.searchStrings = findSearchStrings(doc);
-    item.inflectionTables = getInflectionTables(doc);
+    item.inflectionTables = await getInflectionTables(doc);
     if (type) {
       item.titleElement.classList.add(type);
     }

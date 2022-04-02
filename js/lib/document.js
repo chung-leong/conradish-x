@@ -863,11 +863,11 @@ function addElement(element, info) {
   } else {
     const child = e(tag, { style });
     if (tag === 'TABLE') {
-      const { inflections, type } = info;
+      const { inflections, type, lang } = info;
       if (inflections) {
         child.className = `inflections ${type}`;
       }
-      inflectionMap.set(child, { inflections, type });
+      inflectionMap.set(child, { inflections, type, lang });
     } else if (tag === 'TH' || tag === 'TD') {
       const { colSpan } = info;
       if (colSpan) {

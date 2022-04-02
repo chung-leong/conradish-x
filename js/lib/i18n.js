@@ -13,16 +13,29 @@ export async function initializeLocalization() {
     return;
   }
   // load the [locale]/message.json and deal with ourselves
+  const lang = getUILanguage();
+  fallbackMessages = await loadLocale(lang);
+}
+
+const localeMessageLists = {};
+
+export async function initializeSpecificLocale(lang) {
+  if (!localeMessageLists[lang]) {
+    localeMessageLists[lang] = await loadLocale(lang);
+  }
+}
+
+async function loadLocale(lang) {
   const manifest = await loadJSON('manifest.json');
-  fallbackMessages = await loadJSON(`_locales/${manifest.default_locale}/messages.json`);
+  const messages = await loadJSON(`_locales/${manifest.default_locale}/messages.json`);
   try {
-    const lang = getUILanguage();
     if (lang !== manifest.default_locale) {
       const localeMessages = await loadJSON(`_locales/${lang}/messages.json`);
-      Object.assign(fallbackMessages, localeMessages);
+      Object.assign(messages, localeMessages);
     }
   } catch (e) {
   }
+  return messages;
 }
 
 async function loadJSON(path) {
@@ -39,19 +52,32 @@ export function getMessage(name, substitutions) {
   } else {
     const entry = fallbackMessages[name];
     if (entry) {
-      if (!(substitutions instanceof Array)) {
-        substitutions = [ substitutions ];
-      }
-      return entry.message.replace(/\$(\w+)\$/g, (m0, m1) => {
-        const key = m1.toLowerCase();
-        const placeholder = entry.placeholders[key];
-        const index = parseInt(placeholder.content.substr(1)) - 1;
-        const value = substitutions[index];
-        return (value !== undefined) ? value : '';
-      });
+      return replacePlaceholders(entry.message, substitutions);
     }
     return '';
   }
+}
+
+export function getLocaleMessage(name, lang, substitutions) {
+  const messages = localeMessageLists[lang];
+  const entry = messages[name];
+  if (entry) {
+    return replacePlaceholders(entry.message, substitutions);
+  }
+  return '';
+}
+
+function replacePlaceholders(message, substitutions) {
+  if (!(substitutions instanceof Array)) {
+    substitutions = (substitutions) ? [ substitutions ] : [];
+  }
+  return message.replace(/\$(\w+)\$/g, (m0, m1) => {
+    const key = m1.toLowerCase();
+    const placeholder = entry.placeholders[key];
+    const index = parseInt(placeholder.content.substr(1)) - 1;
+    const value = substitutions[index];
+    return (value !== undefined) ? value : '';
+  });
 }
 
 export function getMessageWithCardinal(name, number) {
