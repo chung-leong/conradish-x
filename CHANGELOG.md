@@ -2,6 +2,8 @@
 
 * Added inflection tables for Finnish.
 * Fixed Ukrainian and SerboCroatian inflection tables.
+* Using language of footnote to determine labels of inflection tables.
+* Fixed search feature.
 * Improved handling of text in all-caps.
 
 # Version 1.5
