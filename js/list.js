@@ -408,7 +408,10 @@ function searchItem(item, words) {
 
 function findSearchStrings(doc) {
   const { url, title, lang, content } = doc;
-  const list = [ url ];
+  const list = [];
+  if (url) {
+    list.push(url);
+  }
   addSearchString(title, lang, list);
   addSearchString(content, lang, list);
   return list;
