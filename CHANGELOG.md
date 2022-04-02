@@ -1,6 +1,12 @@
+# Version 1.6
+
+* Added inflection tables for Finnish.
+* Fixed Ukrainian and SerboCroatian inflection tables.
+* Improved handling of text in all-caps.
+
 # Version 1.5
 
-* Enabled generation of inflection tables for Slavic languages
+* Enabled generation of inflection tables for Slavic languages.
 * Fixed bug affecting annotation of formatted text.
 * Fixed bug causing styling options to appear when text in footnote is selected.
 * Fixed language detection for Serbian articles.
