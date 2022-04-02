@@ -2,6 +2,7 @@ import { getDefaultSettings } from './settings.js';
 
 const directory = [];
 let initialized = false;
+let initializationPromise = null;
 let settings;
 const saving = [];
 
@@ -21,6 +22,14 @@ export async function initializeStorage() {
   if (initialized) {
     return;
   }
+  if (!initializationPromise) {
+    initializationPromise = performStorageInitialization();
+  }
+  await initializationPromise;
+  initialized = true;
+}
+
+async function performStorageInitialization() {
   const keys = await get('.directory');
   if (keys) {
     for (const key of keys) {
@@ -35,7 +44,6 @@ export async function initializeStorage() {
   } else {
     settings = defaultSettings;
   }
-  initialized = true;
 }
 
 function applyMissingDefault(dest, src) {

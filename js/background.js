@@ -53,6 +53,7 @@ function updateContextMenu() {
 
 async function createDocument(tab) {
   const codeURL = chrome.runtime.getURL('js/lib/capturing.js');
+  await initializeStorage();
   await initializeLocalization();
   const settings = getSettings();
   try {
