@@ -310,6 +310,10 @@ const GENERAL = 1;
 const TEMPORARY = 2;
 const COMPARATIVE = 3;
 
+// non-finite form
+const GERUND = 1;
+const INFINITIVE = 2;
+
 class Slavic extends TableGenerator {
   isAdjective(inf) {
     if (super.isAdjective(inf)) {
@@ -766,20 +770,51 @@ class French extends Romance {
       [ h('singular', 2), h('plural', 2) ],
       [ p('je'), sg(FIRST), p('nous'), pl(FIRST) ],
       [ p('tu'), sg(SECOND), p('vous'), pl(SECOND) ],
-      [ p('il/elle/on	'), sg(THIRD), p('ils/elles'), pl(THIRD) ],
+      [ p('il/elle/on'), sg(THIRD), p('ils/elles'), pl(THIRD) ],
     ];
-    if (startsWithVowel(cells[1][1])) {
-      cells[1][0] = p('j\'');
-    }
-    const infinitive = this.find(inf, { person: undefined,  number: undefined, mood: undefined, tense: undefined });
+    const infinitive = this.find(inf, { nonfinite_form: INFINITIVE });
     if (infinitive !== '-') {
       return this.build(infinitive, cells);
     }
   }
 }
 
-function startsWithVowel(word) {
-  return /^[aeiouy]/i.test(word.normalize('NFD'));
+class Italian extends Romance {
+  processVerb(inf, target) {
+    const sg = (person) => this.find(inf, { mood: INDICATIVE, tense: PRESENT, number: SINGULAR, person });
+    const pl = (person) => this.find(inf, { mood: INDICATIVE, tense: PRESENT, number: PLURAL, person });
+    const h = (name, col) => this.header(getLocaleMessage(name, target), col);
+    const p = (text) => this.header(text);
+    const cells = [
+      [ h('singular', 2), h('plural', 2) ],
+      [ p('io'), sg(FIRST), p('noi'), pl(FIRST) ],
+      [ p('tu'), sg(SECOND), p('voi'), pl(SECOND) ],
+      [ p('lui/lei'), sg(THIRD), p('loro'), pl(THIRD) ],
+    ];
+    const infinitive = this.find(inf, { nonfinite_form: INFINITIVE });
+    if (infinitive !== '-') {
+      return this.build(infinitive, cells);
+    }
+  }
+}
+
+class Spanish extends Romance {
+  processVerb(inf, target) {
+    const sg = (person) => this.find(inf, { mood: INDICATIVE, tense: PRESENT, number: SINGULAR, person });
+    const pl = (person) => this.find(inf, { mood: INDICATIVE, tense: PRESENT, number: PLURAL, person });
+    const h = (name, col) => this.header(getLocaleMessage(name, target), col);
+    const p = (text) => this.header(text);
+    const cells = [
+      [ h('singular', 2), h('plural', 2) ],
+      [ p('yo'), sg(FIRST), p('nosotros/nosotras'), pl(FIRST) ],
+      [ p('tú'), sg(SECOND), p('vosotros/vosotras'), pl(SECOND) ],
+      [ p('él/ella/usted'), sg(THIRD), p('ellos/ellas/ustedes'), pl(THIRD) ],
+    ];
+    const infinitive = this.find(inf, { nonfinite_form: INFINITIVE });
+    if (infinitive !== '-') {
+      return this.build(infinitive, cells);
+    }
+  }
 }
 
 const generators = {
@@ -793,4 +828,6 @@ const generators = {
   uk: new Ukrainian,
   fi: new Finnish,
   fr: new French,
+  it: new Italian,
+  es: new Spanish,
 };
