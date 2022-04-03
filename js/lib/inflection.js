@@ -753,6 +753,35 @@ class Finnish extends TableGenerator {
   }
 }
 
+class Romance extends TableGenerator {
+}
+
+class French extends Romance {
+  processVerb(inf, target) {
+    const sg = (person) => this.find(inf, { mood: INDICATIVE, tense: PRESENT, number: SINGULAR, person });
+    const pl = (person) => this.find(inf, { mood: INDICATIVE, tense: PRESENT, number: PLURAL, person });
+    const h = (name, col) => this.header(getLocaleMessage(name, target), col);
+    const p = (text) => this.header(text);
+    const cells = [
+      [ h('singular', 2), h('plural', 2) ],
+      [ p('je'), sg(FIRST), p('nous'), pl(FIRST) ],
+      [ p('tu'), sg(SECOND), p('vous'), pl(SECOND) ],
+      [ p('il/elle/on	'), sg(THIRD), p('ils/elles'), pl(THIRD) ],
+    ];
+    if (startsWithVowel(cells[1][1])) {
+      cells[1][0] = p('j\'');
+    }
+    const infinitive = this.find(inf, { person: undefined,  number: undefined, mood: undefined, tense: undefined });
+    if (infinitive !== '-') {
+      return this.build(infinitive, cells);
+    }
+  }
+}
+
+function startsWithVowel(word) {
+  return /^[aeiouy]/i.test(word.normalize('NFD'));
+}
+
 const generators = {
   sk: new Slovak,
   sr: new SerboCroatian,
@@ -763,4 +792,5 @@ const generators = {
   be: new Belarusian,
   uk: new Ukrainian,
   fi: new Finnish,
+  fr: new French,
 };
