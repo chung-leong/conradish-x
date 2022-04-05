@@ -237,15 +237,15 @@ The new document will appear in a new tab:
 
 The following languages are supported currently:
 
-| Slavic     | Uralic  |
-|------------|---------|
-| Bulgarian  | Finnish |
-| Croatian   |         |
-| Macedonian |         |
-| Russian    |         |
-| Serbian    |         |
-| Slovak     |         |
-| Ukrainian  |         |
+| Slavic     | Romance    | Germanic | Uralic  |
+|------------|------------|----------|---------|
+| Bulgarian  | Catalan    | Dutch    | Finnish |
+| Croatian   | French     | German   |         |
+| Macedonian | Galician   |          |         |
+| Russian    | Italian    |          |         |
+| Serbian    | Portuguese |          |         |
+| Slovak     | Spanish    |          |         |
+| Ukrainian  |            |          |         |
 
 ## Copying article to Microsoft Word
 
