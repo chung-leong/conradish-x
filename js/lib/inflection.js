@@ -878,6 +878,47 @@ class Portuguese extends Romance {
   }
 }
 
+class Germanic extends TableGenerator {
+}
+
+class German extends Germanic {
+  processVerb(inf, target) {
+    const sg = (person) => this.find(inf, { mood: INDICATIVE, tense: PRESENT, number: SINGULAR, person });
+    const pl = (person) => this.find(inf, { mood: INDICATIVE, tense: PRESENT, number: PLURAL, person });
+    const h = (name, col) => this.header(getLocaleMessage(name, target), col);
+    const p = (text) => this.header(text);
+    const cells = [
+      [ h('singular', 2), h('plural', 2) ],
+      [ p('ich'), sg(FIRST), p('wir'), pl(FIRST) ],
+      [ p('du'), sg(SECOND), p('ihr'), pl(SECOND) ],
+      [ p('er/sie/es'), sg(THIRD), p('sie'), pl(THIRD) ],
+    ];
+    const infinitive = this.find(inf, { nonfinite_form: INFINITIVE });
+    if (infinitive !== '-') {
+      return this.build(infinitive, cells);
+    }
+  }
+}
+
+class Dutch extends Germanic {
+  processVerb(inf, target) {
+    const sg = (person) => this.find(inf, { mood: INDICATIVE, tense: PRESENT, number: SINGULAR, person });
+    const pl = (person) => this.find(inf, { mood: INDICATIVE, tense: PRESENT, number: PLURAL, person });
+    const h = (name, col) => this.header(getLocaleMessage(name, target), col);
+    const p = (text) => this.header(text);
+    const cells = [
+      [ h('singular', 2), h('plural', 2) ],
+      [ p('ik'), sg(FIRST), p('wij'), pl(FIRST) ],
+      [ p('jij'), sg(SECOND), p('u'), pl(SECOND) ],
+      [ p('hij/zij/het'), sg(THIRD), p('zij'), pl(THIRD) ],
+    ];
+    const infinitive = this.find(inf, { person: undefined,  number: undefined, mood: undefined, tense: undefined, written_form: (f) => !/^ge/.test(f) });
+    if (infinitive !== '-') {
+      return this.build(infinitive, cells);
+    }
+  }
+}
+
 const generators = {
   sk: new Slovak,
   sr: new SerboCroatian,
@@ -894,4 +935,6 @@ const generators = {
   ca: new Catalan,
   gl: new Galician,
   pt: new Portuguese,
+  de: new German,
+  nl: new Dutch,
 };
