@@ -15,7 +15,6 @@ const cards = [];
 let kebabMenu;
 let selection = [];
 let selectedItem;
-let selectedInflection;
 let searching = false;
 
 async function start() {
@@ -240,6 +239,10 @@ function updateCards() {
 function updateSelection() {
   const checkboxes = getSelectedCheckboxes();
   selection = checkboxes.map(cb => cb.parentNode.dataset.key);
+  createInflectionTableButton.classList.toggle('hidden', !getSelectedInflectionTables());
+}
+
+function getSelectedInflectionTables() {
   const items = getItems(selection);
   const langSelected = {};
   for (const { lang } of items) {
@@ -250,11 +253,8 @@ function updateSelection() {
   if (langs.length === 1 && tableLists.length > 0) {
     const lang = langs[0];
     const tables = mergeInflectionTables(tableLists, lang);
-    selectedInflection = { tables, lang };
-  } else {
-    selectedInflection = null;
+    return { tables, lang };
   }
-  createInflectionTableButton.classList.toggle('hidden', !selectedInflection);
 }
 
 function updateToolbar() {
@@ -270,7 +270,7 @@ function updateToolbar() {
 
 function openInflectionDialogBox() {
   const selection = [];
-  const { tables, lang } = selectedInflection;
+  const { tables, lang } = getSelectedInflectionTables();
   getPossibleTypes(lang).forEach((type) => {
     const rippleElement = e('SPAN', { className: 'ripple' });
     const checkboxElement = e('SPAN', { className: 'checkbox', tabIndex: 0 }, rippleElement);
