@@ -201,6 +201,10 @@ class TableGenerator {
           if (index !== -1) {
             return 1 / (index + 1);
           }
+        } else if (value2 instanceof Function) {
+          if (value2(value1)) {
+            return 1;
+          }
         } else {
           if (value2 === value1) {
             return 1;
@@ -817,6 +821,63 @@ class Spanish extends Romance {
   }
 }
 
+class Catalan extends Romance {
+  processVerb(inf, target) {
+    const sg = (person) => this.find(inf, { mood: INDICATIVE, tense: PRESENT, number: SINGULAR, person });
+    const pl = (person) => this.find(inf, { mood: INDICATIVE, tense: PRESENT, number: PLURAL, person });
+    const h = (name, col) => this.header(getLocaleMessage(name, target), col);
+    const p = (text) => this.header(text);
+    const cells = [
+      [ h('singular', 2), h('plural', 2) ],
+      [ p('jo'), sg(FIRST), p('nosaltres'), pl(FIRST) ],
+      [ p('tu'), sg(SECOND), p('vosaltres'), pl(SECOND) ],
+      [ p('ell/ella/vostè'), sg(THIRD), p('ells/elles/vostès'), pl(THIRD) ],
+    ];
+    const infinitive = this.find(inf, { person: undefined,  number: undefined, mood: undefined, tense: undefined, written_form: (f) => /r$/.test(f) });
+    if (infinitive !== '-') {
+      return this.build(infinitive, cells);
+    }
+  }
+}
+
+class Galician extends Romance {
+  processVerb(inf, target) {
+    const sg = (person) => this.find(inf, { mood: INDICATIVE, tense: PRESENT, number: SINGULAR, person });
+    const pl = (person) => this.find(inf, { mood: INDICATIVE, tense: PRESENT, number: PLURAL, person });
+    const h = (name, col) => this.header(getLocaleMessage(name, target), col);
+    const p = (text) => this.header(text);
+    const cells = [
+      [ h('singular', 2), h('plural', 2) ],
+      [ p('eu'), sg(FIRST), p('nós'), pl(FIRST) ],
+      [ p('ti'), sg(SECOND), p('vós'), pl(SECOND) ],
+      [ p('el/ela/vostede'), sg(THIRD), p('eles/elas/vostedes'), pl(THIRD) ],
+    ];
+    const infinitive = this.find(inf, { person: undefined,  number: undefined, mood: undefined, tense: undefined, written_form: (f) => /r$/.test(f) });
+    if (infinitive !== '-') {
+      return this.build(infinitive, cells);
+    }
+  }
+}
+
+class Portuguese extends Romance {
+  processVerb(inf, target) {
+    const sg = (person) => this.find(inf, { mood: INDICATIVE, tense: PRESENT, number: SINGULAR, person });
+    const pl = (person) => this.find(inf, { mood: INDICATIVE, tense: PRESENT, number: PLURAL, person });
+    const h = (name, col) => this.header(getLocaleMessage(name, target), col);
+    const p = (text) => this.header(text);
+    const cells = [
+      [ h('singular', 2), h('plural', 2) ],
+      [ p('eu'), sg(FIRST), p('nós'), pl(FIRST) ],
+      [ p('tú'), sg(SECOND), p('vós'), pl(SECOND) ],
+      [ p('ele/ela/você'), sg(THIRD), p('eles/elas/vocês'), pl(THIRD) ],
+    ];
+    const infinitive = this.find(inf, { nonfinite_form: INFINITIVE, number: SINGULAR, person: 1 });
+    if (infinitive !== '-') {
+      return this.build(infinitive, cells);
+    }
+  }
+}
+
 const generators = {
   sk: new Slovak,
   sr: new SerboCroatian,
@@ -830,4 +891,7 @@ const generators = {
   fr: new French,
   it: new Italian,
   es: new Spanish,
+  ca: new Catalan,
+  gl: new Galician,
+  pt: new Portuguese,
 };
