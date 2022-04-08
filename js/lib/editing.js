@@ -1,8 +1,9 @@
 import { e, separateWords } from './ui.js';
 import { findDeletedFootnote, annotateRange, updateFootnoteContent, setFilterMode, getTitle, setTitle,
-  generateRangeHTML, generateRangeText, processArticleChanges } from './document.js';
+  generateRangeHTML, generateRangeText, processArticleChanges, findFootnoteByElement } from './document.js';
 import { transverseRange } from './capturing.js';
-import { l, translate, getSourceLanguage, getTargetLanguage, getLanguageDirection, detectDirection } from './i18n.js';
+import { l, translate, getSourceLanguage, getTargetLanguage, getLanguageDirection, detectDirection,
+  getLanguageScript } from './i18n.js';
 
 export const modeChange = new EventTarget;
 
@@ -14,6 +15,7 @@ let lastSelectedRange = null;
 let articleMenuClicked = false;
 let editMode = 'annotate';
 let topDrawer = null;
+let alternativeTarget = null;
 
 export function attachEditingHandlers() {
   document.addEventListener('keydown', handleKeyDown);
@@ -153,7 +155,9 @@ export function createMenuItems() {
     blockStyleMenu.append(item);
     articleMenuItems[key] = item;
   }
-  articleMenuElement.append(annotationMenu, inlineStyleMenu, blockStyleMenu);
+  const alternativeMenu = articleMenuSections.alternative = e('UL', { id: 'menu-alternative' });
+  alternativeMenu.addEventListener('click', handleAlternativeMenuClick);
+  articleMenuElement.append(annotationMenu, inlineStyleMenu, blockStyleMenu, alternativeMenu);
 }
 
 function getSelectedText(range) {
@@ -714,6 +718,76 @@ function showAnnotationMenu(range) {
   return false;
 }
 
+function getDefinitionRange(element, includeTerm) {
+  const range = document.createRange();
+  range.selectNodeContents(element);
+  if (includeTerm) {
+    // jump over the term
+    const text = range.toString();
+    const index = text.indexOf(' - ');
+    if (index !== -1) {
+      // find text node at position
+      let count = index + 3;
+      transverseRange(range, (node, startOffset, endOffset, endTag) => {
+        if (node.nodeType === Node.TEXT_NODE) {
+          const len = endOffset - startOffset;
+          if (len > count) {
+            range.setStart(node, count);
+          } else {
+            count -= len;
+          }
+        }
+      });
+    }
+  }
+  return range;
+}
+
+function showAlternativeMenu(range) {
+  const { collapsed, startContainer } = range;
+  if (collapsed) {
+    const element = findParent(startContainer, n => n.tagName === 'LI');
+    const footnote = findFootnoteByElement(element);
+    if (footnote) {
+      const { alternatives, lang, incl, original } = footnote.extra;
+      if (alternatives && alternatives.length > 0 && lang) {
+        const [ sourceLang, targetLang ] = lang.split(',');
+        // don't show menu when the cursor is on the term
+        const sourceScript = getLanguageScript(sourceLang);
+        const termElement = findParent(startContainer, n => n.classList && n.classList.contains(sourceScript));
+        if (!termElement) {
+          const listElement = articleMenuSections.alternative;
+          while (listElement.firstChild) {
+            listElement.firstChild.remove();
+          }
+          const definitionRange = getDefinitionRange(element, incl);
+          const currentDefinition = definitionRange.toString();
+          const choices = [];
+          if (original && currentDefinition !== original) {
+            choices.push(original);
+          }
+          for (const alternative of alternatives) {
+            if (alternative !== currentDefinition) {
+              choices.push(alternative);
+            }
+          }
+          const script = getLanguageScript(targetLang);
+          for (const choice of choices) {
+            const itemElement = e('LI', { className: `footnote-item ${script}` }, choice);
+            listElement.append(itemElement);
+          }
+          showMenuSection('alternative');
+          positionArticleMenu(definitionRange, targetLang, 'above');
+          toggle(articleMenuElement, true);
+          alternativeTarget = { footnote, definitionRange };
+          return true;
+        }
+      }
+    }
+  }
+  return false;
+}
+
 function showStylingMenu(range, types) {
   const inEffect = {};
   const noteEffect = (name, state) => {
@@ -794,17 +868,22 @@ function showMenuSection(selected) {
   }
 }
 
-function positionArticleMenu(range) {
-  const sourceLang = getSourceLanguage();
-  const sourceLangDir = getLanguageDirection(sourceLang);
+function positionArticleMenu(range, lang, pos = 'below') {
+  const dir = getLanguageDirection(lang || getSourceLanguage());
   const r1 = range.getBoundingClientRect();
   const r2 = articleMenuElement.parentNode.getBoundingClientRect();
-  if (sourceLangDir === 'ltr') {
+  if (dir === 'ltr') {
     articleMenuElement.style.left = `${r1.left - r2.left}px`;
   } else {
     articleMenuElement.style.right = `${r2.right - r1.right}px`;
   }
-  articleMenuElement.style.top = `${r1.bottom - r2.top + 2}px`;
+  if (pos === 'below') {
+    articleMenuElement.style.top = `${r1.bottom - r2.top + 2}px`;
+    articleMenuElement.style.removeProperty('bottom');
+  } else {
+    articleMenuElement.style.bottom = `${r2.bottom - r1.top + 4}px`;
+    articleMenuElement.style.removeProperty('top');
+  }
   articleMenuElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
@@ -840,7 +919,9 @@ function updateArticleMenu() {
       // remember the range
       lastSelectedRange = range;
     } else if (isFootnoteEditor(container)) {
-      if (editMode === 'style') {
+      if (editMode === 'annotate') {
+        hideMenu = !showAlternativeMenu(range);
+      } else if (editMode === 'style') {
         hideMenu = !showStylingMenu(range, [ 'inline' ]);
       }
     }
@@ -1063,6 +1144,28 @@ function handleBlockStyleMenuMouseDown(evt) {
     }
     evt.preventDefault();
     evt.stopPropagation();
+  }
+}
+
+function handleAlternativeMenuClick(evt) {
+  const { target } = evt;
+  if (target.tagName === 'LI') {
+    const { footnote, definitionRange } = alternativeTarget;
+    const { alternatives } = footnote.extra;
+    const newDefinition = target.textContent;
+    // remember the original definition (unless it's one of the alternatives)
+    const currentDefinition = definitionRange.toString();
+    if (!alternatives.includes(currentDefinition)) {
+      footnote.extra.original = currentDefinition;
+    }
+    // insert the text
+    const container = findParent(definitionRange.commonAncestorContainer, n => n.tagName === 'OL');
+    container.focus();
+    const selection = getSelection();
+    selection.removeAllRanges();
+    selection.addRange(definitionRange);
+    document.execCommand('insertText', false, newDefinition);
+    hideArticleMenu();
   }
 }
 

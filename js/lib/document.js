@@ -850,6 +850,10 @@ export function findDeletedFootnote(id) {
   return footnoteRecylclingBin.find(f => f.id === id);
 }
 
+export function findFootnoteByElement(element) {
+  return footnotes.find(f => f.itemElement === element);
+}
+
 let nextFootnoteId = Math.round(Math.random() * 0x00FFFFFF) * 1000;
 
 function addElement(element, info) {

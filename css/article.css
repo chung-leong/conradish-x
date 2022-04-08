@@ -388,6 +388,23 @@ BODY {
   border-radius: 4px;
 }
 
+#menu-alternative {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+#menu-alternative LI {
+  cursor: pointer;
+  padding: 0.2em 0.4em 0.2em 0.4em;
+}
+
+#menu-alternative LI:hover {
+  color: #ffffff;
+  background-color: #333333;
+  border-radius: 4px;
+}
+
 .style-button {
   display: inline-block;
   position: relative;
