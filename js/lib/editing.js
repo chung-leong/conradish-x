@@ -531,7 +531,7 @@ let lastKeyDown = '';
 let lastKeyCombo = '';
 
 function handleKeyDown(evt) {
-  const { code, ctrlKey, altKey, shiftKey } = evt;
+  const { code, ctrlKey, altKey, shiftKey, target } = evt;
   const keys = [];
   if (ctrlKey) {
     keys.push('Ctrl');
@@ -575,6 +575,8 @@ function handleKeyDown(evt) {
     evt.stopPropagation();
   }
   if (code === 'Escape') {
+    hideArticleMenu();
+  } else if (isFootnoteEditor(target)) {
     hideArticleMenu();
   }
   // remember the last key pressed
@@ -771,16 +773,18 @@ function showAlternativeMenu(range) {
               choices.push(alternative);
             }
           }
-          const script = getLanguageScript(targetLang);
-          for (const choice of choices) {
-            const itemElement = e('LI', { className: `footnote-item ${script}` }, choice);
-            listElement.append(itemElement);
+          if (choices.length > 0) {
+            const script = getLanguageScript(targetLang);
+            for (const choice of choices) {
+              const itemElement = e('LI', { className: `footnote-item ${script}` }, choice);
+              listElement.append(itemElement);
+            }
+            showMenuSection('alternative');
+            positionArticleMenu(definitionRange, targetLang, 'above');
+            toggle(articleMenuElement, true);
+            alternativeTarget = { footnote, definitionRange };
+            return true;
           }
-          showMenuSection('alternative');
-          positionArticleMenu(definitionRange, targetLang, 'above');
-          toggle(articleMenuElement, true);
-          alternativeTarget = { footnote, definitionRange };
-          return true;
         }
       }
     }
@@ -919,9 +923,7 @@ function updateArticleMenu() {
       // remember the range
       lastSelectedRange = range;
     } else if (isFootnoteEditor(container)) {
-      if (editMode === 'annotate') {
-        hideMenu = !showAlternativeMenu(range);
-      } else if (editMode === 'style') {
+      if (editMode === 'style') {
         hideMenu = !showStylingMenu(range, [ 'inline' ]);
       }
     }
@@ -1103,6 +1105,14 @@ function handleClick(evt) {
     }
     evt.preventDefault();
     evt.stopPropagation();
+  } else if (editMode === 'annotate') {
+    if (isFootnoteEditor(target)) {
+      const range = getSelectionRange();
+      const hideMenu = !showAlternativeMenu(range);
+      if (hideMenu) {
+        hideArticleMenu();
+      }
+    }
   }
 }
 
