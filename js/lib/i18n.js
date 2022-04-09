@@ -347,10 +347,27 @@ export async function translate(original, sourceLang, targetLang, singleWord) {
   const trans = sentences.map(s => s.trans).join('');
   result.translation.text = trans;
   if (json.alternative_translations) {
+    const phrases = json.alternative_translations;
     const alternatives = [];
-    for (const at of json.alternative_translations) {
-      for (const item of at.alternative.slice(1)) {
-        alternatives.push(item.word_postproc);
+    if (phrases.length === 1) {
+      // only one phrase was translated
+      for (const item of phrases[0].alternative.slice(1)) {
+        const phrase = item.word_postproc;
+        if (phrase !== trans) {
+          alternatives.push(phrase);
+        }
+      }
+    } else {
+      // multiple phrases--need to replace the top choice with alternative
+      for (const phrase of phrases) {
+        const topChoice = phrase.alternative[0].word_postproc;
+        for (const item of phrase.alternative.slice(1)) {
+          const altChoice = item.word_postproc;
+          const phrase = trans.replace(topChoice, altChoice);
+          if (phrase !== trans) {
+            alternatives.push(phrase);
+          }
+        }
       }
     }
     if (alternatives.length > 0) {

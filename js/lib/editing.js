@@ -29,6 +29,7 @@ export function attachEditingHandlers() {
   document.addEventListener('dragend', handleDragEnd);
   document.addEventListener('drop', handleDrop);
   document.addEventListener('selectionchange', handleSelectionChange);
+  document.addEventListener('focusout', handleFocusOut);
   document.addEventListener('click', handleClick);
   document.addEventListener('mousedown', handleMouseDown);
   document.execCommand('styleWithCSS', false, true);
@@ -1086,6 +1087,10 @@ function handleSelectionChange(evt) {
   updateArticleMenu();
 }
 
+function handleFocusOut(evt) {
+  updateArticleMenu();
+}
+
 function handleClick(evt) {
   const { target } = evt;
   if (editMode === 'clean') {
@@ -1120,6 +1125,12 @@ function handleMouseDown(evt) {
   const { target } = evt;
   if (editMode === 'clean') {
     if (articleElement.contains(target)) {
+      evt.preventDefault();
+      evt.stopPropagation();
+    }
+  } else if (editMode === 'annotate') {
+    const menuElement = findParent(target, n => n.id === 'menu-alternative');
+    if (menuElement) {
       evt.preventDefault();
       evt.stopPropagation();
     }
