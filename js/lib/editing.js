@@ -879,8 +879,10 @@ function positionArticleMenu(range, lang, pos = 'below') {
   const r2 = articleMenuElement.parentNode.getBoundingClientRect();
   if (dir === 'ltr') {
     articleMenuElement.style.left = `${r1.left - r2.left}px`;
+    articleMenuElement.style.removeProperty('right');
   } else {
     articleMenuElement.style.right = `${r2.right - r1.right}px`;
+    articleMenuElement.style.removeProperty('left');
   }
   if (pos === 'below') {
     articleMenuElement.style.top = `${r1.bottom - r2.top + 2}px`;
@@ -1088,7 +1090,7 @@ function handleSelectionChange(evt) {
 }
 
 function handleFocusOut(evt) {
-  updateArticleMenu();
+  //updateArticleMenu();
 }
 
 function handleClick(evt) {

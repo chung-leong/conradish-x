@@ -541,7 +541,7 @@ TABLE .footnote-number {
   margin-top: 5mm;
   /* page margin top plus margin bottom */
   margin-bottom: calc(25mm + 25mm);
-  padding-inline-start: 1.2em;
+  padding: 0 1.2em 0 1.2em;
   white-space: pre-wrap;
 }
 
