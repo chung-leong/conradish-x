@@ -12,6 +12,7 @@ The extension was designed with educators in mind, those who wish to make use we
   - [Annotating article](#annotating-article)
      - [Adding definition](#adding-definition)
      - [Adding translation/explanation](#adding-translationexplanation)
+     - [Choosing alternative translation](#choosing-alternative-translation)
      - [Removing footnotes](#removing-footnotes)
   - [Editing article](#editing-article)
   - [Applying text style](#applying-text-style)
@@ -87,6 +88,12 @@ The **Add translation** functionality only differs from **Add definition** in th
 Both **Add definition** and **Add translation** will appear in the menu when more than one word (but less than 8) are selected.
 
 **Add explanation** will appear in the menu instead when no translation would actually occur (the **To** language is the same as the **From** language or "None" is selected).
+
+### Choosing alternative translation
+
+To choose an alternative translation, click on the definition part of a footnote and choose from the pop-up menu:
+
+![Footnote](doc/img/footnote-5.jpg)
 
 ### Removing footnotes
 
@@ -270,7 +277,6 @@ Note that the online version of Word currently does not correctly handle the att
 # Limitations
 
 * User interface not yet optimized for touch screens.
-* No way to select an alternative translation.
 
 These issues will be addressed in future versions.
 
