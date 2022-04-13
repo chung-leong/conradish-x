@@ -1090,7 +1090,7 @@ function handleSelectionChange(evt) {
 }
 
 function handleFocusOut(evt) {
-  //updateArticleMenu();
+  updateArticleMenu();
 }
 
 function handleClick(evt) {
