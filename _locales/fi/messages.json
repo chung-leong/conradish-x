@@ -235,6 +235,10 @@
     "message": "Telugulainen",
     "description": "Name of script, used in option page"
   },
+  "script_thaa": {
+    "message": "Thaanalainen",
+    "description": "Name of script, used in option page"
+  },
   "script_thai": {
     "message": "Thailainen",
     "description": "Name of script, used in option page"
@@ -572,11 +576,20 @@
   "language_af": {
     "message": "Afrikaanin"
   },
+  "language_ak": {
+    "message": "Twin"
+  },
   "language_am": {
     "message": "Amharan"
   },
   "language_ar": {
     "message": "Arabian"
+  },
+  "language_as": {
+    "message": "Assamin"
+  },
+  "language_ay": {
+    "message": "Aimaran"
   },
   "language_az": {
     "message": "Azerin"
@@ -586,6 +599,12 @@
   },
   "language_bg": {
     "message": "Bulgarian"
+  },
+  "language_bho": {
+    "message": "Bhodžpurin"
+  },
+  "language_bm": {
+    "message": "Bambaran"
   },
   "language_bn": {
     "message": "Bengalin"
@@ -598,6 +617,9 @@
   },
   "language_ceb": {
     "message": "Cebun"
+  },
+  "language_ckb": {
+    "message": "Kurdin (soranîn)"
   },
   "language_co": {
     "message": "Korsikan"
@@ -613,6 +635,15 @@
   },
   "language_de": {
     "message": "Saksan"
+  },
+  "language_doi": {
+    "message": "Dogrin"
+  },
+  "language_dv": {
+    "message": "Divehin"
+  },
+  "language_ee": {
+    "message": "Ewen"
   },
   "language_el": {
     "message": "Kreikkan"
@@ -653,6 +684,12 @@
   "language_gl": {
     "message": "Galician"
   },
+  "language_gn": {
+    "message": "Guaranin"
+  },
+  "language_gom": {
+    "message": "Konkanin"
+  },
   "language_gu": {
     "message": "Gujaratin"
   },
@@ -686,6 +723,9 @@
   "language_ig": {
     "message": "Igbon"
   },
+  "language_ilo": {
+    "message": "Ilokanon"
+  },
   "language_is": {
     "message": "Islannin"
   },
@@ -716,8 +756,11 @@
   "language_ko": {
     "message": "Korean"
   },
+  "language_kri": {
+    "message": "Krion"
+  },
   "language_ku": {
-    "message": "Kurdin"
+    "message": "Kurdin (kurmandžin)"
   },
   "language_ky": {
     "message": "Kirgisian"
@@ -728,14 +771,26 @@
   "language_lb": {
     "message": "Luxemburgin"
   },
+  "language_lg": {
+    "message": "Lugandan"
+  },
+  "language_ln": {
+    "message": "Lingalan"
+  },
   "language_lo": {
     "message": "Laosin"
   },
   "language_lt": {
     "message": "Liettuan"
   },
+  "language_lus": {
+    "message": "Mizon"
+  },
   "language_lv": {
     "message": "Latvian"
+  },
+  "language_mai": {
+    "message": "Maithilin"
   },
   "language_mg": {
     "message": "Madagaskarin"
@@ -773,8 +828,14 @@
   "language_no": {
     "message": "Norjan"
   },
+  "language_nso": {
+    "message": "Sepedin"
+  },
   "language_ny": {
     "message": "Njandžan"
+  },
+  "language_om": {
+    "message": "Oromon"
   },
   "language_or": {
     "message": "Odian (orijan)"
@@ -791,6 +852,9 @@
   "language_pt": {
     "message": "Portugalin"
   },
+  "language_qu": {
+    "message": "Ketšuan"
+  },
   "language_ro": {
     "message": "Romanian"
   },
@@ -799,6 +863,9 @@
   },
   "language_rw": {
     "message": "Kinyarwandan"
+  },
+  "language_sa": {
+    "message": "Sanskriittin"
   },
   "language_sd": {
     "message": "Sindhin"
@@ -851,6 +918,9 @@
   "language_th": {
     "message": "Thain"
   },
+  "language_ti": {
+    "message": "Tigrinjan"
+  },
   "language_tk": {
     "message": "Turkmeenin"
   },
@@ -859,6 +929,9 @@
   },
   "language_tr": {
     "message": "Turkkin"
+  },
+  "language_ts": {
+    "message": "Tsongan"
   },
   "language_tt": {
     "message": "Tataarin"

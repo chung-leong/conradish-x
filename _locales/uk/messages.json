@@ -235,6 +235,10 @@
     "message": "Телугу",
     "description": "Name of script, used in option page"
   },
+  "script_thaa": {
+    "message": "Тана",
+    "description": "Name of script, used in option page"
+  },
   "script_thai": {
     "message": "Тайська",
     "description": "Name of script, used in option page"
@@ -600,11 +604,20 @@
   "language_af": {
     "message": "Африкаанс"
   },
+  "language_ak": {
+    "message": "Чві"
+  },
   "language_am": {
     "message": "Амхарська"
   },
   "language_ar": {
     "message": "Арабська"
+  },
+  "language_as": {
+    "message": "Ассамська"
+  },
+  "language_ay": {
+    "message": "Аймарська"
   },
   "language_az": {
     "message": "Азербайджанська"
@@ -614,6 +627,12 @@
   },
   "language_bg": {
     "message": "Болгарська"
+  },
+  "language_bho": {
+    "message": "Бходжпурі"
+  },
+  "language_bm": {
+    "message": "Бамбара"
   },
   "language_bn": {
     "message": "Бенгальська"
@@ -626,6 +645,9 @@
   },
   "language_ceb": {
     "message": "Себуано"
+  },
+  "language_ckb": {
+    "message": "Курдська (сорані)"
   },
   "language_co": {
     "message": "Корсиканська"
@@ -641,6 +663,15 @@
   },
   "language_de": {
     "message": "Німецька"
+  },
+  "language_doi": {
+    "message": "Догрі"
+  },
+  "language_dv": {
+    "message": "Дівехі"
+  },
+  "language_ee": {
+    "message": "Еве"
   },
   "language_el": {
     "message": "Грецька"
@@ -681,6 +712,12 @@
   "language_gl": {
     "message": "Ґалісійська"
   },
+  "language_gn": {
+    "message": "Гуарані"
+  },
+  "language_gom": {
+    "message": "Конкані"
+  },
   "language_gu": {
     "message": "Ґуджаратська"
   },
@@ -714,6 +751,9 @@
   "language_ig": {
     "message": "Ігбо (ібо)"
   },
+  "language_ilo": {
+    "message": "Ілоканська"
+  },
   "language_is": {
     "message": "Ісландська"
   },
@@ -744,8 +784,11 @@
   "language_ko": {
     "message": "Корейська"
   },
+  "language_kri": {
+    "message": "Кріо"
+  },
   "language_ku": {
-    "message": "Курдська"
+    "message": "Курдська (курманджі)"
   },
   "language_ky": {
     "message": "Киргизька"
@@ -756,14 +799,26 @@
   "language_lb": {
     "message": "Люксембурзька"
   },
+  "language_lg": {
+    "message": "Луганда"
+  },
+  "language_ln": {
+    "message": "Лінгала"
+  },
   "language_lo": {
     "message": "Лаоська"
   },
   "language_lt": {
     "message": "Литовська"
   },
+  "language_lus": {
+    "message": "Мізо"
+  },
   "language_lv": {
     "message": "Латиська"
+  },
+  "language_mai": {
+    "message": "Майтхілі"
   },
   "language_mg": {
     "message": "Малагасійська"
@@ -801,11 +856,17 @@
   "language_no": {
     "message": "Норвезька"
   },
+  "language_nso": {
+    "message": "Сепеді"
+  },
   "language_ny": {
     "message": "Чичева"
   },
+  "language_om": {
+    "message": "Оромо"
+  },
   "language_or": {
-    "message": "Орія"
+    "message": "Одія (орія)"
   },
   "language_pa": {
     "message": "Панджабська"
@@ -819,6 +880,9 @@
   "language_pt": {
     "message": "Португальська"
   },
+  "language_qu": {
+    "message": "Кечуа"
+  },
   "language_ro": {
     "message": "Румунська"
   },
@@ -827,6 +891,9 @@
   },
   "language_rw": {
     "message": "Руандійська"
+  },
+  "language_sa": {
+    "message": "Санскрит"
   },
   "language_sd": {
     "message": "Сіндхі"
@@ -879,6 +946,9 @@
   "language_th": {
     "message": "Тайська"
   },
+  "language_ti": {
+    "message": "Тигринcька"
+  },
   "language_tk": {
     "message": "Туркменська"
   },
@@ -887,6 +957,9 @@
   },
   "language_tr": {
     "message": "Турецька"
+  },
+  "language_ts": {
+    "message": "Тсонга"
   },
   "language_tt": {
     "message": "Татарська"

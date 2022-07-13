@@ -243,6 +243,10 @@
     "message": "Telugu",
     "description": "Name of script, used in option page"
   },
+  "script_thaa": {
+    "message": "Thaana",
+    "description": "Name of script, used in option page"
+  },
   "script_thai": {
     "message": "Thai",
     "description": "Name of script, used in option page"
@@ -457,6 +461,10 @@
     "message": "Include adjectives",
     "description": "Label of checkbox in dialog box"
   },
+  "include_noun_adjs": {
+    "message": "Include nouns and adjectives",
+    "description": "Label of checkbox in dialog box"
+  },
   "include_verbs": {
     "message": "Include verbs",
     "description": "Label of checkbox in dialog box"
@@ -497,6 +505,54 @@
     "message": "vocative",
     "description": "Column heading for inflection table"
   },
+  "abessive": {
+    "message": "abessive",
+    "description": "Column heading for inflection table"
+  },
+  "ablative": {
+    "message": "ablative",
+    "description": "Column heading for inflection table"
+  },
+  "adessive": {
+    "message": "adessive",
+    "description": "Column heading for inflection table"
+  },
+  "allative": {
+    "message": "allative",
+    "description": "Column heading for inflection table"
+  },
+  "comitative": {
+    "message": "comitative",
+    "description": "Column heading for inflection table"
+  },
+  "elative": {
+    "message": "elative",
+    "description": "Column heading for inflection table"
+  },
+  "essive": {
+    "message": "essive",
+    "description": "Column heading for inflection table"
+  },
+  "illative": {
+    "message": "illative",
+    "description": "Column heading for inflection table"
+  },
+  "inessive": {
+    "message": "inessive",
+    "description": "Column heading for inflection table"
+  },
+  "instructive": {
+    "message": "instructive",
+    "description": "Column heading for inflection table"
+  },
+  "partitive": {
+    "message": "partitive",
+    "description": "Column heading for inflection table"
+  },
+  "translative": {
+    "message": "translative",
+    "description": "Column heading for inflection table"
+  },
   "singular": {
     "message": "singular",
     "description": "Row label for inflection table"
@@ -528,86 +584,119 @@
   "language_af": {
     "message": "Afrikaans"
   },
+  "language_ak": {
+    "message": "Twi"
+  },
   "language_am": {
-    "message": "Amharic"
+    "message": "Amharisch"
   },
   "language_ar": {
-    "message": "Arabic"
+    "message": "Arabisch"
+  },
+  "language_as": {
+    "message": "Assamees"
+  },
+  "language_ay": {
+    "message": "Aymara"
   },
   "language_az": {
-    "message": "Azerbaijani"
+    "message": "Azerbeidzjaans"
   },
   "language_be": {
-    "message": "Belarusian"
+    "message": "Belarussisch"
   },
   "language_bg": {
-    "message": "Bulgarian"
+    "message": "Bulgaars"
+  },
+  "language_bho": {
+    "message": "Bhojpuri"
+  },
+  "language_bm": {
+    "message": "Bambara"
   },
   "language_bn": {
-    "message": "Bengali"
+    "message": "Bengaals"
   },
   "language_bs": {
-    "message": "Bosnian"
+    "message": "Bosnisch"
   },
   "language_ca": {
-    "message": "Catalan"
+    "message": "Catalaans"
   },
   "language_ceb": {
     "message": "Cebuano"
   },
+  "language_ckb": {
+    "message": "Koerdisch (Sorani)"
+  },
   "language_co": {
-    "message": "Corsican"
+    "message": "Corsicaans"
   },
   "language_cs": {
-    "message": "Czech"
+    "message": "Tsjechisch"
   },
   "language_cy": {
-    "message": "Welsh"
+    "message": "Wels"
   },
   "language_da": {
-    "message": "Danish"
+    "message": "Deens"
   },
   "language_de": {
-    "message": "German"
+    "message": "Duits"
+  },
+  "language_doi": {
+    "message": "Dogri"
+  },
+  "language_dv": {
+    "message": "Dhivehi"
+  },
+  "language_ee": {
+    "message": "Ewe"
   },
   "language_el": {
-    "message": "Greek"
+    "message": "Grieks"
   },
   "language_en": {
-    "message": "English"
+    "message": "Engels"
   },
   "language_eo": {
     "message": "Esperanto"
   },
   "language_es": {
-    "message": "Spanish"
+    "message": "Spaans"
   },
   "language_et": {
-    "message": "Estonian"
+    "message": "Ests"
   },
   "language_eu": {
-    "message": "Basque"
+    "message": "Baskisch"
   },
   "language_fa": {
-    "message": "Persian"
+    "message": "Perzisch"
   },
   "language_fi": {
-    "message": "Finnish"
+    "message": "Fins"
   },
   "language_fr": {
-    "message": "French"
+    "message": "Frans"
   },
   "language_fy": {
-    "message": "Frisian"
+    "message": "Fries"
   },
   "language_ga": {
-    "message": "Irish"
+    "message": "Iers"
   },
   "language_gd": {
-    "message": "Scots Gaelic"
+    "message": "Schots Keltisch"
   },
   "language_gl": {
-    "message": "Galician"
+    "message": "Galicisch"
+  },
+  "language_gn": {
+    "message": "Guarani"
+  },
+  "language_gom": {
+    "message": "Konkani"
   },
   "language_gu": {
     "message": "Gujarati"
@@ -616,7 +705,7 @@
     "message": "Hausa"
   },
   "language_haw": {
-    "message": "Hawaiian"
+    "message": "Hawaïaans"
   },
   "language_hi": {
     "message": "Hindi"
@@ -625,43 +714,46 @@
     "message": "Hmong"
   },
   "language_hr": {
-    "message": "Croatian"
+    "message": "Kroatisch"
   },
   "language_ht": {
-    "message": "Haitian Creole"
+    "message": "Haïtiaans Creools"
   },
   "language_hu": {
-    "message": "Hungarian"
+    "message": "Hongaars"
   },
   "language_hy": {
-    "message": "Armenian"
+    "message": "Armeens"
   },
   "language_id": {
-    "message": "Indonesian"
+    "message": "Indonesisch"
   },
   "language_ig": {
     "message": "Igbo"
   },
+  "language_ilo": {
+    "message": "Ilocano"
+  },
   "language_is": {
-    "message": "Icelandic"
+    "message": "IJslands"
   },
   "language_it": {
-    "message": "Italian"
+    "message": "Italiaans"
   },
   "language_iw": {
-    "message": "Hebrew"
+    "message": "Hebreeuws"
   },
   "language_ja": {
-    "message": "Japanese"
+    "message": "Japans"
   },
   "language_jw": {
-    "message": "Javanese"
+    "message": "Javaans"
   },
   "language_ka": {
-    "message": "Georgian"
+    "message": "Georgisch"
   },
   "language_kk": {
-    "message": "Kazakh"
+    "message": "Kazachs"
   },
   "language_km": {
     "message": "Khmer"
@@ -670,67 +762,88 @@
     "message": "Kannada"
   },
   "language_ko": {
-    "message": "Korean"
+    "message": "Koreaans"
+  },
+  "language_kri": {
+    "message": "Krio"
   },
   "language_ku": {
-    "message": "Kurdish (Kurmanji)"
+    "message": "Koerdisch (Kurmanji)"
   },
   "language_ky": {
-    "message": "Kyrgyz"
+    "message": "Kirgizisch"
   },
   "language_la": {
-    "message": "Latin"
+    "message": "Latijn"
   },
   "language_lb": {
-    "message": "Luxembourgish"
+    "message": "Luxemburgs"
+  },
+  "language_lg": {
+    "message": "Luganda"
+  },
+  "language_ln": {
+    "message": "Lingala"
   },
   "language_lo": {
     "message": "Lao"
   },
   "language_lt": {
-    "message": "Lithuanian"
+    "message": "Litouws"
+  },
+  "language_lus": {
+    "message": "Mizo"
   },
   "language_lv": {
-    "message": "Latvian"
+    "message": "Lets"
+  },
+  "language_mai": {
+    "message": "Maithili"
   },
   "language_mg": {
-    "message": "Malagasy"
+    "message": "Malagasi"
   },
   "language_mi": {
     "message": "Maori"
   },
   "language_mk": {
-    "message": "Macedonian"
+    "message": "Macedonisch"
   },
   "language_ml": {
     "message": "Malayalam"
   },
   "language_mn": {
-    "message": "Mongolian"
+    "message": "Mongools"
   },
   "language_mr": {
     "message": "Marathi"
   },
   "language_ms": {
-    "message": "Malay"
+    "message": "Maleis"
   },
   "language_mt": {
-    "message": "Maltese"
+    "message": "Maltees"
   },
   "language_my": {
-    "message": "Myanmar (Burmese)"
+    "message": "Birmaans"
   },
   "language_ne": {
-    "message": "Nepali"
+    "message": "Nepalees"
   },
   "language_nl": {
-    "message": "Dutch"
+    "message": "Nederlands"
   },
   "language_no": {
-    "message": "Norwegian"
+    "message": "Noors"
+  },
+  "language_nso": {
+    "message": "Sepedi"
   },
   "language_ny": {
     "message": "Chichewa"
+  },
+  "language_om": {
+    "message": "Oromo"
   },
   "language_or": {
     "message": "Odia (Oriya)"
@@ -739,22 +852,28 @@
     "message": "Punjabi"
   },
   "language_pl": {
-    "message": "Polish"
+    "message": "Pools"
   },
   "language_ps": {
     "message": "Pashto"
   },
   "language_pt": {
-    "message": "Portuguese"
+    "message": "Portugees"
+  },
+  "language_qu": {
+    "message": "Quechua"
   },
   "language_ro": {
-    "message": "Romanian"
+    "message": "Roemeens"
   },
   "language_ru": {
-    "message": "Russian"
+    "message": "Russisch"
   },
   "language_rw": {
     "message": "Kinyarwanda"
+  },
+  "language_sa": {
+    "message": "Sanskriet"
   },
   "language_sd": {
     "message": "Sindhi"
@@ -763,34 +882,34 @@
     "message": "Sinhala"
   },
   "language_sk": {
-    "message": "Slovak"
+    "message": "Slovaaks"
   },
   "language_sl": {
-    "message": "Slovenian"
+    "message": "Sloveens"
   },
   "language_sm": {
-    "message": "Samoan"
+    "message": "Samoaans"
   },
   "language_sn": {
     "message": "Shona"
   },
   "language_so": {
-    "message": "Somali"
+    "message": "Somalisch"
   },
   "language_sq": {
-    "message": "Albanian"
+    "message": "Albanees"
   },
   "language_sr": {
-    "message": "Serbian"
+    "message": "Servisch"
   },
   "language_st": {
     "message": "Sesotho"
   },
   "language_su": {
-    "message": "Sundanese"
+    "message": "Soendanees"
   },
   "language_sv": {
-    "message": "Swedish"
+    "message": "Zweeds"
   },
   "language_sw": {
     "message": "Swahili"
@@ -802,57 +921,63 @@
     "message": "Telugu"
   },
   "language_tg": {
-    "message": "Tajik"
+    "message": "Tadzjieks"
   },
   "language_th": {
     "message": "Thai"
   },
+  "language_ti": {
+    "message": "Tigrinya"
+  },
   "language_tk": {
-    "message": "Turkmen"
+    "message": "Turkmeens"
   },
   "language_tl": {
-    "message": "Filipino"
+    "message": "Tagalog"
   },
   "language_tr": {
-    "message": "Turkish"
+    "message": "Turks"
+  },
+  "language_ts": {
+    "message": "Tsonga"
   },
   "language_tt": {
-    "message": "Tatar"
+    "message": "Tataars"
   },
   "language_ug": {
-    "message": "Uyghur"
+    "message": "Oeigoers"
   },
   "language_uk": {
-    "message": "Ukrainian"
+    "message": "Oekraïens"
   },
   "language_ur": {
     "message": "Urdu"
   },
   "language_uz": {
-    "message": "Uzbek"
+    "message": "Oezbeeks"
   },
   "language_vi": {
-    "message": "Vietnamese"
+    "message": "Vietnamees"
   },
   "language_xh": {
     "message": "Xhosa"
   },
   "language_yi": {
-    "message": "Yiddish"
+    "message": "Jiddisch"
   },
   "language_yo": {
     "message": "Yoruba"
   },
   "language_zh": {
-    "message": "Chinese"
+    "message": "Chinees"
   },
   "language_zh_cn": {
-    "message": "Chinese (Simplified)"
+    "message": "Chinees (vereenvoudigd)"
   },
   "language_zh_tw": {
-    "message": "Chinese (Traditional)"
+    "message": "Chinees (traditioneel)"
   },
   "language_zu": {
-    "message": "Zulu"
+    "message": "Zoeloe"
   }
 }

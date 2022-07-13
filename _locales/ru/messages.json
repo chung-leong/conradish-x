@@ -235,6 +235,10 @@
     "message": "Телугу",
     "description": "Name of script, used in option page"
   },
+  "script_thaa": {
+    "message": "Тана",
+    "description": "Name of script, used in option page"
+  },
   "script_thai": {
     "message": "Тайское",
     "description": "Name of script, used in option page"
@@ -596,11 +600,20 @@
   "language_af": {
     "message": "Африкаанс"
   },
+  "language_ak": {
+    "message": "Чви"
+  },
   "language_am": {
     "message": "Амхарский"
   },
   "language_ar": {
     "message": "Арабский"
+  },
+  "language_as": {
+    "message": "Ассамский"
+  },
+  "language_ay": {
+    "message": "Аймара"
   },
   "language_az": {
     "message": "Азербайджанский"
@@ -610,6 +623,12 @@
   },
   "language_bg": {
     "message": "Болгарский"
+  },
+  "language_bho": {
+    "message": "Бходжпури"
+  },
+  "language_bm": {
+    "message": "Бамбара"
   },
   "language_bn": {
     "message": "Бенгальский"
@@ -622,6 +641,9 @@
   },
   "language_ceb": {
     "message": "Себуанский"
+  },
+  "language_ckb": {
+    "message": "Курдский (сорани)"
   },
   "language_co": {
     "message": "Корсиканский"
@@ -637,6 +659,15 @@
   },
   "language_de": {
     "message": "Немецкий"
+  },
+  "language_doi": {
+    "message": "Догри"
+  },
+  "language_dv": {
+    "message": "Мальдивский"
+  },
+  "language_ee": {
+    "message": "Эве"
   },
   "language_el": {
     "message": "Греческий"
@@ -677,6 +708,12 @@
   "language_gl": {
     "message": "Галисийский"
   },
+  "language_gn": {
+    "message": "Гуарани"
+  },
+  "language_gom": {
+    "message": "Конкани"
+  },
   "language_gu": {
     "message": "Гуджарати"
   },
@@ -696,7 +733,7 @@
     "message": "Хорватский"
   },
   "language_ht": {
-    "message": "Креольский (Гаити)"
+    "message": "Креольский (гаити)"
   },
   "language_hu": {
     "message": "Венгерский"
@@ -709,6 +746,9 @@
   },
   "language_ig": {
     "message": "Игбо"
+  },
+  "language_ilo": {
+    "message": "Илоканский"
   },
   "language_is": {
     "message": "Исландский"
@@ -740,8 +780,11 @@
   "language_ko": {
     "message": "Корейский"
   },
+  "language_kri": {
+    "message": "Крио"
+  },
   "language_ku": {
-    "message": "Курманджи"
+    "message": "Курдский (курманджи)"
   },
   "language_ky": {
     "message": "Киргизский"
@@ -752,14 +795,26 @@
   "language_lb": {
     "message": "Люксембургский"
   },
+  "language_lg": {
+    "message": "Луганда"
+  },
+  "language_ln": {
+    "message": "Лингала"
+  },
   "language_lo": {
     "message": "Лаосский"
   },
   "language_lt": {
     "message": "Литовский"
   },
+  "language_lus": {
+    "message": "Мизо"
+  },
   "language_lv": {
     "message": "Латышский"
+  },
+  "language_mai": {
+    "message": "Майтхили"
   },
   "language_mg": {
     "message": "Малагасийский"
@@ -797,8 +852,14 @@
   "language_no": {
     "message": "Норвежский"
   },
+  "language_nso": {
+    "message": "Сепеди"
+  },
   "language_ny": {
     "message": "Чева"
+  },
+  "language_om": {
+    "message": "Оромо"
   },
   "language_or": {
     "message": "Ория"
@@ -815,6 +876,9 @@
   "language_pt": {
     "message": "Португальский"
   },
+  "language_qu": {
+    "message": "Кечуа"
+  },
   "language_ro": {
     "message": "Румынский"
   },
@@ -823,6 +887,9 @@
   },
   "language_rw": {
     "message": "Руанда"
+  },
+  "language_sa": {
+    "message": "Санскрит"
   },
   "language_sd": {
     "message": "Синдхи"
@@ -855,7 +922,7 @@
     "message": "Сесото"
   },
   "language_su": {
-    "message": "Суданский"
+    "message": "Сунданский"
   },
   "language_sv": {
     "message": "Шведский"
@@ -875,6 +942,9 @@
   "language_th": {
     "message": "Тайский"
   },
+  "language_ti": {
+    "message": "Тигринья"
+  },
   "language_tk": {
     "message": "Туркменский"
   },
@@ -883,6 +953,9 @@
   },
   "language_tr": {
     "message": "Турецкий"
+  },
+  "language_ts": {
+    "message": "Тсонга"
   },
   "language_tt": {
     "message": "Татарский"
@@ -903,7 +976,7 @@
     "message": "Вьетнамский"
   },
   "language_xh": {
-    "message": "Кхоса"
+    "message": "Коса"
   },
   "language_yi": {
     "message": "Идиш"

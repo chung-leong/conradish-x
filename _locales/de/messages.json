@@ -239,6 +239,10 @@
     "message": "Telugu",
     "description": "Name of script, used in option page"
   },
+  "script_thaa": {
+    "message": "Thaana",
+    "description": "Name of script, used in option page"
+  },
   "script_thai": {
     "message": "Thailändisch",
     "description": "Name of script, used in option page"
@@ -802,9 +806,6 @@
   },
   "language_mn": {
     "message": "Mongolisch"
-  },
-  "language_mni_mtei": {
-    "message": "Meitei (Manipuri)"
   },
   "language_mr": {
     "message": "Marathi"

@@ -235,6 +235,10 @@
     "message": "Telugské",
     "description": "Name of script, used in option page"
   },
+  "script_thaa": {
+    "message": "Tana",
+    "description": "Name of script, used in option page"
+  },
   "script_thai": {
     "message": "Thajské",
     "description": "Name of script, used in option page"
@@ -600,11 +604,20 @@
   "language_af": {
     "message": "Afrikánčina"
   },
+  "language_ak": {
+    "message": "Twi"
+  },
   "language_am": {
     "message": "Amharčina"
   },
   "language_ar": {
     "message": "Arabčina"
+  },
+  "language_as": {
+    "message": "Ásamčina"
+  },
+  "language_ay": {
+    "message": "Aymarčina"
   },
   "language_az": {
     "message": "Azerbajdžančina"
@@ -614,6 +627,12 @@
   },
   "language_bg": {
     "message": "Bulharčina"
+  },
+  "language_bho": {
+    "message": "Bhódžpurčina"
+  },
+  "language_bm": {
+    "message": "Bambarčina"
   },
   "language_bn": {
     "message": "Bengálčina"
@@ -626,6 +645,9 @@
   },
   "language_ceb": {
     "message": "Cebuánčina"
+  },
+  "language_ckb": {
+    "message": "Kurdčina (sorání)"
   },
   "language_co": {
     "message": "Korzičtina"
@@ -641,6 +663,15 @@
   },
   "language_de": {
     "message": "Nemčina"
+  },
+  "language_doi": {
+    "message": "Dógrí"
+  },
+  "language_dv": {
+    "message": "Maldivčina"
+  },
+  "language_ee": {
+    "message": "Eweština"
   },
   "language_el": {
     "message": "Gréčtina"
@@ -681,6 +712,12 @@
   "language_gl": {
     "message": "Galícijčina"
   },
+  "language_gn": {
+    "message": "Guaraníjčina"
+  },
+  "language_gom": {
+    "message": "Konkančina"
+  },
   "language_gu": {
     "message": "Gudžarátčina"
   },
@@ -714,6 +751,9 @@
   "language_ig": {
     "message": "Igboština"
   },
+  "language_ilo": {
+    "message": "Ilokánčina"
+  },
   "language_is": {
     "message": "Islandčina"
   },
@@ -744,8 +784,11 @@
   "language_ko": {
     "message": "Kórejčina"
   },
+  "language_kri": {
+    "message": "Krio"
+  },
   "language_ku": {
-    "message": "Kurdčina"
+    "message": "Kurdčina (kurmándží)"
   },
   "language_ky": {
     "message": "Kirgizština"
@@ -756,17 +799,29 @@
   "language_lb": {
     "message": "Luxemburčina"
   },
+  "language_lg": {
+    "message": "Lugandčina"
+  },
+  "language_ln": {
+    "message": "Lingalčina"
+  },
   "language_lo": {
     "message": "Laoština"
   },
   "language_lt": {
     "message": "Litovčina"
   },
+  "language_lus": {
+    "message": "Mizorámčina"
+  },
   "language_lv": {
     "message": "Lotyština"
   },
+  "language_mai": {
+    "message": "Maithilčina"
+  },
   "language_mg": {
-    "message": "Malagština"
+    "message": "Malgaština"
   },
   "language_mi": {
     "message": "Maorijčina"
@@ -801,8 +856,14 @@
   "language_no": {
     "message": "Nórčina"
   },
+  "language_nso": {
+    "message": "Sepedi"
+  },
   "language_ny": {
     "message": "Ňandža"
+  },
+  "language_om": {
+    "message": "Oromčina"
   },
   "language_or": {
     "message": "Uríjčina"
@@ -814,10 +875,13 @@
     "message": "Poľština"
   },
   "language_ps": {
-    "message": "Pašto"
+    "message": "Paštčina"
   },
   "language_pt": {
     "message": "Portugalčina"
+  },
+  "language_qu": {
+    "message": "Kečuánčina"
   },
   "language_ro": {
     "message": "Rumunčina"
@@ -827,6 +891,9 @@
   },
   "language_rw": {
     "message": "Rwandčina"
+  },
+  "language_sa": {
+    "message": "Sanskrit"
   },
   "language_sd": {
     "message": "Sindčina"
@@ -844,7 +911,7 @@
     "message": "Samojčina"
   },
   "language_sn": {
-    "message": "Shona"
+    "message": "Šončina"
   },
   "language_so": {
     "message": "Somálčina"
@@ -879,6 +946,9 @@
   "language_th": {
     "message": "Thajčina"
   },
+  "language_ti": {
+    "message": "Tigriňa"
+  },
   "language_tk": {
     "message": "Turkménčina"
   },
@@ -887,6 +957,9 @@
   },
   "language_tr": {
     "message": "Turečtina"
+  },
+  "language_ts": {
+    "message": "Tsongčina"
   },
   "language_tt": {
     "message": "Tatárčina"

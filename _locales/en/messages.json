@@ -243,6 +243,10 @@
     "message": "Telugu",
     "description": "Name of script, used in option page"
   },
+  "script_thaa": {
+    "message": "Thaana",
+    "description": "Name of script, used in option page"
+  },
   "script_thai": {
     "message": "Thai",
     "description": "Name of script, used in option page"
@@ -580,11 +584,20 @@
   "language_af": {
     "message": "Afrikaans"
   },
+  "language_ak": {
+    "message": "Twi"
+  },
   "language_am": {
     "message": "Amharic"
   },
   "language_ar": {
     "message": "Arabic"
+  },
+  "language_as": {
+    "message": "Assamese"
+  },
+  "language_ay": {
+    "message": "Aymara"
   },
   "language_az": {
     "message": "Azerbaijani"
@@ -594,6 +607,12 @@
   },
   "language_bg": {
     "message": "Bulgarian"
+  },
+  "language_bho": {
+    "message": "Bhojpuri"
+  },
+  "language_bm": {
+    "message": "Bambara"
   },
   "language_bn": {
     "message": "Bengali"
@@ -606,6 +625,9 @@
   },
   "language_ceb": {
     "message": "Cebuano"
+  },
+  "language_ckb": {
+    "message": "Kurdish (Sorani)"
   },
   "language_co": {
     "message": "Corsican"
@@ -621,6 +643,15 @@
   },
   "language_de": {
     "message": "German"
+  },
+  "language_doi": {
+    "message": "Dogri"
+  },
+  "language_dv": {
+    "message": "Dhivehi"
+  },
+  "language_ee": {
+    "message": "Ewe"
   },
   "language_el": {
     "message": "Greek"
@@ -661,6 +692,12 @@
   "language_gl": {
     "message": "Galician"
   },
+  "language_gn": {
+    "message": "Guarani"
+  },
+  "language_gom": {
+    "message": "Konkani"
+  },
   "language_gu": {
     "message": "Gujarati"
   },
@@ -694,6 +731,9 @@
   "language_ig": {
     "message": "Igbo"
   },
+  "language_ilo": {
+    "message": "Ilocano"
+  },
   "language_is": {
     "message": "Icelandic"
   },
@@ -724,6 +764,9 @@
   "language_ko": {
     "message": "Korean"
   },
+  "language_kri": {
+    "message": "Krio"
+  },
   "language_ku": {
     "message": "Kurdish (Kurmanji)"
   },
@@ -736,14 +779,26 @@
   "language_lb": {
     "message": "Luxembourgish"
   },
+  "language_lg": {
+    "message": "Luganda"
+  },
+  "language_ln": {
+    "message": "Lingala"
+  },
   "language_lo": {
     "message": "Lao"
   },
   "language_lt": {
     "message": "Lithuanian"
   },
+  "language_lus": {
+    "message": "Mizo"
+  },
   "language_lv": {
     "message": "Latvian"
+  },
+  "language_mai": {
+    "message": "Maithili"
   },
   "language_mg": {
     "message": "Malagasy"
@@ -781,8 +836,14 @@
   "language_no": {
     "message": "Norwegian"
   },
+  "language_nso": {
+    "message": "Sepedi"
+  },
   "language_ny": {
     "message": "Chichewa"
+  },
+  "language_om": {
+    "message": "Oromo"
   },
   "language_or": {
     "message": "Odia (Oriya)"
@@ -799,6 +860,9 @@
   "language_pt": {
     "message": "Portuguese"
   },
+  "language_qu": {
+    "message": "Quechua"
+  },
   "language_ro": {
     "message": "Romanian"
   },
@@ -807,6 +871,9 @@
   },
   "language_rw": {
     "message": "Kinyarwanda"
+  },
+  "language_sa": {
+    "message": "Sanskrit"
   },
   "language_sd": {
     "message": "Sindhi"
@@ -859,6 +926,9 @@
   "language_th": {
     "message": "Thai"
   },
+  "language_ti": {
+    "message": "Tigrinya"
+  },
   "language_tk": {
     "message": "Turkmen"
   },
@@ -867,6 +937,9 @@
   },
   "language_tr": {
     "message": "Turkish"
+  },
+  "language_ts": {
+    "message": "Tsonga"
   },
   "language_tt": {
     "message": "Tatar"

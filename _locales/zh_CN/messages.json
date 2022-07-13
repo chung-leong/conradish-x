@@ -235,6 +235,10 @@
     "message": "泰卢固文",
     "description": "Name of script, used in option page"
   },
+  "script_thaa": {
+    "message": "它拿文",
+    "description": "Name of script, used in option page"
+  },
   "script_thai": {
     "message": "泰文",
     "description": "Name of script, used in option page"
@@ -572,11 +576,20 @@
   "language_af": {
     "message": "布尔语(南非荷兰语)"
   },
+  "language_ak": {
+    "message": "契维语"
+  },
   "language_am": {
     "message": "阿姆哈拉语"
   },
   "language_ar": {
     "message": "阿拉伯语"
+  },
+  "language_as": {
+    "message": "阿萨姆语"
+  },
+  "language_ay": {
+    "message": "艾马拉语"
   },
   "language_az": {
     "message": "阿塞拜疆语"
@@ -586,6 +599,12 @@
   },
   "language_bg": {
     "message": "保加利亚语"
+  },
+  "language_bho": {
+    "message": "博杰普尔语"
+  },
+  "language_bm": {
+    "message": "班巴拉语"
   },
   "language_bn": {
     "message": "孟加拉语"
@@ -598,6 +617,9 @@
   },
   "language_ceb": {
     "message": "宿务语"
+  },
+  "language_ckb": {
+    "message": "库尔德语（索拉尼）"
   },
   "language_co": {
     "message": "科西嘉语"
@@ -613,6 +635,15 @@
   },
   "language_de": {
     "message": "德语"
+  },
+  "language_doi": {
+    "message": "多格来语"
+  },
+  "language_dv": {
+    "message": "迪维希语"
+  },
+  "language_ee": {
+    "message": "埃维语"
   },
   "language_el": {
     "message": "希腊语"
@@ -653,6 +684,12 @@
   "language_gl": {
     "message": "加利西亚语"
   },
+  "language_gn": {
+    "message": "瓜拉尼语"
+  },
+  "language_gom": {
+    "message": "贡根语"
+  },
   "language_gu": {
     "message": "古吉拉特语"
   },
@@ -686,6 +723,9 @@
   "language_ig": {
     "message": "伊博语"
   },
+  "language_ilo": {
+    "message": "伊洛卡诺语"
+  },
   "language_is": {
     "message": "冰岛语"
   },
@@ -716,8 +756,11 @@
   "language_ko": {
     "message": "韩语"
   },
+  "language_kri": {
+    "message": "克里奥尔语"
+  },
   "language_ku": {
-    "message": "库尔德语"
+    "message": "库尔德语（库尔曼吉语）"
   },
   "language_ky": {
     "message": "吉尔吉斯语"
@@ -728,14 +771,26 @@
   "language_lb": {
     "message": "卢森堡语"
   },
+  "language_lg": {
+    "message": "卢干达语"
+  },
+  "language_ln": {
+    "message": "林格拉语"
+  },
   "language_lo": {
     "message": "老挝语"
   },
   "language_lt": {
     "message": "立陶宛语"
   },
+  "language_lus": {
+    "message": "米佐语"
+  },
   "language_lv": {
     "message": "拉脱维亚语"
+  },
+  "language_mai": {
+    "message": "迈蒂利语"
   },
   "language_mg": {
     "message": "马尔加什语"
@@ -773,8 +828,14 @@
   "language_no": {
     "message": "挪威语"
   },
+  "language_nso": {
+    "message": "塞佩蒂语"
+  },
   "language_ny": {
     "message": "齐切瓦语"
+  },
+  "language_om": {
+    "message": "奥罗莫语"
   },
   "language_or": {
     "message": "奥利亚语"
@@ -791,6 +852,9 @@
   "language_pt": {
     "message": "葡萄牙语"
   },
+  "language_qu": {
+    "message": "克丘亚语"
+  },
   "language_ro": {
     "message": "罗马尼亚语"
   },
@@ -799,6 +863,9 @@
   },
   "language_rw": {
     "message": "卢旺达语"
+  },
+  "language_sa": {
+    "message": "梵语"
   },
   "language_sd": {
     "message": "信德语"
@@ -851,6 +918,9 @@
   "language_th": {
     "message": "泰语"
   },
+  "language_ti": {
+    "message": "蒂格尼亚语"
+  },
   "language_tk": {
     "message": "土库曼语"
   },
@@ -859,6 +929,9 @@
   },
   "language_tr": {
     "message": "土耳其语"
+  },
+  "language_ts": {
+    "message": "宗加语"
   },
   "language_tt": {
     "message": "鞑靼语"

@@ -235,6 +235,10 @@
     "message": "Télougou",
     "description": "Name of script, used in option page"
   },
+  "script_thaa": {
+    "message": "Thâna",
+    "description": "Name of script, used in option page"
+  },
   "script_thai": {
     "message": "Thaïlandais",
     "description": "Name of script, used in option page"
@@ -568,11 +572,20 @@
   "language_af": {
     "message": "Afrikaans"
   },
+  "language_ak": {
+    "message": "Twi"
+  },
   "language_am": {
     "message": "Amharique"
   },
   "language_ar": {
     "message": "Arabe"
+  },
+  "language_as": {
+    "message": "Assamais"
+  },
+  "language_ay": {
+    "message": "Aymara"
   },
   "language_az": {
     "message": "Azéri"
@@ -582,6 +595,12 @@
   },
   "language_bg": {
     "message": "Bulgare"
+  },
+  "language_bho": {
+    "message": "Bhodjpouri"
+  },
+  "language_bm": {
+    "message": "Bambara"
   },
   "language_bn": {
     "message": "Bengali"
@@ -594,6 +613,9 @@
   },
   "language_ceb": {
     "message": "Cebuano"
+  },
+  "language_ckb": {
+    "message": "Kurde (Sorani)"
   },
   "language_co": {
     "message": "Corse"
@@ -609,6 +631,15 @@
   },
   "language_de": {
     "message": "Allemand"
+  },
+  "language_doi": {
+    "message": "Dogri"
+  },
+  "language_dv": {
+    "message": "Divéhi"
+  },
+  "language_ee": {
+    "message": "Ewe"
   },
   "language_el": {
     "message": "Grec"
@@ -649,6 +680,12 @@
   "language_gl": {
     "message": "Galicien"
   },
+  "language_gn": {
+    "message": "Guarani"
+  },
+  "language_gom": {
+    "message": "Konkani"
+  },
   "language_gu": {
     "message": "Gujarati"
   },
@@ -682,6 +719,9 @@
   "language_ig": {
     "message": "Igbo"
   },
+  "language_ilo": {
+    "message": "Ilocano"
+  },
   "language_is": {
     "message": "Islandais"
   },
@@ -712,8 +752,11 @@
   "language_ko": {
     "message": "Coréen"
   },
+  "language_kri": {
+    "message": "Krio"
+  },
   "language_ku": {
-    "message": "Kurde"
+    "message": "Kurde (Kurmandji)"
   },
   "language_ky": {
     "message": "Kirghiz"
@@ -724,14 +767,26 @@
   "language_lb": {
     "message": "Luxembourgeois"
   },
+  "language_lg": {
+    "message": "Luganda"
+  },
+  "language_ln": {
+    "message": "Lingala"
+  },
   "language_lo": {
     "message": "Laotien"
   },
   "language_lt": {
     "message": "Lituanien"
   },
+  "language_lus": {
+    "message": "Mizo"
+  },
   "language_lv": {
     "message": "Letton"
+  },
+  "language_mai": {
+    "message": "Maïthili"
   },
   "language_mg": {
     "message": "Malgache"
@@ -769,11 +824,17 @@
   "language_no": {
     "message": "Norvégien"
   },
+  "language_nso": {
+    "message": "Sepedi"
+  },
   "language_ny": {
     "message": "Chichewa"
   },
+  "language_om": {
+    "message": "Oromo"
+  },
   "language_or": {
-    "message": "Odia (oriya)"
+    "message": "Odia (Oriya)"
   },
   "language_pa": {
     "message": "Panjabi"
@@ -787,6 +848,9 @@
   "language_pt": {
     "message": "Portugais"
   },
+  "language_qu": {
+    "message": "Quechua"
+  },
   "language_ro": {
     "message": "Roumain"
   },
@@ -795,6 +859,9 @@
   },
   "language_rw": {
     "message": "Kinyarwanda"
+  },
+  "language_sa": {
+    "message": "Sanscrit"
   },
   "language_sd": {
     "message": "Sindhî"
@@ -839,13 +906,16 @@
     "message": "Tamoul"
   },
   "language_te": {
-    "message": "Télougou"
+    "message": "Telugu"
   },
   "language_tg": {
     "message": "Tadjik"
   },
   "language_th": {
     "message": "Thaï"
+  },
+  "language_ti": {
+    "message": "Tigrigna"
   },
   "language_tk": {
     "message": "Turkmène"
@@ -855,6 +925,9 @@
   },
   "language_tr": {
     "message": "Turc"
+  },
+  "language_ts": {
+    "message": "Tsonga"
   },
   "language_tt": {
     "message": "Tatar"
