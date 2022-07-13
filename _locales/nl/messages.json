@@ -1,0 +1,858 @@
+{
+  "ext_name": {
+    "message": "Conradish",
+    "description": "Name of the extension, used in manifest"
+  },
+  "ext_description": {
+    "message": "Create print version of news articles with footnotes",
+    "description": "Description of the extension, used in manifest"
+  },
+  "user_guide": {
+    "message": "User Guide",
+    "description": "Title of help page"
+  },
+  "user_guide_path": {
+    "message": "_locales/en/user-guide.html",
+    "description": "Path to user guide HTML file"
+  },
+  "keep_all": {
+    "message": "keep all",
+    "description": "Tooltip text of scrubbing mode keep all button"
+  },
+  "create_print_version": {
+    "message": "Create print version",
+    "description": "Label for menu item in browser context menu and extension pop-up menu"
+  },
+  "selection_portion_of_document": {
+    "message": "select portion of document you wish to print first",
+    "description": "Text for tooltip in pop-up menu, when there's no selection"
+  },
+  "created_on": {
+    "message": "created on $DATE$",
+    "description": "Text for tooltip of recent documents in pop-up menu",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "11/28/2021, 10:01:35 PM"
+      }
+    }
+  },
+  "show_all_documents": {
+    "message": "Show all documents",
+    "description": "Label for menu item in pop-up menu"
+  },
+  "add_definition": {
+    "message": "Add definition",
+    "description": "Label for item in annotation menu"
+  },
+  "show_term_and_definition": {
+    "message": "show both term and definition in footnote",
+    "description": "Text for tooltip of item in annotation menu"
+  },
+  "add_translation": {
+    "message": "Add translation",
+    "description": "Label for item in annotation menu"
+  },
+  "show_translation_only": {
+    "message": "show translated sentence only in footnote",
+    "description": "Text for tooltip of item in annotation menu"
+  },
+  "add_explanation": {
+    "message": "Add explanation",
+    "description": "Label for item in annotation menu"
+  },
+  "show_explanation": {
+    "message": "show explanation in footnote",
+    "description": "Text for tooltip of item in annotation menu"
+  },
+  "style_bold": {
+    "message": "bold",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_italic": {
+    "message": "italic",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_underline": {
+    "message": "underline",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_strikethrough": {
+    "message": "strike-through",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_subscript": {
+    "message": "subscript",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_superscript": {
+    "message": "superscript",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_remove": {
+    "message": "clear formatting",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "style_heading": {
+    "message": "heading $NUMBER$",
+    "description": "Text for tooltip of button in style menu",
+    "placeholders": {
+      "number": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "style_paragraph": {
+    "message": "paragraph",
+    "description": "Text for tooltip of button in style menu"
+  },
+  "extension_options": {
+    "message": "Extension options",
+    "description": "Title in options page"
+  },
+  "basic_options": {
+    "message": "Basic options",
+    "description": "Title of basic option card"
+  },
+  "add_context_menu_item": {
+    "message": "Add item to browser context menu",
+    "description": "Label for checkbox in options"
+  },
+  "filter_page_content": {
+    "message": "Filter page content",
+    "description": "Label for checkbox in options"
+  },
+  "filter_automatic": {
+    "message": "Automatically",
+    "description": "Label for filter drop-down in options"
+  },
+  "filter_manual": {
+    "message": "Manually",
+    "description": "Label for filter drop-down in options"
+  },
+  "limit_heading_size": {
+    "message": "Limit heading size",
+    "description": "Label for checkbox in options"
+  },
+  "fonts": {
+    "message": "Fonts",
+    "description": "Used in section navigation in option page"
+  },
+  "search_font": {
+    "message": "Find font",
+    "description": "Placeholder of search box and icon tooltip in document list"
+  },
+  "script_arab": {
+    "message": "Arabic",
+    "description": "Name of script, used in option page"
+  },
+  "script_armn": {
+    "message": "Armenian",
+    "description": "Name of script, used in option page"
+  },
+  "script_beng": {
+    "message": "Bengali",
+    "description": "Name of script, used in option page"
+  },
+  "script_cyrl": {
+    "message": "Cyrillic",
+    "description": "Name of script, used in option page"
+  },
+  "script_deva": {
+    "message": "Devanagari",
+    "description": "Name of script, used in option page"
+  },
+  "script_ethi": {
+    "message": "Ethiopic",
+    "description": "Name of script, used in option page"
+  },
+  "script_geor": {
+    "message": "Georgian",
+    "description": "Name of script, used in option page"
+  },
+  "script_grek": {
+    "message": "Greek",
+    "description": "Name of script, used in option page"
+  },
+  "script_gujr": {
+    "message": "Gujurati",
+    "description": "Name of script, used in option page"
+  },
+  "script_guru": {
+    "message": "Gurmukhi",
+    "description": "Name of script, used in option page"
+  },
+  "script_hang": {
+    "message": "Korean",
+    "description": "Name of script, used in option page"
+  },
+  "script_hans": {
+    "message": "Chinese (Simplified)",
+    "description": "Name of script, used in option page"
+  },
+  "script_hant": {
+    "message": "Chinese (Traditional)",
+    "description": "Name of script, used in option page"
+  },
+  "script_hebr": {
+    "message": "Hebrew",
+    "description": "Name of script, used in option page"
+  },
+  "script_jpan": {
+    "message": "Japanese",
+    "description": "Name of script, used in option page"
+  },
+  "script_khmr": {
+    "message": "Khmer",
+    "description": "Name of script, used in option page"
+  },
+  "script_knda": {
+    "message": "Kannada",
+    "description": "Name of script, used in option page"
+  },
+  "script_laoo": {
+    "message": "Laotian",
+    "description": "Name of script, used in option page"
+  },
+  "script_latn": {
+    "message": "Latin",
+    "description": "Name of script, used in option page"
+  },
+  "script_mlym": {
+    "message": "Malayalam",
+    "description": "Name of script, used in option page"
+  },
+  "script_mymr": {
+    "message": "Burmese",
+    "description": "Name of script, used in option page"
+  },
+  "script_orya": {
+    "message": "Orya",
+    "description": "Name of script, used in option page"
+  },
+  "script_sinh": {
+    "message": "Sinhala",
+    "description": "Name of script, used in option page"
+  },
+  "script_taml": {
+    "message": "Tamil",
+    "description": "Name of script, used in option page"
+  },
+  "script_telu": {
+    "message": "Telugu",
+    "description": "Name of script, used in option page"
+  },
+  "script_thai": {
+    "message": "Thai",
+    "description": "Name of script, used in option page"
+  },
+  "action": {
+    "message": "Action",
+    "description": "Label for drop-down in side-bar"
+  },
+  "editing": {
+    "message": "Editing",
+    "description": "Item in action drop-down"
+  },
+  "styling": {
+    "message": "Styling",
+    "description": "Item in action drop-down"
+  },
+  "annotating": {
+    "message": "Annotating",
+    "description": "Item in action drop-down"
+  },
+  "scrubbing": {
+    "message": "Scrubbing",
+    "description": "Item in action drop-down"
+  },
+  "from_language": {
+    "message": "From",
+    "description": "Label for drop-down in side-bar"
+  },
+  "to_language": {
+    "message": "To",
+    "description": "Label for drop-down in side-bar"
+  },
+  "article_font_family": {
+    "message": "Font",
+    "description": "Label for drop-down in side-bar"
+  },
+  "article_font_size": {
+    "message": "Font size",
+    "description": "Label for drop-down in side-bar"
+  },
+  "article_justification": {
+    "message": "Justification",
+    "description": "Label for drop-down in side-bar"
+  },
+  "justification_none": {
+    "message": "None",
+    "description": "Item in justification drop-down in side-bar"
+  },
+  "justification_text": {
+    "message": "Text only",
+    "description": "Item in justification drop-down in side-bar"
+  },
+  "justification_text_and_headings": {
+    "message": "Text and headings",
+    "description": "Item in justification drop-down in side-bar"
+  },
+  "article_spacing": {
+    "message": "Spacing",
+    "description": "Label for drop-down in side-bar"
+  },
+  "spacing_normal": {
+    "message": "Normal",
+    "description": "Item in line-spacing drop-down in side-bar"
+  },
+  "footnote_font_family": {
+    "message": "Footnote font",
+    "description": "Label for drop-down in side-bar"
+  },
+  "footnote_font_size": {
+    "message": "Footnote font size",
+    "description": "Label for drop-down in side-bar"
+  },
+  "paper_size": {
+    "message": "Paper size",
+    "description": "Label for drop-down in side-bar"
+  },
+  "margins": {
+    "message": "Margins",
+    "description": "Label for drop-down in side-bar"
+  },
+  "margins_default": {
+    "message": "Default",
+    "description": "Item in margins drop-down in side-bar"
+  },
+  "margins_custom": {
+    "message": "Custom",
+    "description": "Item in margins drop-down in side-bar"
+  },
+  "print": {
+    "message": "Print",
+    "description": "Label for button in side-bar"
+  },
+  "finish": {
+    "message": "Finish",
+    "description": "Label for button in side-bar"
+  },
+  "check_paper_size": {
+    "message": "In the print window, make sure **Paper size** matches what’s specified above and that **Margins** are set to “Default”",
+    "description": "Message in speech bubble over print button in side-bar (Markdown)"
+  },
+  "documents": {
+    "message": "Documents",
+    "description": "Title in document list"
+  },
+  "selected_document_sg": {
+    "message": "1 selected",
+    "description": "For displaying the number of selected documents (singular)"
+  },
+  "selected_document_pl": {
+    "message": "$NUMBER$ selected",
+    "description": "For displaying the number of selected documents (plural)",
+    "placeholders": {
+      "number": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "no_documents": {
+    "message": "No documents",
+    "description": "Message in document list when there aren't any documents"
+  },
+  "no_search_results": {
+    "message": "No search results found",
+    "description": "Message in document list when a search yields no results"
+  },
+  "search_documents": {
+    "message": "Search documents",
+    "description": "Placeholder of search box and icon tooltip in document list"
+  },
+  "search_result_sg": {
+    "message": "1 search result",
+    "description": "For displaying the number of search results (singular)"
+  },
+  "search_result_pl": {
+    "message": "$NUMBER$ search results",
+    "description": "For displaying the number of search results (plural)",
+    "placeholders": {
+      "number": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "for_query": {
+    "message": "$RESULTS$ for “$QUERY$”",
+    "description": "Text for card heading in document list",
+    "placeholders": {
+      "results": {
+        "content": "$1",
+        "example": "2 results"
+      },
+      "query": {
+        "content": "$2",
+        "example": "CNN"
+      }
+    }
+  },
+  "today_being": {
+    "message": "Today - $DATE$",
+    "description": "Text for card heading in document list",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "Sunday, November 13, 2001"
+      }
+    }
+  },
+  "yesterday_being": {
+    "message": "Yesterday - $DATE$",
+    "description": "Text for card heading in document list",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "Sunday, November 13, 2001"
+      }
+    }
+  },
+  "clear_search": {
+    "message": "Clear search",
+    "description": "Tooltip of search box x button in document list"
+  },
+  "delete": {
+    "message": "Delete",
+    "description": "Label for delete button in document list"
+  },
+  "cancel": {
+    "message": "Cancel",
+    "description": "Label for x button used to clear selection in document list"
+  },
+  "change_title": {
+    "message": "Change title",
+    "description": "Label for menu item in document list"
+  },
+  "open_original_page": {
+    "message": "Go to original page",
+    "description": "Label for menu item in document list"
+  },
+  "create_inflection_tables": {
+    "message": "Create inflection tables",
+    "description": "Label for create inflection tables button in document list"
+  },
+  "inflection_tables": {
+    "message": "Inflection tables",
+    "description": "Title of dialog box"
+  },
+  "include_nouns": {
+    "message": "Include nouns",
+    "description": "Label of checkbox in dialog box"
+  },
+  "include_adjectives": {
+    "message": "Include adjectives",
+    "description": "Label of checkbox in dialog box"
+  },
+  "include_verbs": {
+    "message": "Include verbs",
+    "description": "Label of checkbox in dialog box"
+  },
+  "create": {
+    "message": "Create",
+    "description": "Label for button in dialog box"
+  },
+  "nominative": {
+    "message": "nominative",
+    "description": "Column heading for inflection table"
+  },
+  "genitive": {
+    "message": "genitive",
+    "description": "Column heading for inflection table"
+  },
+  "accusative": {
+    "message": "accusative",
+    "description": "Column heading for inflection table"
+  },
+  "dative": {
+    "message": "dative",
+    "description": "Column heading for inflection table"
+  },
+  "locative": {
+    "message": "locative",
+    "description": "Column heading for inflection table"
+  },
+  "prepositional": {
+    "message": "prepositional",
+    "description": "Column heading for inflection table"
+  },
+  "instrumental": {
+    "message": "instrumental",
+    "description": "Column heading for inflection table"
+  },
+  "vocative": {
+    "message": "vocative",
+    "description": "Column heading for inflection table"
+  },
+  "singular": {
+    "message": "singular",
+    "description": "Row label for inflection table"
+  },
+  "plural": {
+    "message": "plural",
+    "description": "Row label for inflection table"
+  },
+  "masculine": {
+    "message": "masculine",
+    "description": "Row label for inflection table"
+  },
+  "feminine": {
+    "message": "feminine",
+    "description": "Row label for inflection table"
+  },
+  "neuter": {
+    "message": "neuter",
+    "description": "Row label for inflection table"
+  },
+  "language_none": {
+    "message": "None",
+    "description": "For top item in To language dropdown in side-bar"
+  },
+  "language_unknown": {
+    "message": "Unknown",
+    "description": "For top item in From language dropdown in side-bar"
+  },
+  "language_af": {
+    "message": "Afrikaans"
+  },
+  "language_am": {
+    "message": "Amharic"
+  },
+  "language_ar": {
+    "message": "Arabic"
+  },
+  "language_az": {
+    "message": "Azerbaijani"
+  },
+  "language_be": {
+    "message": "Belarusian"
+  },
+  "language_bg": {
+    "message": "Bulgarian"
+  },
+  "language_bn": {
+    "message": "Bengali"
+  },
+  "language_bs": {
+    "message": "Bosnian"
+  },
+  "language_ca": {
+    "message": "Catalan"
+  },
+  "language_ceb": {
+    "message": "Cebuano"
+  },
+  "language_co": {
+    "message": "Corsican"
+  },
+  "language_cs": {
+    "message": "Czech"
+  },
+  "language_cy": {
+    "message": "Welsh"
+  },
+  "language_da": {
+    "message": "Danish"
+  },
+  "language_de": {
+    "message": "German"
+  },
+  "language_el": {
+    "message": "Greek"
+  },
+  "language_en": {
+    "message": "English"
+  },
+  "language_eo": {
+    "message": "Esperanto"
+  },
+  "language_es": {
+    "message": "Spanish"
+  },
+  "language_et": {
+    "message": "Estonian"
+  },
+  "language_eu": {
+    "message": "Basque"
+  },
+  "language_fa": {
+    "message": "Persian"
+  },
+  "language_fi": {
+    "message": "Finnish"
+  },
+  "language_fr": {
+    "message": "French"
+  },
+  "language_fy": {
+    "message": "Frisian"
+  },
+  "language_ga": {
+    "message": "Irish"
+  },
+  "language_gd": {
+    "message": "Scots Gaelic"
+  },
+  "language_gl": {
+    "message": "Galician"
+  },
+  "language_gu": {
+    "message": "Gujarati"
+  },
+  "language_ha": {
+    "message": "Hausa"
+  },
+  "language_haw": {
+    "message": "Hawaiian"
+  },
+  "language_hi": {
+    "message": "Hindi"
+  },
+  "language_hmn": {
+    "message": "Hmong"
+  },
+  "language_hr": {
+    "message": "Croatian"
+  },
+  "language_ht": {
+    "message": "Haitian Creole"
+  },
+  "language_hu": {
+    "message": "Hungarian"
+  },
+  "language_hy": {
+    "message": "Armenian"
+  },
+  "language_id": {
+    "message": "Indonesian"
+  },
+  "language_ig": {
+    "message": "Igbo"
+  },
+  "language_is": {
+    "message": "Icelandic"
+  },
+  "language_it": {
+    "message": "Italian"
+  },
+  "language_iw": {
+    "message": "Hebrew"
+  },
+  "language_ja": {
+    "message": "Japanese"
+  },
+  "language_jw": {
+    "message": "Javanese"
+  },
+  "language_ka": {
+    "message": "Georgian"
+  },
+  "language_kk": {
+    "message": "Kazakh"
+  },
+  "language_km": {
+    "message": "Khmer"
+  },
+  "language_kn": {
+    "message": "Kannada"
+  },
+  "language_ko": {
+    "message": "Korean"
+  },
+  "language_ku": {
+    "message": "Kurdish (Kurmanji)"
+  },
+  "language_ky": {
+    "message": "Kyrgyz"
+  },
+  "language_la": {
+    "message": "Latin"
+  },
+  "language_lb": {
+    "message": "Luxembourgish"
+  },
+  "language_lo": {
+    "message": "Lao"
+  },
+  "language_lt": {
+    "message": "Lithuanian"
+  },
+  "language_lv": {
+    "message": "Latvian"
+  },
+  "language_mg": {
+    "message": "Malagasy"
+  },
+  "language_mi": {
+    "message": "Maori"
+  },
+  "language_mk": {
+    "message": "Macedonian"
+  },
+  "language_ml": {
+    "message": "Malayalam"
+  },
+  "language_mn": {
+    "message": "Mongolian"
+  },
+  "language_mr": {
+    "message": "Marathi"
+  },
+  "language_ms": {
+    "message": "Malay"
+  },
+  "language_mt": {
+    "message": "Maltese"
+  },
+  "language_my": {
+    "message": "Myanmar (Burmese)"
+  },
+  "language_ne": {
+    "message": "Nepali"
+  },
+  "language_nl": {
+    "message": "Dutch"
+  },
+  "language_no": {
+    "message": "Norwegian"
+  },
+  "language_ny": {
+    "message": "Chichewa"
+  },
+  "language_or": {
+    "message": "Odia (Oriya)"
+  },
+  "language_pa": {
+    "message": "Punjabi"
+  },
+  "language_pl": {
+    "message": "Polish"
+  },
+  "language_ps": {
+    "message": "Pashto"
+  },
+  "language_pt": {
+    "message": "Portuguese"
+  },
+  "language_ro": {
+    "message": "Romanian"
+  },
+  "language_ru": {
+    "message": "Russian"
+  },
+  "language_rw": {
+    "message": "Kinyarwanda"
+  },
+  "language_sd": {
+    "message": "Sindhi"
+  },
+  "language_si": {
+    "message": "Sinhala"
+  },
+  "language_sk": {
+    "message": "Slovak"
+  },
+  "language_sl": {
+    "message": "Slovenian"
+  },
+  "language_sm": {
+    "message": "Samoan"
+  },
+  "language_sn": {
+    "message": "Shona"
+  },
+  "language_so": {
+    "message": "Somali"
+  },
+  "language_sq": {
+    "message": "Albanian"
+  },
+  "language_sr": {
+    "message": "Serbian"
+  },
+  "language_st": {
+    "message": "Sesotho"
+  },
+  "language_su": {
+    "message": "Sundanese"
+  },
+  "language_sv": {
+    "message": "Swedish"
+  },
+  "language_sw": {
+    "message": "Swahili"
+  },
+  "language_ta": {
+    "message": "Tamil"
+  },
+  "language_te": {
+    "message": "Telugu"
+  },
+  "language_tg": {
+    "message": "Tajik"
+  },
+  "language_th": {
+    "message": "Thai"
+  },
+  "language_tk": {
+    "message": "Turkmen"
+  },
+  "language_tl": {
+    "message": "Filipino"
+  },
+  "language_tr": {
+    "message": "Turkish"
+  },
+  "language_tt": {
+    "message": "Tatar"
+  },
+  "language_ug": {
+    "message": "Uyghur"
+  },
+  "language_uk": {
+    "message": "Ukrainian"
+  },
+  "language_ur": {
+    "message": "Urdu"
+  },
+  "language_uz": {
+    "message": "Uzbek"
+  },
+  "language_vi": {
+    "message": "Vietnamese"
+  },
+  "language_xh": {
+    "message": "Xhosa"
+  },
+  "language_yi": {
+    "message": "Yiddish"
+  },
+  "language_yo": {
+    "message": "Yoruba"
+  },
+  "language_zh": {
+    "message": "Chinese"
+  },
+  "language_zh_cn": {
+    "message": "Chinese (Simplified)"
+  },
+  "language_zh_tw": {
+    "message": "Chinese (Traditional)"
+  },
+  "language_zu": {
+    "message": "Zulu"
+  }
+}
