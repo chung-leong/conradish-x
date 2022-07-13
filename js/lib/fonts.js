@@ -256,7 +256,8 @@ const essentialCharacters = {
     Sinh: '\u0d9a\u0d9b\u0d9c\u0d9d',
     Taml: '\u0b95\u0b99\u0b9a\u0b9c',
     Telu: '\u0c15\u0c16\u0c17\u0c18',
-    Thai: '\u0e01\u0e02\u0e03\u0e04'
+    Thaa: '\u0780\u0781\u0782\u0783',
+    Thai: '\u0e01\u0e02\u0e03\u0e04',
 };
 
 const symbolicFontIds = [ 'Webdings', 'Wingdings', 'Wingdings 2', 'Wingdings 3' ];

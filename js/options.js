@@ -302,6 +302,7 @@ const sampleSentences = {
   },
   Beng: {
     bn: 'আমার হভারক্রাফ্ট কুঁচে মাছ-এ ভরা হয়ে গেছে',
+    as: 'মোৰ হ\'ভাৰক্ৰাফ্টটো ঈল মাছেৰে ভৰি গৈছে',
   },
   Cyrl: {
     ru: 'Моё судно на воздушной подушке полно угрей',
@@ -323,6 +324,7 @@ const sampleSentences = {
   },
   Ethi: {
     am: 'የኔ ማንዣበቢያ መኪና በዓሣዎች ተሞልቷል',
+    ti: 'ናተይ ሆበርክራፍት ሙሉእ እዩ ብዓሣ',
   },
   Geor: {
     ka: 'ჩემი ხომალდი საჰაერო ბალიშზე სავსეა გველთევზებით',
@@ -400,6 +402,7 @@ const sampleSentences = {
     mt: 'Il-hovercraft tiegħi hu mimli sallur',
     mi: 'Kī tōnu taku waka topaki i te tuna',
     no: 'Luftputebåten min er full av ål',
+    om: 'Koonkalata baariisu ko bofa bishaani gutu',
     pl: 'Mój poduszkowiec jest pełen węgorzy',
     pt: 'O meu hovercraft está cheio de enguias',
     ro: 'Aeroglisorul meu e plin de țipari',
@@ -437,6 +440,9 @@ const sampleSentences = {
   },
   Telu: {
     te: 'నా విమానము అంతా మలుగు చేపలతో నిండిపోయింది',
+  },
+  Thaa: {
+    dv: 'އަހަރެންގެ ހޯވާރކްރާފްޓުގައި ފުރާ ހުރީ ހުސް ވެނެވެ',
   },
   Thai: {
     th: 'โฮเวอร์คราฟท์ของผมเต็มไปด้วยปลาไหล',

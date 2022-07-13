@@ -471,10 +471,25 @@ const languages = [
     script: 'Armn',
     inflections: 'unavailable',
   },
+  { // Assamese
+    code: 'as',
+    script: 'Beng',
+    inflections: 'unavailable',
+  },
   { // Azerbaijani
     code: 'az',
     script: 'Latn',
     inflections: 'available',
+  },
+  { // Aymara
+    code: 'ay',
+    script: 'Latn',
+    inflections: 'unavailable',
+  },
+  { // Bambara
+    code: 'bm',
+    script: 'Latn',
+    inflections: 'unavailable',
   },
   { // Basque
     code: 'eu',
@@ -489,6 +504,11 @@ const languages = [
   { // Bengali
     code: 'bn',
     script: 'Beng',
+    inflections: 'unavailable',
+  },
+  { // Bhojpuri
+    code: 'bho',
+    script: 'Deva',
     inflections: 'unavailable',
   },
   { // Bosnian
@@ -551,6 +571,16 @@ const languages = [
     script: 'Latn',
     inflections: 'available',
   },
+  { // Dhivehi
+    code: 'dv',
+    script: 'Thaa',
+    inflections: 'unavailable',
+  },
+  { // Dogri
+    code: 'doi',
+    script: 'Deva',
+    inflections: 'unavailable',
+  },
   { // Dutch
     code: 'nl',
     script: 'Latn',
@@ -570,6 +600,11 @@ const languages = [
     code: 'et',
     script: 'Latn',
     inflections: 'unavailable',
+  },
+  { // Ewe
+    code: 'ee',
+    script: 'Latn',
+    inflections: 'available',
   },
   { // Filipino
     code: 'tl',
@@ -610,6 +645,11 @@ const languages = [
     code: 'el',
     script: 'Grek',
     inflections: 'unavailable',
+  },
+  { // Guarani
+    code: 'gn',
+    script: 'Latn',
+    inflections: 'available',
   },
   { // Gujarati
     code: 'gu',
@@ -661,6 +701,11 @@ const languages = [
     script: 'Latn',
     inflections: 'unavailable',
   },
+  { // Ilocano
+    code: 'ilo',
+    script: 'Latn',
+    inflections: 'unavailable',
+  },
   { // Indonesian
     code: 'id',
     script: 'Latn',
@@ -706,14 +751,29 @@ const languages = [
     script: 'Latn',
     inflections: 'unavailable',
   },
+  { // Konkani
+    code: 'gom',
+    script: 'Deva',
+    inflections: 'unavailable',
+  },
   { // Korean
     code: 'ko',
     script: 'Hang',
     inflections: 'unavailable',
   },
+  { // Krio
+    code: 'kri',
+    script: 'Latn',
+    inflections: 'unavailable',
+  },
   { // Kurdish (Kurmanji)
     code: 'ku',
     script: 'Latn',
+    inflections: 'unavailable',
+  },
+  { // Kurdish (Sorani)
+    code: 'ckb',
+    script: 'Arab',
     inflections: 'unavailable',
   },
   { // Kyrgyz
@@ -736,8 +796,18 @@ const languages = [
     script: 'Latn',
     inflections: 'unavailable',
   },
+  { // Lingala
+    code: 'ln',
+    script: 'Latn',
+    inflections: 'unavailable',
+  },
   { // Lithuanian
     code: 'lt',
+    script: 'Latn',
+    inflections: 'unavailable',
+  },
+  { // Luganda
+    code: 'lg',
     script: 'Latn',
     inflections: 'unavailable',
   },
@@ -776,10 +846,20 @@ const languages = [
     script: 'Latn',
     inflections: 'unavailable',
   },
+  { // Maithili
+    code: 'mai',
+    script: 'Deva',
+    inflections: 'unavailable',
+  },
   { // Marathi
     code: 'mr',
     script: 'Deva',
     inflections: 'unavailable',
+  },
+  { // Mizo
+    code: 'lus',
+    script: 'Latn',
+    inflections: 'available',
   },
   { // Mongolian
     code: 'mn',
@@ -804,6 +884,11 @@ const languages = [
   { // Odia (Oriya)
     code: 'or',
     script: 'Orya',
+    inflections: 'unavailable',
+  },
+  { // Oromo
+    code: 'om',
+    script: 'Latn',
     inflections: 'unavailable',
   },
   { // Pashto
@@ -831,6 +916,11 @@ const languages = [
     script: 'Guru',
     inflections: 'available',
   },
+  { // Quechua
+    code: 'qu',
+    script: 'Latn',
+    inflections: 'unavailable',
+  },
   { // Romanian
     code: 'ro',
     script: 'Latn',
@@ -844,6 +934,11 @@ const languages = [
   { // Samoan
     code: 'sm',
     script: 'Latn',
+    inflections: 'unavailable',
+  },
+  { // Sanskrit
+    code: 'sa',
+    script: 'Deva',
     inflections: 'unavailable',
   },
   { // Scots Gaelic
@@ -891,6 +986,11 @@ const languages = [
     script: 'Latn',
     inflections: 'unavailable',
   },
+  { // Sepedi
+    code: 'nso',
+    script: 'Latn',
+    inflections: 'available',
+  },
   { // Spanish
     code: 'es',
     script: 'Latn',
@@ -936,6 +1036,16 @@ const languages = [
     script: 'Thai',
     inflections: 'unavailable',
   },
+  { // Tigrinya
+    code: 'ti',
+    script: 'Ethi',
+    inflections: 'unavailable',
+  },
+  { // Tsonga
+    code: 'ts',
+    script: 'Latn',
+    inflections: 'unavailable',
+  },
   { // Turkish
     code: 'tr',
     script: 'Latn',
@@ -944,6 +1054,11 @@ const languages = [
   { // Turkmen
     code: 'tk',
     script: 'Cyrl',
+    inflections: 'unavailable',
+  },
+  { // Twi
+    code: 'tw',
+    script: 'Latn',
     inflections: 'unavailable',
   },
   { // Ukrainian
@@ -999,5 +1114,5 @@ const languages = [
 ];
 
 const capitalizingLangs = [ 'de', 'lb' ];
-const rightToLeftScripts = [ 'Arab', 'Hebr' ];
+const rightToLeftScripts = [ 'Arab', 'Hebr', 'Thaa' ];
 const mixedCaseScript = [ 'Latn', 'Cyrl' ];

@@ -137,6 +137,7 @@ export function getDefaultSettings() {
     articleSinh: articleText('south-asian'),
     articleTaml: articleText('south-asian'),
     articleTelu: articleText('south-asian'),
+    articleThaa: articleText('south-asian'),
     articleThai: articleText('southeast-asian'),
     footnote: footnoteText('european'),
     footnoteArab: footnoteText('middle-eastern'),
@@ -163,6 +164,7 @@ export function getDefaultSettings() {
     footnoteSinh: footnoteText('south-asian'),
     footnoteTaml: footnoteText('south-asian'),
     footnoteTelu: footnoteText('south-asian'),
+    footnoteThaa: footnoteText('south-asian'),
     footnoteThai: footnoteText('southeast-asian'),
     fonts: [],
     fontsArab: [],
@@ -189,6 +191,7 @@ export function getDefaultSettings() {
     fontsSinh: [],
     fontsTaml: [],
     fontsTelu: [],
+    fontsThaa: [],
     fontsThai: [],
   };
   return settings;
