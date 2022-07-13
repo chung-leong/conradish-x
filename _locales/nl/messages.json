@@ -4,31 +4,27 @@
     "description": "Name of the extension, used in manifest"
   },
   "ext_description": {
-    "message": "Create print version of news articles with footnotes",
+    "message": "Maak een printversie van nieuwsartikelen met voetnoten",
     "description": "Description of the extension, used in manifest"
   },
   "user_guide": {
-    "message": "User Guide",
+    "message": "Gebruikershandleiding",
     "description": "Title of help page"
   },
-  "user_guide_path": {
-    "message": "_locales/en/user-guide.html",
-    "description": "Path to user guide HTML file"
-  },
   "keep_all": {
-    "message": "keep all",
+    "message": "alles behouden",
     "description": "Tooltip text of scrubbing mode keep all button"
   },
   "create_print_version": {
-    "message": "Create print version",
+    "message": "Printversie maken",
     "description": "Label for menu item in browser context menu and extension pop-up menu"
   },
   "selection_portion_of_document": {
-    "message": "select portion of document you wish to print first",
+    "message": "selecteer eerst het gedeelte van het document dat u wilt afdrukken",
     "description": "Text for tooltip in pop-up menu, when there's no selection"
   },
   "created_on": {
-    "message": "created on $DATE$",
+    "message": "gemaakt op $DATE$",
     "description": "Text for tooltip of recent documents in pop-up menu",
     "placeholders": {
       "date": {
@@ -38,47 +34,47 @@
     }
   },
   "show_all_documents": {
-    "message": "Show all documents",
+    "message": "Alle documenten weergeven",
     "description": "Label for menu item in pop-up menu"
   },
   "add_definition": {
-    "message": "Add definition",
+    "message": "Definitie toevoegen",
     "description": "Label for item in annotation menu"
   },
   "show_term_and_definition": {
-    "message": "show both term and definition in footnote",
+    "message": "zowel term als definitie in voetnoot weergeven",
     "description": "Text for tooltip of item in annotation menu"
   },
   "add_translation": {
-    "message": "Add translation",
+    "message": "Vertaling toevoegen",
     "description": "Label for item in annotation menu"
   },
   "show_translation_only": {
-    "message": "show translated sentence only in footnote",
+    "message": "vertaalde zin alleen in voetnoot weergeven",
     "description": "Text for tooltip of item in annotation menu"
   },
   "add_explanation": {
-    "message": "Add explanation",
+    "message": "Uitleg toevoegen",
     "description": "Label for item in annotation menu"
   },
   "show_explanation": {
-    "message": "show explanation in footnote",
+    "message": "uitleg in voetnoot weergeven",
     "description": "Text for tooltip of item in annotation menu"
   },
   "style_bold": {
-    "message": "bold",
+    "message": "vet",
     "description": "Text for tooltip of button in style menu"
   },
   "style_italic": {
-    "message": "italic",
+    "message": "cursief",
     "description": "Text for tooltip of button in style menu"
   },
   "style_underline": {
-    "message": "underline",
+    "message": "onderstrepen",
     "description": "Text for tooltip of button in style menu"
   },
   "style_strikethrough": {
-    "message": "strike-through",
+    "message": "doorhalen",
     "description": "Text for tooltip of button in style menu"
   },
   "style_subscript": {
@@ -90,11 +86,11 @@
     "description": "Text for tooltip of button in style menu"
   },
   "style_remove": {
-    "message": "clear formatting",
+    "message": "opmaak wissen",
     "description": "Text for tooltip of button in style menu"
   },
   "style_heading": {
-    "message": "heading $NUMBER$",
+    "message": "kop $NUMBER$",
     "description": "Text for tooltip of button in style menu",
     "placeholders": {
       "number": {
@@ -104,59 +100,59 @@
     }
   },
   "style_paragraph": {
-    "message": "paragraph",
+    "message": "normale tekst",
     "description": "Text for tooltip of button in style menu"
   },
   "extension_options": {
-    "message": "Extension options",
+    "message": "Opties voor extensie",
     "description": "Title in options page"
   },
   "basic_options": {
-    "message": "Basic options",
+    "message": "Basis opties",
     "description": "Title of basic option card"
   },
   "add_context_menu_item": {
-    "message": "Add item to browser context menu",
+    "message": "Item toevoegen aan contextmenu van browser",
     "description": "Label for checkbox in options"
   },
   "filter_page_content": {
-    "message": "Filter page content",
+    "message": "Pagina-inhoud filteren",
     "description": "Label for checkbox in options"
   },
   "filter_automatic": {
-    "message": "Automatically",
+    "message": "Automatisch",
     "description": "Label for filter drop-down in options"
   },
   "filter_manual": {
-    "message": "Manually",
+    "message": "Handmatig",
     "description": "Label for filter drop-down in options"
   },
   "limit_heading_size": {
-    "message": "Limit heading size",
+    "message": "Grootte van koppen begrenzen",
     "description": "Label for checkbox in options"
   },
   "fonts": {
-    "message": "Fonts",
+    "message": "Lettertypen",
     "description": "Used in section navigation in option page"
   },
   "search_font": {
-    "message": "Find font",
+    "message": "Lettertype zoeken",
     "description": "Placeholder of search box and icon tooltip in document list"
   },
   "script_arab": {
-    "message": "Arabic",
+    "message": "Arabisch",
     "description": "Name of script, used in option page"
   },
   "script_armn": {
-    "message": "Armenian",
+    "message": "Armeens",
     "description": "Name of script, used in option page"
   },
   "script_beng": {
-    "message": "Bengali",
+    "message": "Bengaals",
     "description": "Name of script, used in option page"
   },
   "script_cyrl": {
-    "message": "Cyrillic",
+    "message": "Cyrillisch",
     "description": "Name of script, used in option page"
   },
   "script_deva": {
@@ -164,15 +160,15 @@
     "description": "Name of script, used in option page"
   },
   "script_ethi": {
-    "message": "Ethiopic",
+    "message": "Ethiopisch",
     "description": "Name of script, used in option page"
   },
   "script_geor": {
-    "message": "Georgian",
+    "message": "Georgisch",
     "description": "Name of script, used in option page"
   },
   "script_grek": {
-    "message": "Greek",
+    "message": "Grieks",
     "description": "Name of script, used in option page"
   },
   "script_gujr": {
@@ -184,23 +180,23 @@
     "description": "Name of script, used in option page"
   },
   "script_hang": {
-    "message": "Korean",
+    "message": "Koreaans",
     "description": "Name of script, used in option page"
   },
   "script_hans": {
-    "message": "Chinese (Simplified)",
+    "message": "Chinees (vereenvoudigd)",
     "description": "Name of script, used in option page"
   },
   "script_hant": {
-    "message": "Chinese (Traditional)",
+    "message": "Chinees (traditioneel)",
     "description": "Name of script, used in option page"
   },
   "script_hebr": {
-    "message": "Hebrew",
+    "message": "Hebreeuws",
     "description": "Name of script, used in option page"
   },
   "script_jpan": {
-    "message": "Japanese",
+    "message": "Japans",
     "description": "Name of script, used in option page"
   },
   "script_khmr": {
@@ -212,11 +208,11 @@
     "description": "Name of script, used in option page"
   },
   "script_laoo": {
-    "message": "Laotian",
+    "message": "Laotiaans",
     "description": "Name of script, used in option page"
   },
   "script_latn": {
-    "message": "Latin",
+    "message": "Latijns",
     "description": "Name of script, used in option page"
   },
   "script_mlym": {
@@ -224,7 +220,7 @@
     "description": "Name of script, used in option page"
   },
   "script_mymr": {
-    "message": "Burmese",
+    "message": "Birmaans",
     "description": "Name of script, used in option page"
   },
   "script_orya": {
@@ -232,7 +228,7 @@
     "description": "Name of script, used in option page"
   },
   "script_sinh": {
-    "message": "Sinhala",
+    "message": "Singalees",
     "description": "Name of script, used in option page"
   },
   "script_taml": {
@@ -248,115 +244,115 @@
     "description": "Name of script, used in option page"
   },
   "script_thai": {
-    "message": "Thai",
+    "message": "Thais",
     "description": "Name of script, used in option page"
   },
   "action": {
-    "message": "Action",
+    "message": "Actie",
     "description": "Label for drop-down in side-bar"
   },
   "editing": {
-    "message": "Editing",
+    "message": "Bewerking",
     "description": "Item in action drop-down"
   },
   "styling": {
-    "message": "Styling",
+    "message": "Opmaaking",
     "description": "Item in action drop-down"
   },
   "annotating": {
-    "message": "Annotating",
+    "message": "Annotering",
     "description": "Item in action drop-down"
   },
   "scrubbing": {
-    "message": "Scrubbing",
+    "message": "Schrobbing",
     "description": "Item in action drop-down"
   },
   "from_language": {
-    "message": "From",
+    "message": "Van",
     "description": "Label for drop-down in side-bar"
   },
   "to_language": {
-    "message": "To",
+    "message": "Naar",
     "description": "Label for drop-down in side-bar"
   },
   "article_font_family": {
-    "message": "Font",
+    "message": "Lettertype",
     "description": "Label for drop-down in side-bar"
   },
   "article_font_size": {
-    "message": "Font size",
+    "message": "Lettergrootte",
     "description": "Label for drop-down in side-bar"
   },
   "article_justification": {
-    "message": "Justification",
+    "message": "Uitvulling",
     "description": "Label for drop-down in side-bar"
   },
   "justification_none": {
-    "message": "None",
+    "message": "Geen",
     "description": "Item in justification drop-down in side-bar"
   },
   "justification_text": {
-    "message": "Text only",
+    "message": "Alleen tekst",
     "description": "Item in justification drop-down in side-bar"
   },
   "justification_text_and_headings": {
-    "message": "Text and headings",
+    "message": "Tekst en koppen",
     "description": "Item in justification drop-down in side-bar"
   },
   "article_spacing": {
-    "message": "Spacing",
+    "message": "Regelafstand",
     "description": "Label for drop-down in side-bar"
   },
   "spacing_normal": {
-    "message": "Normal",
+    "message": "Normale",
     "description": "Item in line-spacing drop-down in side-bar"
   },
   "footnote_font_family": {
-    "message": "Footnote font",
+    "message": "Lettertype van voetnoot",
     "description": "Label for drop-down in side-bar"
   },
   "footnote_font_size": {
-    "message": "Footnote font size",
+    "message": "Lettergrootte van voetnoot",
     "description": "Label for drop-down in side-bar"
   },
   "paper_size": {
-    "message": "Paper size",
+    "message": "Papierformaat",
     "description": "Label for drop-down in side-bar"
   },
   "margins": {
-    "message": "Margins",
+    "message": "Marges",
     "description": "Label for drop-down in side-bar"
   },
   "margins_default": {
-    "message": "Default",
+    "message": "Standaard",
     "description": "Item in margins drop-down in side-bar"
   },
   "margins_custom": {
-    "message": "Custom",
+    "message": "Aangepast",
     "description": "Item in margins drop-down in side-bar"
   },
   "print": {
-    "message": "Print",
+    "message": "Afdrukken",
     "description": "Label for button in side-bar"
   },
   "finish": {
-    "message": "Finish",
+    "message": "Afmaken",
     "description": "Label for button in side-bar"
   },
   "check_paper_size": {
-    "message": "In the print window, make sure **Paper size** matches what’s specified above and that **Margins** are set to “Default”",
+    "message": "Zorg er in het afdrukvenster voor dat **Papierformaat** overeenkomt met wat hierboven is gespecificeerd en dat **Marges** zijn ingesteld op \"Standaard\"",
     "description": "Message in speech bubble over print button in side-bar (Markdown)"
   },
   "documents": {
-    "message": "Documents",
+    "message": "Documenten",
     "description": "Title in document list"
   },
   "selected_document_sg": {
-    "message": "1 selected",
+    "message": "1 geselecteerd",
     "description": "For displaying the number of selected documents (singular)"
   },
   "selected_document_pl": {
-    "message": "$NUMBER$ selected",
+    "message": "$NUMBER$ geselecteerd",
     "description": "For displaying the number of selected documents (plural)",
     "placeholders": {
       "number": {
@@ -366,23 +362,23 @@
     }
   },
   "no_documents": {
-    "message": "No documents",
+    "message": "Geen documenten",
     "description": "Message in document list when there aren't any documents"
   },
   "no_search_results": {
-    "message": "No search results found",
+    "message": "Geen zoekresultaten gevonden",
     "description": "Message in document list when a search yields no results"
   },
   "search_documents": {
-    "message": "Search documents",
+    "message": "Documenten doorzoeken",
     "description": "Placeholder of search box and icon tooltip in document list"
   },
   "search_result_sg": {
-    "message": "1 search result",
+    "message": "1 zoekresultaat",
     "description": "For displaying the number of search results (singular)"
   },
   "search_result_pl": {
-    "message": "$NUMBER$ search results",
+    "message": "$NUMBER$ zoekresultaten",
     "description": "For displaying the number of search results (plural)",
     "placeholders": {
       "number": {
@@ -392,7 +388,7 @@
     }
   },
   "for_query": {
-    "message": "$RESULTS$ for “$QUERY$”",
+    "message": "$RESULTS$ gevonden voor “$QUERY$”",
     "description": "Text for card heading in document list",
     "placeholders": {
       "results": {
@@ -406,7 +402,7 @@
     }
   },
   "today_being": {
-    "message": "Today - $DATE$",
+    "message": "Vandaag - $DATE$",
     "description": "Text for card heading in document list",
     "placeholders": {
       "date": {
@@ -416,7 +412,7 @@
     }
   },
   "yesterday_being": {
-    "message": "Yesterday - $DATE$",
+    "message": "Gisteren - $DATE$",
     "description": "Text for card heading in document list",
     "placeholders": {
       "date": {
@@ -426,159 +422,159 @@
     }
   },
   "clear_search": {
-    "message": "Clear search",
+    "message": "Zoekopdracht wissen",
     "description": "Tooltip of search box x button in document list"
   },
   "delete": {
-    "message": "Delete",
+    "message": "Verwijderen",
     "description": "Label for delete button in document list"
   },
   "cancel": {
-    "message": "Cancel",
+    "message": "Annuleren",
     "description": "Label for x button used to clear selection in document list"
   },
   "change_title": {
-    "message": "Change title",
+    "message": "Titel wijzigen",
     "description": "Label for menu item in document list"
   },
   "open_original_page": {
-    "message": "Go to original page",
+    "message": "Originele pagina openen",
     "description": "Label for menu item in document list"
   },
   "create_inflection_tables": {
-    "message": "Create inflection tables",
+    "message": "Verbuigingstabellen maken",
     "description": "Label for create inflection tables button in document list"
   },
   "inflection_tables": {
-    "message": "Inflection tables",
+    "message": "Verbuigingstabellen",
     "description": "Title of dialog box"
   },
   "include_nouns": {
-    "message": "Include nouns",
+    "message": "Naamwoorden opnemen",
     "description": "Label of checkbox in dialog box"
   },
   "include_adjectives": {
-    "message": "Include adjectives",
+    "message": "Adjectieven opnemen",
     "description": "Label of checkbox in dialog box"
   },
   "include_noun_adjs": {
-    "message": "Include nouns and adjectives",
+    "message": "Naamwoorden en adjectieven opnemen",
     "description": "Label of checkbox in dialog box"
   },
   "include_verbs": {
-    "message": "Include verbs",
+    "message": "Werkwoorden opnemen",
     "description": "Label of checkbox in dialog box"
   },
   "create": {
-    "message": "Create",
+    "message": "Maken",
     "description": "Label for button in dialog box"
   },
   "nominative": {
-    "message": "nominative",
+    "message": "nominatief",
     "description": "Column heading for inflection table"
   },
   "genitive": {
-    "message": "genitive",
+    "message": "genitief",
     "description": "Column heading for inflection table"
   },
   "accusative": {
-    "message": "accusative",
+    "message": "accusatief",
     "description": "Column heading for inflection table"
   },
   "dative": {
-    "message": "dative",
+    "message": "datief",
     "description": "Column heading for inflection table"
   },
   "locative": {
-    "message": "locative",
+    "message": "locatief",
     "description": "Column heading for inflection table"
   },
   "prepositional": {
-    "message": "prepositional",
+    "message": "prepositionalis",
     "description": "Column heading for inflection table"
   },
   "instrumental": {
-    "message": "instrumental",
+    "message": "instrumentalis",
     "description": "Column heading for inflection table"
   },
   "vocative": {
-    "message": "vocative",
+    "message": "vocatief",
     "description": "Column heading for inflection table"
   },
   "abessive": {
-    "message": "abessive",
+    "message": "abessief",
     "description": "Column heading for inflection table"
   },
   "ablative": {
-    "message": "ablative",
+    "message": "ablatief",
     "description": "Column heading for inflection table"
   },
   "adessive": {
-    "message": "adessive",
+    "message": "adessief",
     "description": "Column heading for inflection table"
   },
   "allative": {
-    "message": "allative",
+    "message": "allatief",
     "description": "Column heading for inflection table"
   },
   "comitative": {
-    "message": "comitative",
+    "message": "comitatief",
     "description": "Column heading for inflection table"
   },
   "elative": {
-    "message": "elative",
+    "message": "elatief",
     "description": "Column heading for inflection table"
   },
   "essive": {
-    "message": "essive",
+    "message": "essief",
     "description": "Column heading for inflection table"
   },
   "illative": {
-    "message": "illative",
+    "message": "illatief",
     "description": "Column heading for inflection table"
   },
   "inessive": {
-    "message": "inessive",
+    "message": "inessief",
     "description": "Column heading for inflection table"
   },
   "instructive": {
-    "message": "instructive",
+    "message": "instructief",
     "description": "Column heading for inflection table"
   },
   "partitive": {
-    "message": "partitive",
+    "message": "partitief",
     "description": "Column heading for inflection table"
   },
   "translative": {
-    "message": "translative",
+    "message": "translatief",
     "description": "Column heading for inflection table"
   },
   "singular": {
-    "message": "singular",
+    "message": "enkelvoud",
     "description": "Row label for inflection table"
   },
   "plural": {
-    "message": "plural",
+    "message": "meervoud",
     "description": "Row label for inflection table"
   },
   "masculine": {
-    "message": "masculine",
+    "message": "mannelijk",
     "description": "Row label for inflection table"
   },
   "feminine": {
-    "message": "feminine",
+    "message": "vrouwelijk",
     "description": "Row label for inflection table"
   },
   "neuter": {
-    "message": "neuter",
+    "message": "onzijdig",
     "description": "Row label for inflection table"
   },
   "language_none": {
-    "message": "None",
+    "message": "Geen",
     "description": "For top item in To language dropdown in side-bar"
   },
   "language_unknown": {
-    "message": "Unknown",
+    "message": "Onbekend",
     "description": "For top item in From language dropdown in side-bar"
   },
   "language_af": {
