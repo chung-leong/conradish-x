@@ -387,12 +387,15 @@ export async function translate(original, sourceLang, targetLang, singleWord) {
       result.inflections = inflections;
     }
   } else {
-    // use the lowercase version if the translation isn't in uppercase
     const targetScript = getLanguageScript(targetLang);
     if (mixedCaseScript.includes(targetScript)) {
+      // use the lowercase version if the translation is in lowercase
       if (isLowerCase(trans, sourceLang)) {
         useLowerCase = true;
       }
+    } else {
+      // lowercase is more likely
+      useLowerCase = true;
     }
   }
   if (useLowerCase) {

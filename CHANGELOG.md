@@ -2,6 +2,7 @@
 
 * Added inflection tables for Romance and Germanic languages.
 * Added ability to choose alternative translation.
+* Labels of inflection tables now match language of definitions.
 * Fixed non-updating of inflection tables when changes occurs in documents.
 
 # Version 1.6
