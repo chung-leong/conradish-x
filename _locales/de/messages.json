@@ -42,55 +42,55 @@
     "description": "Label for item in annotation menu"
   },
   "show_term_and_definition": {
-    "message": "Zeigen sowohl den Begriff als auch die Definition in der Fußnote",
+    "message": "Begriff und Definition in Fußnote anzeigen",
     "description": "Text for tooltip of item in annotation menu"
   },
   "add_translation": {
-    "message": "Add translation",
+    "message": "Übersetzung hinzufügen",
     "description": "Label for item in annotation menu"
   },
   "show_translation_only": {
-    "message": "show translated sentence only in footnote",
+    "message": "Übersetzten Satz nur in Fußnote anzeigen",
     "description": "Text for tooltip of item in annotation menu"
   },
   "add_explanation": {
-    "message": "Add explanation",
+    "message": "Erklärung hinzufügen",
     "description": "Label for item in annotation menu"
   },
   "show_explanation": {
-    "message": "show explanation in footnote",
+    "message": "Erklärung in Fußnote anzeigen",
     "description": "Text for tooltip of item in annotation menu"
   },
   "style_bold": {
-    "message": "bold",
+    "message": "fett",
     "description": "Text for tooltip of button in style menu"
   },
   "style_italic": {
-    "message": "italic",
+    "message": "kursiv",
     "description": "Text for tooltip of button in style menu"
   },
   "style_underline": {
-    "message": "underline",
+    "message": "unterstreichen",
     "description": "Text for tooltip of button in style menu"
   },
   "style_strikethrough": {
-    "message": "strike-through",
+    "message": "durchgestrichen",
     "description": "Text for tooltip of button in style menu"
   },
   "style_subscript": {
-    "message": "subscript",
+    "message": "tiefgestellen",
     "description": "Text for tooltip of button in style menu"
   },
   "style_superscript": {
-    "message": "superscript",
+    "message": "hochstellen",
     "description": "Text for tooltip of button in style menu"
   },
   "style_remove": {
-    "message": "clear formatting",
+    "message": "Formatierung entfernen",
     "description": "Text for tooltip of button in style menu"
   },
   "style_heading": {
-    "message": "heading $NUMBER$",
+    "message": "Überschrift $NUMBER$",
     "description": "Text for tooltip of button in style menu",
     "placeholders": {
       "number": {
@@ -100,59 +100,59 @@
     }
   },
   "style_paragraph": {
-    "message": "paragraph",
+    "message": "normaler Text",
     "description": "Text for tooltip of button in style menu"
   },
   "extension_options": {
-    "message": "Extension options",
+    "message": "Erweiterungsmöglichkeiten",
     "description": "Title in options page"
   },
   "basic_options": {
-    "message": "Basic options",
+    "message": "Grundlegende Optionen",
     "description": "Title of basic option card"
   },
   "add_context_menu_item": {
-    "message": "Add item to browser context menu",
+    "message": "Element zum Kontextmenü des Browsers hinzufügen",
     "description": "Label for checkbox in options"
   },
   "filter_page_content": {
-    "message": "Filter page content",
+    "message": "Seiteninhalte filtern",
     "description": "Label for checkbox in options"
   },
   "filter_automatic": {
-    "message": "Automatically",
+    "message": "Automatisch",
     "description": "Label for filter drop-down in options"
   },
   "filter_manual": {
-    "message": "Manually",
+    "message": "Manuell",
     "description": "Label for filter drop-down in options"
   },
   "limit_heading_size": {
-    "message": "Limit heading size",
+    "message": "Überschriftengröße begrenzen",
     "description": "Label for checkbox in options"
   },
   "fonts": {
-    "message": "Fonts",
+    "message": "Schriftarten",
     "description": "Used in section navigation in option page"
   },
   "search_font": {
-    "message": "Find font",
+    "message": "Schrift finden",
     "description": "Placeholder of search box and icon tooltip in document list"
   },
   "script_arab": {
-    "message": "Arabic",
+    "message": "Arabische",
     "description": "Name of script, used in option page"
   },
   "script_armn": {
-    "message": "Armenian",
+    "message": "Armenische",
     "description": "Name of script, used in option page"
   },
   "script_beng": {
-    "message": "Bengali",
+    "message": "Bengalische",
     "description": "Name of script, used in option page"
   },
   "script_cyrl": {
-    "message": "Cyrillic",
+    "message": "Kyrillische",
     "description": "Name of script, used in option page"
   },
   "script_deva": {
@@ -160,19 +160,19 @@
     "description": "Name of script, used in option page"
   },
   "script_ethi": {
-    "message": "Ethiopic",
+    "message": "Äthiopische",
     "description": "Name of script, used in option page"
   },
   "script_geor": {
-    "message": "Georgian",
+    "message": "Georgische",
     "description": "Name of script, used in option page"
   },
   "script_grek": {
-    "message": "Greek",
+    "message": "Griechische",
     "description": "Name of script, used in option page"
   },
   "script_gujr": {
-    "message": "Gujurati",
+    "message": "Gujarati",
     "description": "Name of script, used in option page"
   },
   "script_guru": {
@@ -180,23 +180,23 @@
     "description": "Name of script, used in option page"
   },
   "script_hang": {
-    "message": "Korean",
+    "message": "Koreanische",
     "description": "Name of script, used in option page"
   },
   "script_hans": {
-    "message": "Chinese (Simplified)",
+    "message": "Chinesische (Vereinfachte)",
     "description": "Name of script, used in option page"
   },
   "script_hant": {
-    "message": "Chinese (Traditional)",
+    "message": "Chinesische (Traditionelle)",
     "description": "Name of script, used in option page"
   },
   "script_hebr": {
-    "message": "Hebrew",
+    "message": "Hebräische",
     "description": "Name of script, used in option page"
   },
   "script_jpan": {
-    "message": "Japanese",
+    "message": "Japanische",
     "description": "Name of script, used in option page"
   },
   "script_khmr": {
@@ -208,11 +208,11 @@
     "description": "Name of script, used in option page"
   },
   "script_laoo": {
-    "message": "Laotian",
+    "message": "Laotische",
     "description": "Name of script, used in option page"
   },
   "script_latn": {
-    "message": "Latin",
+    "message": "Lateinische",
     "description": "Name of script, used in option page"
   },
   "script_mlym": {
@@ -220,19 +220,19 @@
     "description": "Name of script, used in option page"
   },
   "script_mymr": {
-    "message": "Burmese",
+    "message": "Burmesische",
     "description": "Name of script, used in option page"
   },
   "script_orya": {
-    "message": "Orya",
+    "message": "Oriya",
     "description": "Name of script, used in option page"
   },
   "script_sinh": {
-    "message": "Sinhala",
+    "message": "Singhalesische",
     "description": "Name of script, used in option page"
   },
   "script_taml": {
-    "message": "Tamil",
+    "message": "Tamilische",
     "description": "Name of script, used in option page"
   },
   "script_telu": {
@@ -240,7 +240,7 @@
     "description": "Name of script, used in option page"
   },
   "script_thai": {
-    "message": "Thai",
+    "message": "Thailändische",
     "description": "Name of script, used in option page"
   },
   "action": {
