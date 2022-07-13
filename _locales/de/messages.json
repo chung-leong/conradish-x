@@ -140,19 +140,19 @@
     "description": "Placeholder of search box and icon tooltip in document list"
   },
   "script_arab": {
-    "message": "Arabische",
+    "message": "Arabisch",
     "description": "Name of script, used in option page"
   },
   "script_armn": {
-    "message": "Armenische",
+    "message": "Armenisch",
     "description": "Name of script, used in option page"
   },
   "script_beng": {
-    "message": "Bengalische",
+    "message": "Bengalisch",
     "description": "Name of script, used in option page"
   },
   "script_cyrl": {
-    "message": "Kyrillische",
+    "message": "Kyrillisch",
     "description": "Name of script, used in option page"
   },
   "script_deva": {
@@ -160,15 +160,15 @@
     "description": "Name of script, used in option page"
   },
   "script_ethi": {
-    "message": "Äthiopische",
+    "message": "Äthiopisch",
     "description": "Name of script, used in option page"
   },
   "script_geor": {
-    "message": "Georgische",
+    "message": "Georgisch",
     "description": "Name of script, used in option page"
   },
   "script_grek": {
-    "message": "Griechische",
+    "message": "Griechisch",
     "description": "Name of script, used in option page"
   },
   "script_gujr": {
@@ -180,23 +180,23 @@
     "description": "Name of script, used in option page"
   },
   "script_hang": {
-    "message": "Koreanische",
+    "message": "Koreanisch",
     "description": "Name of script, used in option page"
   },
   "script_hans": {
-    "message": "Chinesische (Vereinfachte)",
+    "message": "Chinesisch (vereinfacht)",
     "description": "Name of script, used in option page"
   },
   "script_hant": {
-    "message": "Chinesische (Traditionelle)",
+    "message": "Chinesisch (traditionell)",
     "description": "Name of script, used in option page"
   },
   "script_hebr": {
-    "message": "Hebräische",
+    "message": "Hebräisch",
     "description": "Name of script, used in option page"
   },
   "script_jpan": {
-    "message": "Japanische",
+    "message": "Japanisch",
     "description": "Name of script, used in option page"
   },
   "script_khmr": {
@@ -208,11 +208,11 @@
     "description": "Name of script, used in option page"
   },
   "script_laoo": {
-    "message": "Laotische",
+    "message": "Laotisch",
     "description": "Name of script, used in option page"
   },
   "script_latn": {
-    "message": "Lateinische",
+    "message": "Lateinisch",
     "description": "Name of script, used in option page"
   },
   "script_mlym": {
@@ -220,7 +220,7 @@
     "description": "Name of script, used in option page"
   },
   "script_mymr": {
-    "message": "Burmesische",
+    "message": "Burmesisch",
     "description": "Name of script, used in option page"
   },
   "script_orya": {
@@ -228,11 +228,11 @@
     "description": "Name of script, used in option page"
   },
   "script_sinh": {
-    "message": "Singhalesische",
+    "message": "Singhalesisch",
     "description": "Name of script, used in option page"
   },
   "script_taml": {
-    "message": "Tamilische",
+    "message": "Tamilisch",
     "description": "Name of script, used in option page"
   },
   "script_telu": {
@@ -240,115 +240,115 @@
     "description": "Name of script, used in option page"
   },
   "script_thai": {
-    "message": "Thailändische",
+    "message": "Thailändisch",
     "description": "Name of script, used in option page"
   },
   "action": {
-    "message": "Action",
+    "message": "Aktion",
     "description": "Label for drop-down in side-bar"
   },
   "editing": {
-    "message": "Editing",
+    "message": "Bearbeitung",
     "description": "Item in action drop-down"
   },
   "styling": {
-    "message": "Styling",
+    "message": "Formatierung",
     "description": "Item in action drop-down"
   },
   "annotating": {
-    "message": "Annotating",
+    "message": "Annotierung",
     "description": "Item in action drop-down"
   },
   "scrubbing": {
-    "message": "Scrubbing",
+    "message": "Reinigung",
     "description": "Item in action drop-down"
   },
   "from_language": {
-    "message": "From",
+    "message": "Von",
     "description": "Label for drop-down in side-bar"
   },
   "to_language": {
-    "message": "To",
+    "message": "Nach",
     "description": "Label for drop-down in side-bar"
   },
   "article_font_family": {
-    "message": "Font",
+    "message": "Schriftart",
     "description": "Label for drop-down in side-bar"
   },
   "article_font_size": {
-    "message": "Font size",
+    "message": "Schriftgröße",
     "description": "Label for drop-down in side-bar"
   },
   "article_justification": {
-    "message": "Justification",
+    "message": "Blocksatz",
     "description": "Label for drop-down in side-bar"
   },
   "justification_none": {
-    "message": "None",
+    "message": "Kein",
     "description": "Item in justification drop-down in side-bar"
   },
   "justification_text": {
-    "message": "Text only",
+    "message": "Nur Text",
     "description": "Item in justification drop-down in side-bar"
   },
   "justification_text_and_headings": {
-    "message": "Text and headings",
+    "message": "Text und Überschriften",
     "description": "Item in justification drop-down in side-bar"
   },
   "article_spacing": {
-    "message": "Spacing",
+    "message": "Zeilenabstand",
     "description": "Label for drop-down in side-bar"
   },
   "spacing_normal": {
-    "message": "Normal",
+    "message": "Normaler",
     "description": "Item in line-spacing drop-down in side-bar"
   },
   "footnote_font_family": {
-    "message": "Footnote font",
+    "message": "Schriftart für Fußnoten",
     "description": "Label for drop-down in side-bar"
   },
   "footnote_font_size": {
-    "message": "Footnote font size",
+    "message": "Schriftgröße der Fußnoten",
     "description": "Label for drop-down in side-bar"
   },
   "paper_size": {
-    "message": "Paper size",
+    "message": "Papierformat",
     "description": "Label for drop-down in side-bar"
   },
   "margins": {
-    "message": "Margins",
+    "message": "Ränder",
     "description": "Label for drop-down in side-bar"
   },
   "margins_default": {
-    "message": "Default",
+    "message": "Standard",
     "description": "Item in margins drop-down in side-bar"
   },
   "margins_custom": {
-    "message": "Custom",
+    "message": "Benutzerdefiniert",
     "description": "Item in margins drop-down in side-bar"
   },
   "print": {
-    "message": "Print",
+    "message": "Drucken",
     "description": "Label for button in side-bar"
   },
   "finish": {
-    "message": "Finish",
+    "message": "Abschließen",
     "description": "Label for button in side-bar"
   },
   "check_paper_size": {
-    "message": "In the print window, make sure **Paper size** matches what’s specified above and that **Margins** are set to “Default”",
+    "message": "Stellen Sie im Druckfenster sicher, dass **Papierformat** mit den oben angegebenen Angaben übereinstimmt und dass **Ränder** auf \"Standard\" eingestellt sind.",
     "description": "Message in speech bubble over print button in side-bar (Markdown)"
   },
   "documents": {
-    "message": "Documents",
+    "message": "Dokumente",
     "description": "Title in document list"
   },
   "selected_document_sg": {
-    "message": "1 selected",
+    "message": "1 ausgewählt",
     "description": "For displaying the number of selected documents (singular)"
   },
   "selected_document_pl": {
-    "message": "$NUMBER$ selected",
+    "message": "$NUMBER$ ausgewählt",
     "description": "For displaying the number of selected documents (plural)",
     "placeholders": {
       "number": {
@@ -358,23 +358,23 @@
     }
   },
   "no_documents": {
-    "message": "No documents",
+    "message": "Keine Dokumente",
     "description": "Message in document list when there aren't any documents"
   },
   "no_search_results": {
-    "message": "No search results found",
+    "message": "Keine Suchergebnisse gefunden",
     "description": "Message in document list when a search yields no results"
   },
   "search_documents": {
-    "message": "Search documents",
+    "message": "In Dokumenten Suchen",
     "description": "Placeholder of search box and icon tooltip in document list"
   },
   "search_result_sg": {
-    "message": "1 search result",
+    "message": "1 Suchergebnis",
     "description": "For displaying the number of search results (singular)"
   },
   "search_result_pl": {
-    "message": "$NUMBER$ search results",
+    "message": "$NUMBER$ Suchergebnisse",
     "description": "For displaying the number of search results (plural)",
     "placeholders": {
       "number": {
@@ -384,7 +384,7 @@
     }
   },
   "for_query": {
-    "message": "$RESULTS$ for “$QUERY$”",
+    "message": "$RESULTS$ für \"$QUERY$\" gefunden",
     "description": "Text for card heading in document list",
     "placeholders": {
       "results": {
@@ -398,7 +398,7 @@
     }
   },
   "today_being": {
-    "message": "Today - $DATE$",
+    "message": "Heute - $DATE$",
     "description": "Text for card heading in document list",
     "placeholders": {
       "date": {
@@ -408,7 +408,7 @@
     }
   },
   "yesterday_being": {
-    "message": "Yesterday - $DATE$",
+    "message": "Gestern - $DATE$",
     "description": "Text for card heading in document list",
     "placeholders": {
       "date": {
@@ -418,192 +418,273 @@
     }
   },
   "clear_search": {
-    "message": "Clear search",
+    "message": "Suche löschen",
     "description": "Tooltip of search box x button in document list"
   },
   "delete": {
-    "message": "Delete",
+    "message": "Löschen",
     "description": "Label for delete button in document list"
   },
   "cancel": {
-    "message": "Cancel",
+    "message": "Abbrechen",
     "description": "Label for x button used to clear selection in document list"
   },
   "change_title": {
-    "message": "Change title",
+    "message": "Titel ändern",
     "description": "Label for menu item in document list"
   },
   "open_original_page": {
-    "message": "Go to original page",
+    "message": "Originalseite öffnen",
     "description": "Label for menu item in document list"
   },
   "create_inflection_tables": {
-    "message": "Create inflection tables",
+    "message": "Flexionstabellen erstellen",
     "description": "Label for create inflection tables button in document list"
   },
   "inflection_tables": {
-    "message": "Inflection tables",
+    "message": "Flexionstabellen",
     "description": "Title of dialog box"
   },
   "include_nouns": {
-    "message": "Include nouns",
+    "message": "Substantive einschließen",
     "description": "Label of checkbox in dialog box"
   },
   "include_adjectives": {
-    "message": "Include adjectives",
+    "message": "Adjektive einschließen",
     "description": "Label of checkbox in dialog box"
   },
   "include_verbs": {
-    "message": "Include verbs",
+    "message": "Verben einschließen",
     "description": "Label of checkbox in dialog box"
   },
   "create": {
-    "message": "Create",
+    "message": "Erstellen",
     "description": "Label for button in dialog box"
   },
   "nominative": {
-    "message": "nominative",
+    "message": "Nominativ",
     "description": "Column heading for inflection table"
   },
   "genitive": {
-    "message": "genitive",
+    "message": "Genitiv",
     "description": "Column heading for inflection table"
   },
   "accusative": {
-    "message": "accusative",
+    "message": "Akkusativ",
     "description": "Column heading for inflection table"
   },
   "dative": {
-    "message": "dative",
+    "message": "Dativ",
     "description": "Column heading for inflection table"
   },
   "locative": {
-    "message": "locative",
+    "message": "Lokativ",
     "description": "Column heading for inflection table"
   },
   "prepositional": {
-    "message": "prepositional",
+    "message": "Präpositiv",
     "description": "Column heading for inflection table"
   },
   "instrumental": {
-    "message": "instrumental",
+    "message": "Instrumental",
     "description": "Column heading for inflection table"
   },
   "vocative": {
-    "message": "vocative",
+    "message": "Vokativ",
+    "description": "Column heading for inflection table"
+  },
+  "abessive": {
+    "message": "Abessiv",
+    "description": "Column heading for inflection table"
+  },
+  "ablative": {
+    "message": "Ablativ",
+    "description": "Column heading for inflection table"
+  },
+  "adessive": {
+    "message": "Adessiv",
+    "description": "Column heading for inflection table"
+  },
+  "allative": {
+    "message": "Allativ",
+    "description": "Column heading for inflection table"
+  },
+  "comitative": {
+    "message": "Komitativ",
+    "description": "Column heading for inflection table"
+  },
+  "elative": {
+    "message": "Elativ",
+    "description": "Column heading for inflection table"
+  },
+  "essive": {
+    "message": "Essiv",
+    "description": "Column heading for inflection table"
+  },
+  "illative": {
+    "message": "Illativ",
+    "description": "Column heading for inflection table"
+  },
+  "inessive": {
+    "message": "Inessiv",
+    "description": "Column heading for inflection table"
+  },
+  "instructive": {
+    "message": "Instruktiv",
+    "description": "Column heading for inflection table"
+  },
+  "partitive": {
+    "message": "Partitiv",
+    "description": "Column heading for inflection table"
+  },
+  "translative": {
+    "message": "Translativ",
     "description": "Column heading for inflection table"
   },
   "singular": {
-    "message": "singular",
+    "message": "Singular",
     "description": "Row label for inflection table"
   },
   "plural": {
-    "message": "plural",
+    "message": "Plural",
     "description": "Row label for inflection table"
   },
   "masculine": {
-    "message": "masculine",
+    "message": "Männlich",
     "description": "Row label for inflection table"
   },
   "feminine": {
-    "message": "feminine",
+    "message": "Sächlich",
     "description": "Row label for inflection table"
   },
   "neuter": {
-    "message": "neuter",
+    "message": "Weiblich",
     "description": "Row label for inflection table"
   },
   "language_none": {
-    "message": "None",
+    "message": "Keine Sprache",
     "description": "For top item in To language dropdown in side-bar"
   },
   "language_unknown": {
-    "message": "Unknown",
+    "message": "Unbekannte Sprache",
     "description": "For top item in From language dropdown in side-bar"
   },
   "language_af": {
     "message": "Afrikaans"
   },
+  "language_ak": {
+    "message": "Twi"
+  },
   "language_am": {
-    "message": "Amharic"
+    "message": "Amharisch"
   },
   "language_ar": {
-    "message": "Arabic"
+    "message": "Arabisch"
+  },
+  "language_as": {
+    "message": "Assamesisch"
+  },
+  "language_ay": {
+    "message": "Aymara"
   },
   "language_az": {
-    "message": "Azerbaijani"
+    "message": "Aserbaidschanisch"
   },
   "language_be": {
-    "message": "Belarusian"
+    "message": "Belarussisch"
   },
   "language_bg": {
-    "message": "Bulgarian"
+    "message": "Bulgarisch"
+  },
+  "language_bho": {
+    "message": "Bhojpuri"
+  },
+  "language_bm": {
+    "message": "Bambara"
   },
   "language_bn": {
-    "message": "Bengali"
+    "message": "Bengalisch"
   },
   "language_bs": {
-    "message": "Bosnian"
+    "message": "Bosnisch"
   },
   "language_ca": {
-    "message": "Catalan"
+    "message": "Katalanisch"
   },
   "language_ceb": {
     "message": "Cebuano"
   },
+  "language_ckb": {
+    "message": "Kurdisch (Sorani)"
+  },
   "language_co": {
-    "message": "Corsican"
+    "message": "Korsisch"
   },
   "language_cs": {
-    "message": "Czech"
+    "message": "Tschechisch"
   },
   "language_cy": {
-    "message": "Welsh"
+    "message": "Walisisch"
   },
   "language_da": {
-    "message": "Danish"
+    "message": "Dänisch"
   },
   "language_de": {
-    "message": "German"
+    "message": "Deutsch"
+  },
+  "language_doi": {
+    "message": "Dogri"
+  },
+  "language_dv": {
+    "message": "Dhivehi"
+  },
+  "language_ee": {
+    "message": "Ewe"
   },
   "language_el": {
-    "message": "Greek"
+    "message": "Griechisch"
   },
   "language_en": {
-    "message": "English"
+    "message": "Englisch"
   },
   "language_eo": {
     "message": "Esperanto"
   },
   "language_es": {
-    "message": "Spanish"
+    "message": "Spanisch"
   },
   "language_et": {
-    "message": "Estonian"
+    "message": "Estnisch"
   },
   "language_eu": {
-    "message": "Basque"
+    "message": "Baskisch"
   },
   "language_fa": {
-    "message": "Persian"
+    "message": "Persisch"
   },
   "language_fi": {
-    "message": "Finnish"
+    "message": "Finnisch"
   },
   "language_fr": {
-    "message": "French"
+    "message": "Französisch"
   },
   "language_fy": {
-    "message": "Frisian"
+    "message": "Friesisch"
   },
   "language_ga": {
-    "message": "Irish"
+    "message": "Irisch"
   },
   "language_gd": {
-    "message": "Scots Gaelic"
+    "message": "Schottisch-Gälisch"
   },
   "language_gl": {
-    "message": "Galician"
+    "message": "Galizisch"
+  },
+  "language_gn": {
+    "message": "Guarani"
+  },
+  "language_gom": {
+    "message": "Konkani"
   },
   "language_gu": {
     "message": "Gujarati"
@@ -612,7 +693,7 @@
     "message": "Hausa"
   },
   "language_haw": {
-    "message": "Hawaiian"
+    "message": "Hawaiisch"
   },
   "language_hi": {
     "message": "Hindi"
@@ -621,43 +702,46 @@
     "message": "Hmong"
   },
   "language_hr": {
-    "message": "Croatian"
+    "message": "Kroatisch"
   },
   "language_ht": {
-    "message": "Haitian Creole"
+    "message": "Haitianisch"
   },
   "language_hu": {
-    "message": "Hungarian"
+    "message": "Ungarisch"
   },
   "language_hy": {
-    "message": "Armenian"
+    "message": "Armenisch"
   },
   "language_id": {
-    "message": "Indonesian"
+    "message": "Indonesisch"
   },
   "language_ig": {
     "message": "Igbo"
   },
+  "language_ilo": {
+    "message": "Ilokano"
+  },
   "language_is": {
-    "message": "Icelandic"
+    "message": "Isländisch"
   },
   "language_it": {
-    "message": "Italian"
+    "message": "Italienisch"
   },
   "language_iw": {
-    "message": "Hebrew"
+    "message": "Hebräisch"
   },
   "language_ja": {
-    "message": "Japanese"
+    "message": "Japanisch"
   },
   "language_jw": {
-    "message": "Javanese"
+    "message": "Javanisch"
   },
   "language_ka": {
-    "message": "Georgian"
+    "message": "Georgisch"
   },
   "language_kk": {
-    "message": "Kazakh"
+    "message": "Kasachisch"
   },
   "language_km": {
     "message": "Khmer"
@@ -666,28 +750,43 @@
     "message": "Kannada"
   },
   "language_ko": {
-    "message": "Korean"
+    "message": "Koreanisch"
+  },
+  "language_kri": {
+    "message": "Krio"
   },
   "language_ku": {
-    "message": "Kurdish (Kurmanji)"
+    "message": "Kurdisch (Kurmandschi)"
   },
   "language_ky": {
-    "message": "Kyrgyz"
+    "message": "Kirgisisch"
   },
   "language_la": {
-    "message": "Latin"
+    "message": "Lateinisch"
   },
   "language_lb": {
-    "message": "Luxembourgish"
+    "message": "Luxemburgisch"
+  },
+  "language_lg": {
+    "message": "Luganda"
+  },
+  "language_ln": {
+    "message": "Lingala"
   },
   "language_lo": {
     "message": "Lao"
   },
   "language_lt": {
-    "message": "Lithuanian"
+    "message": "Litauisch"
+  },
+  "language_lus": {
+    "message": "Mizo"
   },
   "language_lv": {
-    "message": "Latvian"
+    "message": "Lettisch"
+  },
+  "language_mai": {
+    "message": "Maithili"
   },
   "language_mg": {
     "message": "Malagasy"
@@ -696,37 +795,46 @@
     "message": "Maori"
   },
   "language_mk": {
-    "message": "Macedonian"
+    "message": "Mazedonisch"
   },
   "language_ml": {
     "message": "Malayalam"
   },
   "language_mn": {
-    "message": "Mongolian"
+    "message": "Mongolisch"
+  },
+  "language_mni_mtei": {
+    "message": "Meitei (Manipuri)"
   },
   "language_mr": {
     "message": "Marathi"
   },
   "language_ms": {
-    "message": "Malay"
+    "message": "Malaysisch"
   },
   "language_mt": {
-    "message": "Maltese"
+    "message": "Maltesisch"
   },
   "language_my": {
-    "message": "Myanmar (Burmese)"
+    "message": "Birmanisch"
   },
   "language_ne": {
-    "message": "Nepali"
+    "message": "Nepalesisch"
   },
   "language_nl": {
-    "message": "Dutch"
+    "message": "Niederländisch"
   },
   "language_no": {
-    "message": "Norwegian"
+    "message": "Norwegisch"
+  },
+  "language_nso": {
+    "message": "Sepedi"
   },
   "language_ny": {
     "message": "Chichewa"
+  },
+  "language_om": {
+    "message": "Oromo"
   },
   "language_or": {
     "message": "Odia (Oriya)"
@@ -735,37 +843,43 @@
     "message": "Punjabi"
   },
   "language_pl": {
-    "message": "Polish"
+    "message": "Polnisch"
   },
   "language_ps": {
-    "message": "Pashto"
+    "message": "Paschtu"
   },
   "language_pt": {
-    "message": "Portuguese"
+    "message": "Portugiesisch"
+  },
+  "language_qu": {
+    "message": "Quechua"
   },
   "language_ro": {
-    "message": "Romanian"
+    "message": "Rumänisch"
   },
   "language_ru": {
-    "message": "Russian"
+    "message": "Russisch"
   },
   "language_rw": {
     "message": "Kinyarwanda"
+  },
+  "language_sa": {
+    "message": "Sanskrit"
   },
   "language_sd": {
     "message": "Sindhi"
   },
   "language_si": {
-    "message": "Sinhala"
+    "message": "Singhalesisch"
   },
   "language_sk": {
-    "message": "Slovak"
+    "message": "Slowakisch"
   },
   "language_sl": {
-    "message": "Slovenian"
+    "message": "Slowenisch"
   },
   "language_sm": {
-    "message": "Samoan"
+    "message": "Samoanisch"
   },
   "language_sn": {
     "message": "Shona"
@@ -774,19 +888,19 @@
     "message": "Somali"
   },
   "language_sq": {
-    "message": "Albanian"
+    "message": "Albanisch"
   },
   "language_sr": {
-    "message": "Serbian"
+    "message": "Serbisch"
   },
   "language_st": {
     "message": "Sesotho"
   },
   "language_su": {
-    "message": "Sundanese"
+    "message": "Sundanesisch"
   },
   "language_sv": {
-    "message": "Swedish"
+    "message": "Schwedisch"
   },
   "language_sw": {
     "message": "Swahili"
@@ -798,55 +912,61 @@
     "message": "Telugu"
   },
   "language_tg": {
-    "message": "Tajik"
+    "message": "Tadschikisch"
   },
   "language_th": {
-    "message": "Thai"
+    "message": "Thailändisch"
+  },
+  "language_ti": {
+    "message": "Tigrinya"
   },
   "language_tk": {
-    "message": "Turkmen"
+    "message": "Turkmenisch"
   },
   "language_tl": {
     "message": "Filipino"
   },
   "language_tr": {
-    "message": "Turkish"
+    "message": "Türkisch"
+  },
+  "language_ts": {
+    "message": "Tsonga"
   },
   "language_tt": {
-    "message": "Tatar"
+    "message": "Tatarisch"
   },
   "language_ug": {
-    "message": "Uyghur"
+    "message": "Uigurisch"
   },
   "language_uk": {
-    "message": "Ukrainian"
+    "message": "Ukrainisch"
   },
   "language_ur": {
     "message": "Urdu"
   },
   "language_uz": {
-    "message": "Uzbek"
+    "message": "Usbekisch"
   },
   "language_vi": {
-    "message": "Vietnamese"
+    "message": "Vietnamesisch"
   },
   "language_xh": {
     "message": "Xhosa"
   },
   "language_yi": {
-    "message": "Yiddish"
+    "message": "Jiddisch"
   },
   "language_yo": {
     "message": "Yoruba"
   },
   "language_zh": {
-    "message": "Chinese"
+    "message": "Chinesisch"
   },
   "language_zh_cn": {
-    "message": "Chinese (Simplified)"
+    "message": "Chinesisch (vereinfacht)"
   },
   "language_zh_tw": {
-    "message": "Chinese (Traditional)"
+    "message": "Chinesisch (traditionell)"
   },
   "language_zu": {
     "message": "Zulu"
