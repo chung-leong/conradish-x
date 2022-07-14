@@ -7,10 +7,6 @@
     "message": "Druckversion von Nachrichtenartikeln mit Fußnoten erstellen",
     "description": "Description of the extension, used in manifest"
   },
-  "user_guide": {
-    "message": "Benutzerhandbuch",
-    "description": "Title of help page"
-  },
   "keep_all": {
     "message": "alles behalten",
     "description": "Tooltip text of scrubbing mode keep all button"

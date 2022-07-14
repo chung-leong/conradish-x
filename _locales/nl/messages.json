@@ -7,10 +7,6 @@
     "message": "Maak een printversie van nieuwsartikelen met voetnoten",
     "description": "Description of the extension, used in manifest"
   },
-  "user_guide": {
-    "message": "Gebruikershandleiding",
-    "description": "Title of help page"
-  },
   "keep_all": {
     "message": "alles behouden",
     "description": "Tooltip text of scrubbing mode keep all button"

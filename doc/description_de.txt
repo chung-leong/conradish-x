@@ -1,0 +1,32 @@
+Mit Conradish können Sie Druckversionen von Online-Nachrichtenartikeln erstellen. Es entfernt Werbung und andere Ablenkungen und formatiert den Text zu einem einheitlichen, professionellen Aussehen. Darüber hinaus können Sie Wörtern und Sätzen Fußnoten hinzufügen.
+
+Die Erweiterung wurde speziell für Pädagogen entwickelt, die Webmaterialien im Unterricht verwenden möchten. Dank der automatischen Übersetzungsfunktion ist es besonders nützlich für Fremdsprachenlehrer.
+
+Merkmale
+
+• Drucken nur ausgewählter Teile eines Artikels
+• Entfernung von Anzeigen und Bildern
+• Vereinfachung des Seitenlayouts
+• Textbearbeitung vor dem Druck
+• Inhalts-Scrubbing per Point-and-Click.
+• Hinzufügen von Fußnoten
+• Flexionstabellen für ausgewählte Sprachen
+• Integration mit Google Übersetzer
+
+Benutzerhandbuch
+
+Um eine Druckversion des angezeigten Artikels zu erstellen, wählen Sie zunächst den Teil aus, den Sie drucken möchten. Machen Sie sich keine Sorgen, wenn die Auswahl am Ende unerwünschte Navigationselemente enthält – diese werden herausgefiltert. Klicken Sie nach der Auswahl mit der rechten Maustaste darauf und wählen Sie „Druckversion erstellen“. Die Druckversion öffnet sich in einem neuen Browser-Tab.
+
+Um die Definition eines Wortes mit Fußnoten zu versehen, markieren Sie das Wort zunächst mit der Maus und klicken dann im darunter erscheinenden Popup-Menü auf „Definition hinzufügen“.
+
+Um einen ganzen Satz mit einer Fußnote zu versehen, wählen Sie ihn aus und klicken Sie dann auf „Übersetzung hinzufügen“.
+
+Um eine Fußnote zu entfernen, löschen Sie einfach die zugehörige Fußnotennummer oder den Eintrag im Seitenfuß.
+
+Alle Aktionen können durch Drücken von Strg-Z rückgängig gemacht werden.
+
+Weitere Anweisungen finden Sie im integrierten Benutzerhandbuch. Sie können darauf zugreifen, indem Sie auf das Fragezeichen-Symbol in der unteren linken Ecke klicken.
+
+Privatsphäre
+
+Conradish erfasst keine Benutzerinformationen. Es überwacht nicht Ihren Browserverlauf. Alle Daten werden lokal gespeichert. Die Erweiterung sendet Text zum Zwecke der Übersetzung an Google. Die Auswirkungen auf den Datenschutz sind die gleichen wie bei der Verwendung von Google Übersetzer. Wenn Sie die Erweiterung installieren, warnt der Browser, dass er auf „Ihre Daten“ unter translate.googleapis.com zugreifen kann. Die fraglichen Daten sind nur übersetzte Phrasen.

@@ -1,0 +1,32 @@
+Met Conradish kunt u een gedrukte versie van online nieuwsartikelen maken. Het verwijdert advertenties en andere afleiding en herformatteert tekst voor een uniforme, professionele uitstraling. Bovendien kunt u voetnoten toevoegen aan woorden en zinnen.
+
+De extensie is ontworpen met het oog op docenten, degenen die webmaterialen in de klas willen gebruiken. Het is vooral handig voor docenten vreemde talen dankzij de automatische vertaalfunctie.
+
+Functies
+
+• Alleen een geselecteerd gedeelte van een artikel afdrukken
+• Verwijdering van advertenties en afbeeldingen
+• Vereenvoudiging van pagina-indeling
+• Bewerken van tekst voorafgaand aan het afdrukken
+• Wijs-en-klik inhoud scrubben.
+• Toevoeging van voetnoten
+• Buigtabellen voor geselecteerde talen
+• Integratie met Google Translate
+
+Gebruikershandleiding
+
+Om een ​​printversie te maken van het artikel dat je bekijkt, selecteer je eerst het gedeelte dat je wilt printen. Maak je geen zorgen als de selectie ongewenste navigatie-elementen bevat - deze worden eruit gefilterd. Nadat u de selectie heeft gemaakt, klikt u er met de rechtermuisknop op en kiest u "Create print version". De gedrukte versie wordt geopend in een nieuw browsertabblad.
+
+Om de definitie van een woord in een voetnoot te plaatsen, selecteert u eerst het woord met uw muis en klikt u vervolgens op "Definitie toevoegen" in het pop-upmenu dat eronder verschijnt.
+
+Om een ​​hele zin in een voetnoot te plaatsen, selecteert u deze en klikt u vervolgens op "Vertaling toevoegen".
+
+Om een ​​voetnoot te verwijderen, verwijdert u eenvoudig het bijbehorende voetnootnummer of verwijdert u de vermelding in de paginavoettekst.
+
+Alle acties kunnen worden teruggedraaid door op Ctrl-Z te drukken.
+
+Raadpleeg de ingebouwde gebruikershandleiding voor meer instructies. U kunt het openen door op het vraagtekenpictogram in de linkerbenedenhoek te klikken.
+
+Privacy
+
+Conradish legt geen gebruikersinformatie vast. Het houdt uw browsegeschiedenis niet bij. Alle gegevens worden lokaal opgeslagen. De extensie stuurt wel tekst naar Google voor vertaling. De privacy-implicaties zijn dezelfde als die van het gebruik van Google Translate. Wanneer u de extensie installeert, waarschuwt de browser dat deze toegang heeft tot "uw gegevens" op translate.googleapis.com. De gegevens in kwestie zijn slechts vertaalde zinnen.
