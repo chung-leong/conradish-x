@@ -1,3 +1,8 @@
+# Version 1.8
+
+* Added new languages supported by Google translate
+* Localization for German and Dutch
+
 # Version 1.7
 
 * Added inflection tables for Romance and Germanic languages.
