@@ -34,6 +34,7 @@
 .user-guide {
   padding-bottom: 1em;
   font-size: 12pt;
+  user-select: text;
 }
 
 .user-guide IMG {
