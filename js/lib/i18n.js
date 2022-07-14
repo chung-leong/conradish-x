@@ -1057,7 +1057,7 @@ const languages = [
     inflections: 'unavailable',
   },
   { // Twi
-    code: 'tw',
+    code: 'ak',
     script: 'Latn',
     inflections: 'unavailable',
   },
