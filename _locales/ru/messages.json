@@ -100,7 +100,7 @@
     "description": "Text for tooltip of button in style menu"
   },
   "extension_options": {
-    "message": "параметры расширений",
+    "message": "Параметры расширений",
     "description": "Title in options page"
   },
   "basic_options": {
