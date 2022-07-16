@@ -1,6 +1,7 @@
 import { e, parseMarkdown, attachRippleEffectHandlers } from './ui.js';
 import { l, setSourceLanguage, getSourceLanguage, getSourceLanguages, getTargetLanguage, getTargetLanguages, getLanguageScript } from './i18n.js';
 import { getPaperProperties, applyStyles, getSettings, saveSettings } from './settings.js';
+import { storageChange } from './storage.js';
 import { updateLayout } from './document.js';
 import { modeChange, setEditMode, getEditMode } from './editing.js';
 import { getScriptSpecificSettings } from './settings.js';
@@ -76,6 +77,12 @@ function createLanguageControls() {
     const settings = getSettings();
     settings.target = evt.target.value;
     saveSettings();
+  });
+  storageChange.addEventListener('settings', (evt) => {
+    if (!evt.detail.self) {
+      const settings = getSettings();
+      targetLangSelect.value = settings.target;
+    }
   });
   addSection(l('to_language'), targetLangSelect, true);
 }
