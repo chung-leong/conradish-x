@@ -756,8 +756,7 @@ function showAlternativeMenu(range) {
       if (alternatives && alternatives.length > 0 && lang) {
         const [ sourceLang, targetLang ] = lang.split(',');
         // don't show menu when the cursor is on the term
-        const sourceScript = getLanguageScript(sourceLang);
-        const termElement = findParent(startContainer, n => n.classList && n.classList.contains(sourceScript));
+        const termElement = findParent(startContainer, n => n.classList && n.classList.contains('term'));
         if (!termElement) {
           const listElement = articleMenuSections.alternative;
           while (listElement.firstChild) {
