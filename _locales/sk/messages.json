@@ -20,7 +20,7 @@
     "description": "Tooltip text of scrubbing mode keep all button"
   },
   "create_print_version": {
-    "message": "Vytvorte verziu pre tlač",
+    "message": "Vytvoriť verziu pre tlač",
     "description": "Label for menu item in browser context menu and extension pop-up menu"
   },
   "selection_portion_of_document": {
@@ -42,7 +42,7 @@
     "description": "Label for menu item in pop-up menu"
   },
   "add_definition": {
-    "message": "Pridajte definíciu",
+    "message": "Pridať definíciu",
     "description": "Label for item in annotation menu"
   },
   "show_term_and_definition": {
@@ -58,7 +58,7 @@
     "description": "Text for tooltip of item in annotation menu"
   },
   "add_explanation": {
-    "message": "Pridajte vysvetlenie",
+    "message": "Pridať vysvetlenie",
     "description": "Label for item in annotation menu"
   },
   "show_explanation": {
