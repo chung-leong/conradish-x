@@ -252,7 +252,7 @@
     "description": "Name of script, used in option page"
   },
   "action": {
-    "message": "Действия",
+    "message": "Действие",
     "description": "Label for drop-down in side-bar"
   },
   "editing": {
