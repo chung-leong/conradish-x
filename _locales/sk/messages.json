@@ -7,6 +7,14 @@
     "message": "Tvorba tlačených verzií článkov s poznámkami pod čiarou",
     "description": "Description of the extension, used in manifest"
   },
+  "user_guide": {
+    "message": "Užívateľská príručka",
+    "description": "Title of help page"
+  },
+  "user_guide_path": {
+    "message": "_locales/sk/user-guide.html",
+    "description": "Path to user guide HTML file"
+  },
   "keep_all": {
     "message": "ponechať všetky",
     "description": "Tooltip text of scrubbing mode keep all button"

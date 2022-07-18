@@ -7,6 +7,14 @@
     "message": "Створюйте друковані версії статей з примітками",
     "description": "Description of the extension, used in manifest"
   },
+  "user_guide": {
+    "message": "Керівництво користувача",
+    "description": "Title of help page"
+  },
+  "user_guide_path": {
+    "message": "_locales/uk/user-guide.html",
+    "description": "Path to user guide HTML file"
+  },
   "keep_all": {
     "message": "зберігати всі",
     "description": "Tooltip text of scrubbing mode keep all button"

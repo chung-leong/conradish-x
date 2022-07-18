@@ -7,6 +7,14 @@
     "message": "Opret trykt version af nyhedsartikler med fodnoter",
     "description": "Description of the extension, used in manifest"
   },
+  "user_guide": {
+    "message": "Brugervejledning",
+    "description": "Title of help page"
+  },
+  "user_guide_path": {
+    "message": "_locales/da/user-guide.html",
+    "description": "Path to user guide HTML file"
+  },
   "keep_all": {
     "message": "behold alle",
     "description": "Tooltip text of scrubbing mode keep all button"

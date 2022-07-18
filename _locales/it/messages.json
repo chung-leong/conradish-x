@@ -7,6 +7,14 @@
     "message": "Crea versioni stampate di articoli con note a piè di pagina",
     "description": "Description of the extension, used in manifest"
   },
+  "user_guide": {
+    "message": "Guida utente",
+    "description": "Title of help page"
+  },
+  "user_guide_path": {
+    "message": "_locales/it/user-guide.html",
+    "description": "Path to user guide HTML file"
+  },
   "keep_all": {
     "message": "conserva tutto",
     "description": "Tooltip text of scrubbing mode keep all button"

@@ -7,6 +7,14 @@
     "message": "Создавайте печатные версии статей со сносками",
     "description": "Description of the extension, used in manifest"
   },
+  "user_guide": {
+    "message": "Гид пользователя",
+    "description": "Title of help page"
+  },
+  "user_guide_path": {
+    "message": "_locales/ru/user-guide.html",
+    "description": "Path to user guide HTML file"
+  },
   "keep_all": {
     "message": "хранить все",
     "description": "Tooltip text of scrubbing mode keep all button"

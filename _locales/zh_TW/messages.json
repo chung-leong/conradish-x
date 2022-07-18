@@ -7,6 +7,14 @@
     "message": "創建新聞文章印刷版和添加定義",
     "description": "Description of the extension, used in manifest"
   },
+  "user_guide": {
+    "message": "用戶指南",
+    "description": "Title of help page"
+  },
+  "user_guide_path": {
+    "message": "_locales/zh_TW/user-guide.html",
+    "description": "Path to user guide HTML file"
+  },
   "keep_all": {
     "message": "保留全部",
     "description": "Tooltip text of scrubbing mode keep all button"

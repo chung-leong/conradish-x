@@ -7,6 +7,14 @@
     "message": "Twórz drukowane wersje artykułów z przypisami",
     "description": "Description of the extension, used in manifest"
   },
+  "user_guide": {
+    "message": "Podręcznik użytkownika",
+    "description": "Title of help page"
+  },
+  "user_guide_path": {
+    "message": "_locales/pl/user-guide.html",
+    "description": "Path to user guide HTML file"
+  },
   "keep_all": {
     "message": "zachowaj wszystkie",
     "description": "Tooltip text of scrubbing mode keep all button"
