@@ -466,7 +466,7 @@
     "description": "Label for menu item in document list"
   },
   "create_inflection_tables": {
-    "message": "Twórz tabele fleksyjne",
+    "message": "Utwórz tabele fleksyjne",
     "description": "Label for create inflection tables button in document list"
   },
   "inflection_tables": {
@@ -490,7 +490,7 @@
     "description": "Label of checkbox in dialog box"
   },
   "create": {
-    "message": "Twórz",
+    "message": "Utwórz",
     "description": "Label for button in dialog box"
   },
   "nominative": {

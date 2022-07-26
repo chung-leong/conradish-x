@@ -466,11 +466,11 @@
     "description": "Label of checkbox in dialog box"
   },
   "include_verbs": {
-    "message": "Luo",
+    "message": "Sisällytä verbit",
     "description": "Label of checkbox in dialog box"
   },
   "create": {
-    "message": "Create",
+    "message": "Luo",
     "description": "Label for button in dialog box"
   },
   "nominative": {
