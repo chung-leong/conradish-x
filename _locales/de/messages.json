@@ -12,7 +12,7 @@
     "description": "Title of help page"
   },
   "user_guide_path": {
-    "message": "_locales/cs/user-guide.html",
+    "message": "_locales/de/user-guide.html",
     "description": "Path to user guide HTML file"
   },
   "keep_all": {
