@@ -264,7 +264,7 @@
     "description": "Item in action drop-down"
   },
   "annotating": {
-    "message": "Анотація",
+    "message": "Анотування",
     "description": "Item in action drop-down"
   },
   "scrubbing": {
@@ -466,7 +466,7 @@
     "description": "Label for menu item in document list"
   },
   "create_inflection_tables": {
-    "message": "Створіть таблиці словозміни",
+    "message": "Створити таблиці словозміни",
     "description": "Label for create inflection tables button in document list"
   },
   "inflection_tables": {
@@ -474,23 +474,23 @@
     "description": "Title of dialog box"
   },
   "include_nouns": {
-    "message": "Включіть іменники",
+    "message": "Включити іменники",
     "description": "Label of checkbox in dialog box"
   },
   "include_noun_adjs": {
-    "message": "Включіть іменники та прикметники",
+    "message": "Включити іменники та прикметники",
     "description": "Label of checkbox in dialog box"
   },
   "include_adjectives": {
-    "message": "Включіть прикметники",
+    "message": "Включити прикметники",
     "description": "Label of checkbox in dialog box"
   },
   "include_verbs": {
-    "message": "Включіть дієслова",
+    "message": "Включити дієслова",
     "description": "Label of checkbox in dialog box"
   },
   "create": {
-    "message": "Створіть",
+    "message": "Створити",
     "description": "Label for button in dialog box"
   },
   "nominative": {
