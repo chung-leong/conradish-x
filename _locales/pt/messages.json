@@ -446,7 +446,7 @@
     "description": "Label for menu item in document list"
   },
   "create_inflection_tables": {
-    "message": "Criar tabelas de flexão",
+    "message": "Criar tabelas de inflexão",
     "description": "Label for create inflection tables button in document list"
   },
   "inflection_tables": {
