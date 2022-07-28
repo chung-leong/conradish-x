@@ -49,6 +49,10 @@ LI.folder {
   background-image: url('../img/folder.svg');
 }
 
+LI.help {
+  background-image: url('../img/question.svg');
+}
+
 LI.separator {
   border-bottom: 1px solid rgb(241, 243, 244) ;
   padding: 0;

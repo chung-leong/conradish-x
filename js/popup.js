@@ -27,9 +27,9 @@ async function start() {
   });
   await initializeStorage();
   const docs = findObjects();
+  // add separator
+  list.appendChild(e('LI', { className: 'separator' }));
   if (docs.length > 0) {
-    // add separator
-    list.appendChild(e('LI', { className: 'separator' }));
     // list up to 8 recent documents
     const recentDocs = docs.slice(-8).reverse();
     for (const { key, date, type } of recentDocs) {
@@ -50,6 +50,13 @@ async function start() {
       className: 'folder',
       dataset: { command: 'list' }
     }, l('show_all_documents'));
+    list.appendChild(show);
+  } else {
+    // add menu item for opening user guide
+    const show = e('LI', {
+      className: 'help',
+      dataset: { command: 'help' }
+    }, l('user_guide'));
     list.appendChild(show);
   }
 }
@@ -75,6 +82,10 @@ function handleClick(evt) {
           break;
         case 'list':
           openPage('list');
+          close();
+          break;
+        case 'help':
+          openPage('help');
           close();
           break;
       }
