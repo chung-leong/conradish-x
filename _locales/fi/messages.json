@@ -128,7 +128,7 @@
     "description": "Label for filter drop-down in options"
   },
   "filter_manual": {
-    "message": "Käsin",
+    "message": "Manuaalisesti",
     "description": "Label for filter drop-down in options"
   },
   "limit_heading_size": {
