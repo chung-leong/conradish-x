@@ -24,6 +24,7 @@ async function start() {
   attachRippleEffectHandlers();
   attachCustomCheckboxHandlers();
   attachShadowHandlers();
+  attachHelpButtonHandler();
   document.addEventListener('click', handleClick);
   document.addEventListener('change', handleChange);
   createSearchToolbar();
@@ -32,6 +33,12 @@ async function start() {
   storageChange.addEventListener('create', handleCreate);
   storageChange.addEventListener('delete', handleDelete);
   storageChange.addEventListener('update', handleUpdate);
+}
+
+function attachHelpButtonHandler() {
+  const buttonElement = document.getElementById('help-button');
+  buttonElement.addEventListener('click', evt => openPage('help'));
+  buttonElement.title = l('user_guide');
 }
 
 function createSearchToolbar() {

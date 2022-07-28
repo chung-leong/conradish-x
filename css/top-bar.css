@@ -24,6 +24,20 @@ BODY {
   box-shadow: rgba(60, 64, 67, 0.5) 0 3px 8px 1px;
 }
 
+#help-button {
+  position: absolute;
+  top: calc(100% - 32px - 8px);
+  left: 8px;
+  width: 32px;
+  height: 32px;
+  background-image: url('../img/question.svg');
+  background-repeat: no-repeat;
+  background-size: 32px;
+  opacity: 0.25;
+  cursor: pointer;
+  z-index: 1;
+}
+
 .toolbar {
   display: flex;
   position: absolute;

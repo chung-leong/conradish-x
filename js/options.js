@@ -1,7 +1,7 @@
 import { e, attachCustomCheckboxHandlers } from './lib/ui.js';
 import { l, getUILanguage, getLanguageScript, getScriptDirection } from './lib/i18n.js';
 import { initializeStorage, getSettings, saveSettings, storageChange } from './lib/storage.js';
-import { setWindowName } from './lib/navigation.js';
+import { setWindowName, openPage } from './lib/navigation.js';
 import { createTopBar, attachShadowHandlers } from './lib/top-bar.js';
 import { getScriptSpecificSettings } from './lib/settings.js';
 import { getScripts, getFontCoverage, updateFontAvailability, updateFontSelection, applyDefaultFontSettings } from './lib/fonts.js';
@@ -25,6 +25,13 @@ async function start() {
   showActiveCards();
   attachCustomCheckboxHandlers();
   attachShadowHandlers();
+  attachHelpButtonHandler();
+}
+
+function attachHelpButtonHandler() {
+  const buttonElement = document.getElementById('help-button');
+  buttonElement.addEventListener('click', evt => openPage('help'));
+  buttonElement.title = l('user_guide');
 }
 
 function createSearchToolbar() {
