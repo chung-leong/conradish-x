@@ -48,6 +48,13 @@ function createSearchToolbar() {
     searchElement.classList.toggle('active', !!query);
     search(query);
   });
+  inputElement.addEventListener('keydown', (evt) => {
+    if (evt.key === 'Escape') {
+      searchElement.classList.remove('active');
+      inputElement.value = '';
+      search('');
+    }
+  });
   inputElement.addEventListener('focus', (evt) => searchElement.classList.add('focus'));
   inputElement.addEventListener('blur', (evt) => searchElement.classList.remove('focus'));
   const iconElement = e('SPAN', { className: 'magnifying-glass', title: l('search_documents') });
