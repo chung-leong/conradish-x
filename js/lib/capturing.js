@@ -1005,7 +1005,7 @@ function addSpacers(root, objectDossiers) {
             // has margin before but no whitespace, see if the previous item has spacing
             const prevObject = getPreviousObject(object);
             const sepBefore = getSeparation(prevObject);
-            if (!sepBefore.whiteSpaceEnd && (sep.marginStart + sepBefore.marginEnd >= 0.25)) {
+            if (!sepBefore.whiteSpaceEnd && (sep.marginStart + sepBefore.marginEnd >= 0.20)) {
               // add a space at the beginning if this margin is bigger than the other,
               // otherwise add it to the other one
               if (sep.marginStart > sepBefore.marginEnd) {
@@ -1017,7 +1017,7 @@ function addSpacers(root, objectDossiers) {
             // has margin after but no whitespace, see if the next item has spacing
             const nextObject = getNextObject(object);
             const sepAfter = getSeparation(nextObject);
-            if (!sepAfter.whiteSpaceStart && (sep.marginEnd + sepAfter.marginStart >= 0.25)) {
+            if (!sepAfter.whiteSpaceStart && (sep.marginEnd + sepAfter.marginStart >= 0.20)) {
               // add a space at the end
               if (sep.marginEnd >= sepAfter.marginStart) {
                 insertContent(object, ' ');
