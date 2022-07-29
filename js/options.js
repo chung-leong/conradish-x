@@ -156,6 +156,7 @@ function createBasicOptionCard() {
       filterCheckbox.classList.toggle('checked', filtering);
       filterSelect.style.visibility = (filtering) ? 'visible' : 'hidden';
       headingCheckbox.classList.toggle('checked', heading === 'H2');
+    }
   });
   return addCard(l('basic_options'), container, [], () => activeCardType === 'basic');
 }
