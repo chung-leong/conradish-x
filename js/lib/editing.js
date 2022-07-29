@@ -230,7 +230,7 @@ function getSelectedRange() {
 }
 
 async function addFootnote(includeTerm) {
-  const range = getSelectedRange();
+  const range = normalizeRange(lastSelectedRange);
   const cellGuards = [];
   const cell = findParent(range.endContainer, isTableCell);
   if (cell) {
@@ -273,6 +273,29 @@ async function addFootnote(includeTerm) {
     range.selectNode(itemElement.lastChild);
     range.collapse();
   }
+}
+
+function normalizeRange(range) {
+  let startContainer, endContainer;
+  let startOffset = 0, endOffset = 0;
+  transverseRange(range, (node, startIndex, endIndex) => {
+    if (node.nodeType === Node.TEXT_NODE) {
+      // make sure the text is actually visible
+      if (node.parentNode.offsetWidth > 0) {
+        if (!startContainer) {
+          startContainer = node;
+          startOffset = startIndex;
+        }
+        endContainer = node;
+        endOffset = endIndex;
+      }
+    }
+  });
+  if (startContainer && endContainer) {
+    range.setStart(startContainer, startOffset);
+    range.setEnd(endContainer, endOffset);
+  }
+  return range;
 }
 
 function atContainerEnd(range, cb) {
