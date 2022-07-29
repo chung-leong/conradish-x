@@ -150,13 +150,12 @@ function createBasicOptionCard() {
   });
   storageChange.addEventListener('settings', (evt) => {
     if (!evt.detail.self) {
-      const { contextMenu, filter } = getSettings();
+      const { contextMenu, filter, heading } = getSettings();
       const filtering = filterTypes.includes(filter);
       contextMenuCheckbox.classList.toggle('checked', contextMenu);
       filterCheckbox.classList.toggle('checked', filtering);
       filterSelect.style.visibility = (filtering) ? 'visible' : 'hidden';
       headingCheckbox.classList.toggle('checked', heading === 'H2');
-    }
   });
   return addCard(l('basic_options'), container, [], () => activeCardType === 'basic');
 }
