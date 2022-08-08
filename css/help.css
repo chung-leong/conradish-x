@@ -2,6 +2,11 @@ U {
   text-underline-position: under;
 }
 
+BODY.chrome .edge,
+BODY.edge .chrome {
+  display: none;
+}
+
 .toolbar.default {
   background-color: rgb(246, 228, 183);
   color: rgb(0, 0, 0);

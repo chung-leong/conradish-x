@@ -8,6 +8,12 @@ const toolbarContainer = document.getElementById('toolbar-container');
 const tocContainer = document.getElementById('left-side-bar');
 
 async function start() {
+  const { classList } = document.body;
+  if (/Edg/.test(navigator.userAgent)) {
+    classList.add('edge');
+  } else {
+    classList.add('chrome');
+  }
   setWindowName('help');
   const title = document.title = l('user_guide');
   createTopBar('toolbar-title', { left: title });
