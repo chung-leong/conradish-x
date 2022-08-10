@@ -71,7 +71,10 @@ export function attachRippleEffectHandlers() {
   document.addEventListener('mouseup', handleRippleEffectMouseUp);
 }
 
-export function attachCustomCheckboxHandlers() {
+let checkBoxOptions = {};
+
+export function attachCustomCheckboxHandlers(options = {}) {
+  checkBoxOptions = options;
   document.addEventListener('click', handleCustomCheckboxClick);
   document.addEventListener('keypress', handleCustomCheckboxKeyPress);
   document.addEventListener('keydown', handleCustomCheckboxKeyDown);
@@ -164,6 +167,15 @@ function toggleCheckbox(checkbox, shiftKey) {
   lastCheckbox = checkbox;
 }
 
+function toggleAllCheckboxes() {
+  const checkboxes = [ ...document.getElementsByClassName('checkbox') ].filter(c => !c.classList.contains('disabled'));
+  const allChecked = checkboxes.every((c) => c.classList.contains('checked'));
+  for (const checkbox of checkboxes) {
+    checkbox.classList.toggle('checked', !allChecked);
+    triggerChangeEvent(checkbox);
+  }
+}
+
 function handleCustomCheckboxClick(evt) {
   const { target, shiftKey } = evt;
   const { classList } = target;
@@ -195,7 +207,7 @@ function handleCustomCheckboxKeyPress(evt) {
 }
 
 function handleCustomCheckboxKeyDown(evt) {
-  const { target, key } = evt;
+  const { target, key, ctrlKey, metaKey, altKey, shiftKey } = evt;
   const { classList } = target;
   if (classList.contains('checkbox') && !classList.contains('disabled')) {
     if (key === 'ArrowDown' || key === 'ArrowUp') {
@@ -208,6 +220,13 @@ function handleCustomCheckboxKeyDown(evt) {
       }
     }
     classList.remove('clicked');
+  }
+  if ((ctrlKey || metaKey) && (!altKey && !shiftKey) && (key === 'a' || key === 'A')) {
+    if (checkBoxOptions.acceptCtrlA) {
+      if (target.tagName !== 'TEXTAREA' && (target.tagName !== 'INPUT' || target.type !== 'text')) {
+        toggleAllCheckboxes();
+      }
+    }
   }
 }
 

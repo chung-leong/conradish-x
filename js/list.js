@@ -22,7 +22,7 @@ async function start() {
   document.title = l('documents');
   await initializeStorage();
   attachRippleEffectHandlers();
-  attachCustomCheckboxHandlers();
+  attachCustomCheckboxHandlers({ acceptCtrlA: true });
   attachShadowHandlers();
   attachHelpButtonHandler();
   document.addEventListener('click', handleClick);
