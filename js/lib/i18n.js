@@ -393,14 +393,15 @@ export async function translate(original, sourceLang, targetLang, singleWord) {
       if (isLowerCase(trans, sourceLang)) {
         useLowerCase = true;
       }
-    } else {
-      // lowercase is more likely
-      useLowerCase = true;
     }
   }
   if (useLowerCase) {
-    result.term.text = original.toLocaleLowerCase(sourceLang);
-    result.translation.text = trans.toLocaleLowerCase(targetLang);
+    if (!capitalizingLangs.includes(sourceLang)) {
+      result.term.text = original.toLocaleLowerCase(sourceLang);
+    }
+    if (!capitalizingLangs.includes(targetLang)) {
+      result.translation.text = trans.toLocaleLowerCase(targetLang);
+    }
   }
   return result;
 }
