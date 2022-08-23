@@ -464,6 +464,7 @@ function adjustAttributes(container) {
             switch (name) {
               case 'font-style':
               case 'font-weight':
+              case 'text-decoration':
               case 'text-decoration-line':
               case 'text-decoration-style':
               case 'vertical-align':
