@@ -3,7 +3,7 @@ import { l, setSourceLanguage, getSourceLanguage, getSourceLanguages, getTargetL
 import { getPaperProperties, applyStyles, getSettings, saveSettings } from './settings.js';
 import { storageChange } from './storage.js';
 import { updateLayout } from './document.js';
-import { modeChange, setEditMode, getEditMode } from './editing.js';
+import { modeChange, setEditMode, getEditMode, updateArticleMenu } from './editing.js';
 import { getScriptSpecificSettings } from './settings.js';
 import { getAvailableFonts, fontAvailability } from './fonts.js';
 
@@ -371,6 +371,7 @@ function changeSettings(callback, paperSizeChanged = false) {
   callback(settings);
   applyStyles();
   updateLayout({ paperSizeChanged });
+  updateArticleMenu();
   saveSettings();
 }
 
@@ -379,6 +380,7 @@ function changeArticleSettings(callback) {
   callback(section);
   applyStyles();
   updateLayout();
+  updateArticleMenu();
   saveSettings();
 }
 
@@ -393,6 +395,7 @@ function changeFootnoteSettings(callback) {
   callback(section);
   applyStyles();
   updateLayout();
+  updateArticleMenu();
   saveSettings();
 }
 

@@ -935,7 +935,7 @@ function toggle(element, shown) {
   element.classList.toggle('hidden', !shown);
 }
 
-function updateArticleMenu() {
+export function updateArticleMenu() {
   let hideMenu = true;
   if (editMode === 'annotate' || editMode === 'style') {
     const range = getSelectionRange();
