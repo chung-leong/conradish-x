@@ -1,3 +1,12 @@
+# Version 1.9
+
+* Added localized versions of user guide.
+* Added more links to user guide.
+* Added screenshots specific to Microsoft Edge.
+* Enable selection of all documents by pressing Ctrl-A.
+* Fixed bug affecting selection of alternative translation.
+* Various other minor bug fixes.
+
 # Version 1.8
 
 * Added new languages supported by Google translate
